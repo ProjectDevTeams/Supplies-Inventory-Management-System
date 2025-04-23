@@ -1,0 +1,85 @@
+
+
+/* ส่วนรวม */
+.login-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* กล่อง login ด้านซ้าย */
+  .login-box {
+    width: 40%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+  }
+  
+  /* รูปโลโก้ */
+  .logo {
+    width: 180px;
+    align-items: left;
+    /*margin-bottom: 40px;
+    margin-left: 40px;*/
+  }
+  
+  /* หัวข้อ welcome */
+  h4 {
+    margin-bottom: 5px;
+    font-weight: normal;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  /* กล่อง input */
+  .input-group {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    font-size: 14px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* ลิงก์ลืมรหัสผ่าน */
+  .forgot-password {
+    width: 100%;
+    text-align: right;
+    font-size: 12px;
+    color: #007bff;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  /* ปุ่มเข้าสู่ระบบ */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #0099ff, #6633cc);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* ด้านขวาเป็นรูปวิว */
+  .login-side-image {
+    width: 60%;
+    /*background-image: url('./image/bg-loggin.pn');*/
+    background-size: cover;
+    background-position: center;
+  }
