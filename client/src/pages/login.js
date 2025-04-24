@@ -3,7 +3,7 @@ import './login.css';
 
 function Login() {
   return (
-    <body className="body-login">
+    <div className="body-login">
       <div className="login-container">
         <div className="login-left">
           <div className="login-box">
@@ -13,12 +13,12 @@ function Login() {
 
             <div className="input-group">
               <label>Username</label>
-              <input type="text" placeholder="Enter name"  />
+              <input type="text" placeholder="Enter name" />
             </div>
 
             <div className="input-group">
               <label>Password</label>
-              <input type="password" placeholder="Enter password"  />
+              <input type="password" placeholder="Enter password" />
             </div>
 
             <div className="forgot-password">ลืมรหัสผ่าน</div>
@@ -31,7 +31,7 @@ function Login() {
           <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>
-    </body>
+    </div>
   );
 }
 

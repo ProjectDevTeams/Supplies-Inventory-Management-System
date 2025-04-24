@@ -1,15 +1,15 @@
-import './App.css';
-import Main from './pages/Main';
+import React from "react";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from "./pages/login";
 
 function App() {
   return (
-  <body>
-    <title>Shop.co</title>
-    <Main/>
-    <div className="App">
-   
-    </div>
-  </body>
+    <BrowserRouter>
+        <Routes>
+          <Route index element={<Login/>} />
+          <Route index path='/login' element={<Login/>}/>
+        </Routes>
+    </BrowserRouter>
   );
 }
 
