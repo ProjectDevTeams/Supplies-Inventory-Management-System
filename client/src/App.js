@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from "./pages/login";
 import Consumable from "./pages/consumable";
-// import Consumable from "./components/Consumablebar";
+import AddnewPopup from "./components/addnew-popup";
+
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
           <Route index element={<Login/>} />
           <Route index path='/login' element={<Login/>}/>
           <Route index path='/consumable' element={<Consumable/>}/>
-          {/* <Route index path='/consumablebar' element={<Consumable/>}/> */}
+          <Route index path='/popup' element={<AddnewPopup/>}/>
         </Routes>
     </BrowserRouter>
   );
