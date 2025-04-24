@@ -47,9 +47,12 @@
 }
 
 .menu-item .active {
-  background-color: #ffffff;
-  border-left: 4px solid #ffffff;
-  font-weight: normal; /* แก้จาก bold เป็น normal */
+  background-color: #e3f2fd; /* สีฟ้าอ่อน */
+  border-left: 4px solid #2196f3;
+  font-weight: normal;
+  color: #2196f3; /* ข้อความสีฟ้า */
 }
 
-/* */
+.menu-item .active .icon-box {
+  color: #2196f3;
+}

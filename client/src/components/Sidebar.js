@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Sidebar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -30,12 +30,18 @@ const menuItems = [
 ];
 
 function Sidebar() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <div className="sidebar">
       <ul className="sidebar-menu">
         {menuItems.map((item, index) => (
           <li className="menu-item" key={index}>
-            <a href={item.to} className={index === 0 ? "active" : ""}>
+            <a
+              href={item.to}
+              className={activeIndex === index ? "active" : ""}
+              onClick={() => setActiveIndex(index)}
+            >
               <div className="icon-box">
                 <FontAwesomeIcon icon={item.icon} />
               </div>
