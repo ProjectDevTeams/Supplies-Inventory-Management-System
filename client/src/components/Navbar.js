@@ -5,7 +5,7 @@ function Navbar() {
 
 
   return (
-  <body>
+  <div>
     <nav>
         <section id="title">
             <ul>
@@ -22,7 +22,7 @@ function Navbar() {
           </ul>    
         </section>
     </nav>
-  </body>
+  </div>
     
   );
 }

@@ -3,7 +3,7 @@ import "./Consumablebar.css";
 
 function Consumable() {
   return (
-    <body className="">
+    <div>
       <div class="top-bar">
         <div class="top-title">วัสดุสิ้นเปลือง</div>
 
@@ -23,7 +23,7 @@ function Consumable() {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 }
 
