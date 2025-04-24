@@ -85,7 +85,6 @@ h2 {
 
 .login-right {
   flex: 2;
-  background-image: url('C:\Users\User\Desktop\Supplies-Inventory-Management-System\client\public\image\bg-login.png'); /* เปลี่ยน path ตามไฟล์ของคุณ */
   background-size: cover;
   background-position: center;
 }
