@@ -28,7 +28,7 @@ function Login() {
         </div>
 
         <div className="login-right">
-          {/* รูปพื้นหลังแสดงจาก CSS */}
+          <img src="/image/bg-login.png" alt="Background" />
         </div>
       </div>
     </body>
