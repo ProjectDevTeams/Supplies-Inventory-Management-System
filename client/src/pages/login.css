@@ -1,85 +1,91 @@
+.body-login {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
 
-
-/* ส่วนรวม */
 .login-container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  /* กล่อง login ด้านซ้าย */
-  .login-box {
-    width: 40%;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #f8f9fa;
-  }
-  
-  /* รูปโลโก้ */
-  .logo {
-    width: 180px;
-    align-items: left;
-    /*margin-bottom: 40px;
-    margin-left: 40px;*/
-  }
-  
-  /* หัวข้อ welcome */
-  h4 {
-    margin-bottom: 5px;
-    font-weight: normal;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
-  
-  /* กล่อง input */
-  .input-group {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-  
-  .input-group label {
-    font-size: 14px;
-  }
-  
-  .input-group input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* ลิงก์ลืมรหัสผ่าน */
-  .forgot-password {
-    width: 100%;
-    text-align: right;
-    font-size: 12px;
-    color: #007bff;
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
-  
-  /* ปุ่มเข้าสู่ระบบ */
-  .login-button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(to right, #0099ff, #6633cc);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  /* ด้านขวาเป็นรูปวิว */
-  .login-side-image {
-    width: 60%;
-    /*background-image: url('./image/bg-loggin.pn');*/
-    background-size: cover;
-    background-position: center;
-  }
+  display: flex;
+  height: 100vh;
+}
+
+.login-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+ 
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.logo {
+  width: 25em;
+  margin-bottom: 20px;
+}
+
+h4 {
+  font-size: 1.5em;
+  margin: 0;
+  color: #888;
+}
+
+h2 {
+  font-size: 1.7em;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  font-size: 1em;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 20px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.login-right {
+  flex: 2;
+  background-image: url('C:\Users\User\Desktop\Supplies-Inventory-Management-System\client\public\image\bg-login.png'); /* เปลี่ยน path ตามไฟล์ของคุณ */
+  background-size: cover;
+  background-position: center;
+}
