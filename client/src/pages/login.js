@@ -28,7 +28,7 @@ function Login() {
         </div>
 
         <div className="login-right">
-          <img src="/image/bg-login.png" alt="Background" />
+          <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>
     </body>
