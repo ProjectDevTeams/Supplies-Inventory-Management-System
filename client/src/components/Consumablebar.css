@@ -1,0 +1,80 @@
+.top-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    padding: 1em;
+    background-color: #f5f8fc;
+  }
+  
+  .top-title {
+    font-weight: bold;
+    font-size: 1.4em;
+    color: #003366;
+  }
+  
+  .toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+  
+  /* Search Box */
+  .search-container {
+    position: relative;
+  }
+  
+  .search-container input {
+    padding: 0.5em 0.5em 0.5em 2em;
+    border: 2px solid #aab3bb;
+    border-radius: 3px;
+    font-size: 1em;
+  }
+  
+  .search-container .search-icon {
+    position: absolute;
+    left: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+  }
+  
+  /* Buttons */
+  .button-group {
+    display: flex;
+    gap: 1.5em;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 0.5em 1em;
+    border: none;
+    color: white;
+    border-radius: 2px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn.danger {
+    background-color: #e60000;
+  }
+  
+  .btn.danger .count {
+    color: yellow;
+    font-weight: bold;
+  }
+  
+  .btn.success {
+    background-color: #2d7a3e;
+  }
+  
+  .btn.primary {
+    background-color: #2176bd;
+  }
+  
+  .btn.dark {
+    background-color: #122b40;
+  }
+  
