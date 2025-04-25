@@ -4,9 +4,10 @@ import LoginPage from "./pages/LoginPage";
 import ConsumablePage from "./pages/ConsumablePage";
 import AddnewPopup from "./components/addnew-popup";
 import OrganizationsPage from "./pages/OrganizationsPage";
-
-
-function App() {
+import HumanPage from "./pages/HumanPage";
+import HistoryPage from "./pages/HistoryPage";
+ 
+function App() {  
   return (
     <BrowserRouter>
         <Routes>
@@ -15,6 +16,8 @@ function App() {
           <Route path='/consumable' element={<ConsumablePage/>}/>
           <Route path='/organizations' element={<OrganizationsPage/>}/>
           <Route path='/popup' element={<AddnewPopup/>}/>
+          <Route path='/human' element={<HumanPage/>}/>
+          <Route path='/history' element={<HistoryPage/>}/>
         </Routes>
     </BrowserRouter>
   );
