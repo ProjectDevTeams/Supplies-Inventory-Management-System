@@ -1,13 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-<<<<<<< HEAD
 import HomePage from "./pages/HomePage";
-=======
-
-
-import HomePage from "./pages/HomePage";
-
->>>>>>> 13e08afd832761f437ae4e3234a658a8c2558b22
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConsumablePage from "./pages/ConsumablePage";
@@ -19,10 +12,6 @@ import OrganizationsPage from "./pages/OrganizationsPage";
 import ReportPage from "./pages/ReportPage"
 import PermissionPage from "./pages/PermissionPage"
 import SettingPage from "./pages/SettingPage";
-<<<<<<< HEAD
-=======
-
->>>>>>> 13e08afd832761f437ae4e3234a658a8c2558b22
 
 function App() {
   return (
