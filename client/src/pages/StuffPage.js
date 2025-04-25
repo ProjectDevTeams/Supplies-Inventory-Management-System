@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Stuffbar from '../components/Stuffbar';
-import './stuff.css';
+import './StuffPage.css';
 
 function StuffPage() {
   return (
