@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -24,6 +25,10 @@ function LoginPage() {
             <div className="forgot-password">ลืมรหัสผ่าน</div>
 
             <button className="login-button">เข้าสู่ระบบ</button>
+
+            <div className="switch-page">
+              ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
+            </div>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './RegisterPage.css';
 
 function RegisterPage() {
@@ -32,11 +33,15 @@ function RegisterPage() {
             </div>
 
             <button className="register-button">สมัครสมาชิก</button>
+
+            <div className="switch-page">
+              มีบัญชีอยู่แล้ว? <Link to="/login">เข้าสู่ระบบ</Link>
+            </div>
           </div>
         </div>
 
         <div className="register-right">
-            <img src="/image/bg-login.jpg" alt="Background" />
+          <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>
     </div>

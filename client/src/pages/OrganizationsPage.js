@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import Consumablebar from '../components/Consumablebar';
 import './OrganizationsPage.css';
 
 function OrganizationsPage() {
@@ -12,7 +11,7 @@ function OrganizationsPage() {
         <Sidebar />
         <main className="organizations-content">
           <section className="content-header">
-            <Consumablebar />
+            <h2>บริษัท/ห้าง/ร้าน</h2>
           </section>
         </main>
       </div>
