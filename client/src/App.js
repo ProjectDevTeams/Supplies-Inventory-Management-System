@@ -6,13 +6,15 @@ import AddnewPopup from "./components/addnew-popup";
 import OrganizationsPage from "./pages/OrganizationsPage";
 import HumanPage from "./pages/HumanPage";
 import HistoryPage from "./pages/HistoryPage";
- 
-function App() {  
+import RegisterPage from "./pages/RegisterPage";
+
+function App() {
   return (
     <BrowserRouter>
         <Routes>
           <Route index element={<LoginPage/>} />
           <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/consumable' element={<ConsumablePage/>}/>
           <Route path='/organizations' element={<OrganizationsPage/>}/>
           <Route path='/popup' element={<AddnewPopup/>}/>
