@@ -11,6 +11,7 @@ function OrganizationsPage() {
         <Sidebar />
         <main className="organizations-content">
           <section className="content-header">
+            <h2>บริษัท/ห้าง/ร้าน</h2>
           </section>
         </main>
       </div>
