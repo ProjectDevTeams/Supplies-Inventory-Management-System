@@ -14,9 +14,7 @@ function OrganizationsPage() {
         <main className="organizations-content">
           <section className="content-header">
             <Organizationsbar />
-          </section>
-          <section className='Organizations_Table-container'>
-             <Organizations_Table/>
+            <Organizations_Table/>
           </section>
         </main>
       </div>
