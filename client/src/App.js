@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from "./pages/login";
 import Consumable from "./pages/consumable";
+
 // import Consumable from "./components/Consumablebar";
 
 function App() {
