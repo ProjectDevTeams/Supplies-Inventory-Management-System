@@ -1,12 +1,15 @@
 .consumable-navbar {
     width: 100%;
     height: 100%;
+    
+   
   }
   
   .consumable-sidebar {
     display: flex;
     width: 100%;
     min-height: 100vh;
+
   }
   
   .consumable-content {
@@ -16,6 +19,7 @@
     background-color: #f9f9f9;
     padding: 1em;
     box-sizing: border-box;
+    margin-left: 200px; /* <<< ให้ content ไม่ทับ sidebar */
   }
   
   .content-header {

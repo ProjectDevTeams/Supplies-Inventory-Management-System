@@ -1,6 +1,8 @@
 .sidebar {
-  width: 250px;
-  min-height: 100vh;
+  position: fixed;       /* <<< จาก sticky เป็น fixed */
+  left: 0;
+  height: 100vh;
+  width: 200px;
   background-color: white;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
@@ -26,6 +28,7 @@
   text-decoration: none;
   font-size: 15px;
   transition: background-color 0.2s;
+  
 }
 
 .menu-item a:hover {

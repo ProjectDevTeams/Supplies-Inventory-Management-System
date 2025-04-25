@@ -2,7 +2,9 @@ nav {
     display: flex;
     align-items: center;
     background-color: #D1E7FF;
-
+    position: sticky;
+    z-index: 999;
+    top: 0;
 }
 
 #title{
