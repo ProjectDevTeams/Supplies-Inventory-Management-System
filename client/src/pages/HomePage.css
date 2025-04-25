@@ -1,0 +1,31 @@
+.home-navbar {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .home-sidebar {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+  
+  .home-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding: 1em;
+    box-sizing: border-box;
+  }
+  
+  .home-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    background-color: #f5f8fc;
+    padding: 1em;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
