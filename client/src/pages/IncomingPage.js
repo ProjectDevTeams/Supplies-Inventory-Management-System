@@ -6,19 +6,18 @@ import './IncomingPage.css';
 
 function IncomingPage() {
   return (
-    <div className="incoming-navbar">
+    <div className="stuff-navbar">
       <Navbar />
-      <div className="incoming-sidebar">
+      <div className="stuff-sidebar">
         <Sidebar />
-        <main className="incoming-content">
+        <main className="stuff-content">
           <section className="content-header">
-            <Incomingbar /> 
+            <Incomingbar />
           </section>
         </main>
       </div>
     </div>
   );
 }
-
 
 export default IncomingPage;

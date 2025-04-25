@@ -1,15 +1,24 @@
-.incoming-header {
+.incomingbar-wrapper {
+  padding: 1rem 1.5rem;
   background-color: #f5f8fc;
-  padding: 1rem;
 }
 
-.incoming-header h2 {
+.excel-export img {
+  width: 50px;    
+  height: auto;
+  object-fit: contain;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+
+.incomingbar-header h2 {
   color: #11385b;
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 0.75rem;
 }
 
-.incoming-controls {
+.incomingbar-controls {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -19,17 +28,17 @@
 .search-box {
   display: flex;
   align-items: center;
+  background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 6px 10px;
-  background-color: white;
-  min-width: 220px;
+  min-width: 250px;
 }
 
-.search-box img {
-  width: 1rem;
-  margin-right: 6px;
+.search-icon {
+  margin-right: 8px;
   opacity: 0.6;
+  font-size: 1rem;
 }
 
 .search-box input {
@@ -37,6 +46,7 @@
   outline: none;
   font-size: 14px;
   width: 100%;
+  background-color: transparent;
 }
 
 .btn.green {
@@ -54,7 +64,7 @@
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 14px;
-  background: white;
+  background-color: white;
   cursor: pointer;
 }
 
@@ -67,7 +77,4 @@
   font-weight: bold;
 }
 
-.excel-export img {
-  width: 28px;
-  height: auto;
-}
+
