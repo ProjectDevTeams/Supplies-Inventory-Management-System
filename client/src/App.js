@@ -12,6 +12,7 @@ import OrganizationsPage from "./pages/OrganizationsPage";
 import ReportPage from "./pages/ReportPage"
 import PermissionPage from "./pages/PermissionPage"
 import SettingPage from "./pages/SettingPage";
+import IncomingPage from "./pages/IncomingPage";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/stuff" element={<StuffPage />} />
-        {/* <Route path="/incoming" element={<IncomingPage />} /> */}
+        <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/human" element={<HumanPage />} />
