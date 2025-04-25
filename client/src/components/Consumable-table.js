@@ -3,7 +3,7 @@ import "./Consumable-table.css";
 
 function Consumable_Table() {
   return (
-    <div className="Table-Contrainer">
+    <div className="Table-Container">
       <table>
         <thead>
           <tr>

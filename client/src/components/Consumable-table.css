@@ -1,7 +1,7 @@
 
 table {
   width: 90%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
-  margin: 1em 2em; /* <<< จัดกลาง + เว้นบน */
+  margin: 1em 2em 30px; /* <<< จัดกลาง + เว้นบน */
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -62,7 +62,7 @@ th {
   margin-top: 1em;
   font-size: 0.95em;
   width: 90%;
-  margin-left: 2em;
+  margin-left: 1.5em;
   margin-right: auto;
   flex-wrap: wrap;
 }
@@ -91,3 +91,4 @@ th {
 .pagination .disabled {
   color: #aaa;
 }
+

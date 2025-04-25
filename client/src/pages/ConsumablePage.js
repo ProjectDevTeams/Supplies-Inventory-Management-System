@@ -16,11 +16,12 @@ function ConsumablePage() {
             <Consumablebar />
           </section>
           <section className='Consumable_Table-container'>
-             <Consumable_Table/>
+            <Consumable_Table/>
           </section>
         </main>
       </div>
     </div>
+  
   );
 }
 
