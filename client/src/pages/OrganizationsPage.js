@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Organizationsbar from '../components/Organizationsbar';
+import Organizations_Table from '../components/Organizationsbar-table';
 import './OrganizationsPage.css';
 
 function OrganizationsPage() {
@@ -11,7 +13,10 @@ function OrganizationsPage() {
         <Sidebar />
         <main className="organizations-content">
           <section className="content-header">
-            <h2>บริษัท/ห้าง/ร้าน</h2>
+            <Organizationsbar />
+          </section>
+          <section className='Organizations_Table-container'>
+             <Organizations_Table/>
           </section>
         </main>
       </div>
