@@ -1,0 +1,55 @@
+.adjust-header {
+    background-color: #f5f8fc;
+    padding: 1rem;
+  }
+  
+  .adjust-header h2 {
+    color: #11385b;
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adjust-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    background-color: white;
+    min-width: 250px;
+  }
+  
+  .search-box img {
+    width: 1rem;
+    margin-right: 8px;
+    opacity: 0.6;
+  }
+  
+  .search-box input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    background: transparent;
+  }
+  
+  .btn.green {
+    background-color: #2e7d32;
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 1rem;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+  }
+  

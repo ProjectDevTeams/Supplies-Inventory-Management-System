@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Humanbar from '../components/Humanbar';
 import './HumanPage.css';
 
 function HumanPage() {
@@ -11,7 +12,8 @@ function HumanPage() {
         <Sidebar />
         <main className="human-content">
           <section className="content-header">
-            {/* <HumanPage/> */}
+            
+            <Humanbar/>
           </section>
         </main>
       </div>

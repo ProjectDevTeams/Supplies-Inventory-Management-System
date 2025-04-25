@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import Adjustbar from"../components/Adjustbar";
 import './AdjustPage.css';
 
 function AdjustPage() {
@@ -10,13 +11,14 @@ function AdjustPage() {
       <div className="adjust-sidebar">
         <Sidebar />
         <main className="adjust-content">
-          <section className="adjust-header">
-            <h2>ปรับยอด</h2>
+          <section className="content-header">
+            <Adjustbar /> 
           </section>
         </main>
       </div>
     </div>
   );
 }
+
 
 export default AdjustPage;
