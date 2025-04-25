@@ -1,13 +1,7 @@
-.Table-Contrainer {
-  background-color: #f5f8fc; /* สีฟ้าอ่อน เหมือนแถบหัว */
-  padding: 1.5em 1em;        /* เพิ่มระยะห่างรอบตาราง (เลือกได้) */
-  margin-left: 17.9em;
-
-}
 
 table {
-  width: 80%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
-  margin: 1.5em auto 0 auto; /* <<< จัดกลาง + เว้นบน */
+  width: 90%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
+  margin: 1em 2em; /* <<< จัดกลาง + เว้นบน */
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -62,11 +56,19 @@ th {
 }
 
 .pagination {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* <<< จัดข้อความซ้าย, ปุ่มขวา */
   margin-top: 1em;
   font-size: 0.95em;
-  width: 75%;
+  width: 90%;
   margin-left: auto;
+  margin-right: auto;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  color: #333;
   margin-right: auto;
 }
 
@@ -89,4 +91,3 @@ th {
 .pagination .disabled {
   color: #aaa;
 }
-

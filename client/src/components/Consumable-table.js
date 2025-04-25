@@ -137,6 +137,7 @@ function Consumable_Table() {
 
       <div className="pagination">
         แสดง 1 ถึง 5 จาก 120 แถว<br />
+        
         <span className="disabled">ก่อนหน้า</span>
         <span className="current">1</span>
         <a href="#">2</a>

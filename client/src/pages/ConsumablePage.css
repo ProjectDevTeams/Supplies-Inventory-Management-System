@@ -22,10 +22,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.8em;
-    background-color: #f5f8fc;
+    background-color: #f9f9f9;
     padding: 1em;
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
   }
-  
