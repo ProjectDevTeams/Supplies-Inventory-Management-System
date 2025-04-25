@@ -87,7 +87,7 @@
     margin: 1em;
   }
   
-  table {
+  .hum-table {
     width: auto;
     margin: 0.05em auto 0 auto;
     border-collapse: collapse;
@@ -96,8 +96,8 @@
     table-layout: auto;
   }
   
-  th,
-  td {
+  .hum-table th,
+  .hum-table td {
     border: 1px solid #999;
     padding: 0.4em 0.75em;
     text-align: center;
@@ -105,10 +105,11 @@
     white-space: nowrap;
   }
   
-  th {
+  .hum-table th {
     background-color: #dfe8f6;
     font-weight: bold;
   }
+  
   
 .pagination {
     display: flex;

@@ -1,55 +1,57 @@
 .adjust-header {
-    background-color: #f5f8fc;
-    padding: 1rem;
-  }
-  
-  .adjust-header h2 {
-    color: #11385b;
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .adjust-controls {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  
-  .search-box {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 6px 10px;
-    background-color: white;
-    min-width: 250px;
-  }
-  
-  .search-box img {
-    width: 1rem;
-    margin-right: 8px;
-    opacity: 0.6;
-  }
-  
-  .search-box input {
-    border: none;
-    outline: none;
-    font-size: 14px;
-    width: 100%;
-    background: transparent;
-  }
-  
-  .btn.green {
-    background-color: #2e7d32;
-    padding: 0.5rem 1.25rem;
-    border: none;
-    border-radius: var(--border-radius);
-    color: white;
-    font-weight: 500;
-    cursor: pointer;
-    font-size: 1rem;
-    white-space: nowrap;
-    transition: background-color 0.2s ease;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  background-color: #f9f9f9;
+  align-items: flex-start;
+  width: auto;
+  margin-top: -0.6em;
+}
+
+.adjust-title {
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-bottom: 0.5rem;
+  color: #003366;
+}
+
+.adjust-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  align-items: center;
+}
+
+/* ช่องค้นหา */
+.search-container {
+  position: relative;
+}
+
+.search-container input {
+  padding: 0.5em 0.5em 0.5em 2em;
+  border: 2px solid #aab3bb;
+  border-radius: 3px;
+  font-size: 1em;
+  min-width: 250px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  pointer-events: none;
+}
+
+/* ปุ่ม */
+.btn.green {
+  background-color: #2d7a3e;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}

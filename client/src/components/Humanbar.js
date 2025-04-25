@@ -21,7 +21,7 @@ function Human() {
 
       {/* ตารางวัสดุรวมอยู่ใน component เดียว */}
       <div className="table-container">
-        <table>
+        <table className="hum-table">
           <thead>
             <tr>
               <th>ลำดับ</th>
@@ -63,7 +63,7 @@ function Human() {
               <td>นางสาวปิลันธนา สิทธิพันธ์</td>
               <td>STI</td>
               <td>pilantana.s@psu.ac.th</td>
-              <td className="status.approved">อนุมัติ</td>
+              <td className="status approved">อนุมัติ</td>
             </tr> 
             <tr>
               <td>016</td>
@@ -71,7 +71,7 @@ function Human() {
               <td>นางสาวปิยะรส บุญสวัสดิ์</td>
               <td>STI</td>
               <td>piyorot.b@gmail.com</td>
-              <td className="status.approved">อนุมัติ</td>
+              <td className="status approved">อนุมัติ</td>
             </tr>
             <tr>
               <td>015</td>

@@ -4,12 +4,12 @@ import "./Adjustbar.css";
 function Adjustbar() {
   return (
     <div className="adjust-header">
-      <h2>ปรับยอด</h2>
+      <h2 className="adjust-title">ปรับยอด</h2>
 
       <div className="adjust-controls">
         {/* ช่องค้นหา */}
-        <div className="search-box">
-        <span class="search-icon">🔍</span>
+        <div className="search-container">
+          <span className="search-icon">🔍</span>
           <input type="text" placeholder="ค้นหา" />
         </div>
 

@@ -3,14 +3,12 @@ import "./Incomingbar.css";
 
 function Incomingbar() {
   return (
-    <div className="incomingbar-wrapper">
-      <div className="incomingbar-header">
-        <h2>รับเข้าวัสดุ</h2>
-      </div>
+    <div className="incoming-header">
+      <h2 className="incoming-title">รับเข้าวัสดุ</h2>
 
-      <div className="incomingbar-controls">
+      <div className="incoming-controls">
         {/* กล่องค้นหา */}
-        <div className="search-box">
+        <div className="search-container">
           <span className="search-icon">🔍</span>
           <input type="text" placeholder="ค้นหา" />
         </div>
@@ -18,9 +16,9 @@ function Incomingbar() {
         {/* ปุ่มเพิ่มหัวข้อ */}
         <button className="btn green">+ เพิ่มหัวข้อ</button>
 
-        {/* Dropdown ปีงบ Mock ปี แก้ด้วยจ้า*/}
+        {/* Dropdown ปีงบประมาณ */}
         <select className="budget-select">
-          <option>เลือกปีงบประมาณ</option>
+          <option disabled selected>เลือกปีงบประมาณ</option>
           <option>2566</option>
           <option>2567</option>
           <option>2568</option>
@@ -31,10 +29,9 @@ function Incomingbar() {
 
         {/* ปุ่ม Export */}
         <label className="excel-export">
-         <img src="../image/excel-icon.png" alt="Excel" />
-         <span>Export Excel</span>
-         <input type="file" id="excelFile" accept=".xlsx" hidden />
-         </label>
+          <img src="../image/excel-icon.png" alt="Excel" />
+          <span>Export Excel</span>
+        </label>
       </div>
     </div>
   );
