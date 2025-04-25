@@ -1,13 +1,6 @@
 .org-container {
-    padding: 1em;
+    padding: 0 2em;
     background-color: #f9f9f9;
-  }
-  
-  .org-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8em;
-    align-items: flex-start;
   }
   
   .org-title {
@@ -41,18 +34,7 @@
     color: gray;
     pointer-events: none;
   }
-  
-  .btn.green {
-    background-color: #2d7a3e;
-    padding: 0.5em 1em;
-    border: none;
-    color: white;
-    border-radius: 3px;
-    font-size: 1em;
-    cursor: pointer;
-  }
-  
-  /* ตาราง */
+
   .org-table {
     width: 100%;
     border-collapse: collapse;

@@ -4,7 +4,6 @@ import "./Organizationsbar-table.css";
 function OrganizationsBarTable() {
   return (
     <div className="org-container">
-      {/* ตารางข้อมูล */}
       <table className="org-table">
         <thead>
           <tr>
