@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConsumablePage from "./pages/ConsumablePage";
 import StuffPage from "./pages/StuffPage";
+import IncomingPage from "./pages/IncomingPage";
 import HistoryPage from "./pages/HistoryPage";
 import AdjustPage from "./pages/AdjustPage"
 import HumanPage from "./pages/HumanPage";
@@ -12,7 +13,6 @@ import OrganizationsPage from "./pages/OrganizationsPage";
 import ReportPage from "./pages/ReportPage"
 import PermissionPage from "./pages/PermissionPage"
 import SettingPage from "./pages/SettingPage";
-import IncomingPage from "./pages/IncomingPage";
 
 function App() {
   return (
