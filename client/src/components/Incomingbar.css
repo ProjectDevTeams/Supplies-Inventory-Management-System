@@ -1,54 +1,52 @@
-.incomingbar-wrapper {
-  padding: 1rem 1.5rem;
+.incoming-header {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
   background-color: #f5f8fc;
+  align-items: flex-start;
+  width: auto;
+  margin-top: -0.6em;
 }
 
-.excel-export img {
-  width: 50px;    
-  height: auto;
-  object-fit: contain;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-
-.incomingbar-header h2 {
+.incoming-title {
+  font-weight: bold;
+  font-size: 1.4em;
+  margin-bottom: 0.5rem;
   color: #11385b;
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
 }
 
-.incomingbar-controls {
+.incoming-controls {
   display: flex;
-  align-items: center;
-  gap: 1rem;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 1em;
 }
 
-.search-box {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: 1px solid #ccc;
+/* Search Box */
+.search-container {
+  position: relative;
+}
+
+.search-container input {
+  padding: 0.5em 0.5em 0.5em 2em;
+  border: 2px solid #ccc;
   border-radius: 4px;
-  padding: 6px 10px;
+  font-size: 1em;
   min-width: 250px;
 }
 
 .search-icon {
-  margin-right: 8px;
-  opacity: 0.6;
+  position: absolute;
+  left: 0.6em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  pointer-events: none;
   font-size: 1rem;
+  opacity: 0.6;
 }
 
-.search-box input {
-  border: none;
-  outline: none;
-  font-size: 14px;
-  width: 100%;
-  background-color: transparent;
-}
-
+/* Button */
 .btn.green {
   background-color: #2e7d32;
   color: white;
@@ -59,15 +57,17 @@
   cursor: pointer;
 }
 
+/* Select */
 .budget-select {
   padding: 0.5rem 1rem;
   border-radius: 4px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  font-size: 1em;
   background-color: white;
   cursor: pointer;
 }
 
+/* Export Excel */
 .excel-export {
   display: flex;
   align-items: center;
@@ -77,4 +77,9 @@
   font-weight: bold;
 }
 
-
+.excel-export img {
+  width: 40px;
+  height: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
