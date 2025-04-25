@@ -2,6 +2,8 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Humanbar from '../components/Humanbar';
+import AddpeoplePopup from '../components/addpeople-popup';
+import EditpeoplePopup from '../components/Editpeople-popup';
 import './HumanPage.css';
 
 function HumanPage() {
@@ -10,10 +12,15 @@ function HumanPage() {
       <Navbar />
       <div className="human-sidebar">
         <Sidebar />
+        
         <main className="human-content">
           <section className="content-header">
-            
+            {/* test popup */}
+            {/* <EditpeoplePopup/> */}  
+            {/* <AddpeoplePopup/> */}
             <Humanbar/>
+            
+            
           </section>
         </main>
       </div>
