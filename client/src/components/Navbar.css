@@ -6,6 +6,7 @@ nav {
 }
 
 #title{
+    padding: 1em;
     ul{
         li{
             list-style: none;
