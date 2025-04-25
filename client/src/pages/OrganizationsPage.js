@@ -2,15 +2,15 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Consumablebar from '../components/Consumablebar';
-import './consumable.css';
+import './OrganizationsPage.css';
 
-function ConsumablePage() {
+function OrganizationsPage() {
   return (
-    <div className="consumable-navbar">
+    <div className="organizations-navbar">
       <Navbar />
-      <div className="consumable-sidebar">
+      <div className="organizations-sidebar">
         <Sidebar />
-        <main className="consumable-content">
+        <main className="organizations-content">
           <section className="content-header">
             <Consumablebar />
           </section>
@@ -20,4 +20,4 @@ function ConsumablePage() {
   );
 }
 
-export default ConsumablePage;
+export default OrganizationsPage;
