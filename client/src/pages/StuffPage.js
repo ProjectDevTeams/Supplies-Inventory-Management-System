@@ -1,16 +1,18 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
-import './OrganizationsPage.css';
+import Stuffbar from '../components/Stuffbar';
+import './StuffPage.css';
 
-function OrganizationsPage() {
+function StuffPage() {
   return (
-    <div className="organizations-navbar">
+    <div className="stuff-navbar">
       <Navbar />
-      <div className="organizations-sidebar">
+      <div className="stuff-sidebar">
         <Sidebar />
-        <main className="organizations-content">
+        <main className="stuff-content">
           <section className="content-header">
+            <Stuffbar /> 
           </section>
         </main>
       </div>
@@ -18,4 +20,5 @@ function OrganizationsPage() {
   );
 }
 
-export default OrganizationsPage;
+
+export default StuffPage;

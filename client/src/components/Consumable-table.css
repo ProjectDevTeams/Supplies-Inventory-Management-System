@@ -1,0 +1,92 @@
+.Table-Contrainer {
+  background-color: #f5f8fc; /* สีฟ้าอ่อน เหมือนแถบหัว */
+  padding: 1.5em 1em;        /* เพิ่มระยะห่างรอบตาราง (เลือกได้) */
+  margin-left: 17.9em;
+
+}
+
+table {
+  width: 80%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
+  margin: 1.5em auto 0 auto; /* <<< จัดกลาง + เว้นบน */
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  
+}
+
+th, td {
+  border: 1px solid #999;
+  padding: 0.5em;
+  text-align: center;
+  vertical-align: top;
+}
+
+th {
+  background-color: #dfe8f6;
+  font-weight: bold;
+}
+
+.item-cell {
+  text-align: left;
+}
+
+.item-cell b {
+  color: #003366;
+}
+
+.item-status {
+  color: red;
+  font-weight: bold;
+}
+
+.item-status.ok {
+  color: green;
+}
+
+.item-actions {
+  margin-top: 0.5em;
+}
+
+.item-actions a {
+  margin-right: 0.5em;
+  text-decoration: none;
+  color: #2176bd;
+}
+
+.item-actions a.edit {
+  color: orange;
+}
+
+.item-actions a.adjust {
+  color: #003366;
+}
+
+.pagination {
+  text-align: right;
+  margin-top: 1em;
+  font-size: 0.95em;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pagination span,
+.pagination a {
+  padding: 0.3em 0.6em;
+  margin: 0 0.2em;
+  border: 1px solid #ccc;
+  background-color: white;
+  text-decoration: none;
+  color: #003366;
+  border-radius: 3px;
+}
+
+.pagination .current {
+  background-color: #2176bd;
+  color: white;
+}
+
+.pagination .disabled {
+  color: #aaa;
+}
+
