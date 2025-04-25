@@ -5,8 +5,7 @@
   padding: 1em;
   background-color: #f5f8fc;
   align-items: flex-start;  
-  margin-left: 15%;       /* <<< ทำให้ทั้งกล่องไปชิดขวา */
-  width: auto;      /* <<< ให้ขนาดพอดีกับเนื้อหา ไม่กินเต็มจอ */
+  width: auto;
   margin-top: -0.6em;
   
 }

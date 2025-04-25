@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Kanit', Arial, sans-serif;
+}
+
+.body-register {
+    background-color: #f5f5f5;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .register-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .register-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+  }
+  
+  .register-box {
+    width: 80%;
+    max-width: 400px;
+  }
+  
+  .logo {
+    width: 120px;
+    margin-bottom: 1em;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
+  
+  .input-group label {
+    margin-bottom: 0.3em;
+    font-weight: 500;
+  }
+  
+  .input-group input {
+    padding: 0.7em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .register-button {
+    width: 100%;
+    padding: 0.7em;
+    background-color: #2176bd;
+    border: none;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .register-button:hover {
+    background-color: #155a95;
+  }
+  
+  .register-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .register-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
