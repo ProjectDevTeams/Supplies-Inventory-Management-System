@@ -7,6 +7,7 @@ import OrganizationsPage from "./pages/OrganizationsPage";
 import HumanPage from "./pages/HumanPage";
 import HistoryPage from "./pages/HistoryPage";
 import RegisterPage from "./pages/RegisterPage";
+import Stuff from "./pages/stuff";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path='/popup' element={<AddnewPopup/>}/>
           <Route path='/human' element={<HumanPage/>}/>
           <Route path='/history' element={<HistoryPage/>}/>
+          <Route path='/stuff' element={<Stuff/>}/>
         </Routes>
     </BrowserRouter>
   );
