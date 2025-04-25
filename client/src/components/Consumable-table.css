@@ -1,5 +1,5 @@
 
-table {
+.table-consumable {
   width: 90%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
   margin: 1em 2em 30px; /* <<< จัดกลาง + เว้นบน */
   border-collapse: collapse;
@@ -8,14 +8,14 @@ table {
   
 }
 
-th, td {
+#col-name, #data-in-table {
   border: 1px solid #999;
   padding: 0.5em;
   text-align: center;
   vertical-align: top;
 }
 
-th {
+#col-name {
   background-color: #dfe8f6;
   font-weight: bold;
 }

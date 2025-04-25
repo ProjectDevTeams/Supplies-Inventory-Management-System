@@ -4,25 +4,25 @@ import "./Consumable-table.css";
 function Consumable_Table() {
   return (
     <div className="Table-Container">
-      <table>
+      <table className="table-consumable">
         <thead>
           <tr>
-            <th>รหัส</th>
-            <th>รูปภาพ</th>
-            <th>รายการ</th>
-            <th>ยอดยกมา</th>
-            <th>ยอดต่ำสุด</th>
-            <th>ยอดสูงสุด</th>
-            <th>รับ</th>
-            <th>จ่าย</th>
-            <th>คงเหลือ</th>
+            <th id="col-name">รหัส</th>
+            <th id="col-name">รูปภาพ</th>
+            <th id="col-name">รายการ</th>
+            <th id="col-name">ยอดยกมา</th>
+            <th id="col-name">ยอดต่ำสุด</th>
+            <th id="col-name">ยอดสูงสุด</th>
+            <th id="col-name">รับ</th>
+            <th id="col-name">จ่าย</th>
+            <th id="col-name">คงเหลือ</th>
           </tr>
         </thead>
 
         <tbody>
           {/* ---------------- MOCK ข้อมูลตาราง -------------------------- */}
           <tr>
-            <td>OF001</td>
+            <td id="data-in-table">OF001</td>
             <td>
               <img src="https://via.placeholder.com/60" alt="Scotch" />
             </td>
@@ -45,16 +45,17 @@ function Consumable_Table() {
                 </a>
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-            <td>2</td>
-            <td>2</td>
-            <td>1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">5</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">1</td>
           </tr>
           {/* เพิ่มแถวอื่น ๆ ตามต้องการ */}
+
           <tr>
-            <td>OF002</td>
+            <td id="data-in-table">OF002</td>
             <td>
               <img src="https://via.placeholder.com/60" alt="Scotch" />
             </td>
@@ -77,16 +78,16 @@ function Consumable_Table() {
                 </a>
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-            <td>2</td>
-            <td>2</td>
-            <td>1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">5</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">1</td>
           </tr>
 
           <tr>
-            <td>OF003</td>
+            <td id="data-in-table">OF003</td>
             <td>
               <img src="https://via.placeholder.com/60" alt="Scotch" />
             </td>
@@ -109,16 +110,16 @@ function Consumable_Table() {
                 </a>
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-            <td>2</td>
-            <td>2</td>
-            <td>1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">5</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">1</td>
           </tr>
 
           <tr>
-            <td>OF004</td>
+            <td id="data-in-table">OF004</td>
             <td>
               <img src="https://via.placeholder.com/60" alt="Scotch" />
             </td>
@@ -141,16 +142,16 @@ function Consumable_Table() {
                 </a>
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-            <td>2</td>
-            <td>2</td>
-            <td>1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">5</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">1</td>
           </tr>
 
-          <tr>
-            <td>OF005</td>
+           <tr>
+            <td id="data-in-table">OF005</td>
             <td>
               <img src="https://via.placeholder.com/60" alt="Scotch" />
             </td>
@@ -173,13 +174,15 @@ function Consumable_Table() {
                 </a>
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>5</td>
-            <td>2</td>
-            <td>2</td>
-            <td>1</td>
-          </tr>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">1</td>
+            <td id="data-in-table">5</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">2</td>
+            <td id="data-in-table">1</td>
+          </tr>    
+{/* --------------------------Mock ข้อมูลตาราง-----------------------------------        */}
+
         </tbody>
       </table>
 
