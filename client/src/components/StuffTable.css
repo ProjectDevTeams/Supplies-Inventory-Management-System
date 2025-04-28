@@ -1,10 +1,17 @@
-.table-container {
+.table-wrapper {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 1200px;
 }
 
 .stuff-table {
-  width: 95%;
-  margin: 0 auto;
+  width: 100%;
   border-collapse: collapse;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -28,7 +35,6 @@
   height: auto;
 }
 
-/* สถานะ */
 .status {
   font-weight: bold;
 }
@@ -46,28 +52,29 @@
 }
 
 /* Pagination */
-.pagination {
+.pagination-wrapper {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem auto;
-  width: 95%;
-  font-size: 14px;
 }
 
 .pagination-info {
+  font-size: 14px;
   color: #333;
 }
 
 .pagination-buttons {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* <<< ระยะห่างระหว่างปุ่ม */
+  gap: 0.5rem;
 }
 
 .pagination-buttons .btn {
   padding: 0.5rem 1.2rem;
-  background-color: #ffffff;
+  background: white;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -76,7 +83,7 @@
 }
 
 .pagination-buttons .btn:hover {
-  background-color: #e6f0ff; /* <<< สีฟ้าเวลาชี้ mouse */
+  background-color: #e6f0ff;
 }
 
 .pagination-buttons .btn.disabled {
@@ -85,8 +92,27 @@
   pointer-events: none;
 }
 
-.pagination-buttons .btn.current-page {
-  background-color: #007bff; /* <<< สีฟ้าเข้ม */
-  color: #ffffff;
+.page-input {
+  width: 50px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  background-color: #007bff;
+  color: white;
   font-weight: bold;
+  border-radius: 4px;
+  font-size: 14px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.page-input::-webkit-inner-spin-button,
+.page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
