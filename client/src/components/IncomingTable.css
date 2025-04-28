@@ -1,10 +1,19 @@
-.table-container {
-    padding: 1rem;
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem; /* <<< ลดจาก 1rem เป็น 0.5rem */
+  }
+  
+  .table-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 0.2rem; /* <<< ลดจาก 0.5rem เหลือ 0.2rem */
   }
   
   .incoming-table {
-    width: 95%;
-    margin: 0 auto;
+    width: 100%;
     border-collapse: collapse;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -33,18 +42,19 @@
     font-weight: bold;
   }
   
-  /* Pagination */
-  .pagination {
+  /* --- Pagination --- */
+  .pagination-wrapper {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem auto;
-    width: 95%;
-    font-size: 14px;
+    margin-top: 0.5rem; /* <<< ลดจาก 1rem เหลือ 0.5rem */
   }
   
   .pagination-info {
     color: #333;
+    font-size: 14px;
   }
   
   .pagination-buttons {
@@ -73,20 +83,14 @@
     pointer-events: none;
   }
   
-  .pagination-buttons .btn.current-page {
-    background-color: #007bff;
-    color: #ffffff;
-    font-weight: bold;
-  }
-  
   .page-input {
     width: 50px;
     text-align: center;
     padding: 0.4rem 0.6rem;
-    border: 2px solid rgba(0, 123, 255, 0.3); 
+    border: 2px solid rgba(0, 123, 255, 0.3);
     border-radius: 4px;
     font-size: 14px;
-    background-color: #007bff; /* พื้นหลังฟ้า */
+    background-color: #007bff;
     color: white;
     font-weight: bold;
     appearance: textfield;
@@ -95,15 +99,12 @@
   
   .page-input:focus {
     outline: none;
-    border-color: rgba(0, 123, 255, 0.7); /* ตอนโฟกัสขอบเข้มขึ้นนิด */
+    border-color: rgba(0, 123, 255, 0.7);
   }
   
-  /* สำหรับ Safari และ Chrome เพื่อซ่อนปุ่มลูกศร */
-  .page-input::-webkit-inner-spin-button, 
+  .page-input::-webkit-inner-spin-button,
   .page-input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  
-  
   

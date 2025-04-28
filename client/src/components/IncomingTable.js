@@ -14,7 +14,7 @@ const mockIncomingData = [
 
 function IncomingTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState(1); // เพิ่มตัวแปร inputPage
+  const [inputPage, setInputPage] = useState(1);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(mockIncomingData.length / itemsPerPage);
 
@@ -37,7 +37,7 @@ function IncomingTable() {
   };
 
   const handlePageChange = (e) => {
-    setInputPage(e.target.value); // เปลี่ยนค่าขณะพิมพ์
+    setInputPage(e.target.value);
   };
 
   const handleKeyDown = (e) => {
@@ -50,32 +50,34 @@ function IncomingTable() {
   };
 
   return (
-    <div className="table-container">
-      <table className="incoming-table">
-        <thead>
-          <tr>
-            <th>ลำดับ</th>
-            <th>บริษัท/ร้านค้า</th>
-            <th>เลขที่ มอ.</th>
-            <th>วันที่ซื้อ</th>
-            <th>ยอดซื้อรวม</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.company}</td>
-              <td>{item.po}</td>
-              <td>{item.orderDate}</td>
-              <td>{item.amount.toLocaleString()}</td>
+    <div className="table-wrapper">
+      <div className="table-container">
+        <table className="incoming-table">
+          <thead>
+            <tr>
+              <th>ลำดับ</th>
+              <th>บริษัท/ร้านค้า</th>
+              <th>เลขที่ มอ.</th>
+              <th>วันที่ซื้อ</th>
+              <th>ยอดซื้อรวม</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentItems.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td className="company-cell">{item.company}</td>
+                <td>{item.po}</td>
+                <td>{item.orderDate}</td>
+                <td className="total-cell">{item.amount.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
-      <div className="pagination">
+      <div className="pagination-wrapper">
         <div className="pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockIncomingData.length)} จาก {mockIncomingData.length} แถว
         </div>
