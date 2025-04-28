@@ -1,0 +1,105 @@
+.organizations-bar-container {
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+  margin: 0 auto;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.organizations-bar-table {
+  width: 100%;
+  min-width: 600px;
+  margin: 1em auto 2em;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.organizations-bar-table th,
+.organizations-bar-table td {
+  border: 1px solid #999;
+  padding: 1em 0.5em;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1em;
+}
+
+.organizations-bar-table th {
+  background-color: #dfe8f6;
+  color: #003366;
+  font-weight: bold;
+}
+
+.organizations-bar-table td:first-child {
+  text-align: center;
+  width: 6%;
+  font-weight: bold;
+}
+
+.organizations-bar-subtext {
+  font-size: 0.85em;
+  color: #555;
+}
+
+/* ชื่อบริษัทที่คลิกได้ */
+.organizations-bar-highlight-clickable {
+  text-decoration: underline;
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: normal; /* ไม่ทำตัวหนา */
+}
+
+.organizations-bar-highlight-clickable:hover {
+  color: #0056b3;
+  transform: scale(1.03);
+}
+
+/* Pagination */
+.organizations-bar-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+  font-size: 0.95em;
+}
+
+.organizations-bar-pagination-info {
+  color: #333;
+}
+
+.organizations-bar-pagination-buttons button {
+  margin-left: 0.4em;
+  padding: 0.4em 0.8em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.organizations-bar-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+.organizations-bar-pagination-buttons button:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .organizations-bar-table th,
+  .organizations-bar-table td {
+    font-size: 0.9em;
+    padding: 0.6em;
+  }
+
+  .organizations-bar-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}

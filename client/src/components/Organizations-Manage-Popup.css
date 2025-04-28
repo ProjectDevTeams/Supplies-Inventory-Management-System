@@ -1,0 +1,106 @@
+/* พื้นหลังเทา */
+.manage-popup-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* กล่องป๊อปอัป */
+  .manage-popup-box {
+    width: 600px;
+    background: #fff;
+    border: 1px solid #444;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    font-family: 'Kanit', sans-serif;
+  }
+  
+  /* หัวป๊อปอัป */
+  .manage-popup-header {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  /* ปุ่มปิด */
+  .manage-close-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+  }
+  
+  /* เนื้อหาในกล่อง */
+  .manage-popup-body {
+    padding: 20px;
+    border: 1px solid #007bff;
+  }
+  
+  /* แถวในฟอร์ม */
+  .manage-form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  
+  /* ป้าย label */
+  .manage-form-row label {
+    width: 200px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  /* ช่องกรอกข้อมูล */
+  .manage-form-row input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* ส่วนท้าย */
+  .manage-form-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* ปุ่มลบ */
+  .manage-delete-btn {
+    background-color: red;
+    color: white;
+    padding: 10px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  
+  /* ปุ่มบันทึก */
+  .manage-submit-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  

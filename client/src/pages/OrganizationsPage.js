@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Organizationsbar from '../components/Organizationsbar';
-import Organizations_Table from '../components/Organizationsbar-table';
+import Organizations_Table from '../components/Organizations-table';
 import './OrganizationsPage.css';
 
 function OrganizationsPage() {

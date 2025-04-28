@@ -39,15 +39,3 @@
   color: gray;
   pointer-events: none;
 }
-
-/* ปุ่มเพิ่มร้านค้า */
-.btn.green {
-  background-color: #2d7a3e;
-  padding: 0.5em 1em;
-  border: none;
-  color: white;
-  border-radius: 3px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background 0.3s;
-}
