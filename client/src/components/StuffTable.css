@@ -1,0 +1,92 @@
+.table-container {
+  padding: 1rem;
+}
+
+.stuff-table {
+  width: 95%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.stuff-table th,
+.stuff-table td {
+  border: 1px solid #999;
+  padding: 0.6em;
+  text-align: center;
+  font-size: 14px;
+}
+
+.stuff-table th {
+  background-color: #dfe8f6;
+  font-weight: bold;
+}
+
+.printer-icon {
+  width: 30px;
+  height: auto;
+}
+
+/* สถานะ */
+.status {
+  font-weight: bold;
+}
+
+.status.pending {
+  color: orange;
+}
+
+.status.approved {
+  color: green;
+}
+
+.status.rejected {
+  color: red;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem auto;
+  width: 95%;
+  font-size: 14px;
+}
+
+.pagination-info {
+  color: #333;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* <<< ระยะห่างระหว่างปุ่ม */
+}
+
+.pagination-buttons .btn {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pagination-buttons .btn:hover {
+  background-color: #e6f0ff; /* <<< สีฟ้าเวลาชี้ mouse */
+}
+
+.pagination-buttons .btn.disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.pagination-buttons .btn.current-page {
+  background-color: #007bff; /* <<< สีฟ้าเข้ม */
+  color: #ffffff;
+  font-weight: bold;
+}

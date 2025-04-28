@@ -16,8 +16,9 @@
     background-color: #f9f9f9;
     padding: 1em;
     box-sizing: border-box;
-    margin-left: 200px;
+    margin-left: 200px; 
   }
+  
   
   .content-header {
     display: flex;
@@ -28,5 +29,9 @@
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
+  }
+  
+  .stuff-table-container {
+    margin-top: 1rem;
   }
   

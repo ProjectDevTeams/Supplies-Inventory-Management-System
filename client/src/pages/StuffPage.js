@@ -2,22 +2,29 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Stuffbar from '../components/Stuffbar';
-// import StuffTable from '../components/StuffTable';
+import StuffTable from '../components/StuffTable'; 
 import './StuffPage.css';
 
 function StuffPage() {
   return (
     <div className="stuff-navbar">
       <Navbar />
+      
       <div className="stuff-sidebar">
         <Sidebar />
+        
         <main className="stuff-content">
+          
+          {/* ส่วนหัว (bar) */}
           <section className="content-header">
             <Stuffbar />
           </section>
+          
+          {/* ตารางแสดงข้อมูล */}
           <section className="stuff-table-container">
-            {/* <StuffTable /> */}
+            <StuffTable />
           </section>
+
         </main>
       </div>
     </div>
