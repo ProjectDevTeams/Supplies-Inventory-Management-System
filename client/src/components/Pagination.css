@@ -1,0 +1,36 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* <<< จัดซ้าย-ขวาเต็มพื้นที่ */
+    margin-top: 1em;
+    font-size: 0.95em;
+    width: 90%;
+    margin-left: 1.5em;
+    margin-right: auto;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-info {
+    color: #333;
+    margin-right: auto;
+  }
+  
+  .pagination span,
+  .pagination a {
+    padding: 0.3em 0.6em;
+    margin: 0 0.2em;
+    border: 1px solid #ccc;
+    background-color: white;
+    text-decoration: none;
+    color: #000000;
+    border-radius: 3px;
+  }
+  
+  .pagination .current {
+    background-color: #2176bd;
+    color: white;
+  }
+  
+  .pagination .disabled {
+    color: #aaa;
+  }

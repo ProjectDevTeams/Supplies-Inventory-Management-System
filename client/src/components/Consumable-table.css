@@ -1,21 +1,20 @@
-
-.table-consumable {
+table {
   width: 90%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
-  margin: 1em 2em 30px; /* <<< จัดกลาง + เว้นบน */
+  margin: 1em 2em; /* <<< จัดกลาง + เว้นบน */
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   
 }
 
-#col-name, #data-in-table {
+th, td {
   border: 1px solid #999;
   padding: 0.5em;
   text-align: center;
   vertical-align: top;
 }
 
-#col-name {
+th {
   background-color: #dfe8f6;
   font-weight: bold;
 }
@@ -91,4 +90,3 @@
 .pagination .disabled {
   color: #aaa;
 }
-
