@@ -21,6 +21,7 @@ function OrganizationsTable() {
   const [showManagePopup, setShowManagePopup] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [showAddPopup, setShowAddPopup] = useState(false);
+  const [sortOrder, setSortOrder] = useState("asc");  // "asc" for ascending, "desc" for descending
 
   const handleCompanyClick = (companyId) => {
     setSelectedCompanyId(companyId);
@@ -49,9 +50,9 @@ function OrganizationsTable() {
     setCompanies(updatedCompanies);
     localStorage.setItem("companies", JSON.stringify(updatedCompanies));
   
-    // อัปเดตหน้าสุดท้าย
+    // After adding a new company, re-sort the companies list and reset pagination
     setCurrentPage(Math.ceil(updatedCompanies.length / itemsPerPage));
-  };  
+  };
 
   const handleDeleteCompany = (idToDelete) => {
     const updatedCompanies = companies.filter(company => company.id !== idToDelete);
@@ -67,13 +68,25 @@ function OrganizationsTable() {
 
   const selectedCompany = companies.find(c => c.id === selectedCompanyId);
 
+  // Sorting function (applies to the companies array)
+  const sortedCompanies = [...companies].sort((a, b) => {
+    return sortOrder === "asc" 
+      ? parseInt(a.id) - parseInt(b.id)  // Ascending order
+      : parseInt(b.id) - parseInt(a.id); // Descending order
+  });
+
   // Pagination
   const totalPages = Math.ceil(companies.length / itemsPerPage);
-  const displayedCompanies = companies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const displayedCompanies = sortedCompanies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) setCurrentPage(totalPages);
   }, [totalPages, currentPage]);
+
+  // Toggle sort order
+  const handleSortClick = () => {
+    setSortOrder(prevSortOrder => prevSortOrder === "asc" ? "desc" : "asc");
+  };
 
   return (
     <div className="organizations-bar-container">
@@ -82,7 +95,11 @@ function OrganizationsTable() {
       <table className="organizations-bar-table">
         <thead>
           <tr>
-            <th>ลำดับ</th>
+            <th>
+              <span onClick={handleSortClick} style={{ cursor: "pointer" }}>
+                ลำดับ {sortOrder === "asc" ? "↓" : "↑"}
+              </span>
+            </th>
             <th>บริษัท/ร้านค้า</th>
             <th>วันที่สร้าง</th>
             <th>วันที่แก้ไข</th>
@@ -110,7 +127,6 @@ function OrganizationsTable() {
         </tbody>
       </table>
 
-      {/* Pagination Dynamic */}
       <div className="organizations-bar-pagination">
         <div className="organizations-bar-pagination-info">
           แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง {Math.min(currentPage * itemsPerPage, companies.length)} จาก {companies.length} แถว
