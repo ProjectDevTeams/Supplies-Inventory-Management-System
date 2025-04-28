@@ -19,7 +19,7 @@ function Human() {
         </div>
       </div>
 
-      {/* ตารางวัสดุรวมอยู่ใน component เดียว */}
+      {/* ตาราง */}
       <div className="table-container">
         <table className="hum-table">
           <thead>
@@ -64,7 +64,7 @@ function Human() {
               <td>STI</td>
               <td>pilantana.s@psu.ac.th</td>
               <td className="status approved">อนุมัติ</td>
-            </tr> 
+            </tr>
             <tr>
               <td>016</td>
               <td>piyorot.b</td>
