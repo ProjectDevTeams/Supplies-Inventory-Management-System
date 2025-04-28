@@ -10,7 +10,7 @@
 
 .organizations-bar-table {
   width: 100%;
-  min-width: 600px;
+  min-width: 800px;
   margin: 1em auto 2em;
   border-collapse: collapse;
   background-color: white;
@@ -20,10 +20,11 @@
 .organizations-bar-table th,
 .organizations-bar-table td {
   border: 1px solid #999;
-  padding: 1em 0.5em;
+  padding: 0.7em 0.5em; /* ลด padding */
   text-align: center;
   vertical-align: middle;
-  font-size: 1em;
+  font-size: 0.95em; /* เล็กลงแต่ยังอ่านสบาย */
+  line-height: 1.4;
 }
 
 .organizations-bar-table th {
@@ -32,10 +33,28 @@
   font-weight: bold;
 }
 
-.organizations-bar-table td:first-child {
-  text-align: center;
+/* กำหนดความกว้างเฉพาะช่อง */
+.organizations-bar-table th:nth-child(1),
+.organizations-bar-table td:nth-child(1) {
   width: 6%;
-  font-weight: bold;
+  white-space: nowrap;
+}
+
+.organizations-bar-table th:nth-child(2),
+.organizations-bar-table td:nth-child(2) {
+  width: 45%;
+  text-align: left;
+  padding-left: 1em;
+}
+
+.organizations-bar-table th:nth-child(3),
+.organizations-bar-table td:nth-child(3) {
+  width: 25%;
+}
+
+.organizations-bar-table th:nth-child(4),
+.organizations-bar-table td:nth-child(4) {
+  width: 24%;
 }
 
 .organizations-bar-subtext {
@@ -49,7 +68,7 @@
   color: #007bff;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: normal; /* ไม่ทำตัวหนา */
+  font-weight: normal;
 }
 
 .organizations-bar-highlight-clickable:hover {
@@ -63,7 +82,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1em;
-  font-size: 0.95em;
+  font-size: 0.9em;
 }
 
 .organizations-bar-pagination-info {
@@ -77,6 +96,7 @@
   border-radius: 3px;
   background-color: white;
   cursor: pointer;
+  font-size: 0.9em;
 }
 
 .organizations-bar-pagination-buttons .active {
@@ -93,8 +113,8 @@
 @media (max-width: 768px) {
   .organizations-bar-table th,
   .organizations-bar-table td {
-    font-size: 0.9em;
-    padding: 0.6em;
+    font-size: 0.85em;
+    padding: 0.5em;
   }
 
   .organizations-bar-pagination {
