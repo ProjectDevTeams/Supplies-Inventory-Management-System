@@ -1,0 +1,102 @@
+/* Container ครอบตาราง */
+.adjustment-table-container {
+    width: 100%;
+    height: 100vh;
+    padding: 1.5rem;
+    background-color: #f5f8fc;
+    padding-left: 14em;
+  }
+  
+  /* ตัว table */
+  #adjustment-table {
+    width: 95%; 
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #f5f8fc;
+    padding-left: 14em;
+  }
+  
+  /* หัวตาราง thead */
+  #adjustment-thead {
+    background-color: #f1f5f9;
+  }
+  
+  /* แถว tr */
+
+  
+  /* หัวคอลัมน์ th */
+  .adjustment-th {
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    color: #003366; /* สีข้อความหัวตาราง */
+    font-size: 1.05rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  /* เซลล์ td */
+  .adjustment-td {
+    padding: 1rem;
+    text-align: center;
+    color: #333;
+    font-size: 1rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  /* สถานะ อนุมัติ */
+  .status-approved {
+    color: green;
+    font-weight: bold;
+  }
+  
+  /* สถานะ รออนุมัติ */
+  .status-pending {
+    color:#f79c05;
+    font-weight: bold;
+  }
+
+  /* สถานะ ไม่อนุมัติ */
+  .status-not-pending {
+    color:#ff0000;
+    font-weight: bold;
+  }
+
+/* ปุ่มแบ่งหน้า */
+.pagination-adjust {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* <<< จัดซ้าย-ขวาเต็มพื้นที่ */
+    margin-top: 1em;
+    font-size: 0.95em;
+    width: 95%;
+    margin-left: 2em;
+    margin-right: auto;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-info-adjust {
+    color: #333;
+    margin-right: auto;
+  }
+  
+  .pagination-adjust span,
+  .pagination-adjust a {
+    padding: 0.3em 0.6em;
+    margin:  0.2em;
+    border: 1px solid #ccc;
+    background-color: white;
+    text-decoration: none;
+    color: #000000;
+    border-radius: 3px;
+   
+  }
+  
+  .pagination-adjust .current-adjust {
+    background-color: #2176bd;
+    color: white;
+  }
+  
+  .pagination-adjust .disabled-adjust {
+    color: #aaa;
+  }
+

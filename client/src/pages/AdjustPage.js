@@ -2,8 +2,7 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Adjustbar from "../components/Adjustbar";
-// import AdjustTable from "../components/AdjustTable";
-import './AdjustPage.css';
+import AdjustTable from '../components/Adjust-table';
 
 function AdjustPage() {
   return (
@@ -16,7 +15,7 @@ function AdjustPage() {
             <Adjustbar />
           </section>
           <section className="adjust-table-container">
-            {/* <AdjustTable /> */}
+           <AdjustTable/>
           </section>
         </main>
       </div>
