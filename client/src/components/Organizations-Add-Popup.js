@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import "./Organizations-Add-Popup.css";
 
-function OrganizationsAddPopup({ onClose }) {
+function OrganizationsAddPopup({ onClose, onAddCompany }) {
   const [name, setName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("เพิ่มร้านค้าใหม่: " + name);
+    if (name.trim() === "") {
+      alert("กรุณากรอกชื่อร้านค้าใหม่");
+      return;
+    }
+    const newCompany = {
+      id: Date.now().toString(),
+      name: name,
+      created: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }),
+    };
+    onAddCompany(newCompany);
     onClose();
   };
 

@@ -1,18 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Organizationsbar.css";
-import OrganizationsAddPopup from "./Organizations-Add-Popup";
 
-function Organizationsbar() {
-  const [showPopup, setShowPopup] = useState(false);
-
-  const handleOpenPopup = () => {
-    setShowPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
+function Organizationsbar({ onAddClick }) {
   return (
     <div className="org-bar">
       <div className="org-title">บริษัท/ห้าง/ร้าน</div>
@@ -23,13 +12,11 @@ function Organizationsbar() {
           <input type="text" placeholder="ค้นหา" />
         </div>
 
-        <button className="btn green" onClick={handleOpenPopup}>
+        {/* ปุ่มกดเปิด popup โดยเรียก onAddClick */}
+        <button className="btn green" onClick={onAddClick}>
           + เพิ่มร้านค้า
         </button>
       </div>
-
-      {/* แสดง Popup ถ้า showPopup เป็น true */}
-      {showPopup && <OrganizationsAddPopup onClose={handleClosePopup} />}
     </div>
   );
 }
