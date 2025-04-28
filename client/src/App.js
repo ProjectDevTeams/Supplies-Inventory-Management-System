@@ -1,18 +1,18 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ConsumablePage from "./pages/ConsumablePage";
-import StuffPage from "./pages/StuffPage";
-import IncomingPage from "./pages/IncomingPage";
-import HistoryPage from "./pages/HistoryPage";
-import AdjustPage from "./pages/AdjustPage"
-import HumanPage from "./pages/HumanPage";
-import OrganizationsPage from "./pages/OrganizationsPage";
-import ReportPage from "./pages/ReportPage"
-import PermissionPage from "./pages/PermissionPage"
-import SettingPage from "./pages/SettingPage";
+import HomePage from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
+import RegisterPage from "./pages/Register/RegisterPage";
+import ConsumablePage from "./pages/Consumable/ConsumablePage";
+import StuffPage from "./pages/Stuff/StuffPage";
+import IncomingPage from "./pages/Incoming/IncomingPage";
+import HistoryPage from "./pages/History/HistoryPage";
+import AdjustPage from "./pages/Adjust/AdjustPage"
+import HumanPage from "./pages/Human/HumanPage";
+import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
+import ReportPage from "./pages/Report/ReportPage"
+import PermissionPage from "./pages/Permission/PermissionPage"
+import SettingPage from "./pages/Setting/SettingPage";
 
 function App() {
   return (
