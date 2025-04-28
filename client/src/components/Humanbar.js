@@ -21,7 +21,8 @@ function Human() {
 
       {/* ตาราง */}
       <div className="table-container">
-        <table className="hum-table">
+        {/*  */}
+        <table className="hum-table"> 
           <thead>
             <tr>
               <th>ลำดับ</th>
