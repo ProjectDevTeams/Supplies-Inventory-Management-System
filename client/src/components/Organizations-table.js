@@ -2,28 +2,35 @@ import React, { useState } from "react";
 import "./Organizations-table.css";
 import OrganizationsManagePopup from "./Organizations-Manage-Popup";
 import OrganizationsAddPopup from "./Organizations-Add-Popup";
-import Organizationsbar from "./Organizationsbar"; // ต้อง import มา
+import Organizationsbar from "./Organizationsbar";
 
 function OrganizationsTable() {
-  const [companies, setCompanies] = useState([
-    { id: "005", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" },
-    { id: "004", name: "ห้างหุ้นส่วนจำกัด นนทภัณฑ์ สเตชั่นเนอรี่", created: "24 พ.ย. 66" },
-    { id: "003", name: "บริษัท โกลบอล 205 (ประเทศไทย) จำกัด", created: "14 พ.ย. 66" },
-    { id: "002", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "14 พ.ย. 66" },
-    { id: "001", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "13 พ.ย. 66" },
-  ]);
+  const [companies, setCompanies] = useState(() => {
+    const savedCompanies = localStorage.getItem("companies");
+    if (savedCompanies) {
+      return JSON.parse(savedCompanies);
+    } else {
+      return [
+        { id: "005", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" },
+        { id: "004", name: "ห้างหุ้นส่วนจำกัด นนทภัณฑ์ สเตชั่นเนอรี่", created: "24 พ.ย. 66" },
+        { id: "003", name: "บริษัท โกลบอล 205 (ประเทศไทย) จำกัด", created: "14 พ.ย. 66" },
+        { id: "002", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "14 พ.ย. 66" },
+        { id: "001", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "13 พ.ย. 66" },
+      ];
+    }
+  });
 
   const [showManagePopup, setShowManagePopup] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [showAddPopup, setShowAddPopup] = useState(false);
 
-  const handleCompanyClick = (companyName) => {
-    setSelectedCompany(companyName);
+  const handleCompanyClick = (companyId) => {
+    setSelectedCompanyId(companyId);
     setShowManagePopup(true);
   };
 
   const handleCloseManagePopup = () => {
-    setSelectedCompany(null);
+    setSelectedCompanyId(null);
     setShowManagePopup(false);
   };
 
@@ -36,18 +43,43 @@ function OrganizationsTable() {
   };
 
   const handleAddCompany = (newCompany) => {
-    console.log("ข้อมูลร้านค้าที่เพิ่มใหม่:", newCompany);
+    const maxId = Math.max(...companies.map(c => parseInt(c.id)));
+    const nextId = (maxId + 1).toString().padStart(3, '0');
 
-    setCompanies(prevCompanies => [newCompany, ...prevCompanies]);
+    const companyToSave = {
+      ...newCompany,
+      id: nextId,
+    };
+
+    const updatedCompanies = [companyToSave, ...companies];
+    setCompanies(updatedCompanies);
+    localStorage.setItem("companies", JSON.stringify(updatedCompanies));
   };
+
+  const handleDeleteCompany = (idToDelete) => {
+    const updatedCompanies = companies.filter((company) => company.id !== idToDelete);
+    setCompanies(updatedCompanies);
+    localStorage.setItem("companies", JSON.stringify(updatedCompanies));
+  };
+
+  const handleEditCompany = (idToEdit, newName) => {
+    const updatedCompanies = companies.map((company) => {
+      if (company.id === idToEdit) {
+        return { ...company, name: newName };
+      }
+      return company;
+    });
+
+    setCompanies(updatedCompanies);
+    localStorage.setItem("companies", JSON.stringify(updatedCompanies));
+  };
+
+  const selectedCompany = companies.find((c) => c.id === selectedCompanyId);
 
   return (
     <div className="organizations-bar-container">
-
-      {/* วาง Organizationsbar และส่งฟังก์ชันไป */}
       <Organizationsbar onAddClick={handleOpenAddPopup} />
 
-      {/* ตารางข้อมูล */}
       <table className="organizations-bar-table">
         <thead>
           <tr>
@@ -64,7 +96,7 @@ function OrganizationsTable() {
               <td>
                 <span
                   className="organizations-bar-highlight-clickable"
-                  onClick={() => handleCompanyClick(company.name)}
+                  onClick={() => handleCompanyClick(company.id)}
                 >
                   {company.name}
                 </span>
@@ -98,7 +130,9 @@ function OrganizationsTable() {
       {showManagePopup && selectedCompany && (
         <OrganizationsManagePopup
           onClose={handleCloseManagePopup}
-          companyName={selectedCompany}
+          companyData={selectedCompany}
+          onDeleteCompany={handleDeleteCompany}
+          onEditCompany={handleEditCompany}
         />
       )}
 

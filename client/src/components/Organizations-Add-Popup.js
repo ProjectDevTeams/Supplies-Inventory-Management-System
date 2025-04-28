@@ -10,11 +10,14 @@ function OrganizationsAddPopup({ onClose, onAddCompany }) {
       alert("กรุณากรอกชื่อร้านค้าใหม่");
       return;
     }
+
+    // ส่งข้อมูล id ชั่วคราว + name + created
     const newCompany = {
-      id: Date.now().toString(),
+      id: "temp", // id จริงไปสร้างใน OrganizationsTable
       name: name,
       created: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }),
     };
+
     onAddCompany(newCompany);
     onClose();
   };
