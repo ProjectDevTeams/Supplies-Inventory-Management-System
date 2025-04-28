@@ -16,7 +16,7 @@ function HumanPage() {
         <main className="human-content">
           <section className="content-header">
             {/* test popup */}
-            {/* <EditpeoplePopup/> */}  
+            {/* <EditpeoplePopup/>   */}
             {/* <AddpeoplePopup/> */}
             <Humanbar/>
             
