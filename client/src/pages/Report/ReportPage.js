@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import './ReportPage.css';
+import ReportContent from '../../components/Report/Report-Content';
 
 function ReportPage() {
   return (
@@ -11,7 +12,7 @@ function ReportPage() {
         <Sidebar />
         <main className="report-content">
           <section className="report-header">
-            <h2>รายงาน</h2>
+            <ReportContent />
           </section>
         </main>
       </div>

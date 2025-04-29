@@ -8,12 +8,12 @@ function Organizationsbar({ onAddClick }) {
 
       <div className="org-controls">
         <div className="org-search-box">
-          <span className="search-icon">🔍</span>
-          <input type="text" placeholder="ค้นหา" />
+          <span className="org-search-icon">🔍</span>
+          <input type="text" placeholder="ค้นหา" className="org-input" />
         </div>
 
-        {/* ปุ่มกดเปิด popup โดยเรียก onAddClick */}
-        <button className="btn green" onClick={onAddClick}>
+        {/* ปุ่มเพิ่มร้านค้า */}
+        <button className="org-btn-green" onClick={onAddClick}>
           + เพิ่มร้านค้า
         </button>
       </div>

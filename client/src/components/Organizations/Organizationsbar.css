@@ -23,18 +23,34 @@
   position: relative;
 }
 
-.org-search-box input {
+.org-input {
   padding: 0.5em 0.5em 0.5em 2em;
   border: 2px solid #aab3bb;
   border-radius: 3px;
   font-size: 1em;
 }
 
-.search-icon {
+.org-search-icon {
   position: absolute;
   left: 0.5em;
   top: 50%;
   transform: translateY(-50%);
   color: gray;
   pointer-events: none;
+}
+
+.org-btn-green {
+  background-color: #2d7a3e;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.org-btn-green:hover {
+  transform: scale(1.05);
 }
