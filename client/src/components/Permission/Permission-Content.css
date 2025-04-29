@@ -1,0 +1,108 @@
+.perm-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 1em;
+    background-color: #f5f8fc;
+    width: 100%;
+    max-width: 1200px;     /* ✅ ให้ความกว้างไม่เกิน */
+    margin: 0 auto;         /* ✅ จัดกลางหน้าจอ */
+    box-sizing: border-box;
+  }
+  
+  
+  /* หัวข้อ */
+  .perm-title {
+    font-weight: bold;
+    font-size: 1.4em;
+    color: #003366;
+  }
+  
+  /* กล่องช่องค้นหา + ปุ่ม */
+  .perm-actions {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  /* กล่องค้นหา */
+  .perm-search-box {
+    position: relative;
+    width: 250px;
+  }
+  
+  .perm-search-icon {
+    position: absolute;
+    left: 0.8em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    font-size: 1em;
+    pointer-events: none;
+  }
+  
+  .perm-search-input {
+    width: 100%;
+    padding: 0.5em 0.5em 0.5em 2.2em;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 1em;
+  }
+  
+  /* ปุ่มเพิ่มสิทธิ์ */
+  .perm-add-btn {
+    background-color: #0f7729;
+    color: white;
+    font-weight: bold;
+    padding: 0.5em 1.5em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  
+  .perm-add-btn:hover {
+    background-color: #0c5e21;
+    transform: scale(1.02);
+  }
+  
+  /* ตาราง */
+  .perm-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    table-layout: fixed; /* ✅ ไม่ให้ช่องขยาย */
+    margin-left: 0; /* ✅ ชิดซ้าย */
+  }  
+  
+  .perm-table th,
+  .perm-table td {
+    padding: 0.8em;
+    border: 1px solid #999;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .perm-table th {
+    background-color: #e9ecef;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .perm-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .perm-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+  
