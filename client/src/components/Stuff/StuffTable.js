@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import "./StuffTable.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPrint } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+import './StuffTable.css';
 
 const mockData = [
   { id: 24, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
@@ -15,24 +13,26 @@ const mockData = [
 function StuffTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  const itemsPerPage = 4;
 
+  const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleNextPage = () => {
+  const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      setInputPage(currentPage + 1);
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      setInputPage(nextPage);
     }
   };
 
-  const handlePrevPage = () => {
+  const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      setInputPage(currentPage - 1);
+      const prevPage = currentPage - 1;
+      setCurrentPage(prevPage);
+      setInputPage(prevPage);
     }
   };
 
@@ -45,6 +45,7 @@ function StuffTable() {
       const value = parseInt(inputPage, 10);
       if (!isNaN(value) && value >= 1 && value <= totalPages) {
         setCurrentPage(value);
+        setInputPage(value);
       }
     }
   };
@@ -71,16 +72,14 @@ function StuffTable() {
                 <td>{item.code}</td>
                 <td>{item.stock}</td>
                 <td>
-                 <button className="btn print-black-btn" onClick={() => window.print()}>
-                 <FontAwesomeIcon icon={faPrint} /> ปริ้น
-                 </button>
+                  <button className="print-black-btn">
+                    🖨️ ปริ้น
+                  </button>
                 </td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-                <td>
-                  <span className={`status ${item.status}`}>
-                    {renderStatusText(item.status)}
-                  </span>
+                <td className={`status ${item.status}`}>
+                  {renderStatus(item.status)}
                 </td>
               </tr>
             ))}
@@ -88,51 +87,39 @@ function StuffTable() {
         </table>
       </div>
 
+      {/* Pagination */}
       <div className="pagination-wrapper">
         <div className="pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
         </div>
-
         <div className="pagination-buttons">
-          <button
-            className={`btn ${currentPage === 1 ? "disabled" : ""}`}
-            onClick={handlePrevPage}
-          >
-            ก่อนหน้า
-          </button>
-
+          <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
           <input
             type="number"
             className="page-input"
             value={inputPage}
-            min={1}
-            max={totalPages}
             onChange={handlePageChange}
             onKeyDown={handleKeyDown}
+            min={1}
+            max={totalPages}
           />
-
-          <button
-            className={`btn ${currentPage === totalPages ? "disabled" : ""}`}
-            onClick={handleNextPage}
-          >
-            ถัดไป
-          </button>
+          <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
         </div>
       </div>
     </div>
   );
 }
 
-function renderStatusText(status) {
+function renderStatus(status) {
   switch (status) {
-    case "pending":
-      return "รออนุมัติ";
-    case "approved":
-      return "อนุมัติ";
-    case "rejected":
-      return "ไม่อนุมัติ";
+    case 'pending':
+      return 'รออนุมัติ';
+    case 'approved':
+      return 'อนุมัติ';
+    case 'rejected':
+      return 'ไม่อนุมัติ';
     default:
-      return "-";
+      return '-';
   }
 }
 

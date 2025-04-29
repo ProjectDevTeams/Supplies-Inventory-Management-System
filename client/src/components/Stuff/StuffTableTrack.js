@@ -10,14 +10,12 @@ const mockTrackData = [
   { id: 35, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "17 ม.ค. 68", status: "รับของเรียบร้อย" },
   { id: 34, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 4, date: "13 ม.ค. 68", status: "ไม่อนุมัติ" },
   { id: 33, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "ไม่อนุมัติ" },
-  { id: 32, code: "002-01/2568", stock: "วัสดุในคลัง", amount: 3, date: "6 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 31, code: "001-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "3 ม.ค. 68", status: "รับของเรียบร้อย" },
 ];
 
 function StuffTableTrack() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
 
   const totalPages = Math.ceil(mockTrackData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -26,15 +24,17 @@ function StuffTableTrack() {
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      setInputPage(currentPage + 2);
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      setInputPage(nextPage);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      setInputPage(currentPage - 0);
+      const prevPage = currentPage - 1;
+      setCurrentPage(prevPage);
+      setInputPage(prevPage);
     }
   };
 
@@ -47,6 +47,7 @@ function StuffTableTrack() {
       const value = parseInt(inputPage, 10);
       if (!isNaN(value) && value >= 1 && value <= totalPages) {
         setCurrentPage(value);
+        setInputPage(value);
       }
     }
   };

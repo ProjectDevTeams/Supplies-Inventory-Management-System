@@ -4,16 +4,14 @@ import './StuffTable.css';
 const mockPurchaseData = [
   { id: 1, stock: "วัสดุในคลัง", item: "ถ่าน 9 โวลต์", createDate: "28 มี.ค. 67", updateDate: "-", status: "อนุมัติ" },
   { id: 2, stock: "วัสดุในคลัง", item: "กาวแท่ง UHU", createDate: "4 มี.ค. 67", updateDate: "5 มี.ค. 67", status: "ไม่อนุมัติ" },
-  { id: 3, stock: "วัสดุในคลัง", item: "ถ่าน 9 โวลต์", createDate: "6 ธ.ค. 66", updateDate: "25 ธ.ค. 66", status: "อนุมัติ" },
-  { id: 4, stock: "วัสดุในคลัง", item: "ปากกา", createDate: "12 ม.ค. 67", updateDate: "13 ม.ค. 67", status: "อนุมัติ" },
-  { id: 5, stock: "วัสดุในคลัง", item: "สมุด A4", createDate: "10 ม.ค. 67", updateDate: "-", status: "ไม่อนุมัติ" },
-  { id: 6, stock: "วัสดุในคลัง", item: "ลวดเสียบกระดาษ", createDate: "8 ม.ค. 67", updateDate: "9 ม.ค. 67", status: "อนุมัติ" },
+  { id: 3, stock: "วัสดุในคลัง", item: "ปากกา", createDate: "6 ม.ค. 67", updateDate: "7 ม.ค. 67", status: "อนุมัติ" },
+  { id: 4, stock: "วัสดุในคลัง", item: "สมุด", createDate: "5 ม.ค. 67", updateDate: "5 ม.ค. 67", status: "ไม่อนุมัติ" },
 ];
 
 function StuffTablePurchase() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 2;
 
   const totalPages = Math.ceil(mockPurchaseData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -22,15 +20,17 @@ function StuffTablePurchase() {
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      setInputPage(currentPage + 2);
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      setInputPage(nextPage);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      setInputPage(currentPage - 0);
+      const prevPage = currentPage - 1;
+      setCurrentPage(prevPage);
+      setInputPage(prevPage);
     }
   };
 
@@ -43,6 +43,7 @@ function StuffTablePurchase() {
       const value = parseInt(inputPage, 10);
       if (!isNaN(value) && value >= 1 && value <= totalPages) {
         setCurrentPage(value);
+        setInputPage(value);
       }
     }
   };
