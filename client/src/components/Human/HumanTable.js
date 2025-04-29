@@ -18,7 +18,14 @@ const mockIncomingData = [
 function HumanTable({ searchTerm }) {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showEditPopup, setShowEditPopup] = useState(false);
-  const [data, setData] = useState(mockIncomingData);
+
+  const initialData = JSON.parse(localStorage.getItem("peopleData")) || mockIncomingData;
+//   const [data, setData] = useState(mockIncomingData);
+
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("peopleData");
+    return storedData ? JSON.parse(storedData) : mockIncomingData;
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
@@ -32,7 +39,8 @@ function HumanTable({ searchTerm }) {
     item.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.group.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchTerm.toLowerCase())
+    item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.id.toLowerCase().includes(searchTerm.toLowerCase()) // เพิ่มการค้นหาด้วย ID
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -71,12 +79,28 @@ function HumanTable({ searchTerm }) {
   };
 
   const handleSave = (updatedPerson) => {
+    const updatedData = data.map(person =>
+        person.id === updatedPerson.id ? updatedPerson : person
+    );
+
+    
+    // setShowEditPopup(false);
+
+    // ปรับปรุงข้อมูลในตาราง
     setData(prevData => {
       return prevData.map(person =>
         person.id === updatedPerson.id ? updatedPerson : person
       );
     });
+
+    setData(updatedData);
+    // ปิด popup หลังจากบันทึกข้อมูล
+    localStorage.setItem("peopleData", JSON.stringify(updatedData));
     setShowEditPopup(false);
+    
+    // แสดง Console log เพื่อดูว่ามีการอัปเดตข้อมูลหรือไม่
+    // เซฟลง localStorage
+    console.log("Updated person:", updatedPerson);
   };
 
   return (
@@ -100,11 +124,22 @@ function HumanTable({ searchTerm }) {
               <td>{item.fullname}</td>
               <td>{item.group}</td>
               <td>{item.email}</td>
-              <td className="status approved">{item.status}</td>
+              <td className={`status ${item.status === 'อนุมัติ' ? 'approved' : 
+                              item.status === 'รออนุมัติ' ? 'pending' : 
+                              'rejected'}`}>
+                {item.status}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* แสดงข้อความเมื่อไม่พบข้อมูล */}
+      {currentItems.length === 0 && (
+        <div className="no-data-message">
+          ไม่พบข้อมูลที่ตรงกับคำค้นหา "{searchTerm}"
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="pagination-wrapper">

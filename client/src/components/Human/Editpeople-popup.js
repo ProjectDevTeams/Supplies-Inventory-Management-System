@@ -3,22 +3,22 @@ import "./Editpeople-popup.css";
 
 function EditpeoplePopup({ person, onClose, onSave }) {
   const [formData, setFormData] = useState({
+    id: '',
     username: '',
     fullname: '',
     group: '',
     email: '',
     phone: '',
     role: '',
+    status: '',
   });
 
   // ใช้ useEffect เพื่อปรับค่า formData เมื่อมีการส่งข้อมูล person เข้ามา
   useEffect(() => {
     if (person) {
+      // คัดลอกทุกฟิลด์จาก person มาที่ formData
       setFormData({
-        username: person.username,
-        fullname: person.fullname,
-        group: person.group,
-        email: person.email,
+        ...person,
         phone: person.phone || '',
         role: person.role || '',
       });
@@ -35,7 +35,12 @@ function EditpeoplePopup({ person, onClose, onSave }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);  // ส่งข้อมูลที่ถูกแก้ไขกลับไปที่ HumanTable.js
+    // ส่งข้อมูลที่ถูกแก้ไขกลับไปที่ HumanTable.js
+    onSave({
+      ...formData,
+      // เพิ่ม id ให้เหมือนเดิมเพื่อให้การอัปเดตข้อมูลถูกต้อง
+      id: person.id
+    });
     onClose();  // ปิด Popup หลังจากบันทึกข้อมูล
   };
 
@@ -113,6 +118,18 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   <option value="">เลือกสิทธิการใช้งาน</option>
                   <option value="admin">แอดมิน</option>
                   <option value="user">ผู้ใช้งานทั่วไป</option>
+                </select>
+              </div>
+              <div className="form-row">
+                <label>สถานะ</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                >
+                  <option value="อนุมัติ">อนุมัติ</option>
+                  <option value="รออนุมัติ">รออนุมัติ</option>
+                  <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                 </select>
               </div>
             </div>
