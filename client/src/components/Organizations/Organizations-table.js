@@ -97,7 +97,7 @@ function OrganizationsTable() {
           <tr>
             <th>
               <span onClick={handleSortClick} style={{ cursor: "pointer" }}>
-                ลำดับ {sortOrder === "asc" ? "↓" : "↑"}
+                ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
               </span>
             </th>
             <th>บริษัท/ร้านค้า</th>
