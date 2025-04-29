@@ -15,24 +15,41 @@
   border-collapse: collapse;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  font-size: 13px; /* ลดขนาดฟอนต์เล็กน้อย */
 }
 
 .stuff-table th,
 .stuff-table td {
-  border: 1px solid #999;
-  padding: 0.6em;
+  border: 1px solid #ddd;
+  padding: 0.5em 0.8em;
   text-align: center;
-  font-size: 14px;
+  vertical-align: middle;
+  min-height: 50px;
 }
 
 .stuff-table th {
   background-color: #dfe8f6;
   font-weight: bold;
+  font-size: 14px;
 }
 
-.printer-icon {
-  width: 30px;
-  height: auto;
+.print-black-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0.4em 0.8em;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  transition: background-color 0.2s ease;
+}
+
+.print-black-btn:hover {
+  background-color: #333;
 }
 
 .status {
@@ -59,10 +76,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 13px;
 }
 
 .pagination-info {
-  font-size: 14px;
   color: #333;
 }
 
@@ -73,12 +90,12 @@
 }
 
 .pagination-buttons .btn {
-  padding: 0.5rem 1.2rem;
+  padding: 0.4rem 1rem;
   background: white;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -87,7 +104,7 @@
 }
 
 .pagination-buttons .btn.disabled {
-  background-color: #eeeeee;
+  background-color: #eee;
   color: #aaa;
   pointer-events: none;
 }
@@ -95,15 +112,13 @@
 .page-input {
   width: 50px;
   text-align: center;
-  padding: 0.4rem 0.6rem;
+  padding: 0.3rem 0.6rem;
   border: 2px solid rgba(0, 123, 255, 0.3);
   background-color: #007bff;
   color: white;
   font-weight: bold;
   border-radius: 4px;
-  font-size: 14px;
-  appearance: textfield;
-  -moz-appearance: textfield;
+  font-size: 13px;
 }
 
 .page-input:focus {
@@ -115,4 +130,36 @@
 .page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.print-black-btn {
+  width: 100%; /* <<< กินพื้นที่เต็มกล่อง */
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; /* <<< ตรงกลาง */
+  gap: 0.6em; /* <<< ระยะห่างไอคอนกับข้อความ */
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-sizing: border-box;
+}
+
+.print-black-btn:hover {
+  background-color: #333;
+  transform: scale(1.02);
+}
+
+.print-black-btn svg {
+  font-size: 1.3rem; /* <<< ขยายขนาดไอคอน print */
+}
+
+.stuff-table td:nth-child(4),
+.stuff-table th:nth-child(4) {
+  width: 140px; /* หรือจะ 150px ก็ดี */
 }

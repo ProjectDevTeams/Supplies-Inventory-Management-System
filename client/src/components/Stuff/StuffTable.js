@@ -1,6 +1,7 @@
-// src/components/StuffTable.js
 import React, { useState } from "react";
 import "./StuffTable.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
 const mockData = [
   { id: 24, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
@@ -70,7 +71,9 @@ function StuffTable() {
                 <td>{item.code}</td>
                 <td>{item.stock}</td>
                 <td>
-                  <img src="/printer-icon.png" alt="ปริ้น" className="printer-icon" />
+                 <button className="btn print-black-btn" onClick={() => window.print()}>
+                 <FontAwesomeIcon icon={faPrint} /> ปริ้น
+                 </button>
                 </td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
