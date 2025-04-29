@@ -1,3 +1,11 @@
+:root {
+  --color-border: #ddd;
+  --color-header-bg: #dfe8f6;
+  --color-pagination-hover: #e6f0ff;
+  --color-pagination-disabled: #eee;
+  --color-pagination-active: #007bff;
+}
+
 .table-wrapper {
   padding: 1rem;
   display: flex;
@@ -15,12 +23,12 @@
   border-collapse: collapse;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  font-size: 13px; /* ลดขนาดฟอนต์เล็กน้อย */
+  font-size: 13px;
 }
 
 .stuff-table th,
 .stuff-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   padding: 0.5em 0.8em;
   text-align: center;
   vertical-align: middle;
@@ -28,30 +36,46 @@
 }
 
 .stuff-table th {
-  background-color: #dfe8f6;
+  background-color: var(--color-header-bg);
   font-weight: bold;
   font-size: 14px;
 }
 
+/* กำหนดความกว้างคอลัมน์ปุ่มปริ้น */
+.stuff-table td:nth-child(4),
+.stuff-table th:nth-child(4) {
+  width: 140px;
+}
+
+/* ปุ่มปริ้น */
 .print-black-btn {
+  width: 100%;
   background-color: #000;
   color: #fff;
   border: none;
-  padding: 0.4em 0.8em;
-  font-size: 0.9rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
-  transition: background-color 0.2s ease;
+  justify-content: center;
+  gap: 0.6em;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-sizing: border-box;
 }
 
 .print-black-btn:hover {
   background-color: #333;
+  transform: scale(1.02);
 }
 
+.print-black-btn svg {
+  font-size: 1.3rem;
+}
+
+/* สถานะ */
 .status {
   font-weight: bold;
 }
@@ -97,24 +121,33 @@
   border-radius: 4px;
   font-size: 13px;
   cursor: pointer;
+  min-width: 70px;
+  text-align: center;
 }
 
 .pagination-buttons .btn:hover {
-  background-color: #e6f0ff;
+  background-color: var(--color-pagination-hover);
 }
 
 .pagination-buttons .btn.disabled {
-  background-color: #eee;
+  background-color: var(--color-pagination-disabled);
   color: #aaa;
   pointer-events: none;
 }
 
+.pagination-buttons .btn.current {
+  background-color: var(--color-pagination-active);
+  color: white;
+  border: none;
+}
+
+/* ช่องกรอกหน้าจากตัวเลข (ถ้าใช้) */
 .page-input {
   width: 50px;
   text-align: center;
   padding: 0.3rem 0.6rem;
   border: 2px solid rgba(0, 123, 255, 0.3);
-  background-color: #007bff;
+  background-color: var(--color-pagination-active);
   color: white;
   font-weight: bold;
   border-radius: 4px;
@@ -130,36 +163,4 @@
 .page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.print-black-btn {
-  width: 100%; /* <<< กินพื้นที่เต็มกล่อง */
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center; /* <<< ตรงกลาง */
-  gap: 0.6em; /* <<< ระยะห่างไอคอนกับข้อความ */
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  box-sizing: border-box;
-}
-
-.print-black-btn:hover {
-  background-color: #333;
-  transform: scale(1.02);
-}
-
-.print-black-btn svg {
-  font-size: 1.3rem; /* <<< ขยายขนาดไอคอน print */
-}
-
-.stuff-table td:nth-child(4),
-.stuff-table th:nth-child(4) {
-  width: 140px; /* หรือจะ 150px ก็ดี */
 }
