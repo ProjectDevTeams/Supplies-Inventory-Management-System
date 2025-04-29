@@ -11,7 +11,7 @@ const mockPurchaseData = [
 function StuffTablePurchase() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 5;
 
   const totalPages = Math.ceil(mockPurchaseData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;

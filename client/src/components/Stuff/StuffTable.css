@@ -6,24 +6,32 @@
   --color-pagination-active: #007bff;
 }
 
+/* กล่องครอบทั้ง Table + Pagination */
 .table-wrapper {
-  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
 }
 
 .table-container {
   width: 100%;
   max-width: 1200px;
+  background-color: white;
+  padding: 1.5rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
+/* ตารางหลัก */
 .stuff-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   font-size: 13px;
+  margin-bottom: 1.5rem;
 }
 
 .stuff-table th,
@@ -32,7 +40,6 @@
   padding: 0.5em 0.8em;
   text-align: center;
   vertical-align: middle;
-  min-height: 50px;
 }
 
 .stuff-table th {
@@ -41,7 +48,7 @@
   font-size: 14px;
 }
 
-/* กำหนดความกว้างคอลัมน์ปุ่มปริ้น */
+/* คอลัมน์ปุ่มปริ้น */
 .stuff-table td:nth-child(4),
 .stuff-table th:nth-child(4) {
   width: 140px;
@@ -92,18 +99,19 @@
   color: red;
 }
 
-/* Pagination */
+/* Pagination รวมอยู่ในกล่องเดียวกับ table */
 .pagination-wrapper {
-  margin-top: 1rem;
   width: 100%;
-  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
+  flex-wrap: wrap;
 }
 
 .pagination-info {
+  flex: 1;
+  text-align: left;
   color: #333;
 }
 
@@ -141,9 +149,9 @@
   border: none;
 }
 
-/* ช่องกรอกหน้าจากตัวเลข (ถ้าใช้) */
+/* ช่องกรอกเลขหน้า */
 .page-input {
-  width: 50px;
+  width: 60px;
   text-align: center;
   padding: 0.3rem 0.6rem;
   border: 2px solid rgba(0, 123, 255, 0.3);
@@ -151,7 +159,8 @@
   color: white;
   font-weight: bold;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 14px;
+  margin: 0 0.4rem;
 }
 
 .page-input:focus {
