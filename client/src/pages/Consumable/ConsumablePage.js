@@ -12,9 +12,6 @@ function ConsumablePage() {
       <div className="consumable-sidebar">
         <Sidebar />
         <main className="consumable-content">
-          <section className="content-header">
-            <Consumablebar />
-          </section>
           <section className="consumable-table-container">
             <Consumable_Table/>
           </section>
