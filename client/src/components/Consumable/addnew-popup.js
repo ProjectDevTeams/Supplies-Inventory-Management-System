@@ -1,13 +1,17 @@
 import React from "react";
 import "./addnew-popup.css";
 
-function AddnewPopup() {
+function AddnewPopup({ onClose }) {  // ✅ รับ onClose จาก props
   return (
     <div className="popup-container">
       <div className="popup-box">
         <div className="popup-header">
           <span>เพิ่มรายการใหม่</span>
-          <button className="close-btn">✕</button>
+
+          {/* ✅ ปุ่มปิด */}
+          <button className="close-btn" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         <div className="popup-body">
@@ -74,11 +78,10 @@ function AddnewPopup() {
               <label>แนบไฟล์ภาพ</label>
               <div className="upload-group">
                 <small>ขนาดไฟล์สูงสุด 5MB</small>
-    
                 <label htmlFor="fileUpload" className="custom-file-btn">เลือกไฟล์</label>
                 <input type="file" id="fileUpload" className="file-hidden" />
               </div>
-              </div>
+            </div>
 
             <div className="form-row">
               <label>วันที่สร้าง</label>
@@ -96,4 +99,3 @@ function AddnewPopup() {
 }
 
 export default AddnewPopup;
-

@@ -5,20 +5,18 @@ function PermissionContent() {
   return (
     <div className="perm-container">
       
-      {/* ส่วนหัวข้อและกล่องค้นหา+ปุ่ม */}
-      <div className="perm-header">
+      <div className="perm-bar">
         <div className="perm-title">แบ่งสิทธิ์</div>
 
-        <div className="perm-actions">
+        <div className="perm-controls">
           <div className="perm-search-box">
             <span className="perm-search-icon">🔍</span>
-            <input
-              type="text"
-              placeholder="ค้นหา"
-              className="perm-search-input"
-            />
+            <input type="text" placeholder="ค้นหา" className="perm-search-input" />
           </div>
-          <button className="perm-add-btn">+ เพิ่มสิทธิ์</button>
+
+          <button className="perm-add-btn">
+            + เพิ่มสิทธิ์
+          </button>
         </div>
       </div>
 

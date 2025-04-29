@@ -1,15 +1,23 @@
 .perm-container {
     display: flex;
     flex-direction: column;
-    gap: 1.5em;
+    gap: 0.8em;
     padding: 1em;
     background-color: #f5f8fc;
     width: 100%;
-    max-width: 1200px;     /* ✅ ให้ความกว้างไม่เกิน */
-    margin: 0 auto;         /* ✅ จัดกลางหน้าจอ */
+    max-width: 1200px;
+    margin: 0 auto;
     box-sizing: border-box;
   }
   
+  /* บาร์บนสุด */
+  .perm-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    align-items: flex-start;
+    width: auto;
+  }
   
   /* หัวข้อ */
   .perm-title {
@@ -19,36 +27,31 @@
   }
   
   /* กล่องช่องค้นหา + ปุ่ม */
-  .perm-actions {
+  .perm-controls {
     display: flex;
     gap: 1em;
-    align-items: center;
-    justify-content: flex-start;
     flex-wrap: wrap;
+    align-items: center;
   }
   
   /* กล่องค้นหา */
   .perm-search-box {
     position: relative;
-    width: 250px;
   }
   
   .perm-search-icon {
     position: absolute;
-    left: 0.8em;
+    left: 0.5em;
     top: 50%;
     transform: translateY(-50%);
     color: gray;
-    font-size: 1em;
     pointer-events: none;
   }
   
   .perm-search-input {
-    width: 100%;
-    padding: 0.5em 0.5em 0.5em 2.2em;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
+    padding: 0.5em 0.5em 0.5em 2em;
+    border: 2px solid #aab3bb;
+    border-radius: 3px;
     font-size: 1em;
   }
   
@@ -74,9 +77,9 @@
     width: 100%;
     border-collapse: collapse;
     background-color: white;
-    table-layout: fixed; /* ✅ ไม่ให้ช่องขยาย */
-    margin-left: 0; /* ✅ ชิดซ้าย */
-  }  
+    table-layout: fixed;
+    margin-left: 0;
+  }
   
   .perm-table th,
   .perm-table td {
@@ -92,7 +95,7 @@
   
   /* Responsive */
   @media (max-width: 768px) {
-    .perm-actions {
+    .perm-controls {
       flex-direction: column;
       align-items: flex-start;
     }

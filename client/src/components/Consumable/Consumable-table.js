@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./Consumable-table.css";
+import AddnewPopup from "./addnew-popup"; 
+import Consumable from "./Consumablebar";
 
 const mockData = [
   { code: "OF001", image: "https://via.placeholder.com/60", name: "เทปกาวสองหน้า", category: "วัสดุสำนักงาน", unit: "ม้วน", location: "คลังหลัก", price: 220, status: "ใกล้หมดสต็อก!", in: 2, out: 2, remain: 1, low: 1, high: 5, brought: 1 },
@@ -24,10 +26,12 @@ const mockData = [
   { code: "OF020", image: "https://via.placeholder.com/60", name: "แผ่นพลาสติกใส", category: "วัสดุสำนักงาน", unit: "แผ่น", location: "คลังรอง", price: 3, status: "ใกล้หมดสต็อก!", in: 2, out: 1, remain: 1, low: 1, high: 4, brought: 1 }
 ];
 
+
 const itemsPerPage = 5;
 
 function Consumable_Table() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
 
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -44,6 +48,10 @@ function Consumable_Table() {
 
   return (
     <div className="table-container-consumable" id="consumable-table-container">
+      
+      {/* ✅ เรียก Consumable bar พร้อมส่ง onAddClick ลงไป */}
+      <Consumable onAddClick={() => setShowPopup(true)} />
+
       <table className="consumable-table" id="consumable-main-table">
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
@@ -91,6 +99,9 @@ function Consumable_Table() {
           ))}
         </tbody>
       </table>
+
+      {/* ✅ แสดง Popup ถ้า showPopup true */}
+      {showPopup && <AddnewPopup onClose={() => setShowPopup(false)} />}
 
       <div className="consumable-pagination">
         <strong className="pagination-info" id="pagination-info">
