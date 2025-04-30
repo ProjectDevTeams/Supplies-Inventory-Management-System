@@ -16,7 +16,6 @@ import SettingPage from "./pages/Setting/SettingPage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -34,10 +33,9 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
         <Route path="/setting" element={<SettingPage />} />
-        <Route path="/consumable/categorize" element={<CategorizePage/>} />
+        <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
-
-
+        
       </Routes>
     </BrowserRouter>
   );
