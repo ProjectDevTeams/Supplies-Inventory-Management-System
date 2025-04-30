@@ -34,13 +34,10 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
         <Route path="/setting" element={<SettingPage />} />
-<<<<<<< Updated upstream
-        <Route path="/consumable/categorize" element={<CategorizePage />} />
-=======
-        <Route path="/categorize" element={<CategorizePage/>} />
-        <Route path="/unitscount" element={<UnitsCountPage />} />
-        
->>>>>>> Stashed changes
+        <Route path="/consumable/categorize" element={<CategorizePage/>} />
+        <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
+
+
       </Routes>
     </BrowserRouter>
   );
