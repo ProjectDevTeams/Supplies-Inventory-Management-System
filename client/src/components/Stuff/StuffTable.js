@@ -14,7 +14,6 @@ function StuffTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
   const itemsPerPage = 5;
-
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -41,53 +40,43 @@ function StuffTable() {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       const value = parseInt(inputPage, 10);
       if (!isNaN(value) && value >= 1 && value <= totalPages) {
         setCurrentPage(value);
-        setInputPage(value);
       }
     }
   };
 
   return (
-    <div className="table-wrapper">
-      <div className="table-container">
-        <table className="stuff-table">
-          <thead>
-            <tr>
-              <th>ลำดับ</th>
-              <th>เลขที่ใบเบิก</th>
-              <th>คลังวัสดุ</th>
-              <th>ปริ้น</th>
-              <th>จำนวนรายการ</th>
-              <th>วันที่สร้าง</th>
-              <th>สถานะ</th>
+    <div className="table-container">
+      <table className="stuff-table">
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>เลขที่ใบเบิก</th>
+            <th>คลังวัสดุ</th>
+            <th>จำนวน</th>
+            <th>วันที่สร้าง</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map(item => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.code}</td>
+              <td>{item.stock}</td>
+              <td>{item.amount}</td>
+              <td>{item.date}</td>
+              <td className={`status ${item.status}`}>
+                {renderStatusText(item.status)}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.code}</td>
-                <td>{item.stock}</td>
-                <td>
-                  <button className="print-black-btn">
-                    🖨️ ปริ้น
-                  </button>
-                </td>
-                <td>{item.amount}</td>
-                <td>{item.date}</td>
-                <td className={`status ${item.status}`}>
-                  {renderStatus(item.status)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
 
-      {/* Pagination */}
       <div className="pagination-wrapper">
         <div className="pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
@@ -110,7 +99,7 @@ function StuffTable() {
   );
 }
 
-function renderStatus(status) {
+function renderStatusText(status) {
   switch (status) {
     case 'pending':
       return 'รออนุมัติ';

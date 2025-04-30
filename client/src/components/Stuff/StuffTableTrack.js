@@ -1,53 +1,45 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
 
-const mockTrackData = [
-  { id: 40, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "รับของเรียบร้อย" },
-  { id: 39, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "3 ก.พ. 68", status: "รับของเรียบร้อย" },
-  { id: 38, code: "008-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 37, code: "007-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 36, code: "006-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 35, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "17 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 34, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 4, date: "13 ม.ค. 68", status: "ไม่อนุมัติ" },
-  { id: 33, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "ไม่อนุมัติ" },
+const trackData = [
+  { id: 30, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 29, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 28, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "ไม่อนุมัติ" },
+  { id: 27, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 26, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "ไม่อนุมัติ" },
 ];
 
 function StuffTableTrack() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
 
-  const totalPages = Math.ceil(mockTrackData.length / itemsPerPage);
+  const totalPages = Math.ceil(trackData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockTrackData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = trackData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-      setInputPage(nextPage);
+      setCurrentPage(currentPage + 1);
+      setInputPage(currentPage + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
-      const prevPage = currentPage - 1;
-      setCurrentPage(prevPage);
-      setInputPage(prevPage);
+      setCurrentPage(currentPage - 1);
+      setInputPage(currentPage - 1);
     }
   };
 
-  const handlePageChange = (e) => {
-    setInputPage(e.target.value);
-  };
+  const handlePageChange = (e) => setInputPage(e.target.value);
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const value = parseInt(inputPage, 10);
-      if (!isNaN(value) && value >= 1 && value <= totalPages) {
-        setCurrentPage(value);
-        setInputPage(value);
+    if (e.key === 'Enter') {
+      const page = parseInt(inputPage, 10);
+      if (!isNaN(page) && page >= 1 && page <= totalPages) {
+        setCurrentPage(page);
       }
     }
   };
@@ -67,7 +59,7 @@ function StuffTableTrack() {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((item) => (
+            {currentItems.map(item => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.code}</td>
@@ -81,24 +73,24 @@ function StuffTableTrack() {
             ))}
           </tbody>
         </table>
-      </div>
 
-      <div className="pagination-wrapper">
-        <div className="pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockTrackData.length)} จาก {mockTrackData.length} แถว
-        </div>
-        <div className="pagination-buttons">
-          <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
-          <input
-            type="number"
-            className="page-input"
-            value={inputPage}
-            onChange={handlePageChange}
-            onKeyDown={handleKeyDown}
-            min={1}
-            max={totalPages}
-          />
-          <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
+        <div className="pagination-wrapper">
+          <div className="pagination-info">
+            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, trackData.length)} จาก {trackData.length} แถว
+          </div>
+          <div className="pagination-buttons">
+            <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
+            <input
+              type="number"
+              className="page-input"
+              value={inputPage}
+              onChange={handlePageChange}
+              onKeyDown={handleKeyDown}
+              min={1}
+              max={totalPages}
+            />
+            <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
+          </div>
         </div>
       </div>
     </div>
