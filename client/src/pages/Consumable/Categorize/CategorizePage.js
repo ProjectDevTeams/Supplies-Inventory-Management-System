@@ -12,9 +12,6 @@ function CategorizePage() {
       <div className="consumable-sidebar-categorize">
         <Sidebar />
         <main className="consumable-content-categorize">
-          <section className="consumable-table-container-categorize">
-          <Categorizebar />
-          </section>
           <Categorize_table />
         </main>
       </div>

@@ -28,7 +28,7 @@ function Consumable({ onAddClick }) {
               + เพิ่มรายการ
             </button>
 
-            <button className="btn primary" onClick={() => navigate("/categorize")}>จัดการหมวดหมู่</button>
+            <button className="btn primary" onClick={() => navigate("categorize")}>จัดการหมวดหมู่</button>
             <button className="btn dark">จัดการหน่วยนับ</button>
           </div>
         </div>
