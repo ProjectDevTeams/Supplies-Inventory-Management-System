@@ -1,20 +1,20 @@
 .organizations-bar-container {
-  background-color: #f9f9f9;
   width: 100%;
-  max-width: 1200px;
-  padding: 0 1rem;
-  margin: 0 auto;
-  overflow-x: auto;
+  padding: 1em;
+  background-color: #f5f8fc;
   box-sizing: border-box;
+  margin: 0 auto;
+  margin-left: 0.1em;
+  margin-top: -1em;
 }
 
 .organizations-bar-table {
   width: 100%;
-  min-width: 800px;
-  margin: 1em auto 2em;
+  margin: 1em auto;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  table-layout: auto;
 }
 
 .organizations-bar-table th,
@@ -77,7 +77,7 @@
 /* ✅ Pagination แบบใหม่ */
 .organizations-pagination-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1500px;
   display: flex;
   justify-content: space-between;
   align-items: center;

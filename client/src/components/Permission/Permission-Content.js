@@ -15,7 +15,7 @@ function PermissionContent() {
     ["10", "STI", "31 ส.ค. 65", "—"],
   ];
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(initialData.length / itemsPerPage);

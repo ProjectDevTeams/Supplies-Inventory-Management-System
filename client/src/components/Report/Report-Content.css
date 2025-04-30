@@ -4,11 +4,9 @@
   flex-direction: column;
   gap: 0.8em;
   padding: 1em;
-  background-color: #f5f8fc;
-  width: 100%;
-  max-width: 1200px;     /* ✅ ให้ความกว้างไม่เกิน */
-  margin: 0 auto;         /* ✅ จัดกลางหน้าจอ */
-  box-sizing: border-box;
+  background-color: #f9f9f9;
+  align-items: flex-start;  
+  width: auto;
 }
 
 /* 🔷 หัวข้อ */
