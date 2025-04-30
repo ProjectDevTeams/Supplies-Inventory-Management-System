@@ -13,29 +13,34 @@ const purchaseData = [
 function StuffTablePurchase() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 4;
+  const [sortAsc, setSortAsc] = useState(true);
 
+  const itemsPerPage = 4;
   const totalPages = Math.ceil(purchaseData.length / itemsPerPage);
+
+  const sortedData = [...purchaseData].sort((a, b) => sortAsc ? a.id - b.id : b.id - a.id);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = purchaseData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
+  const toggleSort = () => setSortAsc(!sortAsc);
   const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      setInputPage(currentPage - 1);
+      const prev = currentPage - 1;
+      setCurrentPage(prev);
+      setInputPage(prev);
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      setInputPage(currentPage + 1);
+      const next = currentPage + 1;
+      setCurrentPage(next);
+      setInputPage(next);
     }
   };
 
   const handleChange = (e) => setInputPage(e.target.value);
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       const value = parseInt(inputPage);
@@ -45,13 +50,22 @@ function StuffTablePurchase() {
     }
   };
 
+  const renderStatusText = (status) => {
+    switch (status) {
+      case 'pending': return 'รออนุมัติ';
+      case 'approved': return 'อนุมัติ';
+      case 'rejected': return 'ไม่อนุมัติ';
+      default: return '-';
+    }
+  };
+
   return (
     <div className="table-wrapper">
       <div className="table-container">
         <table className="stuff-table">
           <thead>
             <tr>
-              <th>ลำดับ</th>
+              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>ลำดับ {sortAsc ? '▲' : '▼'}</th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
               <th>จำนวน</th>
@@ -67,44 +81,34 @@ function StuffTablePurchase() {
                 <td>{item.stock}</td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-                <td className={`status ${item.status}`}>
-                  {renderStatusText(item.status)}
-                </td>
+                <td className={`status ${item.status}`}>{renderStatusText(item.status)}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        <div className="pagination-wrapper">
-          <div className="pagination-info">
+        <div className="stuff-pagination">
+          <div className="stuff-pagination-info">
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, purchaseData.length)} จาก {purchaseData.length} แถว
           </div>
-          <div className="pagination-buttons">
-            <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
-            <input
-              type="number"
-              className="page-input"
-              value={inputPage}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              min={1}
-              max={totalPages}
-            />
-            <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
+          <div className="stuff-pagination-buttons">
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+            <div className="page-box">
+              <input
+                type="number"
+                className="page-box-input"
+                value={inputPage}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+              />
+              <span className="page-box-total">/ {totalPages}</span>
+            </div>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-const renderStatusText = (status) => {
-  switch (status) {
-    case "pending": return "รออนุมัติ";
-    case "approved": return "อนุมัติ";
-    case "rejected": return "ไม่อนุมัติ";
-    default: return "-";
-  }
-};
 
 export default StuffTablePurchase;

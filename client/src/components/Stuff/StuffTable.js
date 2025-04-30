@@ -13,103 +13,91 @@ const mockData = [
 function StuffTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 5;
+  const [sortAsc, setSortAsc] = useState(true);
+
+  const itemsPerPage = 4;
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
+
+  const sortedData = [...mockData].sort((a, b) =>
+    sortAsc ? a.id - b.id : b.id - a.id
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-      setInputPage(nextPage);
+  const renderStatusText = (status) => {
+    switch (status) {
+      case 'pending': return 'รออนุมัติ';
+      case 'approved': return 'อนุมัติ';
+      case 'rejected': return 'ไม่อนุมัติ';
+      default: return '-';
     }
   };
 
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      const prevPage = currentPage - 1;
-      setCurrentPage(prevPage);
-      setInputPage(prevPage);
-    }
-  };
-
-  const handlePageChange = (e) => {
-    setInputPage(e.target.value);
-  };
-
+  const handleSort = () => setSortAsc(!sortAsc);
+  const handlePrev = () => { if (currentPage > 1) setCurrentPage(prev => { setInputPage(prev - 1); return prev - 1; }); };
+  const handleNext = () => { if (currentPage < totalPages) setCurrentPage(next => { setInputPage(next + 1); return next + 1; }); };
+  const handleChange = (e) => setInputPage(e.target.value);
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      const value = parseInt(inputPage, 10);
-      if (!isNaN(value) && value >= 1 && value <= totalPages) {
-        setCurrentPage(value);
-      }
+      const val = parseInt(inputPage);
+      if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
     }
   };
 
   return (
-    <div className="table-container">
-      <table className="stuff-table">
-        <thead>
-          <tr>
-            <th>ลำดับ</th>
-            <th>เลขที่ใบเบิก</th>
-            <th>คลังวัสดุ</th>
-            <th>จำนวน</th>
-            <th>วันที่สร้าง</th>
-            <th>สถานะ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map(item => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.code}</td>
-              <td>{item.stock}</td>
-              <td>{item.amount}</td>
-              <td>{item.date}</td>
-              <td className={`status ${item.status}`}>
-                {renderStatusText(item.status)}
-              </td>
+    <div className="table-wrapper">
+      <div className="table-container">
+        <table className="stuff-table">
+          <thead>
+            <tr>
+              <th onClick={handleSort} style={{ cursor: 'pointer' }}>ลำดับ {sortAsc ? '▲' : '▼'}</th>
+              <th>เลขที่ใบเบิก</th>
+              <th>คลังวัสดุ</th>
+              <th>จำนวน</th>
+              <th>วันที่สร้าง</th>
+              <th>สถานะ</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentItems.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.code}</td>
+                <td>{item.stock}</td>
+                <td>{item.amount}</td>
+                <td>{item.date}</td>
+                <td className={`status ${item.status}`}>
+                  {renderStatusText(item.status)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="pagination-wrapper">
-        <div className="pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
-        </div>
-        <div className="pagination-buttons">
-          <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
-          <input
-            type="number"
-            className="page-input"
-            value={inputPage}
-            onChange={handlePageChange}
-            onKeyDown={handleKeyDown}
-            min={1}
-            max={totalPages}
-          />
-          <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
+        <div className="stuff-pagination">
+          <div className="stuff-pagination-info">
+            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+          </div>
+          <div className="stuff-pagination-buttons">
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+            <div className="page-box">
+              <input
+                type="number"
+                className="page-box-input"
+                value={inputPage}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+              />
+              <span className="page-box-total">/ {totalPages}</span>
+            </div>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
+          </div>
         </div>
       </div>
     </div>
   );
-}
-
-function renderStatusText(status) {
-  switch (status) {
-    case 'pending':
-      return 'รออนุมัติ';
-    case 'approved':
-      return 'อนุมัติ';
-    case 'rejected':
-      return 'ไม่อนุมัติ';
-    default:
-      return '-';
-  }
 }
 
 export default StuffTable;

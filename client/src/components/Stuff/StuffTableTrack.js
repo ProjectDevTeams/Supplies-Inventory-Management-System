@@ -12,29 +12,34 @@ const trackData = [
 function StuffTableTrack() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
-  const itemsPerPage = 3;
+  const [sortAsc, setSortAsc] = useState(true);
 
+  const itemsPerPage = 3;
   const totalPages = Math.ceil(trackData.length / itemsPerPage);
+
+  const sortedData = [...trackData].sort((a, b) => sortAsc ? a.id - b.id : b.id - a.id);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = trackData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      setInputPage(currentPage + 1);
+  const toggleSort = () => setSortAsc(!sortAsc);
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      const prev = currentPage - 1;
+      setCurrentPage(prev);
+      setInputPage(prev);
     }
   };
 
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      setInputPage(currentPage - 1);
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      const next = currentPage + 1;
+      setCurrentPage(next);
+      setInputPage(next);
     }
   };
 
   const handlePageChange = (e) => setInputPage(e.target.value);
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       const page = parseInt(inputPage, 10);
@@ -50,7 +55,7 @@ function StuffTableTrack() {
         <table className="stuff-table">
           <thead>
             <tr>
-              <th>ลำดับ</th>
+              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>ลำดับ {sortAsc ? '▲' : '▼'}</th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
               <th>จำนวน</th>
@@ -74,22 +79,23 @@ function StuffTableTrack() {
           </tbody>
         </table>
 
-        <div className="pagination-wrapper">
-          <div className="pagination-info">
+        <div className="stuff-pagination">
+          <div className="stuff-pagination-info">
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, trackData.length)} จาก {trackData.length} แถว
           </div>
-          <div className="pagination-buttons">
-            <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
-            <input
-              type="number"
-              className="page-input"
-              value={inputPage}
-              onChange={handlePageChange}
-              onKeyDown={handleKeyDown}
-              min={1}
-              max={totalPages}
-            />
-            <button className={`btn ${currentPage === totalPages ? 'disabled' : ''}`} onClick={handleNext}>ถัดไป</button>
+          <div className="stuff-pagination-buttons">
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+            <div className="page-box">
+              <input
+                type="number"
+                className="page-box-input"
+                value={inputPage}
+                onChange={handlePageChange}
+                onKeyDown={handleKeyDown}
+              />
+              <span className="page-box-total">/ {totalPages}</span>
+            </div>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
           </div>
         </div>
       </div>

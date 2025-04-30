@@ -3,7 +3,7 @@
   justify-content: center;
   padding: 1.5rem;
 }
-+
+
 .table-container {
   width: 100%;
   max-width: 1200px;
@@ -42,19 +42,22 @@
   font-weight: bold;
 }
 
-.pagination-wrapper {
+/* Pagination */
+.stuff-pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
   flex-wrap: wrap;
+  font-size: 14px;
+  gap: 0.5rem;
 }
 
-.pagination-info {
+.stuff-pagination-info {
   color: #333;
+  flex: 1;
 }
 
-.pagination-buttons {
+.stuff-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -68,23 +71,130 @@
   cursor: pointer;
 }
 
-.btn:hover {
-  background-color: #e6f0ff;
-}
-
-.btn.disabled {
+.btn:disabled {
   background-color: #eee;
   color: #aaa;
   pointer-events: none;
 }
 
-.page-input {
-  width: 50px;
-  text-align: center;
-  padding: 0.4rem;
-  border: 2px solid rgba(0, 123, 255, 0.3);
+.btn:hover:not(:disabled) {
+  background-color: #e6f0ff;
+}
+
+.page-box {
+  display: inline-flex;
+  align-items: center;
   background-color: #007bff;
   color: white;
+  padding: 0.3rem 0.8rem;
   border-radius: 4px;
   font-weight: bold;
+}
+
+.page-box input {
+  width: 40px;
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: center;
+  font-size: 14px;
+}
+
+.page-box input:focus {
+  outline: none;
+}
+
+.page-input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  color: white;
+  font-weight: bold;
+}
+
+.page-input-wrapper input.page-input {
+  background-color: transparent;
+  border: none;
+  width: 35px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+  outline: none;
+}
+
+.page-input-wrapper input.page-input::-webkit-inner-spin-button,
+.page-input-wrapper input.page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.total-page {
+  margin-left: 4px;
+}
+
+.page-box {
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 0.2rem 0.8rem;
+  font-weight: bold;
+}
+
+.page-input {
+  width: 35px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.page-input:focus {
+  outline: none;
+}
+
+.page-total {
+  margin-left: 5px;
+  font-size: 14px;
+  color: white;
+}
+
+.page-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  gap: 0.3rem;
+}
+
+.page-box-input {
+  width: 40px;
+  text-align: right;
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.page-box-input:focus {
+  outline: none;
+}
+
+.page-box-total {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
 }
