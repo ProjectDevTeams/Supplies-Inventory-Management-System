@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Permission-Content.css";
 
 function PermissionContent() {
+  const initialData = [
+    ["01", "แอดมิน ฝ่ายบริการโครงสร้างพื้นฐานฯ", "27 มี.ค. 65", "24 พ.ย. 65"],
+    ["02", "สำนักงานความร่วมมืออุตสาหกรรม", "27 มี.ค. 65", "—"],
+    ["03", "ศูนย์ทรัพย์สินทางปัญญา", "27 มี.ค. 65", "—"],
+    ["04", "ศูนย์บ่มเพาะวิสาหกิจ", "27 มี.ค. 65", "—"],
+    ["05", "ฝ่ายยุทธศาสตร์และแผน", "17 พ.ค. 65", "—"],
+    ["06", "ศูนย์นวัตกรรมการออกแบบ", "17 พ.ค. 65", "—"],
+    ["07", "สำนักงานกลาง", "17 พ.ค. 65", "9 พ.ย. 65"],
+    ["08", "สถาบันพัฒนาการเป็นผู้ประกอบการนักศึกษา", "17 พ.ค. 65", "—"],
+    ["09", "ประชาสัมพันธ์และสื่อสารองค์กร", "31 ส.ค. 65", "7 ธ.ค. 65"],
+    ["10", "STI", "31 ส.ค. 65", "—"],
+  ];
+
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(initialData.length / itemsPerPage);
+  const displayedData = initialData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="perm-container">
-      
       <div className="perm-bar">
         <div className="perm-title">แบ่งสิทธิ์</div>
 
@@ -13,14 +30,10 @@ function PermissionContent() {
             <span className="perm-search-icon">🔍</span>
             <input type="text" placeholder="ค้นหา" className="perm-search-input" />
           </div>
-
-          <button className="perm-add-btn">
-            + เพิ่มสิทธิ์
-          </button>
+          <button className="perm-add-btn">+ เพิ่มสิทธิ์</button>
         </div>
       </div>
 
-      {/* ตาราง */}
       <table className="perm-table">
         <thead>
           <tr>
@@ -31,19 +44,39 @@ function PermissionContent() {
           </tr>
         </thead>
         <tbody>
-          <tr><td>01</td><td>แอดมิน ฝ่ายบริการโครงสร้างพื้นฐานฯ</td><td>27 มี.ค. 65</td><td>24 พ.ย. 65</td></tr>
-          <tr><td>02</td><td>สำนักงานความร่วมมืออุตสาหกรรม</td><td>27 มี.ค. 65</td><td>—</td></tr>
-          <tr><td>03</td><td>ศูนย์ทรัพย์สินทางปัญญา</td><td>27 มี.ค. 65</td><td>—</td></tr>
-          <tr><td>04</td><td>ศูนย์บ่มเพาะวิสาหกิจ</td><td>27 มี.ค. 65</td><td>—</td></tr>
-          <tr><td>05</td><td>ฝ่ายยุทธศาสตร์และแผน</td><td>17 พ.ค. 65</td><td>—</td></tr>
-          <tr><td>06</td><td>ศูนย์นวัตกรรมการออกแบบ</td><td>17 พ.ค. 65</td><td>—</td></tr>
-          <tr><td>07</td><td>สำนักงานกลาง</td><td>17 พ.ค. 65</td><td>9 พ.ย. 65</td></tr>
-          <tr><td>08</td><td>สถาบันพัฒนาการเป็นผู้ประกอบการนักศึกษา</td><td>17 พ.ค. 65</td><td>—</td></tr>
-          <tr><td>09</td><td>ประชาสัมพันธ์และสื่อสารองค์กร</td><td>31 ส.ค. 65</td><td>7 ธ.ค. 65</td></tr>
-          <tr><td>10</td><td>STI</td><td>31 ส.ค. 65</td><td>—</td></tr>
+          {displayedData.map(([id, name, created, updated]) => (
+            <tr key={id}>
+              <td>{id}</td>
+              <td>
+                <span className="perm-highlight-clickable">{name}</span>
+                <br />
+              </td>
+              <td>{created}</td>
+              <td>{updated}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
+      <div className="perm-pagination">
+        <div className="perm-pagination-info">
+          แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
+          {Math.min(currentPage * itemsPerPage, initialData.length)} จาก {initialData.length} แถว
+        </div>
+        <div className="perm-pagination-buttons">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>ก่อนหน้า</button>
+          {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((page) => (
+            <button
+              key={page}
+              className={page === currentPage ? "active" : ""}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>ถัดไป</button>
+        </div>
+      </div>
     </div>
   );
 }

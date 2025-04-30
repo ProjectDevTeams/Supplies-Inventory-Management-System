@@ -1,0 +1,98 @@
+.report-remain-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1em auto;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
+  
+  /* ปุ่ม Export Excel ชิดขวา */
+  .report-export-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1em;
+  }
+  
+  .report-export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #217346;
+    font-size: 16px;
+  }
+  
+  .report-export-btn:hover {
+    opacity: 0.85;
+  }
+  
+  .excel-icon {
+    width: 30px;
+    height: auto;
+  }
+  
+  /* ตาราง */
+  .report-remain-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    background-color: white;
+    font-size: 14px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .report-remain-table th,
+  .report-remain-table td {
+    border: 1px solid #ccc;
+    padding: 0.6em 0.8em;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .report-remain-table th {
+    background-color: #dfe8f6;
+    font-weight: bold;
+    color: #003366;
+  }
+  
+  /* Pagination */
+  .report-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+    font-size: 0.9em;
+    flex-wrap: wrap;
+  }
+  
+  .report-pagination-info {
+    color: #333;
+  }
+  
+  .report-pagination-buttons {
+    display: flex;
+    gap: 0.4em;
+  }
+  
+  .report-pagination-buttons button {
+    padding: 0.4em 0.8em;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
+  
+  .report-pagination-buttons button.active {
+    background-color: #2176bd;
+    color: white;
+  }
+  
+  .report-pagination-buttons button:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+  }
+  
