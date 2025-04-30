@@ -1,3 +1,4 @@
+/* 🔷 พื้นหลัง + Container หลัก */
 .report-bar {
   display: flex;
   flex-direction: column;
@@ -10,12 +11,14 @@
   box-sizing: border-box;
 }
 
+/* 🔷 หัวข้อ */
 .report-title {
   font-weight: bold;
   font-size: 1.4em;
   color: #003366;
 }
 
+/* 🔷 ปุ่มเมนูรายงาน */
 .report-controls {
   display: flex;
   gap: 1em;
@@ -38,7 +41,7 @@
   transform: scale(1.05);
 }
 
-/* สีปุ่มรายงาน */
+/* 🔷 สีปุ่มรายงาน */
 .report-blue {
   background-color: #204d92;
 }
@@ -60,7 +63,7 @@
   background-color: #e74c3c;
 }
 
-/* ฟอร์มค้นหา */
+/* 🔷 ฟอร์มค้นหา */
 .report-search {
   display: flex;
   flex-direction: column;
@@ -96,6 +99,7 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* 🔷 ปุ่มค้นหา */
 .report-search-button {
   display: flex;
   align-items: flex-end;
