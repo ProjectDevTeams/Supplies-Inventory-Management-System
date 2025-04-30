@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Adjust-table.css";
 
 const mockAdjustData = [
@@ -174,39 +174,33 @@ const mockAdjustData = [
 
 // ------------------------Mock Data-------------------------
 
-
 function AdjustTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState("desc"); // เพิ่มสถานะการเรียง (เริ่มที่ "desc")
+  const [inputPage, setInputPage] = useState("");
+
+  const [sortOrder, setSortOrder] = useState("desc");
   const itemsPerPage = 10;
 
-  // ✅ เรียงข้อมูลตามสถานะปัจจุบัน (มากไปน้อย หรือ น้อยไปมาก)
-  const sortedData = [...mockAdjustData].sort((a, b) => {
-    return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
-  });
+  const sortedData = [...mockAdjustData].sort((a, b) =>
+    sortOrder === "asc" ? a.id - b.id : b.id - a.id
+  );
 
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  // ✅ ฟังก์ชันสลับการเรียง id
   const toggleSortOrder = () => {
     setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    setCurrentPage(1); // รีเซ็ตไปหน้าแรกเสมอเมื่อสลับ
+    setCurrentPage(1);
   };
 
   return (
@@ -214,11 +208,7 @@ function AdjustTable() {
       <table id="adjustment-table">
         <thead id="adjustment-thead">
           <tr className="adjustment-tr">
-            <th
-              className="adjustment-th"
-              onClick={toggleSortOrder}
-              style={{ cursor: "pointer" }}
-            >
+            <th className="adjustment-th" onClick={toggleSortOrder} style={{ cursor: "pointer" }}>
               ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
             </th>
             <th className="adjustment-th">จากคลัง</th>
@@ -235,7 +225,6 @@ function AdjustTable() {
                 <td className="adjustment-td">{item.from}</td>
                 <td className="adjustment-td">{item.company}</td>
                 <td className="adjustment-td">{item.orderDate}</td>
-
                 <td
                   className={`adjustment-td ${
                     item.state === "อนุมัติ"
@@ -259,59 +248,40 @@ function AdjustTable() {
         </tbody>
       </table>
 
-      {/* Pagination */}
-      <div className="pagination-adjust">
-        <strong className="pagination-info-adjust">
-          แสดง {indexOfFirstItem + 1} ถึง{" "}
-          {Math.min(indexOfLastItem, sortedData.length)} จาก {sortedData.length}{" "}
-          แถว
-        </strong>
+      {/* ✅ Pagination */}
+      <div className="adjust-pagination-wrapper">
+        <div className="adjust-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedData.length)} จาก {sortedData.length} แถว
+        </div>
+        <div className="adjust-pagination-buttons">
+          <button disabled={currentPage === 1} onClick={handlePrevPage}>
+            ก่อนหน้า
+          </button>
 
-        <div className="pagination-buttons-adjust">
-          {/* ปุ่ม ก่อนหน้า */}
-          {currentPage > 1 ? (
-            <a href="#" onClick={handlePrevPage}>
-              ก่อนหน้า
-            </a>
-          ) : (
-            <span className="disabled-adjust">ก่อนหน้า</span>
-          )}
+          <input
+            type="number"
+            className="adjust-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                  setInputPage(""); // ✅ Reset เพื่อแสดง placeholder เช่น "2 / 3"
+                }
+                e.target.blur(); // ✅ ออกจาก input เพื่อให้ placeholder ทำงาน
+              }
+            }}
+            placeholder={`${currentPage} / ${totalPages}`}
+          />
 
-          {/* เลขหน้าแบบย่อ */}
-          {Array.from({ length: totalPages }, (_, index) => index + 1)
-            .filter((page) => {
-              return (
-                page === 1 ||
-                page === totalPages ||
-                (page >= currentPage - 1 && page <= currentPage + 1)
-              );
-            })
-            .map((page, idx, arr) => (
-              <React.Fragment key={page}>
-                {idx > 0 && page - arr[idx - 1] > 1 && (
-                  <span className="ellipsis">...</span>
-                )}
-                <a
-                  href="#"
-                  className={currentPage === page ? "current-adjust" : ""}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentPage(page);
-                  }}
-                >
-                  {page}
-                </a>
-              </React.Fragment>
-            ))}
-
-          {/* ปุ่ม ถัดไป */}
-          {currentPage < totalPages ? (
-            <a href="#" onClick={handleNextPage}>
-              ถัดไป
-            </a>
-          ) : (
-            <span className="disabled-adjust">ถัดไป</span>
-          )}
+          <button disabled={currentPage === totalPages} onClick={handleNextPage}>
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>

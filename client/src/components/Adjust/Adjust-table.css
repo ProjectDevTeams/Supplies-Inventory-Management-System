@@ -70,47 +70,98 @@
   font-weight: bold;
 }
 
-/* ✅ Pagination */
-.pagination-adjust {
+ /* ✅ Pagination แบบใหม่ */
+ .adjust-pagination-wrapper {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.adjust-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.adjust-pagination-buttons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 1em;
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 0.95em;
-  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.pagination-info-adjust {
+.adjust-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
   color: #333;
-  margin-right: auto;
-}
-
-.pagination-adjust span,
-.pagination-adjust a {
-  padding: 0.3em 0.6em;
-  margin: 0.2em;
   border: 1px solid #ccc;
-  background-color: white;
-  text-decoration: none;
-  color: #000000;
-  border-radius: 3px;
-  font-size: 0.95em;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.pagination-adjust .current-adjust {
+.adjust-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.adjust-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.adjust-pagination-buttons .active {
   background-color: #2176bd;
   color: white;
 }
 
-.pagination-adjust .disabled-adjust {
-  color: #aaa;
+/* ช่องเลขหน้า */
+.adjust-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-/* ✅ จุดไข่ปลา (...) */
-.ellipsis {
-  margin: 0 0.5em;
-  color: #999;
+.adjust-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.adjust-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.adjust-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.adjust-page-input::-webkit-inner-spin-button,
+.adjust-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .adjust-th,
+  .adjust-td {
+    font-size: 0.85em;
+    padding: 0.5em;
+  }
+
+  .adjust-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
 }
