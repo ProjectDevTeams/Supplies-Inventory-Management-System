@@ -46,10 +46,11 @@ function UnitsCountTable() {
                 <span className="unit-name">{unit}</span>
                 <div className="unitscount-actions">
                   <button className="unitscount-edit-btn">
-                    <img className="img-edit-unitscount" src="./image/Edit.png" alt="Edit" />
+                    <img className="img-edit-unitscount" src="../image/Edit.png" alt="Edit" />
+                    
                   </button>
                   <button className="unitscount-edit-btn">
-                    <img className="img-remove-unitscount" src="./image/delete.png" alt="Delete" />
+                    <img className="img-remove-unitscount" src="../image/delete.png" alt="Delete" />
                   </button>
                 </div>
               </td>
