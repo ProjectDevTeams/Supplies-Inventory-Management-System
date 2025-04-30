@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
 
-const mockData = [
-  { id: 24, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
-  { id: 23, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "3 ก.พ. 68", status: "approved" },
-  { id: 22, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "rejected" },
-  { id: 21, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "pending" },
-  { id: 20, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "20 ม.ค. 68", status: "approved" },
-  { id: 19, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "rejected" },
+const mockTrackData = [
+  { id: 40, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "รับของเรียบร้อย" },
+  { id: 39, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "3 ก.พ. 68", status: "รับของเรียบร้อย" },
+  { id: 38, code: "008-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 37, code: "007-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 36, code: "006-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 35, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "17 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 34, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 4, date: "13 ม.ค. 68", status: "ไม่อนุมัติ" },
+  { id: 33, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "ไม่อนุมัติ" },
 ];
 
-function StuffTable() {
+function StuffTableTrack() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState(1);
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  const totalPages = Math.ceil(mockTrackData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = mockTrackData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleNext = () => {
     if (currentPage < totalPages) {
@@ -59,8 +61,7 @@ function StuffTable() {
               <th>ลำดับ</th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
-              <th>ปริ้น</th>
-              <th>จำนวนรายการ</th>
+              <th>จำนวน</th>
               <th>วันที่สร้าง</th>
               <th>สถานะ</th>
             </tr>
@@ -71,15 +72,10 @@ function StuffTable() {
                 <td>{item.id}</td>
                 <td>{item.code}</td>
                 <td>{item.stock}</td>
-                <td>
-                  <button className="print-black-btn">
-                    🖨️ ปริ้น
-                  </button>
-                </td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-                <td className={`status ${item.status}`}>
-                  {renderStatus(item.status)}
+                <td className={`status ${item.status.includes("ไม่") ? "rejected" : "approved"}`}>
+                  {item.status}
                 </td>
               </tr>
             ))}
@@ -87,10 +83,9 @@ function StuffTable() {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="pagination-wrapper">
         <div className="pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockTrackData.length)} จาก {mockTrackData.length} แถว
         </div>
         <div className="pagination-buttons">
           <button className={`btn ${currentPage === 1 ? 'disabled' : ''}`} onClick={handlePrev}>ก่อนหน้า</button>
@@ -110,17 +105,4 @@ function StuffTable() {
   );
 }
 
-function renderStatus(status) {
-  switch (status) {
-    case 'pending':
-      return 'รออนุมัติ';
-    case 'approved':
-      return 'อนุมัติ';
-    case 'rejected':
-      return 'ไม่อนุมัติ';
-    default:
-      return '-';
-  }
-}
-
-export default StuffTable;
+export default StuffTableTrack;

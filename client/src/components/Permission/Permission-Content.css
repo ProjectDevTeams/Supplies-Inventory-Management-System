@@ -1,0 +1,109 @@
+.perm-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    padding: 1em;
+    background-color: #f5f8fc;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  /* บาร์บนสุด */
+  .perm-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    align-items: flex-start;
+    width: auto;
+  }
+  
+  /* หัวข้อ */
+  .perm-title {
+    font-weight: bold;
+    font-size: 1.4em;
+    color: #003366;
+  }
+  
+  /* กล่องช่องค้นหา + ปุ่ม */
+  .perm-controls {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  /* กล่องค้นหา */
+  .perm-search-box {
+    position: relative;
+  }
+  
+  .perm-search-icon {
+    position: absolute;
+    left: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    pointer-events: none;
+  }
+  
+  .perm-search-input {
+    padding: 0.5em 0.5em 0.5em 2em;
+    border: 2px solid #aab3bb;
+    border-radius: 3px;
+    font-size: 1em;
+  }
+  
+  /* ปุ่มเพิ่มสิทธิ์ */
+  .perm-add-btn {
+    background-color: #2d7a3e;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 3px;
+    font-size: 1em;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+  }
+  
+  .perm-add-btn:hover {
+    transform: scale(1.05);
+  }
+  
+  /* ตาราง */
+  .perm-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    table-layout: fixed;
+    margin-left: 0;
+  }
+  
+  .perm-table th,
+  .perm-table td {
+    padding: 0.8em;
+    border: 1px solid #999;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .perm-table th {
+    background-color: #e9ecef;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .perm-controls {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .perm-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+  

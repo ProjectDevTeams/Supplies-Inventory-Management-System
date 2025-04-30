@@ -1,13 +1,14 @@
 import React from "react";
 import "./addpeople-popup.css";
 
-function AddpeoplePopup() {
+function AddpeoplePopup({ onClose }) {  // รับ prop onClose เพื่อปิด Popup
   return (
     <div className="popup-container">
       <div className="popup-box">
         <div className="popup-header blue">
           <span>เพิ่มเจ้าหน้าที่ใหม่</span>
-          <button className="close-btn">✕</button>
+          {/* คลิกปุ่มกากบาทเพื่อปิด Popup */}
+          <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <div className="popup-body">

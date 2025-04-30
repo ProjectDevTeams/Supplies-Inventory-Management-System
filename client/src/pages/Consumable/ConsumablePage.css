@@ -33,3 +33,6 @@
     box-sizing: border-box;
   }
 
+  .consumable-table-container{
+    width: 100%;
+  }

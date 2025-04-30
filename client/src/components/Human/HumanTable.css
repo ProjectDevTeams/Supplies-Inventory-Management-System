@@ -1,0 +1,105 @@
+/* ==================== Container ของตาราง ==================== */
+.table-container {
+    width: 100%;
+    padding: 1em;
+    background-color: #f5f8fc;
+    box-sizing: border-box;
+    margin: 0 auto;
+    margin-left: 0.1em; /* ปรับซ้ายตามดีไซน์ */
+    margin-top: -1em;
+  }
+  
+  /* ==================== ตาราง ==================== */
+  .hum-table {
+    width: 100%;
+    margin: 1em auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    table-layout: auto;
+  }
+  
+  .hum-table th,
+  .hum-table td {
+    border: 1px solid #999;
+    padding: 0.6em 0.8em;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  
+  .hum-table th {
+    background-color: #dfe8f6;
+    font-weight: bold;
+  }
+  .hum-table tbody tr:hover {
+    background-color: #e0f0ff; /* ฟ้าอ่อนเวลาชี้ */
+    color: #3498db; /* สีฟ้าตามปุ่ม */
+    cursor: pointer; /* เปลี่ยนเมาส์เป็น pointer เมื่อชี้ */
+}
+  /* ==================== ช่องซ้าย ==================== */
+  .left-align {
+    text-align: left;
+    padding-left: 1em;
+  }
+  
+  /* ==================== สีสถานะ ==================== */
+  .status.approved {
+    color: #2d7a3e; /* เขียว */
+    font-weight: bold;
+  }
+  
+  /* ==================== Pagination ส่วนแสดงผลข้อมูล ==================== */
+  .pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5em;
+    padding: 0 1em;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-info {
+    font-size: 0.95em;
+    color: #333;
+    margin-bottom: 0.5em;
+  }
+  
+  /* ==================== Pagination ปุ่มและ Input ==================== */
+  .pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .page-input {
+    width: 60px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* ปุ่มทั่วไป */
+  .btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Hover ปุ่ม */
+  .btn:hover {
+    background-color: #2980b9;
+  }
+  
+  /* ปุ่ม Disabled */
+  .btn.disabled {
+    background-color: #ccc;
+    color: #777;
+    cursor: not-allowed;
+  }
+  

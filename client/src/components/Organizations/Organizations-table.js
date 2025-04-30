@@ -21,7 +21,7 @@ function OrganizationsTable() {
   const [showManagePopup, setShowManagePopup] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [showAddPopup, setShowAddPopup] = useState(false);
-  const [sortOrder, setSortOrder] = useState("asc");  // "asc" for ascending, "desc" for descending
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const handleCompanyClick = (companyId) => {
     setSelectedCompanyId(companyId);
@@ -45,12 +45,9 @@ function OrganizationsTable() {
     const maxId = Math.max(...companies.map(c => parseInt(c.id)));
     const nextId = maxId + 1;
     const companyToSave = { ...newCompany, id: nextId.toString() };
-  
     const updatedCompanies = [...companies, companyToSave];
     setCompanies(updatedCompanies);
     localStorage.setItem("companies", JSON.stringify(updatedCompanies));
-  
-    // After adding a new company, re-sort the companies list and reset pagination
     setCurrentPage(Math.ceil(updatedCompanies.length / itemsPerPage));
   };
 
@@ -61,31 +58,32 @@ function OrganizationsTable() {
   };
 
   const handleEditCompany = (idToEdit, newName) => {
-    const updatedCompanies = companies.map(company => company.id === idToEdit ? { ...company, name: newName } : company);
+    const updatedCompanies = companies.map(company =>
+      company.id === idToEdit ? { ...company, name: newName } : company
+    );
     setCompanies(updatedCompanies);
     localStorage.setItem("companies", JSON.stringify(updatedCompanies));
   };
 
   const selectedCompany = companies.find(c => c.id === selectedCompanyId);
 
-  // Sorting function (applies to the companies array)
   const sortedCompanies = [...companies].sort((a, b) => {
-    return sortOrder === "asc" 
-      ? parseInt(a.id) - parseInt(b.id)  // Ascending order
-      : parseInt(b.id) - parseInt(a.id); // Descending order
+    return sortOrder === "asc"
+      ? parseInt(a.id) - parseInt(b.id)
+      : parseInt(b.id) - parseInt(a.id);
   });
 
-  // Pagination
   const totalPages = Math.ceil(companies.length / itemsPerPage);
   const displayedCompanies = sortedCompanies.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) setCurrentPage(totalPages);
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
   }, [totalPages, currentPage]);
 
-  // Toggle sort order
   const handleSortClick = () => {
-    setSortOrder(prevSortOrder => prevSortOrder === "asc" ? "desc" : "asc");
+    setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
   };
 
   return (
@@ -97,7 +95,7 @@ function OrganizationsTable() {
           <tr>
             <th>
               <span onClick={handleSortClick} style={{ cursor: "pointer" }}>
-                ลำดับ {sortOrder === "asc" ? "↓" : "↑"}
+                ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
               </span>
             </th>
             <th>บริษัท/ร้านค้า</th>
@@ -132,13 +130,38 @@ function OrganizationsTable() {
           แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง {Math.min(currentPage * itemsPerPage, companies.length)} จาก {companies.length} แถว
         </div>
         <div className="organizations-bar-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
-          {[...Array(totalPages)].map((_, idx) => (
-            <button key={idx} className={currentPage === idx + 1 ? "active" : ""} onClick={() => setCurrentPage(idx + 1)}>
-              {idx + 1}
-            </button>
-          ))}
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>
+            ก่อนหน้า
+          </button>
+
+          {Array.from({ length: totalPages }, (_, idx) => idx + 1).map(page => {
+            const isFirst = page === 1;
+            const isLast = page === totalPages;
+            const isNearCurrent = Math.abs(page - currentPage) <= 1;
+
+            if (isFirst || isLast || isNearCurrent) {
+              return (
+                <button
+                  key={page}
+                  className={currentPage === page ? "active" : ""}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              );
+            } else if (
+              page === currentPage - 2 ||
+              page === currentPage + 2
+            ) {
+              return <span key={page} style={{ padding: "0 0.5em" }}>...</span>;
+            }
+
+            return null;
+          })}
+
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>
+            ถัดไป
+          </button>
         </div>
       </div>
 

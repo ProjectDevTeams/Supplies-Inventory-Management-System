@@ -1,24 +1,35 @@
-table {
-  width: 90%; /* <<< ลดขนาดตารางลงเหลือ ~75% ของพื้นที่ */
-  margin: 1em 2em; /* <<< จัดกลาง + เว้นบน */
+/* ✅ Container */
+.table-container-consumable {
+  width: 100%;
+  padding: 1em;
+  background-color: #f5f8fc;
+}
+
+/* ✅ Main Table */
+.consumable-table {
+  width: 98%;
+  margin: 1em auto;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  
 }
 
-th, td {
+/* ✅ Header + Cell */
+.consumable-th,
+.consumable-td {
   border: 1px solid #999;
   padding: 0.5em;
   text-align: center;
   vertical-align: top;
 }
 
-th {
+/* ✅ Headings */
+.consumable-th {
   background-color: #dfe8f6;
   font-weight: bold;
 }
 
+/* ✅ Left-align รายการ */
 .item-cell {
   text-align: left;
 }
@@ -27,15 +38,18 @@ th {
   color: #003366;
 }
 
+/* ✅ สถานะสินค้า */
 .item-status {
-  color: red;
   font-weight: bold;
 }
-
-.item-status.ok {
+.item-status.low-stock {
+  color: red;
+}
+.item-status.in-stock {
   color: green;
 }
 
+/* ✅ ปุ่มแก้ไข/ปรับยอด */
 .item-actions {
   margin-top: 0.5em;
 }
@@ -54,39 +68,55 @@ th {
   color: #003366;
 }
 
-.pagination {
+/* ✅ Pagination Container */
+.consumable-pagination {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* <<< จัดซ้าย-ขวาเต็มพื้นที่ */
   margin-top: 1em;
   font-size: 0.95em;
-  width: 90%;
-  margin-left: 1.5em;
+  width: 98%;
+  margin-left: auto;
   margin-right: auto;
   flex-wrap: wrap;
 }
 
+/* ✅ Left info */
 .pagination-info {
   color: #333;
-  margin-right: auto;
 }
 
-.pagination span,
-.pagination a {
+/* ✅ ปุ่มทั้งหมดชิดขวา */
+.pagination-buttons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ✅ ปุ่ม */
+.page-button {
   padding: 0.3em 0.6em;
   margin: 0 0.2em;
   border: 1px solid #ccc;
   background-color: white;
   text-decoration: none;
-  color: #000000;
+  color: #000;
   border-radius: 3px;
+  cursor: pointer;
 }
 
-.pagination .current {
+.page-button.current {
   background-color: #2176bd;
   color: white;
 }
 
-.pagination .disabled {
+.page-button.disabled {
   color: #aaa;
+  cursor: default;
+  pointer-events: none;
+}
+
+.ellipsis {
+  margin: 0 0.5em;
+  color: #999;
 }
