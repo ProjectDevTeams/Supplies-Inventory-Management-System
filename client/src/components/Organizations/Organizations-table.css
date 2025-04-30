@@ -20,10 +20,10 @@
 .organizations-bar-table th,
 .organizations-bar-table td {
   border: 1px solid #999;
-  padding: 0.7em 0.5em; /* ลด padding */
+  padding: 0.7em 0.5em;
   text-align: center;
   vertical-align: middle;
-  font-size: 0.95em; /* เล็กลงแต่ยังอ่านสบาย */
+  font-size: 0.95em;
   line-height: 1.4;
 }
 
@@ -33,7 +33,6 @@
   font-weight: bold;
 }
 
-/* กำหนดความกว้างเฉพาะช่อง */
 .organizations-bar-table th:nth-child(1),
 .organizations-bar-table td:nth-child(1) {
   width: 6%;
@@ -62,7 +61,6 @@
   color: #555;
 }
 
-/* ชื่อบริษัทที่คลิกได้ */
 .organizations-bar-highlight-clickable {
   text-decoration: underline;
   color: #007bff;
@@ -76,40 +74,79 @@
   transform: scale(1.03);
 }
 
-/* Pagination */
-.organizations-bar-pagination {
+/* ✅ Pagination แบบใหม่ */
+.organizations-pagination-wrapper {
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1em;
-  font-size: 0.9em;
+  margin-top: 0.5rem;
 }
 
-.organizations-bar-pagination-info {
+.organizations-pagination-info {
   color: #333;
+  font-size: 14px;
 }
 
-.organizations-bar-pagination-buttons button {
-  margin-left: 0.4em;
-  padding: 0.4em 0.8em;
+.organizations-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.organizations-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
   border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: white;
+  border-radius: 4px;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 0.9em;
 }
 
-.organizations-bar-pagination-buttons .active {
+.organizations-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.organizations-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.organizations-pagination-buttons .active {
   background-color: #2176bd;
   color: white;
 }
 
-.organizations-bar-pagination-buttons button:disabled {
-  color: #aaa;
-  cursor: not-allowed;
+/* ✅ Page input box */
+.org-page-input {
+  width: 50px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-/* Responsive */
+.org-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.org-page-input::-webkit-inner-spin-button,
+.org-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
 @media (max-width: 768px) {
   .organizations-bar-table th,
   .organizations-bar-table td {
@@ -117,7 +154,7 @@
     padding: 0.5em;
   }
 
-  .organizations-bar-pagination {
+  .organizations-pagination-wrapper {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5em;
