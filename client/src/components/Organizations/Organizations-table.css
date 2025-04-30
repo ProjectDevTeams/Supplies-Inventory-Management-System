@@ -135,9 +135,18 @@
   -moz-appearance: textfield;
 }
 
+.org-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
 .org-page-input:focus {
   outline: none;
   border-color: rgba(0, 123, 255, 0.7);
+}
+
+.org-page-input:focus::placeholder {
+  color: transparent;
 }
 
 .org-page-input::-webkit-inner-spin-button,
