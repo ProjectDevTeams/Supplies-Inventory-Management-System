@@ -14,6 +14,8 @@ import ReportPage from "./pages/Report/ReportPage";
 import PermissionPage from "./pages/Permission/PermissionPage";
 import SettingPage from "./pages/Setting/SettingPage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
+import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
+
 
 function App() {
   return (
@@ -32,7 +34,13 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
         <Route path="/setting" element={<SettingPage />} />
+<<<<<<< Updated upstream
         <Route path="/consumable/categorize" element={<CategorizePage />} />
+=======
+        <Route path="/categorize" element={<CategorizePage/>} />
+        <Route path="/unitscount" element={<UnitsCountPage />} />
+        
+>>>>>>> Stashed changes
       </Routes>
     </BrowserRouter>
   );

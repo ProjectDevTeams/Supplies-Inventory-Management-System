@@ -28,8 +28,14 @@ function Consumable({ onAddClick }) {
               + เพิ่มรายการ
             </button>
 
+<<<<<<< Updated upstream
             <button className="btn primary" onClick={() => navigate("categorize")}>จัดการหมวดหมู่</button>
             <button className="btn dark">จัดการหน่วยนับ</button>
+=======
+            <button className="btn primary" onClick={() => navigate("/categorize")}>จัดการหมวดหมู่</button>
+            {/* <button className="btn dark">จัดการหน่วยนับ</button> */}
+            <button className="btn dark" onClick={() => navigate("/unitscount")}>จัดการหน่วยนับ</button>
+>>>>>>> Stashed changes
           </div>
         </div>
       </div>
