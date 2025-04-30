@@ -104,7 +104,7 @@ function HumanTable({ searchTerm }) {
   };
 
   return (
-    <div className="table-container">
+    <div className="human-table-container">
       <table className="hum-table">
         <thead>
           <tr>

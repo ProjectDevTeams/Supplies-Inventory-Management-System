@@ -12,16 +12,16 @@ function HistoryPage() {
       <div className="history-sidebar">
         <Sidebar />
         <main className="history-content">
-          <section className="content-header">
+          <section className="history-header">
             
             <Historybar />
             
 
             
           </section>
-          <section className="stuff-table-container">
-            {/* <StuffTable /> */}
-          </section>
+          {/* <section className="history-table-container">
+           
+          </section> */}
         </main>
       </div>
     </div>

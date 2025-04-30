@@ -3,9 +3,9 @@ import "./addpeople-popup.css";
 
 function AddpeoplePopup({ onClose }) {  // รับ prop onClose เพื่อปิด Popup
   return (
-    <div className="popup-container">
-      <div className="popup-box">
-        <div className="popup-header blue">
+    <div className="his-popup-container">
+      <div className="his-popup-box">
+        <div className="his-popup-header blue">
           <span>เพิ่มเจ้าหน้าที่ใหม่</span>
           {/* คลิกปุ่มกากบาทเพื่อปิด Popup */}
           <button className="close-btn" onClick={onClose}>✕</button>

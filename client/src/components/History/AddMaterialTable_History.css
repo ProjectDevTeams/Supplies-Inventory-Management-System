@@ -1,10 +1,10 @@
-.history-table-container {
+.his-table-container {
     width: 100%;
     padding: 1em;
     background-color: #f5f8fc;
     box-sizing: border-box;
     margin: 0 auto;
-    margin-left: -3em;
+    margin-left: -5.5em;
   }
   
   .history-table {

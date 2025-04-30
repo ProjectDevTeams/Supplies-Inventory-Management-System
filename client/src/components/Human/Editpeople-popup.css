@@ -1,5 +1,5 @@
 /* พื้นหลังเทา */
-.popup-container {
+.his-popup-container {
     position: fixed;
     top: 0; left: 0;
     width: 100vw;
@@ -12,7 +12,7 @@
   }
   
   /* กล่องป๊อปอัป */
-  .popup-box {
+  .his-popup-box {
     width: 700px;
     background: #fff;
     border: 1px solid #444;
@@ -21,7 +21,7 @@
   }
   
   /* หัวป๊อปอัป */
-  .popup-header {
+  .his-popup-header {
     background-color: #1223c0;
     color: white;
     padding: 12px 20px;
@@ -33,7 +33,7 @@
   }
   
   /* ปุ่มปิด */
-  .close-btn {
+  .his-close-btn {
     background-color: red;
     color: white;
     border: none;
@@ -45,7 +45,7 @@
   }
   
   /* เนื้อหาในกล่อง */
-  .popup-body {
+  .his-popup-body {
     padding: 20px;
     border: 1px solid #007bff;
   }

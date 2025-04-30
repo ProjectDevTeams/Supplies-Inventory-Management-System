@@ -45,14 +45,14 @@ function EditpeoplePopup({ person, onClose, onSave }) {
   };
 
   return (
-    <div className="popup-container">
-      <div className="popup-box">
-        <div className="popup-header blue">
+    <div className="his-popup-container">
+      <div className="his-popup-box">
+        <div className="his-popup-header blue">
           <span>แก้ไขข้อมูลบุคลากร</span>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="popup-body">
+        <div className="his-popup-body">
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-row">
