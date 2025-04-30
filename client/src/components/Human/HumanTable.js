@@ -19,9 +19,6 @@ function HumanTable({ searchTerm }) {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showEditPopup, setShowEditPopup] = useState(false);
 
-  const initialData = JSON.parse(localStorage.getItem("peopleData")) || mockIncomingData;
-
-
   const [data, setData] = useState(() => {
     const storedData = localStorage.getItem("peopleData");
     return storedData ? JSON.parse(storedData) : mockIncomingData;
