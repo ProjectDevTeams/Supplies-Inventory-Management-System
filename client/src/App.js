@@ -13,6 +13,8 @@ import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
 import ReportPage from "./pages/Report/ReportPage"
 import PermissionPage from "./pages/Permission/PermissionPage"
 import SettingPage from "./pages/Setting/SettingPage";
+import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
         <Route path="/setting" element={<SettingPage />} />
+        <Route path="/categorize" element={<CategorizePage/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,63 @@
+.categorize-table-container {
+    width: 100%;
+    height: 100vh;
+    padding: 1em;
+    background-color: #f5f8fc;
+  }
+  
+  /* ปรับความกว้างเหลือ 75% และขยับมาทางขวาเล็กน้อย */
+  .categorize-table {
+    width: 75%;
+    margin: 0.5px 0 1.5em 14em;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .categorize-th,
+  .categorize-td {
+    border: 1px solid #000;
+    padding: 0.8em;
+    text-align: center;
+  }
+  
+  .categorize-th {
+    background-color: #d0d0d0;
+    font-weight: bold;
+  }
+  
+  .categorize-actions {
+    float: right;            /* ✅ ชิดขวาภายในเซลล์ */
+  display: flex;
+  gap: 0.5em;
+  }
+  
+  .categorize-edit-btn,
+  .categorize-delete-btn {
+    background: none;
+    border: none;
+    font-size: 1.1em;
+    cursor: pointer;
+  }
+  
+  .categorize-edit-btn {
+    color: orange;
+  }
+  
+  .categorize-delete-btn {
+    color: red;
+  }
+
+  .img-edit-categorize{
+    width: 20px;
+    height: 20px;
+    object-fit: contain; /* ป้องกันการยืด/เบี้ยวของภาพ */
+    vertical-align: middle; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+  }
+
+  .img-remove-categorize{
+    width: 20px;
+    height: 20px;
+    object-fit: contain; /* ป้องกันการยืด/เบี้ยวของภาพ */
+    vertical-align: middle; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+  }

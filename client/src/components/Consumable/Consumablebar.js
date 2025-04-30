@@ -1,7 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./Consumablebar.css";
 
 function Consumable({ onAddClick }) {
+  const navigate = useNavigate(); // สร้างตัวแปร navigate
+
+
+
   return (
     <div>
       <div className="top-bar">
@@ -23,7 +28,7 @@ function Consumable({ onAddClick }) {
               + เพิ่มรายการ
             </button>
 
-            <button className="btn primary">จัดการหมวดหมู่</button>
+            <button className="btn primary" onClick={() => navigate("/categorize")}>จัดการหมวดหมู่</button>
             <button className="btn dark">จัดการหน่วยนับ</button>
           </div>
         </div>
