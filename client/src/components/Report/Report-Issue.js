@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Report-Issue.css";
 
 function ReportIssue() {
@@ -17,8 +17,15 @@ function ReportIssue() {
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(data.length / itemsPerPage);
-  const displayedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
 
   return (
     <div className="report-issue-container">
@@ -45,24 +52,35 @@ function ReportIssue() {
         </tbody>
       </table>
 
-      <div className="report-issue-pagination">
+      <div className="report-issue-pagination-wrapper">
         <div className="report-issue-pagination-info">
-          แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
-          {Math.min(currentPage * itemsPerPage, data.length)} จาก {data.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="report-issue-pagination-buttons">
           <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
             ก่อนหน้า
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
+
+          <input
+            type="number"
+            className="report-issue-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+            placeholder={`${currentPage} / ${totalPages}`}
+          />
+
           <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
             ถัดไป
           </button>

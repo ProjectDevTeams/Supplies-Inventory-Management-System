@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Permission-Content.css";
 
 function PermissionContent() {
@@ -17,8 +17,15 @@ function PermissionContent() {
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(initialData.length / itemsPerPage);
-  const displayedData = initialData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const displayedData = initialData.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
 
   return (
     <div className="perm-container">
@@ -47,10 +54,7 @@ function PermissionContent() {
           {displayedData.map(([id, name, created, updated]) => (
             <tr key={id}>
               <td>{id}</td>
-              <td>
-                <span className="perm-highlight-clickable">{name}</span>
-                <br />
-              </td>
+              <td><span className="perm-highlight-clickable">{name}</span></td>
               <td>{created}</td>
               <td>{updated}</td>
             </tr>
@@ -58,23 +62,44 @@ function PermissionContent() {
         </tbody>
       </table>
 
-      <div className="perm-pagination">
+      <div className="perm-pagination-wrapper">
         <div className="perm-pagination-info">
-          แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
-          {Math.min(currentPage * itemsPerPage, initialData.length)} จาก {initialData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, initialData.length)} จาก {initialData.length} แถว
         </div>
         <div className="perm-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>ก่อนหน้า</button>
-          {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((page) => (
-            <button
-              key={page}
-              className={page === currentPage ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>ถัดไป</button>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            ก่อนหน้า
+          </button>
+
+          <input
+            type="number"
+            className="perm-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+            placeholder={`${currentPage} / ${totalPages}`}
+          />
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>

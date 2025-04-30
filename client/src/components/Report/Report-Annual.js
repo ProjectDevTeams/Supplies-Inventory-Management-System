@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Report-Annual.css";
 
 function ReportAnnual() {
@@ -13,13 +13,19 @@ function ReportAnnual() {
     ["ถ่าน Panasonic AA", "แพ็ค", 1, 168.00],
     ["กระดาษ A3 Double A", "รีม", 1, 245.00],
     ["กระดาษ A4 Idea Work สีแดง", "ลัง", 3, 1800.00],
-    // เพิ่มข้อมูลจำลองเพิ่มเติมได้
   ];
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(data.length / itemsPerPage);
-  const displayedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
 
   return (
     <div className="report-annual-container">
@@ -47,25 +53,42 @@ function ReportAnnual() {
         </tbody>
       </table>
 
-      <div className="report-annual-pagination">
+      <div className="report-annual-pagination-wrapper">
         <div className="report-annual-pagination-info">
-          แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
-          {Math.min(currentPage * itemsPerPage, data.length)} จาก {data.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="report-annual-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
             ก่อนหน้า
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+
+          <input
+            type="number"
+            className="report-annual-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+            placeholder={`${currentPage} / ${totalPages}`}
+          />
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
             ถัดไป
           </button>
         </div>

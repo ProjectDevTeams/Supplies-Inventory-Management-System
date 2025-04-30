@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Report-LowStock.css";
 
 function ReportLowStock() {
@@ -13,11 +13,11 @@ function ReportLowStock() {
     ["Tape Cassette เทปสำหรับเครื่องพิมพ์ฉลาก", "อัน", 2, 2, 900.00],
     ["Whiteboard Monomi สีแดง", "ด้าม", 1, 1, 17.50],
     ["Whiteboard Monomi สีน้ำเงิน", "ด้าม", 1, 1, 17.50],
-    // ข้อมูลจำลองเพิ่มได้อีก
   ];
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [warehouse, setWarehouse] = useState("ทั้งหมด");
 
@@ -26,7 +26,13 @@ function ReportLowStock() {
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const displayedData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const displayedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
 
   return (
     <div className="report-lowstock-container">
@@ -75,23 +81,44 @@ function ReportLowStock() {
         </tbody>
       </table>
 
-      <div className="report-lowstock-pagination">
+      <div className="report-lowstock-pagination-wrapper">
         <div className="report-lowstock-pagination-info">
-          แสดง {(currentPage - 1) * itemsPerPage + 1} ถึง{" "}
-          {Math.min(currentPage * itemsPerPage, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="report-lowstock-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>ก่อนหน้า</button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>ถัดไป</button>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            ก่อนหน้า
+          </button>
+
+          <input
+            type="number"
+            className="report-lowstock-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+            placeholder={`${currentPage} / ${totalPages}`}
+          />
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>

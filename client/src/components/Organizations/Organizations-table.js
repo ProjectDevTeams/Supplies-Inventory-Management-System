@@ -18,7 +18,7 @@ function OrganizationsTable() {
         ];
   });
 
-  const itemsPerPage = 1;
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [showManagePopup, setShowManagePopup] = useState(false);
