@@ -25,7 +25,7 @@ export default function IncomingTable({ onDataReady }) {
 
   useEffect(() => {
     if (onDataReady) {
-      onDataReady(sortedData); // ส่งข้อมูลออกไปให้ IncomingPage
+      onDataReady(sortedData); // ส่งข้อมูลไปให้หน้าหลัก export
     }
   }, [sortedData, onDataReady]);
 
@@ -36,14 +36,6 @@ export default function IncomingTable({ onDataReady }) {
   const toggleSort = () => setAsc(prev => !prev);
   const handleNextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
   const handlePrevPage = () => currentPage > 1 && setCurrentPage(p => p - 1);
-  const handlePageChange = (e) => setInputPage(e.target.value);
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const val = Number(inputPage);
-      if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
-      e.target.blur();
-    }
-  };
 
   return (
     <div className="table-wrapper">
@@ -80,15 +72,22 @@ export default function IncomingTable({ onDataReady }) {
           <div className="pagination-buttons">
             <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>ก่อนหน้า</button>
             <input
-              type="number"
+              type="text"
               className="page-input"
-              placeholder={`${currentPage} / ${totalPages}`}
+              placeholder={inputPage === '' ? `${currentPage} / ${totalPages}` : ''}
               value={inputPage}
-              min={1}
-              max={totalPages}
-              onFocus={() => setInputPage('')}
-              onChange={handlePageChange}
-              onKeyDown={handleKeyDown}
+              onFocus={() => setInputPage(' ')} // บังคับให้ placeholder หายทันที
+              onChange={(e) => setInputPage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const page = parseInt(inputPage, 10);
+                  if (!isNaN(page) && page >= 1 && page <= totalPages) {
+                    setCurrentPage(page);
+                  }
+                  setInputPage('');
+                  e.target.blur();
+                }
+              }}
             />
             <button className="btn" disabled={currentPage === totalPages} onClick={handleNextPage}>ถัดไป</button>
           </div>
