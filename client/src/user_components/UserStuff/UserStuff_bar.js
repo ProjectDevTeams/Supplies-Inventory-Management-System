@@ -3,6 +3,7 @@ import "./UserStuff_bar.css";
 
 
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
+
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
 import UserMoreTable from "../../user_components/UserStuff/UserMore/UserMoreTable";
@@ -10,7 +11,6 @@ import UserMoreTable from "../../user_components/UserStuff/UserMore/UserMoreTabl
 function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const renderTable = () => {
     switch (activeTab) {
@@ -30,7 +30,6 @@ function UserStuffbar() {
   return (
     <>
       <div className="userstuff-bar">
-        {/* แถบเมนูด้านบน */}
         <div className="userstuff-menu">
           {["เบิกวัสดุ", "ติดตามสถานะ", "ประวัติการทำรายการ", "รายการขอจัดซื้อเพิ่มเติม"].map(tab => (
             <button
@@ -43,7 +42,6 @@ function UserStuffbar() {
           ))}
         </div>
 
-        {/* ค้นหาและไอคอน */}
         <div className="userstuff-right">
           <div className="userstuff-search-box">
             <span className="userstuff-search-icon">🔍</span>
@@ -56,18 +54,20 @@ function UserStuffbar() {
             />
           </div>
 
-          <div className="userstuff-bag-icon">
-            <img src="/image/bagicon.png" alt="Bag" />
-          </div>
+          {activeTab === "เบิกวัสดุ" && (
+            <div className="userstuff-bag-icon">
+              <img src="/image/bagicon.png" alt="Bag" />
+            </div>
+          )}
         </div>
-      </div>
 
-
-      <div className="userstuff-table-content">
-        {renderTable()}
+        <div className="userstuff-table-content">
+          {renderTable()}
+        </div>
       </div>
     </>
   );
 }
+
 
 export default UserStuffbar;
