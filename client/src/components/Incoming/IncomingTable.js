@@ -12,45 +12,35 @@ const mockIncomingData = [
   { id: 1839, company: "บริษัท H", po: "018.1 66-7181", orderDate: "27 พ.ย. 66", amount: 41448.0 },
 ];
 
-export default function IncomingTable() {
+export default function IncomingTable({ onDataReady }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
-  const [asc, setAsc] = useState(true); // ✅ เพิ่ม state สำหรับเรียง
+  const [asc, setAsc] = useState(true);
   const itemsPerPage = 5;
   const totalPages = Math.ceil(mockIncomingData.length / itemsPerPage);
 
-  useEffect(() => {
-    setInputPage('');
-  }, [currentPage]);
-
-  const toggleSort = () => setAsc(prev => !prev); // ✅ toggle sort
-
-  // ✅ เรียงก่อนแบ่งหน้า
   const sortedData = [...mockIncomingData].sort((a, b) =>
     asc ? a.id - b.id : b.id - a.id
   );
+
+  useEffect(() => {
+    if (onDataReady) {
+      onDataReady(sortedData); // ส่งข้อมูลออกไปให้ IncomingPage
+    }
+  }, [sortedData, onDataReady]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(p => p + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(p => p - 1);
-  };
-
-  const handlePageChange = (e) => {
-    setInputPage(e.target.value);
-  };
-
+  const toggleSort = () => setAsc(prev => !prev);
+  const handleNextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
+  const handlePrevPage = () => currentPage > 1 && setCurrentPage(p => p - 1);
+  const handlePageChange = (e) => setInputPage(e.target.value);
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       const val = Number(inputPage);
-      if (!isNaN(val) && val >= 1 && val <= totalPages) {
-        setCurrentPage(val);
-      }
+      if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
       e.target.blur();
     }
   };
@@ -74,10 +64,10 @@ export default function IncomingTable() {
             {currentItems.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
-                <td className="company-cell">{item.company}</td>
+                <td>{item.company}</td>
                 <td>{item.po}</td>
                 <td>{item.orderDate}</td>
-                <td className="total-cell">{item.amount.toLocaleString()}</td>
+                <td>{item.amount.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
