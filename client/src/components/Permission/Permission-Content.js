@@ -15,7 +15,7 @@ function PermissionContent() {
     ["10", "STI", "31 ส.ค. 65", "—"],
   ];
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const totalPages = Math.ceil(initialData.length / itemsPerPage);
@@ -26,6 +26,10 @@ function PermissionContent() {
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
+
+  const handleRowClick = (id) => {
+    alert(`คลิกที่แถว ID: ${id}`);
+  };
 
   return (
     <div className="perm-container">
@@ -52,9 +56,9 @@ function PermissionContent() {
         </thead>
         <tbody>
           {displayedData.map(([id, name, created, updated]) => (
-            <tr key={id}>
+            <tr key={id} className="perm-clickable-row" onClick={() => handleRowClick(id)}>
               <td>{id}</td>
-              <td><span className="perm-highlight-clickable">{name}</span></td>
+              <td>{name}</td>
               <td>{created}</td>
               <td>{updated}</td>
             </tr>

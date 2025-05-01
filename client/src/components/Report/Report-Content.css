@@ -74,7 +74,7 @@
 
 .report-search-row {
   display: flex;
-  gap: 2em;
+  gap: 1em;
   flex-wrap: wrap;
 }
 
@@ -121,4 +121,15 @@
 .report-btn-search:hover {
   background-color: #0056b3;
   transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .report-search-row {
+    flex-direction: column;
+  }
+
+  /* ✅ บังคับให้ "คลังวัสดุ" อยู่ล่างสุดในแถวแรก */
+  .report-search .report-search-row:first-of-type .report-search-group:nth-child(2) {
+    order: 3;
+  }
 }

@@ -108,16 +108,13 @@ function OrganizationsTable() {
         </thead>
         <tbody>
           {displayedCompanies.map((company) => (
-            <tr key={company.id}>
+            <tr
+              key={company.id}
+              onClick={() => handleCompanyClick(company.id)}
+              className="org-clickable-row"
+            >
               <td>{company.id}</td>
-              <td>
-                <span
-                  className="organizations-bar-highlight-clickable"
-                  onClick={() => handleCompanyClick(company.id)}
-                >
-                  {company.name}
-                </span>
-              </td>
+              <td>{company.name}</td>
               <td>
                 {company.created}
                 <br />
@@ -157,9 +154,9 @@ function OrganizationsTable() {
                 if (!isNaN(val) && val >= 1 && val <= totalPages) {
                   setCurrentPage(val);
                 }
-                e.target.blur(); // ✅ บังคับให้หลุด focus → placeholder จะแสดง
+                e.target.blur();
               }
-            }}            
+            }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
           <button

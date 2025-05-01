@@ -42,7 +42,7 @@
 .organizations-bar-table th:nth-child(2),
 .organizations-bar-table td:nth-child(2) {
   width: 45%;
-  text-align: left;
+  text-align: center; /* เปลี่ยนจาก left → center */
   padding-left: 1em;
 }
 
@@ -61,20 +61,17 @@
   color: #555;
 }
 
-.organizations-bar-highlight-clickable {
-  text-decoration: underline;
-  color: #007bff;
+/* คลิกได้ทั้งแถว */
+.org-clickable-row {
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: normal;
+  transition: background-color 0.2s ease;
 }
 
-.organizations-bar-highlight-clickable:hover {
-  color: #0056b3;
-  transform: scale(1.03);
+.org-clickable-row:hover {
+  background-color: #f0f8ff;
 }
 
-/* ✅ Pagination แบบใหม่ */
+/* ✅ Pagination */
 .organizations-pagination-wrapper {
   width: 100%;
   display: flex;

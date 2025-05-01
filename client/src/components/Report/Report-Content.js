@@ -81,13 +81,6 @@ function ReportContent() {
                 </select>
               </div>
             </div>
-
-            <div className="report-search-group">
-              <label>คลังวัสดุ</label>
-              <select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
-                {warehouses.map((item) => <option key={item}>{item}</option>)}
-              </select>
-            </div>
           </div>
 
           <div className="report-search-row">
@@ -103,6 +96,16 @@ function ReportContent() {
                   {years.map((year) => <option key={year}>{year}</option>)}
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* ✅ ย้ายคลังวัสดุ + ปุ่มค้นหา มาอยู่แถวเดียวกัน */}
+          <div className="report-search-row">
+            <div className="report-search-group">
+              <label>คลังวัสดุ</label>
+              <select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                {warehouses.map((item) => <option key={item}>{item}</option>)}
+              </select>
             </div>
 
             <div className="report-search-button">
