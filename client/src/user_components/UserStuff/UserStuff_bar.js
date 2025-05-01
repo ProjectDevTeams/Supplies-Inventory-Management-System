@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./UserStuff_bar.css";
 
-// ✅ import ตารางแต่ละอัน
+
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
@@ -11,7 +11,7 @@ function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // ✅ แสดงตารางตามแท็บ
+
   const renderTable = () => {
     switch (activeTab) {
       case "เบิกวัสดุ":
@@ -62,7 +62,7 @@ function UserStuffbar() {
         </div>
       </div>
 
-      {/* ✅ ตารางแสดงผลตาม tab */}
+
       <div className="userstuff-table-content">
         {renderTable()}
       </div>
