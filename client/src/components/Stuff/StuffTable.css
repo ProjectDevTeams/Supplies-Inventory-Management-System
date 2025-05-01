@@ -1,29 +1,31 @@
 .table-wrapper {
   display: flex;
-  justify-content: center;
-  padding: 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
 }
 
 .table-container {
   width: 100%;
   max-width: 1200px;
+  margin-top: 0.2rem;
   background: white;
-  padding: 1rem;
-  border-radius: 10px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
 }
 
 .stuff-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
-  margin-bottom: 1rem;
+  background: white;
+  font-size: 14px;
 }
 
 .stuff-table th,
 .stuff-table td {
-  border: 1px solid #ccc;
-  padding: 0.5rem 0.8rem;
+  border: 1px solid #999;
+  padding: 0.6em;
   text-align: center;
 }
 
@@ -32,34 +34,27 @@
   font-weight: bold;
 }
 
-.status.pending {
-  color: orange;
-  font-weight: bold;
-}
-
-.status.approved {
-  color: green;
-  font-weight: bold;
-}
-
+/* ถ้าต้องการคง status color ให้คอมเมนต์ด้านล่าง */
+.status.pending,
+.status.approved,
 .status.rejected {
-  color: red;
-  font-weight: bold;
+  color: #333;
+  font-weight: normal;
 }
 
 /* Pagination */
 .stuff-pagination {
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  font-size: 14px;
-  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .stuff-pagination-info {
   color: #333;
-  flex: 1;
+  font-size: 14px;
 }
 
 .stuff-pagination-buttons {
@@ -68,65 +63,52 @@
   gap: 0.5rem;
 }
 
-.btn {
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+.stuff-pagination-buttons .btn {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
   border: 1px solid #ccc;
-  background: white;
+  border-radius: 4px;
+  font-size: 14px;
   cursor: pointer;
 }
 
-.btn:disabled {
-  background-color: #eee;
+.stuff-pagination-buttons .btn:hover {
+  background-color: #e6f0ff;
+}
+
+.stuff-pagination-buttons .btn:disabled {
+  background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-.btn:hover:not(:disabled) {
-  background-color: #e6f0ff;
-}
-
-.page-box {
-  display: inline-flex;
-  align-items: center;
-  background-color: #007bff;                  /* พื้นหลังฟ้า */
-  border: 2px solid rgba(0,123,255,0.3);      /* ขอบฟ้าโปร่ง */
+.org-page-input {
+  width: 60px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
   border-radius: 4px;
-  padding: 0;                                  /* ไม่มี padding รอบๆ */
-  height: 2.2rem;                              /* กำหนดความสูงให้เท่ากับ org-page-input */
-  box-sizing: border-box;
-}
-
-.page-box-input {
-  width: 60px;                                 /* กว้างเท่า org-page-input */
-  height: 100%;                                /* เต็มความสูงของ .page-box */
-  border: none;
-  background: transparent;
+  font-size: 14px;
+  background-color: #007bff;
   color: white;
   font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  outline: none;
   appearance: textfield;
   -moz-appearance: textfield;
-  margin: 0;
-  padding: 0;                                  /* เอา padding ออก ให้ชิด */
 }
 
-/* ซ่อนลูกศร number input */
-.page-box-input::-webkit-inner-spin-button,
-.page-box-input::-webkit-outer-spin-button {
+.org-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.org-page-input::-webkit-inner-spin-button,
+.org-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.page-box-input:focus {
-  outline: none;
-}
-
-.page-box-total {
+.org-page-input::placeholder {
   color: white;
-  font-size: 14px;
-  margin: 0 0.5rem;                            /* เว้นซ้ายขวาเล็กน้อย */
-  user-select: none;
+  opacity: 1;
 }

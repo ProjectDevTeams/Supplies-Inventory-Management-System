@@ -10,13 +10,17 @@
   width: 100%;
   max-width: 1200px;
   margin-top: 0.2rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
 .incoming-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
 }
 
 .incoming-table th,
@@ -24,7 +28,6 @@
   border: 1px solid #999;
   padding: 0.6em;
   text-align: center;
-  font-size: 14px;
 }
 
 .incoming-table th {
@@ -42,6 +45,7 @@
   font-weight: bold;
 }
 
+/* Pagination */
 .pagination-wrapper {
   width: 100%;
   max-width: 1200px;
@@ -49,6 +53,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .pagination-info {
@@ -76,8 +81,7 @@
   background-color: #e6f0ff;
 }
 
-.pagination-buttons .btn:disabled,
-.pagination-buttons .btn.disabled {
+.pagination-buttons .btn:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
@@ -113,7 +117,6 @@
   opacity: 1;
 }
 
-/* ✅ เพิ่มเพื่อให้หัวตารางคลิกได้ */
 .sortable-header {
   cursor: pointer;
 }
