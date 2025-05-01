@@ -9,10 +9,12 @@
     display: flex;
     gap: 1em;
     margin-bottom: 1em;
+    font-size: larger;
   }
   
   .userstuff-tab {
-    padding: 0.6em 1.2em;
+    padding: 0.8em 2em;
+    font-size: 1.1rem;
     border: none;
     background-color: white;
     color: #003366;
@@ -54,8 +56,27 @@
   }
   
   .userstuff-bag-icon img {
-    width: 35px;
-    height: 35px;
-    margin-left: 1em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;      /* วงกลม */
+    object-fit: cover;       /* เติมภาพให้เต็ม */
+    cursor: pointer;         /* แสดงว่าคลิกได้ */
+    border: none;            /* ❌ ลบกรอบสี่เหลี่ยม */
+    padding: 0;              /* ❌ ลบช่องว่าง */
+    background-color: transparent; /* ❌ ไม่มีพื้นหลังขาว */
+    box-shadow: none;        /* ❌ ไม่มีเงา */
   }
   
+  .userstuff-bag-icon {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    background-color: #D1E7FF;
+    border: none;
+    border-radius: 50%; /* ✅ วงกลมแท้ */
+    padding: 0;
+    cursor: pointer;
+  }

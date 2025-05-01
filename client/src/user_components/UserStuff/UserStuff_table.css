@@ -1,145 +1,154 @@
 .table-container-userstuff {
-    padding: 1em;
-    background-color: #f9f9f9;
-  }
-  
-  .userstuff-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  padding: 1em;
+  background-color: #f9f9f9;
+}
+
+.userstuff-table {
+  width: 100%;
+  height: 100vh;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.userstuff-table th,
+.userstuff-table td {
+  border: 1px solid #ccc;
+  padding: 1em;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.userstuff-table th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.userstuff-table td:nth-child(3) {
+  text-align: left;
+}
+
+.stuff-image {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+/* ✅ ปุ่มเลือก - ปรับใหม่ให้ตรงภาพ */
+.userstuff-select-btn {
+  background-color: #007bff;       /* พื้นหลังน้ำเงิน */
+  color: white;                    /* ตัวอักษรขาว */
+  border: none;
+  padding: 0.6em 1.5em;            /* ปรับขนาด */
+  font-weight: bold;
+  font-size: 0.95rem;
+  border-radius: 6px;              /* ขอบมน */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.select-btn:hover {
+  background-color: #0056b3;       /* Hover เข้มขึ้น */
+}
+
+.item-name {
+  color: #0066cc; /* ✅ สีฟ้าน้ำเงินตามตัวอย่าง */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+/* ✅ Pagination */
+.userstuff-pagination-wrapper {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.userstuff-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.userstuff-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userstuff-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.userstuff-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.userstuff-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.userstuff-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+.userstuff-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.userstuff-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.userstuff-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.userstuff-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.userstuff-page-input::-webkit-inner-spin-button,
+.userstuff-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
   .userstuff-table th,
   .userstuff-table td {
-    border: 1px solid #ccc;
-    padding: 1em;
-    text-align: center;
-    vertical-align: middle;
+    font-size: 0.85em;
+    padding: 0.5em;
   }
-  
-  .userstuff-table th {
-    background-color: #e0e0e0;
-    font-weight: bold;
-  }
-  
-  .userstuff-table td:nth-child(3) {
-    text-align: left;
-  }
-  
-  .stuff-image {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-  }
-  
-  .select-btn {
-    background-color: #0066ff;
-    color: white;
-    border: none;
-    padding: 0.5em 1.2em;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .select-btn:hover {
-    background-color: #004bbd;
-  }
-  
 
-    /* ✅ Pagination แบบใหม่ */
-    .userstuff-pagination-wrapper {
-        width: 98%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1em;
-      }
-      
-      .userstuff-pagination-info {
-        color: #333;
-        font-size: 14px;
-      }
-      
-      .userstuff-pagination-buttons {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      
-      .userstuff-pagination-buttons button {
-        padding: 0.5rem 1.2rem;
-        background-color: #ffffff;
-        color: #333;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
-      }
-      
-      .userstuff-pagination-buttons button:hover {
-        background-color: #e6f0ff;
-      }
-      
-      .userstuff-pagination-buttons button:disabled {
-        background-color: #eeeeee;
-        color: #aaa;
-        pointer-events: none;
-      }
-      
-      .userstuff-pagination-buttons .active {
-        background-color: #2176bd;
-        color: white;
-      }
-      
-      /* ช่องเลขหน้า */
-      .userstuff-page-input {
-        width: 55px;
-        text-align: center;
-        padding: 0.4rem 0.6rem;
-        border: 2px solid rgba(0, 123, 255, 0.3);
-        border-radius: 4px;
-        font-size: 14px;
-        background-color: #007bff;
-        color: white;
-        font-weight: bold;
-        appearance: textfield;
-        -moz-appearance: textfield;
-      }
-      
-      .userstuff-page-input::placeholder {
-        color: white;
-        opacity: 1;
-      }
-      
-      .userstuff-page-input:focus {
-        outline: none;
-        border-color: rgba(0, 123, 255, 0.7);
-      }
-      
-      .userstuff-page-input:focus::placeholder {
-        color: transparent;
-      }
-      
-      .userstuff-page-input::-webkit-inner-spin-button,
-      .userstuff-page-input::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      
-      /* ✅ Responsive */
-      @media (max-width: 768px) {
-        .userstuff-th,
-        .userstuff-td {
-          font-size: 0.85em;
-          padding: 0.5em;
-        }
-      
-        .userstuff-pagination-wrapper {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.5em;
-        }
-      }
+  .userstuff-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}

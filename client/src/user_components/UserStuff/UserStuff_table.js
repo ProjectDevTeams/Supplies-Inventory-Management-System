@@ -29,74 +29,90 @@ const mockData = [
 const itemsPerPage = 5;
 
 function UserStuff_Table() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
-
-  return (
-    <div className="table-container-userstuff">
-      <table className="userstuff-table">
-        <thead>
-          <tr>
-            <th>รหัส</th>
-            <th>รูปภาพ</th>
-            <th>รายการ</th>
-            <th>จำนวนที่สามารถเบิกได้</th>
-            <th>ทำรายการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((item, index) => (
-            <tr key={index}>
-              <td>{item.code}</td>
-              <td><img src={item.image} alt={item.name} className="stuff-image" /></td>
-              <td>
-                <b>ชื่อ :</b> {item.name}<br />
-                หมวดหมู่ : {item.category}
-              </td>
-              <td>{item.remain}</td>
-              <td><button className="select-btn">เลือก</button></td>
+    const [currentPage, setCurrentPage] = useState(1);
+    const [inputPage, setInputPage] = useState("");
+  
+    const totalPages = Math.ceil(mockData.length / itemsPerPage);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
+  
+    return (
+      <div className="userstuff-table-container">
+        <table className="userstuff-table">
+          <thead className="userstuff-thead">
+            <tr className="userstuff-thead-row">
+              <th className="userstuff-th">รหัส</th>
+              <th className="userstuff-th">รูปภาพ</th>
+              <th className="userstuff-th">รายการ</th>
+              <th className="userstuff-th">จำนวนที่สามารถเบิกได้</th>
+              <th className="userstuff-th">ทำรายการ</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="userstuff-pagination-wrapper">
-        <div className="userstuff-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
-        </div>
-        <div className="userstuff-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
-
-          <input
-            type="number"
-            className="userstuff-page-input"
-            value={inputPage}
-            min={1}
-            max={totalPages}
-            placeholder={`${currentPage} / ${totalPages}`}
-            onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
+          </thead>
+          <tbody className="userstuff-tbody">
+            {currentItems.map((item, index) => (
+              <tr key={index} className="userstuff-tr">
+                <td className="userstuff-td">{item.code}</td>
+                <td className="userstuff-td">
+                  <img src={item.image} alt={item.name} className="userstuff-image" />
+                </td>
+                <td className="userstuff-td">
+                <b>ชื่อ :</b> <span className="item-name">{item.name}</span><br />
+                  <span className="userstuff-category">หมวดหมู่ : {item.category}</span>
+                </td>
+                <td className="userstuff-td">{item.remain}</td>
+                <td className="userstuff-td">
+                  <button className="userstuff-select-btn">เลือก</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+  
+        <div className="userstuff-pagination-wrapper">
+          <div className="userstuff-pagination-info">
+            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+          </div>
+          <div className="userstuff-pagination-buttons">
+            <button
+              className="userstuff-pagination-btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(prev => prev - 1)}
+            >
+              ก่อนหน้า
+            </button>
+  
+            <input
+              type="number"
+              className="userstuff-page-input"
+              value={inputPage}
+              min={1}
+              max={totalPages}
+              placeholder={`${currentPage} / ${totalPages}`}
+              onFocus={() => setInputPage("")}
+              onChange={(e) => setInputPage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const val = parseInt(inputPage.trim(), 10);
+                  if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                    setCurrentPage(val);
+                  }
+                  e.target.blur();
                 }
-                e.target.blur();
-              }
-            }}
-          />
-
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
+              }}
+            />
+  
+            <button
+              className="userstuff-pagination-btn"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(prev => prev + 1)}
+            >
+              ถัดไป
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-export default UserStuff_Table;
+    );
+  }
+  
+  export default UserStuff_Table;
