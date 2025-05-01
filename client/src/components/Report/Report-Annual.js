@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./Report-Annual.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function ReportAnnual() {
   const data = [
-    ["ผ้าหมึก EPSON LQ-310", "กล่อง", 1, 150.00],
-    ["หมึกพิมพ์เลเซอร์ Global nano toner", "กล่อง", 1, 1990.00],
+    ["ผ้าหมึก EPSON LQ-310", "กล่อง", 1, 150.0],
+    ["หมึกพิมพ์เลเซอร์ Global nano toner", "กล่อง", 1, 1990.0],
     ["กระดาษเช็ดหน้าแบบกล่อง (140 แผ่น/กล่อง)", "กล่อง", 32, 1266.88],
-    ["ถุงขยะสีขาว (30×40)", "กิโลกรัม", 71, 3798.50],
+    ["ถุงขยะสีขาว (30×40)", "กิโลกรัม", 71, 3798.5],
     ["ถุงขยะสีดำ (18×20)", "กิโลกรัม", 14, 584.22],
     ["สบู่เหลวล้างมือ", "แกลลอน", 6, 898.88],
-    ["กระดาษทิชชู่ Jumboroll 2 ชั้น ยาว 300 เมตร", "ลัง", 22, 16007.20],
-    ["ถ่าน Panasonic AA", "แพ็ค", 1, 168.00],
-    ["กระดาษ A3 Double A", "รีม", 1, 245.00],
-    ["กระดาษ A4 Idea Work สีแดง", "ลัง", 3, 1800.00],
+    ["กระดาษทิชชู่ Jumboroll 2 ชั้น ยาว 300 เมตร", "ลัง", 22, 16007.2],
+    ["ถ่าน Panasonic AA", "แพ็ค", 1, 168.0],
+    ["กระดาษ A3 Double A", "รีม", 1, 245.0],
+    ["กระดาษ A4 Idea Work สีแดง", "ลัง", 3, 1800.0],
   ];
 
   const itemsPerPage = 10;
@@ -27,8 +29,29 @@ function ReportAnnual() {
     setInputPage("");
   }, [currentPage]);
 
+  const exportToExcel = () => {
+    const header = [["ชื่อวัสดุ", "หน่วย", "รวมยอดเบิก", "มูลค่ารวม"]];
+    const rows = data.map((row) => [...row]);
+    const wsData = [...header, ...rows];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานเบิกประจำปี");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const file = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(file, "รายงานเบิกประจำปี.xlsx");
+  };
+
   return (
     <div className="report-annual-container">
+      <div className="report-annual-export-wrapper">
+        <button onClick={exportToExcel} className="report-annual-export-btn" title="Export Excel">
+          <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
+          <span>Export Excel</span>
+        </button>
+      </div>
+
       <table className="report-annual-table">
         <thead>
           <tr>

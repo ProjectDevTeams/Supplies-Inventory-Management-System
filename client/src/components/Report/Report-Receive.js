@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Report-Receive.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function ReportReceive() {
   const data = [
@@ -19,8 +21,29 @@ function ReportReceive() {
     setInputPage("");
   }, [currentPage]);
 
+  const exportToExcel = () => {
+    const header = [["ชื่อวัสดุ", "หน่วย", "รวมยอดซื้อ", "มูลค่ารวม"]];
+    const rows = data.map((row) => [...row]);
+    const wsData = [...header, ...rows];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานการรับวัสดุ");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const file = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(file, "รายงานการรับวัสดุ.xlsx");
+  };
+
   return (
     <div className="report-receive-container">
+      <div className="report-receive-export-wrapper">
+        <button onClick={exportToExcel} className="report-receive-export-btn" title="Export Excel">
+          <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
+          <span>Export Excel</span>
+        </button>
+      </div>
+
       <table className="report-receive-table">
         <thead>
           <tr>

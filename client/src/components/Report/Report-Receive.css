@@ -4,6 +4,35 @@
   margin: 0 auto;
 }
 
+/* ปุ่ม Export Excel */
+.report-receive-export-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+}
+
+.report-receive-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #217346;
+  font-size: 16px;
+}
+
+.report-receive-export-btn:hover {
+  opacity: 0.85;
+}
+
+.excel-icon {
+  width: 30px;
+  height: auto;
+}
+
+/* ตาราง */
 .report-receive-table {
   width: 100%;
   margin: 1em auto;
@@ -26,7 +55,7 @@
   color: #003366;
 }
 
-/* ✅ Pagination แบบใหม่ */
+/* Pagination */
 .report-pagination-wrapper {
   width: 100%;
   display: flex;

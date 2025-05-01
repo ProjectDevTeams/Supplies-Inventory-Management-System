@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./Report-Issue.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function ReportIssue() {
   const data = [
-    ["25 เม.ย. 67", "005-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 168.00],
+    ["25 เม.ย. 67", "005-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 168.0],
     ["22 เม.ย. 67", "004-04/2567", "นางสาวปวิตา", "พวงเพ็ชร์", "18 รายการ", 3743.93],
-    ["18 เม.ย. 67", "003-04/2567", "นางสาวจุลธิดา", "ยงอรุณกุล", "1 รายการ", 22.00],
-    ["18 เม.ย. 67", "002-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 1990.00],
+    ["18 เม.ย. 67", "003-04/2567", "นางสาวจุลธิดา", "ยงอรุณกุล", "1 รายการ", 22.0],
+    ["18 เม.ย. 67", "002-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 1990.0],
     ["4 เม.ย. 67", "001-04/2567", "นางสาวปวิตา", "พวงเพ็ชร์", "20 รายการ", 3643.35],
-    ["29 มี.ค. 67", "019-03/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 600.00],
-    ["28 มี.ค. 67", "018-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "1 รายการ", 300.00],
-    ["28 มี.ค. 67", "017-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "36 รายการ", 4098.00],
-    ["28 มี.ค. 67", "016-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "3 รายการ", 935.00],
-    ["25 มี.ค. 67", "015-03/2567", "นายเคนศต", "บุญรัตน์", "2 รายการ", 80.00],
+    ["29 มี.ค. 67", "019-03/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 600.0],
+    ["28 มี.ค. 67", "018-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "1 รายการ", 300.0],
+    ["28 มี.ค. 67", "017-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "36 รายการ", 4098.0],
+    ["28 มี.ค. 67", "016-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "3 รายการ", 935.0],
+    ["25 มี.ค. 67", "015-03/2567", "นายเคนศต", "บุญรัตน์", "2 รายการ", 80.0],
   ];
 
   const itemsPerPage = 10;
@@ -27,8 +29,29 @@ function ReportIssue() {
     setInputPage("");
   }, [currentPage]);
 
+  const exportToExcel = () => {
+    const header = [["วันที่", "เลขที่", "ชื่อ", "สกุล", "จำนวนรายการ", "มูลค่า"]];
+    const rows = data.map((row) => [...row]);
+    const wsData = [...header, ...rows];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานการเบิกวัสดุ");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const file = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(file, "รายงานการเบิกวัสดุ.xlsx");
+  };
+
   return (
     <div className="report-issue-container">
+      <div className="report-issue-export-wrapper">
+        <button onClick={exportToExcel} className="report-issue-export-btn" title="Export Excel">
+          <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
+          <span>Export Excel</span>
+        </button>
+      </div>
+
       <table className="report-issue-table">
         <thead>
           <tr>

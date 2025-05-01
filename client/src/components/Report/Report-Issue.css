@@ -4,6 +4,35 @@
   margin: 0 auto;
 }
 
+/* ปุ่ม Export Excel */
+.report-issue-export-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+}
+
+.report-issue-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #217346;
+  font-size: 16px;
+}
+
+.report-issue-export-btn:hover {
+  opacity: 0.85;
+}
+
+.excel-icon {
+  width: 30px;
+  height: auto;
+}
+
+/* ตาราง */
 .report-issue-table {
   width: 100%;
   margin: 1em auto;
@@ -27,7 +56,7 @@
   color: #003366;
 }
 
-/* Pagination แบบใหม่ */
+/* Pagination */
 .report-issue-pagination-wrapper {
   width: 100%;
   display: flex;
@@ -73,7 +102,6 @@
   pointer-events: none;
 }
 
-/* กล่อง input page */
 .report-issue-page-input {
   width: 50px;
   text-align: center;
@@ -119,5 +147,9 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5em;
+  }
+
+  .report-issue-export-wrapper {
+    justify-content: flex-start;
   }
 }
