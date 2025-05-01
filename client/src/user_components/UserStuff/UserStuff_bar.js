@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import "./UserStuff_bar.css";
 
-
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
-
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
-import UserMoreTable from "../../user_components/UserStuff/UserMore/UserMoreTable";
+import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup"; // ✅ ใช้ popup แทน
 
 function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
+  const [showMorePopup, setShowMorePopup] = useState(false); // ✅ state เปิดป๊อปอัป
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "รายการขอจัดซื้อเพิ่มเติม") {
+      setShowMorePopup(true);
+    }
+  };
 
   const renderTable = () => {
     switch (activeTab) {
@@ -20,8 +26,6 @@ function UserStuffbar() {
         return <UserFollowTable searchTerm={searchTerm} />;
       case "ประวัติการทำรายการ":
         return <UserHistoryTable searchTerm={searchTerm} />;
-      case "รายการขอจัดซื้อเพิ่มเติม":
-        return <UserMoreTable searchTerm={searchTerm} />;
       default:
         return null;
     }
@@ -31,11 +35,11 @@ function UserStuffbar() {
     <>
       <div className="userstuff-bar">
         <div className="userstuff-menu">
-          {["เบิกวัสดุ", "ติดตามสถานะ", "ประวัติการทำรายการ", "รายการขอจัดซื้อเพิ่มเติม"].map(tab => (
+          {["เบิกวัสดุ", "ติดตามสถานะ", "ประวัติการทำรายการ", "รายการขอจัดซื้อเพิ่มเติม"].map((tab) => (
             <button
               key={tab}
               className={`userstuff-tab ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabClick(tab)}
             >
               {tab}
             </button>
@@ -54,24 +58,22 @@ function UserStuffbar() {
             />
           </div>
 
-
           {activeTab === "เบิกวัสดุ" && (
             <div className="userstuff-bag-icon">
               <img src="/image/bagicon.png" alt="Bag" />
             </div>
           )}
-
-        
-
         </div>
 
         <div className="userstuff-table-content">
           {renderTable()}
         </div>
       </div>
+
+      {/* ✅ ป๊อปอัปสำหรับรายการขอจัดซื้อเพิ่มเติม */}
+      {showMorePopup && <UserMorePopup onClose={() => setShowMorePopup(false)} />}
     </>
   );
 }
-
 
 export default UserStuffbar;
