@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserStuffbar from '../../user_components/UserStuff/UserStuff_bar';
+
 
 import "./UserStuff_table.css";
 
@@ -39,7 +39,6 @@ function UserStuff_Table() {
 
   return (
     <div className="table-container-userstuff">
-        <UserStuffbar/>
       <table className="userstuff-table">
         <thead>
           <tr>
