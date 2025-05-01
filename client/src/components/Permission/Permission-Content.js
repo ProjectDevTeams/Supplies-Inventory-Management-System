@@ -18,17 +18,29 @@ function PermissionContent() {
     ["10", "STI", "31 ส.ค. 65", "—"],
   ];
 
+  const [data, setData] = useState(initialData);
+  const [sortOrder, setSortOrder] = useState("asc");
+
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
-  const totalPages = Math.ceil(initialData.length / itemsPerPage);
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedData = initialData.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
+
+  const handleSortClick = () => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    const sorted = [...data].sort((a, b) => {
+      return newOrder === "asc" ? parseInt(a[0]) - parseInt(b[0]) : parseInt(b[0]) - parseInt(a[0]);
+    });
+    setSortOrder(newOrder);
+    setData(sorted);
+  };
 
   const handleRowClick = (id, name) => {
     navigate(`/permission/edit/${id}`, {
@@ -36,8 +48,8 @@ function PermissionContent() {
         data: {
           id,
           groupName: name,
-          warehouse: "",        // ใส่ค่า default ได้
-          permissions: {},      // ค่าเริ่มต้น (ปรับตามจริงได้)
+          warehouse: "",
+          permissions: {},
         },
       },
     });
@@ -61,7 +73,11 @@ function PermissionContent() {
       <table className="perm-table">
         <thead>
           <tr>
-            <th>ลำดับ</th>
+            <th>
+              <span onClick={handleSortClick} style={{ cursor: "pointer" }}>
+                ลำดับ <span className="perm-sort-arrow">{sortOrder === "asc" ? "▲" : "▼"}</span>
+              </span>
+            </th>
             <th>บริษัท/ร้านค้า</th>
             <th>วันที่สร้าง</th>
             <th>วันที่แก้ไข</th>
@@ -81,19 +97,34 @@ function PermissionContent() {
 
       <div className="perm-pagination-wrapper">
         <div className="perm-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, initialData.length)} จาก {initialData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="perm-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>ก่อนหน้า</button>
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>
+            ก่อนหน้า
+          </button>
           <input
             type="number"
             className="perm-page-input"
             value={inputPage}
+            min={1}
+            max={totalPages}
+            onFocus={() => setInputPage("")}
             onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && setCurrentPage(Number(inputPage))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>ถัดไป</button>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>
