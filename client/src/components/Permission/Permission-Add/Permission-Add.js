@@ -32,23 +32,24 @@ function PermissionAdd() {
   };
 
   return (
-    <div className="perm-form-container">
-      <form className="perm-form" onSubmit={handleSubmit}>
-      <div className="perm-form-title">แบ่งสิทธิ์</div>
-        <div className="perm-form-row">
-          <label className="perm-form-label">คลังวัสดุ</label>
+    <div className="permission-add-container">
+      <form className="permission-add-form" onSubmit={handleSubmit}>
+        <div className="permission-add-title">เพิ่มสิทธิ์</div>
+
+        <div className="permission-add-row">
+          <label className="permission-add-label">คลังวัสดุ</label>
           <input
-            className="perm-form-input"
+            className="permission-add-input"
             value={warehouse}
             onChange={(e) => setWarehouse(e.target.value)}
             placeholder="ชื่อคลังวัสดุ"
           />
         </div>
 
-        <div className="perm-form-row">
-          <label className="perm-form-label">ชื่อกลุ่ม</label>
+        <div className="permission-add-row">
+          <label className="permission-add-label">ชื่อกลุ่ม</label>
           <input
-            className="perm-form-input"
+            className="permission-add-input"
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
             placeholder="ชื่อกลุ่มผู้ใช้"
@@ -56,14 +57,14 @@ function PermissionAdd() {
         </div>
 
         {Object.entries(groupedPermissions).map(([group, items]) => (
-          <div key={group} className="perm-form-section">
-            <div className="perm-form-section-title">{group}</div>
-            <div className="perm-form-checkbox-list">
+          <div key={group} className="permission-add-section">
+            <div className="permission-add-section-title">{group}</div>
+            <div className="permission-add-checkbox-list">
               {items.map((item) => (
-                <label className="perm-form-checkbox-item">
+                <label key={item} className="permission-add-checkbox-item">
                   <input
-                    className="custom-checkbox"
                     type="checkbox"
+                    className="permission-add-checkbox"
                     checked={permissions[item] || false}
                     onChange={() => handleCheckboxChange(item)}
                   />
@@ -74,8 +75,8 @@ function PermissionAdd() {
           </div>
         ))}
 
-        <div className="perm-form-actions">
-          <button type="submit" className="perm-form-submit">บันทึก</button>
+        <div className="permission-add-actions">
+          <button type="submit" className="permission-add-submit">บันทึก</button>
         </div>
       </form>
     </div>

@@ -1,4 +1,4 @@
-.perm-form-container {
+.permission-add-container {
   width: 100%;
   padding: 1em;
   background-color: #f5f8fc;
@@ -8,13 +8,13 @@
   margin-top: -1em;
 }
 
-.perm-form-title {
+.permission-add-title {
   font-weight: bold;
   font-size: 1.4em;
   color: #003366;
 }
 
-.perm-form {
+.permission-add-form {
   background: #ffffff;
   border-radius: 10px;
   padding: 2em;
@@ -27,19 +27,19 @@
   font-size: 0.95em;
 }
 
-.perm-form-row {
+.permission-add-row {
   display: flex;
   align-items: center;
   gap: 1em;
 }
 
-.perm-form-label {
+.permission-add-label {
   width: 110px;
   font-weight: bold;
   color: #2c3e50;
 }
 
-.perm-form-input {
+.permission-add-input {
   flex: 1;
   max-width: 300px;
   padding: 0.6em 1em;
@@ -49,26 +49,26 @@
   background-color: #f9f9f9;
 }
 
-.perm-form-section {
+.permission-add-section {
   padding-top: 1.2em;
   border-top: 1px solid #e1e1e1;
 }
 
-.perm-form-section-title {
+.permission-add-section-title {
   font-weight: bold;
   color: #003366;
   margin-bottom: 0.7em;
   font-size: 1.05em;
 }
 
-.perm-form-checkbox-list {
+.permission-add-checkbox-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.4em 5em;
   padding-left: 1em;
 }
 
-.perm-form-checkbox-item {
+.permission-add-checkbox-item {
   min-width: 240px;
   white-space: nowrap;
   overflow: hidden;
@@ -80,26 +80,19 @@
   margin-bottom: 0.4rem;
 }
 
-.custom-checkbox {
+.permission-add-checkbox {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #60a5fa;
-  font-size: 20px;
-  border-radius: 6px;
-  transition: color 0.2s ease;
 }
 
-.perm-form-actions {
+.permission-add-actions {
   display: flex;
   justify-content: flex-end;
   padding-top: 1em;
 }
 
-.perm-form-submit {
+.permission-add-submit {
   background-color: #28a745;
   color: white;
   padding: 0.6em 1.6em;
@@ -112,7 +105,7 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.perm-form-submit:hover {
+.permission-add-submit:hover {
   background-color: #218838;
   transform: scale(1.05);
 }

@@ -13,6 +13,7 @@ import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
 import ReportPage from "./pages/Report/ReportPage";
 import PermissionPage from "./pages/Permission/PermissionPage";
 import PermissionAddPage from "./pages/Permission/PermissionAdd/PermissionAddPage";
+import PermissionEditPage from "./pages/Permission/PermissionEdit/PermissionEditPage";
 import SettingPage from "./pages/Setting/SettingPage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
@@ -35,6 +36,7 @@ function App() {
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
         <Route path="/permission/add" element={<PermissionAddPage />} />
+        <Route path="/permission/edit/:id" element={<PermissionEditPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
