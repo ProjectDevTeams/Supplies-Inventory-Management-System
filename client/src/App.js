@@ -41,7 +41,7 @@ function App() {
         <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
 
-        <Route path="/userstuff " element={<UserStuffPage />} />
+        <Route path="/userstuff" element={<UserStuffPage />} />
 
       </Routes>
     </BrowserRouter>

@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import Consumablebar from '../../components/Consumable/Consumablebar';
 import Consumable_Table from '../../components/Consumable/Consumable-table';
 import './ConsumablePage.css';
 
