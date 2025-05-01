@@ -59,7 +59,7 @@ function Historybar() {
         </div>
   
         {/* แสดงตารางตามที่เลือก */}
-        <div className="his-table-container">
+        <div className="hisory-table-container">
           {selectedTable === "all" && <AllMaterialTable_History />}
           {selectedTable === "add" && <AddMaterialTable_History />}
           {selectedTable === "out" && <OutMaterialTable_History />}

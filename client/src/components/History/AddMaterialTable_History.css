@@ -1,14 +1,17 @@
-.his-table-container {
+.history-table-container {
+    
     width: 100%;
+    max-width: 2000px;
     padding: 1em;
     background-color: #f5f8fc;
     box-sizing: border-box;
     margin: 0 auto;
-    margin-left: -5.5em;
+    padding-left: 1em;
+    
   }
   
   .history-table {
-    width: 90%; /* <<< ตารางไม่ชิดขอบเต็ม */
+    width: 100%; /* <<< ตารางไม่ชิดขอบเต็ม */
     margin: 1em auto; /* <<< จัดกลาง */
     border-collapse: collapse;
     background-color: white;

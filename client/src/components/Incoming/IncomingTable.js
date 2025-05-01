@@ -15,6 +15,7 @@ const mockIncomingData = [
 export default function IncomingTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
+  const [asc, setAsc] = useState(true); // ✅ เพิ่ม state สำหรับเรียง
   const itemsPerPage = 5;
   const totalPages = Math.ceil(mockIncomingData.length / itemsPerPage);
 
@@ -22,20 +23,22 @@ export default function IncomingTable() {
     setInputPage('');
   }, [currentPage]);
 
+  const toggleSort = () => setAsc(prev => !prev); // ✅ toggle sort
+
+  // ✅ เรียงก่อนแบ่งหน้า
+  const sortedData = [...mockIncomingData].sort((a, b) =>
+    asc ? a.id - b.id : b.id - a.id
+  );
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockIncomingData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((p) => p + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(p => p + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((p) => p - 1);
-    }
+    if (currentPage > 1) setCurrentPage(p => p - 1);
   };
 
   const handlePageChange = (e) => {
@@ -58,7 +61,9 @@ export default function IncomingTable() {
         <table className="incoming-table">
           <thead>
             <tr>
-              <th>ลำดับ</th>
+              <th className="sortable-header" onClick={toggleSort}>
+                ลำดับ {asc ? "▲" : "▼"}
+              </th>
               <th>บริษัท/ร้านค้า</th>
               <th>เลขที่ มอ.</th>
               <th>วันที่ซื้อ</th>
@@ -83,9 +88,7 @@ export default function IncomingTable() {
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockIncomingData.length)} จาก {mockIncomingData.length} แถว
           </div>
           <div className="pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>
-              ก่อนหน้า
-            </button>
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>ก่อนหน้า</button>
             <input
               type="number"
               className="page-input"
@@ -93,23 +96,11 @@ export default function IncomingTable() {
               value={inputPage}
               min={1}
               max={totalPages}
-              onFocus={(e) => {
-                // รีเซตเมื่อคลิกทันที
-                if (inputPage === '') {
-                  e.target.placeholder = '';
-                }
-                setInputPage('');
-              }}
-              onBlur={(e) => {
-                // กลับมาแสดง placeholder เดิมเมื่อคลิกออก
-                e.target.placeholder = `${currentPage} / ${totalPages}`;
-              }}
+              onFocus={() => setInputPage('')}
               onChange={handlePageChange}
               onKeyDown={handleKeyDown}
             />
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNextPage}>
-              ถัดไป
-            </button>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNextPage}>ถัดไป</button>
           </div>
         </div>
       </div>

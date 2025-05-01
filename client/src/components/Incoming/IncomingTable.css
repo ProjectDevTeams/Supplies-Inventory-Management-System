@@ -112,3 +112,8 @@
   color: white;
   opacity: 1;
 }
+
+/* ✅ เพิ่มเพื่อให้หัวตารางคลิกได้ */
+.sortable-header {
+  cursor: pointer;
+}
