@@ -12,34 +12,35 @@ const mockData = [
 
 export default function StuffTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage]     = useState('');
+  const [inputPage, setInputPage] = useState('');
+  const [asc, setAsc] = useState(true); // 🔸 เพิ่มสถานะการเรียง
   const itemsPerPage = 4;
-  const totalPages   = Math.ceil(mockData.length / itemsPerPage);
+  const totalPages = Math.ceil(mockData.length / itemsPerPage);
 
-  // บังคับให้ inputPage กลับมาเป็น '' ทุกครั้งที่ currentPage เปลี่ยน
   useEffect(() => {
     setInputPage('');
   }, [currentPage]);
 
-  const indexOfLastItem  = currentPage * itemsPerPage;
+  const toggleSort = () => setAsc(prev => !prev); // 🔸 toggle เรียง
+
+  // 🔸 เรียงข้อมูลก่อนแบ่งหน้า
+  const sortedData = [...mockData].sort((a, b) =>
+    asc ? a.id - b.id : b.id - a.id
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems     = mockData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const handleChange = e => {
-    setInputPage(e.target.value);
-  };
+  const handleChange = e => setInputPage(e.target.value);
 
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
@@ -52,7 +53,7 @@ export default function StuffTable() {
   };
 
   const renderStatus = status => {
-    if (status === 'pending')  return 'รออนุมัติ';
+    if (status === 'pending') return 'รออนุมัติ';
     if (status === 'approved') return 'อนุมัติ';
     if (status === 'rejected') return 'ไม่อนุมัติ';
     return '-';
@@ -64,7 +65,9 @@ export default function StuffTable() {
         <table className="stuff-table">
           <thead>
             <tr>
-              <th>ลำดับ</th>
+              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>
+                ลำดับ {asc ? '▲' : '▼'}
+              </th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
               <th>จำนวน</th>
