@@ -12,26 +12,35 @@ const mockIncomingData = [
   { id: 1839, company: "บริษัท H", po: "018.1 66-7181", orderDate: "27 พ.ย. 66", amount: 41448.0 },
 ];
 
-export default function IncomingTable({ onDataReady }) {
+export default function IncomingTable({ searchTerm = '', onDataReady }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
   const [asc, setAsc] = useState(true);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(mockIncomingData.length / itemsPerPage);
 
+  // เรียงข้อมูลก่อน
   const sortedData = [...mockIncomingData].sort((a, b) =>
     asc ? a.id - b.id : b.id - a.id
   );
 
+  // 🔍 กรองข้อมูล
+  const filteredData = sortedData.filter(item =>
+    item.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.po.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.orderDate.includes(searchTerm) ||
+    item.amount.toString().includes(searchTerm)
+  );
+
   useEffect(() => {
     if (onDataReady) {
-      onDataReady(sortedData); // ส่งข้อมูลไปให้หน้าหลัก export
+      onDataReady(filteredData); // ส่งออกไปให้ export Excel
     }
-  }, [sortedData, onDataReady]);
+  }, [filteredData, onDataReady]);
 
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const toggleSort = () => setAsc(prev => !prev);
   const handleNextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
@@ -67,7 +76,7 @@ export default function IncomingTable({ onDataReady }) {
 
         <div className="pagination-wrapper">
           <div className="pagination-info">
-            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockIncomingData.length)} จาก {mockIncomingData.length} แถว
+            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
           </div>
           <div className="pagination-buttons">
             <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>ก่อนหน้า</button>
@@ -76,7 +85,7 @@ export default function IncomingTable({ onDataReady }) {
               className="page-input"
               placeholder={inputPage === '' ? `${currentPage} / ${totalPages}` : ''}
               value={inputPage}
-              onFocus={() => setInputPage(' ')} // บังคับให้ placeholder หายทันที
+              onFocus={() => setInputPage(' ')}
               onChange={(e) => setInputPage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

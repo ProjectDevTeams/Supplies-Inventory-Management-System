@@ -21,3 +21,24 @@
   gap: 12px; /* ระยะห่างระหว่างแต่ละปุ่ม */
   flex-wrap: wrap; /* กรณีจอเล็กจะขึ้นบรรทัดใหม่ */
 }
+
+
+.search-container input {
+  padding: 0.5em 0.5em 0.5em 2em;
+  border: 2px solid #aab3bb;
+  border-radius: 4px;
+  font-size: 1rem;
+  height: 2.5em;
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.6em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  font-size: 1rem;
+  pointer-events: none;
+}

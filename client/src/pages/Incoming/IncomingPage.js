@@ -8,6 +8,7 @@ import './IncomingPage.css';
 
 function IncomingPage() {
   const [tableData, setTableData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(''); // ✅ เพิ่ม searchTerm
 
   const handleExportExcel = () => {
     exportToExcel(tableData);
@@ -20,10 +21,17 @@ function IncomingPage() {
         <Sidebar />
         <main className="stuff-content">
           <section className="content-header">
-            <Incomingbar onExportExcel={handleExportExcel} />
+            <Incomingbar
+              onExportExcel={handleExportExcel}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
           </section>
           <section className="stuff-table-container">
-            <IncomingTable onDataReady={setTableData} />
+            <IncomingTable
+              searchTerm={searchTerm}
+              onDataReady={setTableData}
+            />
           </section>
         </main>
       </div>

@@ -1,27 +1,39 @@
 import React from "react";
 import "./Incomingbar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
+function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-function Incomingbar({ onExportExcel }) {
   return (
     <div className="incoming-header">
       <h2 className="incoming-title">รับเข้าวัสดุ</h2>
 
       <div className="incoming-controls">
+        {/* 🔍 Search */}
         <div className="search-container">
-          <span className="search-icon">🔍</span>
-          <input type="text" placeholder="ค้นหา" />
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <input
+            type="text"
+            placeholder="ค้นหา"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
         </div>
 
+        {/* ➕ เพิ่มหัวข้อ */}
         <button className="btn green">+ เพิ่มหัวข้อ</button>
 
+        {/* 📅 ปีงบ */}
         <select className="budget-select">
           <option disabled selected>เลือกปีงบประมาณ</option>
           <option>2566</option>
           <option>2567</option>
+          <option>2568</option>
         </select>
 
-        {/* ✅ ปุ่ม Export Excel พร้อมไอคอน */}
+        {/* 🧾 Export */}
         <button className="excel-export" onClick={onExportExcel}>
           <img src="/image/excel-icon.png" alt="Excel" />
           <span>Export Excel</span>
