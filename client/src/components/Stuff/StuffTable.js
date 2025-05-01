@@ -10,54 +10,37 @@ const mockData = [
   { id: 19, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "rejected" },
 ];
 
-export default function StuffTable() {
+export default function StuffTable({ searchTerm }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('');
-  const [asc, setAsc] = useState(true); // 🔸 เพิ่มสถานะการเรียง
+  const [asc, setAsc] = useState(true);
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
 
-  useEffect(() => {
-    setInputPage('');
-  }, [currentPage]);
-
-  const toggleSort = () => setAsc(prev => !prev); // 🔸 toggle เรียง
-
-  // 🔸 เรียงข้อมูลก่อนแบ่งหน้า
   const sortedData = [...mockData].sort((a, b) =>
     asc ? a.id - b.id : b.id - a.id
   );
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const handleChange = e => setInputPage(e.target.value);
-
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      const v = parseInt(inputPage, 10);
-      if (!isNaN(v) && v >= 1 && v <= totalPages) {
-        setCurrentPage(v);
-      }
-      e.target.blur();
-    }
-  };
-
-  const renderStatus = status => {
+  const renderStatus = (status) => {
     if (status === 'pending') return 'รออนุมัติ';
     if (status === 'approved') return 'อนุมัติ';
     if (status === 'rejected') return 'ไม่อนุมัติ';
     return '-';
   };
+
+  const filteredData = sortedData.filter(item =>
+    item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.stock.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.date.includes(searchTerm) ||
+    renderStatus(item.status).includes(searchTerm)
+  );
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   return (
     <div className="table-wrapper">
@@ -65,7 +48,7 @@ export default function StuffTable() {
         <table className="stuff-table">
           <thead>
             <tr>
-              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>
+              <th onClick={() => setAsc(prev => !prev)} style={{ cursor: 'pointer' }}>
                 ลำดับ {asc ? '▲' : '▼'}
               </th>
               <th>เลขที่ใบเบิก</th>
@@ -93,28 +76,29 @@ export default function StuffTable() {
 
         <div className="stuff-pagination">
           <div className="stuff-pagination-info">
-            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>
-              ก่อนหน้า
-            </button>
-
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
             <input
-              type="number"
+              type="text"
               className="org-page-input"
               placeholder={`${currentPage} / ${totalPages}`}
               value={inputPage}
-              min={1}
-              max={totalPages}
               onFocus={() => setInputPage('')}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
+              onChange={(e) => setInputPage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const page = parseInt(inputPage, 10);
+                  if (!isNaN(page) && page >= 1 && page <= totalPages) {
+                    setCurrentPage(page);
+                  }
+                  setInputPage('');
+                  e.target.blur();
+                }
+              }}
             />
-
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>
-              ถัดไป
-            </button>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
           </div>
         </div>
       </div>

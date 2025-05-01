@@ -1,10 +1,11 @@
-// src/components/Stuff/Stuffbar.js
 import React from 'react';
 import './Stuffbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-function Stuffbar({ setActiveTab, activeTab }) {
+function Stuffbar({ setActiveTab, activeTab, searchTerm, setSearchTerm }) {
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+
   return (
     <div className="stuff-header">
       <div className="stuff-title">เบิกวัสดุ</div>
@@ -13,10 +14,15 @@ function Stuffbar({ setActiveTab, activeTab }) {
         {/* ช่องค้นหา */}
         <div className="search-container">
           <FontAwesomeIcon icon={faSearch} className="search-icon" />
-          <input type="text" placeholder="ค้นหา" />
+          <input
+            type="text"
+            placeholder="ค้นหา"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
         </div>
 
-        {/* ปุ่มเลือกตาราง */}
+        {/* ปุ่มสลับตาราง */}
         <button
           className={`btn blue ${activeTab === 'wait' ? 'active-tab' : ''}`}
           onClick={() => setActiveTab('wait')}
