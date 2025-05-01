@@ -76,6 +76,7 @@
   background-color: #e6f0ff;
 }
 
+.pagination-buttons .btn:disabled,
 .pagination-buttons .btn.disabled {
   background-color: #eeeeee;
   color: #aaa;
@@ -83,7 +84,7 @@
 }
 
 .page-input {
-  width: 50px;
+  width: 60px;
   text-align: center;
   padding: 0.4rem 0.6rem;
   border: 2px solid rgba(0, 123, 255, 0.3);
@@ -105,4 +106,9 @@
 .page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.page-input::placeholder {
+  color: white;
+  opacity: 1;
 }

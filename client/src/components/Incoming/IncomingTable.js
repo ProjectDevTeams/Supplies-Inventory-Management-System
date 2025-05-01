@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./IncomingTable.css";
 
 const mockIncomingData = [
@@ -12,11 +12,15 @@ const mockIncomingData = [
   { id: 1839, company: "บริษัท H", po: "018.1 66-7181", orderDate: "27 พ.ย. 66", amount: 41448.0 },
 ];
 
-function IncomingTable() {
+export default function IncomingTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState(1);
+  const [inputPage, setInputPage] = useState('');
   const itemsPerPage = 5;
   const totalPages = Math.ceil(mockIncomingData.length / itemsPerPage);
+
+  useEffect(() => {
+    setInputPage('');
+  }, [currentPage]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -24,17 +28,13 @@ function IncomingTable() {
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      const next = currentPage + 1;
-      setCurrentPage(next);
-      setInputPage(next);
+      setCurrentPage((p) => p + 1);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      const prev = currentPage - 1;
-      setCurrentPage(prev);
-      setInputPage(prev);
+      setCurrentPage((p) => p - 1);
     }
   };
 
@@ -44,10 +44,11 @@ function IncomingTable() {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      const val = parseInt(inputPage, 10);
+      const val = Number(inputPage);
       if (!isNaN(val) && val >= 1 && val <= totalPages) {
         setCurrentPage(val);
       }
+      e.target.blur();
     }
   };
 
@@ -82,19 +83,31 @@ function IncomingTable() {
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockIncomingData.length)} จาก {mockIncomingData.length} แถว
           </div>
           <div className="pagination-buttons">
-            <button className={`btn ${currentPage === 1 ? "disabled" : ""}`} onClick={handlePrevPage}>
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>
               ก่อนหน้า
             </button>
             <input
               type="number"
               className="page-input"
+              placeholder={`${currentPage} / ${totalPages}`}
               value={inputPage}
               min={1}
               max={totalPages}
+              onFocus={(e) => {
+                // รีเซตเมื่อคลิกทันที
+                if (inputPage === '') {
+                  e.target.placeholder = '';
+                }
+                setInputPage('');
+              }}
+              onBlur={(e) => {
+                // กลับมาแสดง placeholder เดิมเมื่อคลิกออก
+                e.target.placeholder = `${currentPage} / ${totalPages}`;
+              }}
               onChange={handlePageChange}
               onKeyDown={handleKeyDown}
             />
-            <button className={`btn ${currentPage === totalPages ? "disabled" : ""}`} onClick={handleNextPage}>
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNextPage}>
               ถัดไป
             </button>
           </div>
@@ -103,5 +116,3 @@ function IncomingTable() {
     </div>
   );
 }
-
-export default IncomingTable;
