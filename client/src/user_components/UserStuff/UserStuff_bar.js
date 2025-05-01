@@ -4,9 +4,12 @@ import "./UserStuff_bar.css";
 // ✅ import ตารางแต่ละอัน
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
+<<<<<<< HEAD
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
+=======
+>>>>>>> fc8f7c7568a0d35cef1b24980eda1f58b3e336f9
 import UserMoreTable from "../../user_components/UserStuff/UserMore/UserMoreTable";
-
+import UserHistoryTable from "./็๊UserHistory/UserHistoryTable";
 function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
