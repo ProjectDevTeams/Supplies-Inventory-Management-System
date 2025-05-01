@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from "../../../components/Navbar/Navbar";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import PermissionAdd from "../../../components/Permission/Permission-Add/Permission-Add";
+import './PermissionAddPage.css';
 
 function PermissionAddPage() {
   return (
