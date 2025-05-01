@@ -32,6 +32,11 @@
   font-weight: bold;
 }
 
+.status.pending {
+  color: orange;
+  font-weight: bold;
+}
+
 .status.approved {
   color: green;
   font-weight: bold;
@@ -84,109 +89,35 @@
 .page-box {
   display: inline-flex;
   align-items: center;
-  background-color: #007bff;
-  color: white;
-  padding: 0.3rem 0.8rem;
+  background-color: #007bff;                  /* พื้นหลังฟ้า */
+  border: 2px solid rgba(0,123,255,0.3);      /* ขอบฟ้าโปร่ง */
   border-radius: 4px;
-  font-weight: bold;
-}
-
-.page-box input {
-  width: 40px;
-  border: none;
-  background: transparent;
-  color: white;
-  text-align: center;
-  font-size: 14px;
-}
-
-.page-box input:focus {
-  outline: none;
-}
-
-.page-input-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #007bff;
-  border-radius: 4px;
-  padding: 0.2rem 0.6rem;
-  color: white;
-  font-weight: bold;
-}
-
-.page-input-wrapper input.page-input {
-  background-color: transparent;
-  border: none;
-  width: 35px;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  font-size: 14px;
-  outline: none;
-}
-
-.page-input-wrapper input.page-input::-webkit-inner-spin-button,
-.page-input-wrapper input.page-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.total-page {
-  margin-left: 4px;
-}
-
-.page-box {
-  background-color: #007bff;
-  color: white;
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  padding: 0.2rem 0.8rem;
-  font-weight: bold;
-}
-
-.page-input {
-  width: 35px;
-  text-align: center;
-  border: none;
-  background: transparent;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.page-input:focus {
-  outline: none;
-}
-
-.page-total {
-  margin-left: 5px;
-  font-size: 14px;
-  color: white;
-}
-
-.page-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #007bff;
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  gap: 0.3rem;
+  padding: 0;                                  /* ไม่มี padding รอบๆ */
+  height: 2.2rem;                              /* กำหนดความสูงให้เท่ากับ org-page-input */
+  box-sizing: border-box;
 }
 
 .page-box-input {
-  width: 40px;
-  text-align: right;
-  background: transparent;
+  width: 60px;                                 /* กว้างเท่า org-page-input */
+  height: 100%;                                /* เต็มความสูงของ .page-box */
   border: none;
+  background: transparent;
   color: white;
   font-weight: bold;
   font-size: 14px;
+  text-align: center;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  margin: 0;
+  padding: 0;                                  /* เอา padding ออก ให้ชิด */
+}
+
+/* ซ่อนลูกศร number input */
+.page-box-input::-webkit-inner-spin-button,
+.page-box-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .page-box-input:focus {
@@ -194,7 +125,8 @@
 }
 
 .page-box-total {
-  font-size: 14px;
-  font-weight: bold;
   color: white;
+  font-size: 14px;
+  margin: 0 0.5rem;                            /* เว้นซ้ายขวาเล็กน้อย */
+  user-select: none;
 }
