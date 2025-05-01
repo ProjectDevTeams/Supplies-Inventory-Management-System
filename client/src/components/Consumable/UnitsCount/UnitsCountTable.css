@@ -105,6 +105,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 0.5rem;
+    background-color: #f5f8fc;
   }
   
   .unitscount-pagination-info {
