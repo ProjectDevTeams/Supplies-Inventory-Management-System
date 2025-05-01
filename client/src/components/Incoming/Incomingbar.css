@@ -1,85 +1,23 @@
-.incoming-header {
+.excel-export {
   display: flex;
-  flex-direction: column;
-  padding: 1em;
-  background-color: #f5f8fc;
-  align-items: flex-start;
-  width: auto;
-  margin-top: -0.6em;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #2e7d32;
+  font-size: 16px;
+  padding: 5px 10px;
 }
 
-.incoming-title {
-  font-weight: bold;
-  font-size: 1.4em;
-  margin-bottom: 0.5rem;
-  color: #11385b;
+.excel-export img {
+  height: 24px;
+  margin-right: 6px;
 }
 
 .incoming-controls {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 1em;
-}
-
-/* Search Box */
-.search-container {
-  position: relative;
-}
-
-.search-container input {
-  padding: 0.5em 0.5em 0.5em 2em;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
-  min-width: 250px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 0.6em;
-  top: 50%;
-  transform: translateY(-50%);
-  color: gray;
-  pointer-events: none;
-  font-size: 1rem;
-  opacity: 0.6;
-}
-
-/* Button */
-.btn.green {
-  background-color: #2e7d32;
-  color: white;
-  padding: 0.5rem 1.2rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* Select */
-.budget-select {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  background-color: white;
-  cursor: pointer;
-}
-
-/* Export Excel */
-.excel-export {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #2e7d32;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.excel-export img {
-  width: 40px;
-  height: auto;
-  object-fit: contain;
-  vertical-align: middle;
+  gap: 12px; /* ระยะห่างระหว่างแต่ละปุ่ม */
+  flex-wrap: wrap; /* กรณีจอเล็กจะขึ้นบรรทัดใหม่ */
 }

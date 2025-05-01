@@ -1,67 +1,356 @@
-USE supplies_inventory;
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 25, 2025 at 10:10 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 
--- Mock data for users
-INSERT INTO users (username, password, fullname, position, email, phone, permission, department_id) VALUES
-('user01', 'hashedpass1', 'ชื่อผู้ใช้1', 'เจ้าหน้าที่', 'user1@example.com', '0800000001', 'user', 1),
-('user02', 'hashedpass2', 'ชื่อผู้ใช้2', 'เจ้าหน้าที่', 'user2@example.com', '0800000002', 'user', 1),
-('user03', 'hashedpass3', 'ชื่อผู้ใช้3', 'เจ้าหน้าที่', 'user3@example.com', '0800000003', 'user', 2),
-('user04', 'hashedpass4', 'ชื่อผู้ใช้4', 'เจ้าหน้าที่', 'user4@example.com', '0800000004', 'user', 2),
-('user05', 'hashedpass5', 'ชื่อผู้ใช้5', 'เจ้าหน้าที่', 'user5@example.com', '0800000005', 'user', 2),
-('user06', 'hashedpass6', 'ชื่อผู้ใช้6', 'เจ้าหน้าที่', 'user6@example.com', '0800000006', 'user', 1),
-('user07', 'hashedpass7', 'ชื่อผู้ใช้7', 'เจ้าหน้าที่', 'user7@example.com', '0800000007', 'user', 1),
-('user08', 'hashedpass8', 'ชื่อผู้ใช้8', 'เจ้าหน้าที่', 'user8@example.com', '0800000008', 'user', 1),
-('user09', 'hashedpass9', 'ชื่อผู้ใช้9', 'เจ้าหน้าที่', 'user9@example.com', '0800000009', 'user', 1),
-('user10', 'hashedpass10', 'ชื่อผู้ใช้10', 'เจ้าหน้าที่', 'user10@example.com', '0800000010', 'user', 2);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
--- Mock data for suppliers
-INSERT INTO suppliers (name, address, phone, tax_id) VALUES
-('ซัพพลายเออร์ 1', 'ที่อยู่ 1', '0740000001', 'TAX000001'),
-('ซัพพลายเออร์ 2', 'ที่อยู่ 2', '0740000002', 'TAX000002'),
-('ซัพพลายเออร์ 3', 'ที่อยู่ 3', '0740000003', 'TAX000003'),
-('ซัพพลายเออร์ 4', 'ที่อยู่ 4', '0740000004', 'TAX000004'),
-('ซัพพลายเออร์ 5', 'ที่อยู่ 5', '0740000005', 'TAX000005'),
-('ซัพพลายเออร์ 6', 'ที่อยู่ 6', '0740000006', 'TAX000006'),
-('ซัพพลายเออร์ 7', 'ที่อยู่ 7', '0740000007', 'TAX000007'),
-('ซัพพลายเออร์ 8', 'ที่อยู่ 8', '0740000008', 'TAX000008'),
-('ซัพพลายเออร์ 9', 'ที่อยู่ 9', '0740000009', 'TAX000009'),
-('ซัพพลายเออร์ 10', 'ที่อยู่ 10', '0740000010', 'TAX000010');
+--
+-- Database: `supplies_inventory`
+--
 
--- Mock data for mt_requests
-INSERT INTO mt_requests (user_id, request_date, status, purpose) VALUES
-(2, '2025-04-02', 'pending', 'ขอเบิกวัสดุครั้งที่ 1'),
-(6, '2025-04-03', 'not approved', 'ขอเบิกวัสดุครั้งที่ 2'),
-(4, '2025-04-04', 'approved', 'ขอเบิกวัสดุครั้งที่ 3'),
-(9, '2025-04-05', 'approved', 'ขอเบิกวัสดุครั้งที่ 4'),
-(5, '2025-04-06', 'not approved', 'ขอเบิกวัสดุครั้งที่ 5'),
-(1, '2025-04-07', 'not approved', 'ขอเบิกวัสดุครั้งที่ 6'),
-(9, '2025-04-08', 'pending', 'ขอเบิกวัสดุครั้งที่ 7'),
-(6, '2025-04-09', 'pending', 'ขอเบิกวัสดุครั้งที่ 8'),
-(3, '2025-04-10', 'not approved', 'ขอเบิกวัสดุครั้งที่ 9'),
-(5, '2025-04-11', 'not approved', 'ขอเบิกวัสดุครั้งที่ 10');
+-- --------------------------------------------------------
 
--- Mock data for mt_request_details
-INSERT INTO mt_request_details (request_id, material_id, quantity, total_price) VALUES
-(1, 3, 1, 10),
-(2, 3, 9, 369),
-(3, 3, 2, 28),
-(4, 2, 1, 17),
-(5, 2, 7, 168),
-(6, 2, 6, 180),
-(7, 1, 2, 66),
-(8, 2, 8, 376),
-(9, 2, 8, 192),
-(10, 2, 7, 252);
+--
+-- Table structure for table `departments`
+--
 
--- Mock data for mt_receipts
-INSERT INTO mt_receipts (material_id, supplier_id, purchase_date, price_per_unit, quantity, total_price) VALUES
-(3, 4, '2025-04-02', 36, 29, 1044),
-(2, 6, '2025-04-03', 36, 35, 1260),
-(2, 9, '2025-04-04', 42, 48, 2016),
-(2, 1, '2025-04-05', 21, 18, 378),
-(1, 5, '2025-04-06', 12, 86, 1032),
-(3, 7, '2025-04-07', 29, 21, 609),
-(3, 1, '2025-04-08', 15, 62, 930),
-(1, 10, '2025-04-09', 29, 92, 2668),
-(2, 3, '2025-04-10', 5, 42, 210),
-(2, 4, '2025-04-11', 12, 94, 1128);
+CREATE TABLE `departments` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`id`, `name`, `description`) VALUES
+(1, 'ฝ่ายซ่อมบำรุง', 'ดูแลเรื่องอุปกรณ์และวัสดุในหน่วยงาน'),
+(2, 'ฝ่ายบัญชี', 'จัดการเอกสารด้านการเงิน');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `materials`
+--
+
+CREATE TABLE `materials` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `unit` varchar(20) DEFAULT NULL,
+  `price_per_unit` decimal(10,2) DEFAULT NULL,
+  `stock_qty` int(11) DEFAULT 0,
+  `min_stock` int(11) DEFAULT 0,
+  `image` varchar(255) DEFAULT NULL,
+  `initial_stock` int(11) DEFAULT 0 COMMENT 'ยอดยกมา',
+  `max_stock` int(11) DEFAULT 0 COMMENT 'ยอดสูงสุดที่ควรมี',
+  `received_qty` int(11) DEFAULT 0 COMMENT 'จำนวนที่รับเข้าทั้งหมด',
+  `issued_qty` int(11) DEFAULT 0 COMMENT 'จำนวนที่จ่ายออกทั้งหมด'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `materials`
+--
+
+INSERT INTO `materials` (`id`, `name`, `category`, `unit`, `price_per_unit`, `stock_qty`, `min_stock`, `image`, `initial_stock`, `max_stock`, `received_qty`, `issued_qty`) VALUES
+(1, 'กระดาษ A4', 'เครื่องเขียน', 'รีม', 100.00, 25, 10, NULL, 0, 0, 0, 0),
+(2, 'ปากกาลูกลื่น', 'เครื่องเขียน', 'ด้าม', 5.00, 200, 50, NULL, 0, 0, 0, 0),
+(3, 'แฟ้มเอกสาร', 'เครื่องเขียน', 'เล่ม', 25.00, 80, 10, NULL, 100, 200, 300, 220);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mt_adjustments`
+--
+
+CREATE TABLE `mt_adjustments` (
+  `id` int(11) NOT NULL,
+  `material_id` int(11) DEFAULT NULL,
+  `old_quantity` int(11) DEFAULT NULL,
+  `new_quantity` int(11) DEFAULT NULL,
+  `adjustment_date` date DEFAULT NULL,
+  `reason` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mt_adjustments`
+--
+
+INSERT INTO `mt_adjustments` (`id`, `material_id`, `old_quantity`, `new_quantity`, `adjustment_date`, `reason`) VALUES
+(1, 1, 30, 25, '2025-04-01', 'เบิกผิดจำนวน'),
+(2, 2, 250, 200, '2025-04-01', 'วัสดุชำรุด');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mt_receipts`
+--
+
+CREATE TABLE `mt_receipts` (
+  `id` int(11) NOT NULL,
+  `material_id` int(11) DEFAULT NULL,
+  `supplier_name` varchar(100) DEFAULT NULL,
+  `tax_no` varchar(50) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `price_per_unit` decimal(10,2) DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mt_receipts`
+--
+
+INSERT INTO `mt_receipts` (`id`, `material_id`, `supplier_name`, `tax_no`, `purchase_date`, `quantity`, `price_per_unit`, `total_price`) VALUES
+(1, 1, 'บริษัท พิมพ์ดี จำกัด', '1234567890123', '2025-03-30', 50, 100.00, 5000.00),
+(2, 2, 'ร้านเครื่องเขียน ABC', '9876543210123', '2025-03-29', 300, 5.00, 1500.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mt_requests`
+--
+
+CREATE TABLE `mt_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `request_date` date DEFAULT NULL,
+  `purpose` varchar(255) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mt_requests`
+--
+
+INSERT INTO `mt_requests` (`id`, `user_id`, `request_date`, `purpose`, `status`) VALUES
+(1, 2, '2025-04-01', 'สำหรับงานประชุมภายใน', 'approved');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mt_request_details`
+--
+
+CREATE TABLE `mt_request_details` (
+  `id` int(11) NOT NULL,
+  `mt_request_id` int(11) DEFAULT NULL,
+  `material_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mt_request_details`
+--
+
+INSERT INTO `mt_request_details` (`id`, `mt_request_id`, `material_id`, `quantity`, `total_price`) VALUES
+(1, 1, 1, 5, 500.00),
+(2, 1, 2, 10, 50.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `suppliers`
+--
+
+CREATE TABLE `suppliers` (
+  `id` int(11) NOT NULL,
+  `company_name` varchar(100) DEFAULT NULL,
+  `tax_no` varchar(50) DEFAULT NULL,
+  `contact_name` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`id`, `company_name`, `tax_no`, `contact_name`, `phone`, `address`) VALUES
+(1, 'บริษัท พิมพ์ดี จำกัด', '1234567890123', 'คุณวรรณา', '0800000000', '123 ถ.ราษฎร์บำรุง หาดใหญ่'),
+(2, 'ร้านเครื่องเขียน ABC', '9876543210123', 'คุณประสิทธิ์', '0823456789', '456 ถ.ศรีภูวนารถ สงขลา');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `fullname` varchar(100) DEFAULT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `permission` enum('admin','user') DEFAULT 'user',
+  `department_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `fullname`, `position`, `email`, `phone`, `permission`, `department_id`) VALUES
+(1, 'admin001', 'admin123', 'นายสมชาย แอดมิน', 'เจ้าหน้าที่พัสดุ', 'admin@example.com', '0812345678', 'admin', 1),
+(2, 'user001', 'user123', 'นางสาวน้ำใส ผู้ใช้', 'เจ้าหน้าที่บัญชี', 'user@example.com', '0899999999', 'user', 2);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `departments`
+--
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `materials`
+--
+ALTER TABLE `materials`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mt_adjustments`
+--
+ALTER TABLE `mt_adjustments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `material_id` (`material_id`);
+
+--
+-- Indexes for table `mt_receipts`
+--
+ALTER TABLE `mt_receipts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `material_id` (`material_id`);
+
+--
+-- Indexes for table `mt_requests`
+--
+ALTER TABLE `mt_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `mt_request_details`
+--
+ALTER TABLE `mt_request_details`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `mt_request_id` (`mt_request_id`),
+  ADD KEY `material_id` (`material_id`);
+
+--
+-- Indexes for table `suppliers`
+--
+ALTER TABLE `suppliers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `departments`
+--
+ALTER TABLE `departments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `materials`
+--
+ALTER TABLE `materials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `mt_adjustments`
+--
+ALTER TABLE `mt_adjustments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `mt_receipts`
+--
+ALTER TABLE `mt_receipts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `mt_requests`
+--
+ALTER TABLE `mt_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `mt_request_details`
+--
+ALTER TABLE `mt_request_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `suppliers`
+--
+ALTER TABLE `suppliers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `mt_adjustments`
+--
+ALTER TABLE `mt_adjustments`
+  ADD CONSTRAINT `mt_adjustments_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+
+--
+-- Constraints for table `mt_receipts`
+--
+ALTER TABLE `mt_receipts`
+  ADD CONSTRAINT `mt_receipts_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+
+--
+-- Constraints for table `mt_requests`
+--
+ALTER TABLE `mt_requests`
+  ADD CONSTRAINT `mt_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `mt_request_details`
+--
+ALTER TABLE `mt_request_details`
+  ADD CONSTRAINT `mt_request_details_ibfk_1` FOREIGN KEY (`mt_request_id`) REFERENCES `mt_requests` (`id`),
+  ADD CONSTRAINT `mt_request_details_ibfk_2` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

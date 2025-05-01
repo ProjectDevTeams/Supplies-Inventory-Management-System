@@ -40,6 +40,7 @@ function PermissionAdd() {
             className="perm-form-input"
             value={warehouse}
             onChange={(e) => setWarehouse(e.target.value)}
+            placeholder="ชื่อคลังวัสดุ"
           />
         </div>
 
@@ -49,16 +50,18 @@ function PermissionAdd() {
             className="perm-form-input"
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
+            placeholder="ชื่อกลุ่มผู้ใช้"
           />
         </div>
 
         {Object.entries(groupedPermissions).map(([group, items]) => (
           <div key={group} className="perm-form-section">
             <div className="perm-form-section-title">{group}</div>
-            <div className="perm-form-checkbox-group">
+            <div className="perm-form-checkbox-list">
               {items.map((item) => (
-                <label key={item} className="perm-form-checkbox-item">
+                <label className="perm-form-checkbox-item">
                   <input
+                    className="custom-checkbox"
                     type="checkbox"
                     checked={permissions[item] || false}
                     onChange={() => handleCheckboxChange(item)}

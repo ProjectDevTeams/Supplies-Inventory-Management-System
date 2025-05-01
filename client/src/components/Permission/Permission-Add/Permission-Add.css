@@ -1,18 +1,26 @@
 .perm-form-container {
-  margin-left: 200px;
-  padding: 2em 2.5em;
+  width: 100%;
+  padding: 1em;
+  background-color: #f5f8fc;
   box-sizing: border-box;
+  margin: 0 auto;
+  margin-left: 0.1em;
+  margin-top: -1em;
 }
 
 .perm-form {
+  background: #ffffff;
+  border-radius: 10px;
   padding: 2em;
+  width: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 1.5em;
+  gap: 1.8em;
   font-family: 'Segoe UI', sans-serif;
+  font-size: 0.95em;
 }
 
-/* แถวฟอร์ม */
 .perm-form-row {
   display: flex;
   align-items: center;
@@ -20,85 +28,81 @@
 }
 
 .perm-form-label {
-  width: 100px;
+  width: 110px;
   font-weight: bold;
-  color: #222;
+  color: #2c3e50;
 }
 
 .perm-form-input {
   flex: 1;
-  padding: 0.5em 0.8em;
+  max-width: 300px;
+  padding: 0.6em 1em;
   font-size: 1em;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-/* กล่องสิทธิ์ */
 .perm-form-section {
-  border-top: 1px solid #eee;
-  padding-top: 1em;
+  padding-top: 1.2em;
+  border-top: 1px solid #e1e1e1;
 }
 
 .perm-form-section-title {
   font-weight: bold;
-  margin-bottom: 0.5em;
   color: #003366;
+  margin-bottom: 0.7em;
+  font-size: 1.05em;
 }
 
-.perm-form-checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
+.perm-form-checkbox-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.4em 1.2em;
   padding-left: 1em;
 }
 
 .perm-form-checkbox-item {
   display: flex;
   align-items: center;
-  gap: 0.5em;
-  font-size: 0.95em;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
 }
 
-/* ปุ่มบันทึก */
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  font-size: 20px;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+}
+
 .perm-form-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1em;
+  padding-top: 1em;
 }
 
 .perm-form-submit {
   background-color: #28a745;
   color: white;
-  padding: 0.7em 1.6em;
-  font-size: 1em;
+  padding: 0.6em 1.6em;
+  font-size: 0.95em;
   font-weight: bold;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .perm-form-submit:hover {
   background-color: #218838;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .perm-form-container {
-    margin-left: 0;
-    padding: 1.5em;
-  }
-
-  .perm-form-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .perm-form-label {
-    width: 100%;
-  }
-
-  .perm-form-checkbox-group {
-    padding-left: 0;
-  }
+  transform: translateY(-1px);
 }
