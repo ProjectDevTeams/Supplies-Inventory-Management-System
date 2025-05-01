@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ เพิ่มบรรทัดนี้
 import "./Permission-Content.css";
 
 function PermissionContent() {
+  const navigate = useNavigate(); // ✅ ใช้งาน hook
   const initialData = [
     ["01", "แอดมิน ฝ่ายบริการโครงสร้างพื้นฐานฯ", "27 มี.ค. 65", "24 พ.ย. 65"],
     ["02", "สำนักงานความร่วมมืออุตสาหกรรม", "27 มี.ค. 65", "—"],
@@ -41,7 +43,12 @@ function PermissionContent() {
             <span className="perm-search-icon">🔍</span>
             <input type="text" placeholder="ค้นหา" className="perm-search-input" />
           </div>
-          <button className="perm-add-btn">+ เพิ่มสิทธิ์</button>
+          <button
+            className="perm-add-btn"
+            onClick={() => navigate("/permission/add")} // ✅ ไปหน้าเพิ่มสิทธิ์
+          >
+            + เพิ่มสิทธิ์
+          </button>
         </div>
       </div>
 

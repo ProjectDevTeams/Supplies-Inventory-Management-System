@@ -12,14 +12,11 @@ import HumanPage from "./pages/Human/HumanPage";
 import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
 import ReportPage from "./pages/Report/ReportPage";
 import PermissionPage from "./pages/Permission/PermissionPage";
+import PermissionAddPage from "./pages/Permission/PermissionAdd/PermissionAddPage";
 import SettingPage from "./pages/Setting/SettingPage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
-
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
-
-
-
 
 function App() {
   return (
@@ -28,7 +25,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/consumable" element={<ConsumablePage />}/>
+        <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
@@ -37,12 +34,11 @@ function App() {
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/permission" element={<PermissionPage />} />
+        <Route path="/permission/add" element={<PermissionAddPage />} />
         <Route path="/setting" element={<SettingPage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
-
-        <Route path="/userstuff " element={<UserStuffPage />} />
-
+        <Route path="/userstuff" element={<UserStuffPage />} />
       </Routes>
     </BrowserRouter>
   );

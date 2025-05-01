@@ -1,0 +1,81 @@
+import React, { useState } from "react";
+import "./Permission-Add.css";
+
+function PermissionAdd() {
+  const [warehouse, setWarehouse] = useState("");
+  const [groupName, setGroupName] = useState("");
+  const [permissions, setPermissions] = useState({});
+
+  const handleCheckboxChange = (key) => {
+    setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ warehouse, groupName, permissions });
+    alert("บันทึกสิทธิ์เรียบร้อยแล้ว");
+  };
+
+  const groupedPermissions = {
+    "เมนูที่ใช้บ่อย": ["วัสดุสิ้นเปลือง"],
+    "วัสดุสิ้นเปลือง": ["จัดการข้อมูล", "จัดการหมวดหมู่", "หน่วยนับ"],
+    "เบิกวัสดุ": ["รายการเบิกวัสดุ", "ติดตามสถานะเบิก", "รายการขอจัดซื้อเพิ่มเติม"],
+    "ประวัติเบิก/จ่าย/ปรับยอด": ["ประวัติทั้งหมด", "ประวัติรับเข้า", "ประวัติเบิก", "ประวัติปรับยอด"],
+    "รายงาน": [
+      "รายงานยอดคงเหลือวัสดุ",
+      "รายงานการรับเข้าแต่ละเดือน",
+      "รายงานรายจ่ายประจำปี",
+      "รายงานการเบิก-จ่าย",
+      "รายงานวัสดุใกล้หมดสต็อก"
+    ],
+    "อื่นๆ": ["อนุมัติเบิกวัสดุ", "รับเข้าวัสดุ", "ปรับยอด", "บุคลากร", "บริษัท/ห้าง/ร้าน", "แบ่งสิทธิ์"]
+  };
+
+  return (
+    <div className="perm-form-container">
+      <form className="perm-form" onSubmit={handleSubmit}>
+        <div className="perm-form-row">
+          <label className="perm-form-label">คลังวัสดุ</label>
+          <input
+            className="perm-form-input"
+            value={warehouse}
+            onChange={(e) => setWarehouse(e.target.value)}
+          />
+        </div>
+
+        <div className="perm-form-row">
+          <label className="perm-form-label">ชื่อกลุ่ม</label>
+          <input
+            className="perm-form-input"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+          />
+        </div>
+
+        {Object.entries(groupedPermissions).map(([group, items]) => (
+          <div key={group} className="perm-form-section">
+            <div className="perm-form-section-title">{group}</div>
+            <div className="perm-form-checkbox-group">
+              {items.map((item) => (
+                <label key={item} className="perm-form-checkbox-item">
+                  <input
+                    type="checkbox"
+                    checked={permissions[item] || false}
+                    onChange={() => handleCheckboxChange(item)}
+                  />
+                  {item}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div className="perm-form-actions">
+          <button type="submit" className="perm-form-submit">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default PermissionAdd;
