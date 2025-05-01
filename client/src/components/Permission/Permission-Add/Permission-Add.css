@@ -8,6 +8,12 @@
   margin-top: -1em;
 }
 
+.perm-form-title {
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #003366;
+}
+
 .perm-form {
   background: #ffffff;
   border-radius: 10px;
@@ -58,14 +64,18 @@
 .perm-form-checkbox-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.4em 1.2em;
+  gap: 0.4em 5em;
   padding-left: 1em;
 }
 
 .perm-form-checkbox-item {
+  min-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   font-size: 1rem;
   margin-bottom: 0.4rem;
 }
@@ -104,5 +114,5 @@
 
 .perm-form-submit:hover {
   background-color: #218838;
-  transform: translateY(-1px);
+  transform: scale(1.05);
 }

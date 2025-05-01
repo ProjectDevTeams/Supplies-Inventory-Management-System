@@ -34,6 +34,7 @@ function PermissionAdd() {
   return (
     <div className="perm-form-container">
       <form className="perm-form" onSubmit={handleSubmit}>
+      <div className="perm-form-title">แบ่งสิทธิ์</div>
         <div className="perm-form-row">
           <label className="perm-form-label">คลังวัสดุ</label>
           <input
