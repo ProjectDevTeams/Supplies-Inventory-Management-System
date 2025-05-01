@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import "./Consumable-table.css";
 import AddnewPopup from "./addnew-popup"; 
 import Consumable from "./Consumablebar";
@@ -32,27 +32,22 @@ const itemsPerPage = 5;
 function Consumable_Table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
+  const [inputPage, setInputPage] = useState("");
 
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
+  useEffect(() => {
+    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
+  }, [currentPage]);
 
   return (
-    <div className="table-container-consumable" id="consumable-table-container">
-      
-      {/* ✅ เรียก Consumable bar พร้อมส่ง onAddClick ลงไป */}
+    <div className="table-container-consumable">
       <Consumable onAddClick={() => setShowPopup(true)} />
 
-      <table className="consumable-table" id="consumable-main-table">
+      <table className="consumable-table">
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
             <th className="consumable-th">รหัส</th>
@@ -66,7 +61,6 @@ function Consumable_Table() {
             <th className="consumable-th">คงเหลือ</th>
           </tr>
         </thead>
-
         <tbody className="consumable-tbody">
           {currentItems.map((item, index) => (
             <tr key={index} className="consumable-tr">
@@ -100,45 +94,36 @@ function Consumable_Table() {
         </tbody>
       </table>
 
-      {/* ✅ แสดง Popup ถ้า showPopup true */}
       {showPopup && <AddnewPopup onClose={() => setShowPopup(false)} />}
 
-      <div className="consumable-pagination">
-        <strong className="pagination-info" id="pagination-info">
+      <div className="consumable-pagination-wrapper">
+        <div className="consumable-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
-        </strong>
-        <div className="pagination-buttons" id="pagination-buttons">
-          {currentPage > 1 ? (
-            <a href="#" className="page-button prev" onClick={(e) => { e.preventDefault(); handlePrevPage(); }}>ก่อนหน้า</a>
-          ) : (
-            <span className="disabled page-button">ก่อนหน้า</span>
-          )}
+        </div>
+        <div className="consumable-pagination-buttons">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(page =>
-              page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)
-            )
-            .map((page, index, arr) => (
-              <React.Fragment key={page}>
-                {index > 0 && page - arr[index - 1] > 1 && <span className="ellipsis">...</span>}
-                <a
-                  href="#"
-                  className={`page-button ${currentPage === page ? "current" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentPage(page);
-                  }}
-                >
-                  {page}
-                </a>
-              </React.Fragment>
-            ))}
+          <input
+            type="number"
+            className="consumable-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            placeholder={`${currentPage} / ${totalPages}`}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+          />
 
-          {currentPage < totalPages ? (
-            <a href="#" className="page-button next" onClick={(e) => { e.preventDefault(); handleNextPage(); }}>ถัดไป</a>
-          ) : (
-            <span className="disabled page-button">ถัดไป</span>
-          )}
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
         </div>
       </div>
     </div>

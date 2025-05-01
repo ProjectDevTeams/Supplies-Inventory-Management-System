@@ -68,55 +68,99 @@
   color: #003366;
 }
 
-/* ✅ Pagination Container */
-.consumable-pagination {
-  display: flex;
-  align-items: center;
-  margin-top: 1em;
-  font-size: 0.95em;
-  width: 98%;
-  margin-left: auto;
-  margin-right: auto;
-  flex-wrap: wrap;
-}
-
-/* ✅ Left info */
-.pagination-info {
-  color: #333;
-}
-
-/* ✅ ปุ่มทั้งหมดชิดขวา */
-.pagination-buttons {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-/* ✅ ปุ่ม */
-.page-button {
-  padding: 0.3em 0.6em;
-  margin: 0 0.2em;
-  border: 1px solid #ccc;
-  background-color: white;
-  text-decoration: none;
-  color: #000;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.page-button.current {
-  background-color: #2176bd;
-  color: white;
-}
-
-.page-button.disabled {
-  color: #aaa;
-  cursor: default;
-  pointer-events: none;
-}
-
-.ellipsis {
-  margin: 0 0.5em;
-  color: #999;
-}
+  /* ✅ Pagination แบบใหม่ */
+  .consumable-pagination-wrapper {
+    width: 98%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+  }
+  
+  .consumable-pagination-info {
+    color: #333;
+    font-size: 14px;
+  }
+  
+  .consumable-pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .consumable-pagination-buttons button {
+    padding: 0.5rem 1.2rem;
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .consumable-pagination-buttons button:hover {
+    background-color: #e6f0ff;
+  }
+  
+  .consumable-pagination-buttons button:disabled {
+    background-color: #eeeeee;
+    color: #aaa;
+    pointer-events: none;
+  }
+  
+  .consumable-pagination-buttons .active {
+    background-color: #2176bd;
+    color: white;
+  }
+  
+  /* ช่องเลขหน้า */
+  .consumable-page-input {
+    width: 55px;
+    text-align: center;
+    padding: 0.4rem 0.6rem;
+    border: 2px solid rgba(0, 123, 255, 0.3);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  
+  .consumable-page-input::placeholder {
+    color: white;
+    opacity: 1;
+  }
+  
+  .consumable-page-input:focus {
+    outline: none;
+    border-color: rgba(0, 123, 255, 0.7);
+  }
+  
+  .consumable-page-input:focus::placeholder {
+    color: transparent;
+  }
+  
+  .consumable-page-input::-webkit-inner-spin-button,
+  .consumable-page-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* ✅ Responsive */
+  @media (max-width: 768px) {
+    .consumable-th,
+    .consumable-td {
+      font-size: 0.85em;
+      padding: 0.5em;
+    }
+  
+    .consumable-pagination-wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5em;
+    }
+  }
+  
