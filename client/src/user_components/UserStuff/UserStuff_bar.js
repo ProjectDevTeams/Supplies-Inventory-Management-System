@@ -4,7 +4,7 @@ import "./UserStuff_bar.css";
 // ✅ import ตารางแต่ละอัน
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
-import UserHistoryTable from "../../user_components/UserStuff/็๊UserHistory/UserHistoryTable";
+import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
 import UserMoreTable from "../../user_components/UserStuff/UserMore/UserMoreTable";
 
 function UserStuffbar() {

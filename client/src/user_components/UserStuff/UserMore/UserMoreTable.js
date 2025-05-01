@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HelloMessage() {
+function UserMoreTable() {
   return (
     <div style={{ padding: "20px", fontSize: "18px" }}>
       More
@@ -8,4 +8,4 @@ function HelloMessage() {
   );
 }
 
-export default HelloMessage;
+export default UserMoreTable;

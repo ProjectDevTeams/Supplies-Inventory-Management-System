@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-function HelloMessage() {
+function UserFollowTable() {
   return (
     <div style={{ padding: "20px", fontSize: "18px" }}>
       Follow
@@ -9,4 +9,4 @@ function HelloMessage() {
   );
 }
 
-export default HelloMessage;
+export default UserFollowTable;
