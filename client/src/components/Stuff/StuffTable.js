@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StuffTable.css';
 
 const mockData = [
@@ -10,40 +10,52 @@ const mockData = [
   { id: 19, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "rejected" },
 ];
 
-function StuffTable() {
+export default function StuffTable() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState(1);
-  const [sortAsc, setSortAsc] = useState(true);
-
+  const [inputPage, setInputPage]     = useState('');
   const itemsPerPage = 4;
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  const totalPages   = Math.ceil(mockData.length / itemsPerPage);
 
-  const sortedData = [...mockData].sort((a, b) =>
-    sortAsc ? a.id - b.id : b.id - a.id
-  );
+  // บังคับให้ inputPage กลับมาเป็น '' ทุกครั้งที่ currentPage เปลี่ยน
+  useEffect(() => {
+    setInputPage('');
+  }, [currentPage]);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfLastItem  = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems     = mockData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const renderStatusText = (status) => {
-    switch (status) {
-      case 'pending': return 'รออนุมัติ';
-      case 'approved': return 'อนุมัติ';
-      case 'rejected': return 'ไม่อนุมัติ';
-      default: return '-';
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
-  const handleSort = () => setSortAsc(!sortAsc);
-  const handlePrev = () => { if (currentPage > 1) setCurrentPage(prev => { setInputPage(prev - 1); return prev - 1; }); };
-  const handleNext = () => { if (currentPage < totalPages) setCurrentPage(next => { setInputPage(next + 1); return next + 1; }); };
-  const handleChange = (e) => setInputPage(e.target.value);
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      const val = parseInt(inputPage);
-      if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
     }
+  };
+
+  const handleChange = e => {
+    setInputPage(e.target.value);
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      const v = parseInt(inputPage, 10);
+      if (!isNaN(v) && v >= 1 && v <= totalPages) {
+        setCurrentPage(v);
+      }
+      e.target.blur();
+    }
+  };
+
+  const renderStatus = status => {
+    if (status === 'pending')  return 'รออนุมัติ';
+    if (status === 'approved') return 'อนุมัติ';
+    if (status === 'rejected') return 'ไม่อนุมัติ';
+    return '-';
   };
 
   return (
@@ -52,7 +64,7 @@ function StuffTable() {
         <table className="stuff-table">
           <thead>
             <tr>
-              <th onClick={handleSort} style={{ cursor: 'pointer' }}>ลำดับ {sortAsc ? '▲' : '▼'}</th>
+              <th>ลำดับ</th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
               <th>จำนวน</th>
@@ -69,7 +81,7 @@ function StuffTable() {
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
                 <td className={`status ${item.status}`}>
-                  {renderStatusText(item.status)}
+                  {renderStatus(item.status)}
                 </td>
               </tr>
             ))}
@@ -81,23 +93,28 @@ function StuffTable() {
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
-            <div className="page-box">
-              <input
-                type="number"
-                className="page-box-input"
-                value={inputPage}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-              />
-              <span className="page-box-total">/ {totalPages}</span>
-            </div>
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
+            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>
+              ก่อนหน้า
+            </button>
+
+            <input
+              type="number"
+              className="org-page-input"
+              placeholder={`${currentPage} / ${totalPages}`}
+              value={inputPage}
+              min={1}
+              max={totalPages}
+              onFocus={() => setInputPage('')}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+
+            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>
+              ถัดไป
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default StuffTable;

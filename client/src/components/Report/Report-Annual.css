@@ -1,11 +1,7 @@
 .report-annual-container {
   width: 100%;
-  padding: 1em;
-  background-color: #f5f8fc;
   box-sizing: border-box;
   margin: 0 auto;
-  margin-left: 0.1em;
-  margin-top: -1em;
 }
 
 .report-annual-table {

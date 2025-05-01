@@ -1,63 +1,43 @@
+// StuffTablePurchase.js
 import React, { useState } from 'react';
 import './StuffTable.css';
 
 const purchaseData = [
-  { id: 1, code: "001-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "5 ม.ค. 68", status: "approved" },
-  { id: 2, code: "002-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "pending" },
-  { id: 3, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 3, date: "15 ม.ค. 68", status: "rejected" },
-  { id: 4, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "18 ม.ค. 68", status: "approved" },
-  { id: 5, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 5, date: "20 ม.ค. 68", status: "approved" },
-  { id: 6, code: "006-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "25 ม.ค. 68", status: "pending" },
+  { id:1, code:"001-01/2568", stock:"วัสดุในคลัง", amount:2, date:"5 ม.ค. 68", status:"approved" },
+  { id:2, code:"002-01/2568", stock:"วัสดุในคลัง", amount:1, date:"10 ม.ค. 68", status:"pending" },
+  { id:3, code:"003-01/2568", stock:"วัสดุในคลัง", amount:3, date:"15 ม.ค. 68", status:"rejected" },
+  { id:4, code:"004-01/2568", stock:"วัสดุในคลัง", amount:2, date:"18 ม.ค. 68", status:"approved" },
+  { id:5, code:"005-01/2568", stock:"วัสดุในคลัง", amount:5, date:"20 ม.ค. 68", status:"approved" },
+  { id:6, code:"006-01/2568", stock:"วัสดุในคลัง", amount:1, date:"25 ม.ค. 68", status:"pending" },
 ];
 
-function StuffTablePurchase() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState(1);
-  const [sortAsc, setSortAsc] = useState(true);
+export default function StuffTablePurchase(){
+  const [page, setPage] = useState(1);
+  const [input, setInput] = useState('');
+  const [asc, setAsc] = useState(true);
+  const perPage = 4;
+  const total  = Math.ceil(purchaseData.length / perPage);
 
-  const itemsPerPage = 4;
-  const totalPages = Math.ceil(purchaseData.length / itemsPerPage);
+  const sorted = [...purchaseData].sort((a,b)=> asc? a.id-b.id : b.id-a.id);
+  const items  = sorted.slice((page-1)*perPage, page*perPage);
 
-  const sortedData = [...purchaseData].sort((a, b) => sortAsc ? a.id - b.id : b.id - a.id);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const toggleSort = () => setSortAsc(!sortAsc);
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      const prev = currentPage - 1;
-      setCurrentPage(prev);
-      setInputPage(prev);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      const next = currentPage + 1;
-      setCurrentPage(next);
-      setInputPage(next);
-    }
-  };
-
-  const handleChange = (e) => setInputPage(e.target.value);
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      const value = parseInt(inputPage);
-      if (!isNaN(value) && value >= 1 && value <= totalPages) {
-        setCurrentPage(value);
+  const toggleSort = ()=> setAsc(!asc);
+  const prev       = ()=> page>1 && (setPage(p=>p-1), setInput(''));
+  const next       = ()=> page<total && (setPage(p=>p+1), setInput(''));
+  const onKey      = e=> {
+    if(e.key==='Enter'){
+      const v = Number(input);
+      if(v>=1&&v<=total) {
+        setPage(v);
       }
+      e.target.blur();
     }
   };
-
-  const renderStatusText = (status) => {
-    switch (status) {
-      case 'pending': return 'รออนุมัติ';
-      case 'approved': return 'อนุมัติ';
-      case 'rejected': return 'ไม่อนุมัติ';
-      default: return '-';
-    }
-  };
+  const renderStatus = st=> ({
+    pending:'รออนุมัติ',
+    approved:'อนุมัติ',
+    rejected:'ไม่อนุมัติ'
+  }[st]||'-');
 
   return (
     <div className="table-wrapper">
@@ -65,7 +45,9 @@ function StuffTablePurchase() {
         <table className="stuff-table">
           <thead>
             <tr>
-              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>ลำดับ {sortAsc ? '▲' : '▼'}</th>
+              <th onClick={toggleSort} style={{cursor:'pointer'}}>
+                ลำดับ {asc?'▲':'▼'}
+              </th>
               <th>เลขที่ใบเบิก</th>
               <th>คลังวัสดุ</th>
               <th>จำนวน</th>
@@ -74,14 +56,16 @@ function StuffTablePurchase() {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map(item => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.code}</td>
-                <td>{item.stock}</td>
-                <td>{item.amount}</td>
-                <td>{item.date}</td>
-                <td className={`status ${item.status}`}>{renderStatusText(item.status)}</td>
+            {items.map(i=>(
+              <tr key={i.id}>
+                <td>{i.id}</td>
+                <td>{i.code}</td>
+                <td>{i.stock}</td>
+                <td>{i.amount}</td>
+                <td>{i.date}</td>
+                <td className={`status ${i.status}`}>
+                  {renderStatus(i.status)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -89,26 +73,25 @@ function StuffTablePurchase() {
 
         <div className="stuff-pagination">
           <div className="stuff-pagination-info">
-            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, purchaseData.length)} จาก {purchaseData.length} แถว
+            แสดง {(page-1)*perPage+1} ถึง {Math.min(page*perPage,purchaseData.length)} จาก {purchaseData.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
-            <div className="page-box">
-              <input
-                type="number"
-                className="page-box-input"
-                value={inputPage}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-              />
-              <span className="page-box-total">/ {totalPages}</span>
-            </div>
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
+            <button className="btn" disabled={page===1} onClick={prev}>ก่อนหน้า</button>
+            <input
+              type="number"
+              className="org-page-input"
+              placeholder={`${page} / ${total}`}
+              value={input}
+              min="1"
+              max={total}
+              onFocus={() => setInput('')}
+              onChange={e=>setInput(e.target.value)}
+              onKeyDown={onKey}
+            />
+            <button className="btn" disabled={page===total} onClick={next}>ถัดไป</button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default StuffTablePurchase;

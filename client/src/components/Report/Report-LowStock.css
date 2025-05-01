@@ -1,29 +1,26 @@
+/* Container หลัก */
 .report-lowstock-container {
   width: 100%;
-  padding: 1em;
   box-sizing: border-box;
   margin: 0 auto;
-  margin-left: 0.1em;
-  margin-top: -1em;
+  margin-top: 1em;
 }
 
 /* ส่วนควบคุมด้านบน */
 .report-lowstock-controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   margin-bottom: 1em;
   gap: 1em;
 }
 
-.report-lowstock-select-group,
 .report-lowstock-search-group {
   display: flex;
   align-items: center;
   gap: 0.5em;
 }
 
-.report-lowstock-select-group select,
 .report-lowstock-search-group input {
   padding: 0.4em 0.6em;
   font-size: 1em;
@@ -31,7 +28,7 @@
   border-radius: 5px;
 }
 
-/* ตาราง */
+/* ตารางแสดงรายการวัสดุ */
 .report-lowstock-table {
   width: 100%;
   min-width: 800px;
@@ -55,7 +52,7 @@
   color: #003366;
 }
 
-/* Pagination แบบใหม่ (มี input) */
+/* ส่วน Pagination */
 .report-lowstock-pagination-wrapper {
   width: 100%;
   display: flex;
@@ -101,7 +98,7 @@
   pointer-events: none;
 }
 
-/* กล่องใส่หมายเลขหน้า */
+/* กล่องใส่หมายเลขหน้า (input) */
 .report-lowstock-page-input {
   width: 50px;
   text-align: center;
@@ -135,7 +132,7 @@
   margin: 0;
 }
 
-/* Responsive */
+/* Responsive สำหรับจอแคบ */
 @media (max-width: 768px) {
   .report-lowstock-table th,
   .report-lowstock-table td {
@@ -147,5 +144,10 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5em;
+  }
+
+  .report-lowstock-controls {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

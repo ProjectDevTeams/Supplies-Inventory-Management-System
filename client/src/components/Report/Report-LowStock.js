@@ -19,7 +19,6 @@ function ReportLowStock() {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [warehouse, setWarehouse] = useState("ทั้งหมด");
 
   const filteredData = allData.filter(row =>
     row[0].toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,14 +36,6 @@ function ReportLowStock() {
   return (
     <div className="report-lowstock-container">
       <div className="report-lowstock-controls">
-        <div className="report-lowstock-select-group">
-          <label>คลังวัสดุ</label>
-          <select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
-            <option>ทั้งหมด</option>
-            <option>วัสดุในคลัง</option>
-            <option>วัสดุนอกคลัง</option>
-          </select>
-        </div>
         <div className="report-lowstock-search-group">
           <label>ค้นหา</label>
           <input

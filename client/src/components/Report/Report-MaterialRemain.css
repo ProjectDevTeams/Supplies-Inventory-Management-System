@@ -1,10 +1,7 @@
 .report-remain-container {
   width: 100%;
-  padding: 1em;
   box-sizing: border-box;
   margin: 0 auto;
-  margin-left: 0.1em;
-  margin-top: -1em;
 }
 
 /* ปุ่ม Export Excel ชิดขวา */
