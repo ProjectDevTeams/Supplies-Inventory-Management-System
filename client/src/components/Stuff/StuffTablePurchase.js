@@ -46,8 +46,8 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
   };
 
   return (
-    <div className="table-wrapper">
-      <div className="table-container">
+    <div className="stuff-wrapper">
+      <div className="stuff-container">
         <table className="stuff-table">
           <thead>
             <tr>
@@ -69,7 +69,9 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
-                <td className={`status ${i.status}`}>{renderStatus(i.status)}</td>
+                <td className={`stuff-status stuff-${i.status}`}>
+                  {renderStatus(i.status)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -80,17 +82,17 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
+            <button className="stuff-btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
             <input
               type="text"
-              className="org-page-input"
+              className="stuff-page-input"
               placeholder={`${page} / ${total}`}
               value={input}
               onFocus={() => setInput('')}
               onChange={e => setInput(e.target.value)}
               onKeyDown={onKey}
             />
-            <button className="btn" disabled={page === total} onClick={next}>ถัดไป</button>
+            <button className="stuff-btn" disabled={page === total} onClick={next}>ถัดไป</button>
           </div>
         </div>
       </div>

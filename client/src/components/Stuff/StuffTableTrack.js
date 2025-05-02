@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import './StuffTable.css';
 
 const trackData = [
-  { id: 30, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 29, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 28, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "ไม่อนุมัติ" },
-  { id: 27, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 26, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "ไม่อนุมัติ" },
+  { id: 1, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 2, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 3, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "ไม่อนุมัติ" },
+  { id: 4, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
+  { id: 5, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "ไม่อนุมัติ" },
 ];
 
 export default function StuffTableTrack({ searchTerm = '' }) {
@@ -41,8 +41,8 @@ export default function StuffTableTrack({ searchTerm = '' }) {
   };
 
   return (
-    <div className="table-wrapper">
-      <div className="table-container">
+    <div className="stuff-wrapper">
+      <div className="stuff-container">
         <table className="stuff-table">
           <thead>
             <tr>
@@ -64,7 +64,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
-                <td className={`status ${i.status.includes('ไม่') ? 'rejected' : 'approved'}`}>
+                <td className={`stuff-status stuff-${i.status.includes('ไม่') ? 'rejected' : 'approved'}`}>
                   {renderStatus(i.status)}
                 </td>
               </tr>
@@ -77,17 +77,17 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
+            <button className="stuff-btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
             <input
               type="text"
-              className="org-page-input"
+              className="stuff-page-input"
               placeholder={`${page} / ${total}`}
               value={input}
               onFocus={() => setInput('')}
               onChange={e => setInput(e.target.value)}
               onKeyDown={onKey}
             />
-            <button className="btn" disabled={page === total} onClick={next}>ถัดไป</button>
+            <button className="stuff-btn" disabled={page === total} onClick={next}>ถัดไป</button>
           </div>
         </div>
       </div>
