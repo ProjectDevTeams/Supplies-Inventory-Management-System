@@ -53,12 +53,11 @@
 }
 
 .human-pagination-wrapper {
-  width: 98%;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1em;
+  margin-top: 0.5rem;
 }
 
 .human-pagination-info {
