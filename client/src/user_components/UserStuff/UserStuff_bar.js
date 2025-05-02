@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import "./UserStuff_bar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
-import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup"; // ✅ ใช้ popup แทน
+import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup";
 
 function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
-  const [showMorePopup, setShowMorePopup] = useState(false); // ✅ state เปิดป๊อปอัป
+  const [showMorePopup, setShowMorePopup] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -48,7 +50,7 @@ function UserStuffbar() {
 
         <div className="userstuff-right">
           <div className="userstuff-search-box">
-            <span className="userstuff-search-icon">🔍</span>
+            <FontAwesomeIcon icon={faSearch} className="userstuff-search-icon" />
             <input
               type="text"
               placeholder="ค้นหา"
@@ -70,7 +72,6 @@ function UserStuffbar() {
         </div>
       </div>
 
-      {/* ✅ ป๊อปอัปสำหรับรายการขอจัดซื้อเพิ่มเติม */}
       {showMorePopup && <UserMorePopup onClose={() => setShowMorePopup(false)} />}
     </>
   );
