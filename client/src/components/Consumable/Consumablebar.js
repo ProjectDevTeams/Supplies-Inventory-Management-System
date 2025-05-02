@@ -2,10 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router";
 import "./Consumablebar.css";
 
-function Consumable({ onAddClick }) {
-  const navigate = useNavigate(); // สร้างตัวแปร navigate
+function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
+  const navigate = useNavigate();
 
-
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div>
@@ -14,7 +16,12 @@ function Consumable({ onAddClick }) {
 
         <div className="toolbar">
           <div className="search-container">
-            <input type="text" placeholder="ค้นหา" />
+            <input
+              type="text"
+              placeholder="ค้นหา"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
             <span className="search-icon">🔍</span>
           </div>
 
@@ -23,18 +30,23 @@ function Consumable({ onAddClick }) {
               สินค้าใกล้หมดสต็อก <span className="count">60</span> รายการ
             </button>
 
-            {/* ✅ ปุ่มเพิ่มรายการ กดแล้วเรียก onAddClick */}
             <button className="btn success" onClick={onAddClick}>
               + เพิ่มรายการ
             </button>
 
+            <button
+              className="btn primary"
+              onClick={() => navigate("/consumable/categorize")}
+            >
+              จัดการหมวดหมู่
+            </button>
 
-            <button className="btn primary" onClick={() => navigate("/consumable/categorize")}>จัดการหมวดหมู่</button>
-            {/* <button className="btn dark">จัดการหน่วยนับ</button> */}
-            <button className="btn dark" onClick={() => navigate("/consumable/unitscount")}>จัดการหน่วยนับ</button>
-
-
-
+            <button
+              className="btn dark"
+              onClick={() => navigate("/consumable/unitscount")}
+            >
+              จัดการหน่วยนับ
+            </button>
           </div>
         </div>
       </div>

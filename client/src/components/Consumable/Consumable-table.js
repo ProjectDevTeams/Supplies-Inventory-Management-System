@@ -1,4 +1,5 @@
 import React, { useState , useEffect} from "react";
+
 import "./Consumable-table.css";
 import AddnewPopup from "./addnew-popup"; 
 import Consumable from "./Consumablebar";
@@ -29,7 +30,9 @@ const mockData = [
 
 const itemsPerPage = 5;
 
-function Consumable_Table() {
+function Consumable_Table({ searchTerm, setSearchTerm }) {
+
+  // const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [inputPage, setInputPage] = useState("");
@@ -37,7 +40,21 @@ function Consumable_Table() {
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = mockData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const filteredData = mockData.filter(
+    (item) =>
+      item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.status.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  // const indexOfLastItem = currentPage * itemsPerPage;
+  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
@@ -45,7 +62,11 @@ function Consumable_Table() {
 
   return (
     <div className="table-container-consumable">
-      <Consumable onAddClick={() => setShowPopup(true)} />
+      <Consumable 
+        onAddClick={() => setShowPopup(true)}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
 
       <table className="consumable-table">
         <thead className="consumable-thead">
