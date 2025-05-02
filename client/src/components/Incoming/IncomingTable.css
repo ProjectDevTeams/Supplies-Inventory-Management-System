@@ -1,4 +1,4 @@
-.table-wrapper {
+.incoming-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,7 +6,7 @@
   padding: 0.5rem;
 }
 
-.table-container {
+.incoming-container {
   width: 100%;
   max-width: 1200px;
   margin-top: 0.2rem;
@@ -35,18 +35,11 @@
   font-weight: bold;
 }
 
-.company-cell {
-  text-align: left;
-  font-weight: 500;
+.incoming-sortable-header {
+  cursor: pointer;
 }
 
-.total-cell {
-  text-align: right;
-  font-weight: bold;
-}
-
-/* Pagination */
-.pagination-wrapper {
+.incoming-pagination-wrapper {
   width: 100%;
   max-width: 1200px;
   display: flex;
@@ -56,18 +49,18 @@
   flex-wrap: wrap;
 }
 
-.pagination-info {
+.incoming-pagination-info {
   color: #333;
   font-size: 14px;
 }
 
-.pagination-buttons {
+.incoming-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.pagination-buttons .btn {
+.incoming-btn {
   padding: 0.5rem 1.2rem;
   background-color: #ffffff;
   color: #333;
@@ -77,17 +70,17 @@
   cursor: pointer;
 }
 
-.pagination-buttons .btn:hover {
+.incoming-btn:hover {
   background-color: #e6f0ff;
 }
 
-.pagination-buttons .btn:disabled {
+.incoming-btn:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-.page-input {
+.incoming-page-input {
   width: 60px;
   text-align: center;
   padding: 0.4rem 0.6rem;
@@ -101,22 +94,18 @@
   -moz-appearance: textfield;
 }
 
-.page-input:focus {
+.incoming-page-input:focus {
   outline: none;
   border-color: rgba(0, 123, 255, 0.7);
 }
 
-.page-input::-webkit-inner-spin-button,
-.page-input::-webkit-outer-spin-button {
+.incoming-page-input::-webkit-inner-spin-button,
+.incoming-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.page-input::placeholder {
+.incoming-page-input::placeholder {
   color: white;
   opacity: 1;
-}
-
-.sortable-header {
-  cursor: pointer;
 }

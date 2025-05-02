@@ -13,17 +13,15 @@ const mockIncomingData = [
 ];
 
 export default function IncomingTable({ searchTerm = '', onDataReady }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState('');
-  const [asc, setAsc] = useState(true);
-  const itemsPerPage = 5;
+  const [incomingCurrentPage, setIncomingCurrentPage] = useState(1);
+  const [incomingInputPage, setIncomingInputPage] = useState('');
+  const [incomingAsc, setIncomingAsc] = useState(true);
+  const incomingItemsPerPage = 5;
 
-  // เรียงข้อมูลก่อน
   const sortedData = [...mockIncomingData].sort((a, b) =>
-    asc ? a.id - b.id : b.id - a.id
+    incomingAsc ? a.id - b.id : b.id - a.id
   );
 
-  // 🔍 กรองข้อมูล
   const filteredData = sortedData.filter(item =>
     item.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.po.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -33,27 +31,27 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
 
   useEffect(() => {
     if (onDataReady) {
-      onDataReady(filteredData); // ส่งออกไปให้ export Excel
+      onDataReady(filteredData);
     }
   }, [filteredData, onDataReady]);
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const totalPages = Math.ceil(filteredData.length / incomingItemsPerPage);
+  const indexOfLastItem = incomingCurrentPage * incomingItemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - incomingItemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const toggleSort = () => setAsc(prev => !prev);
-  const handleNextPage = () => currentPage < totalPages && setCurrentPage(p => p + 1);
-  const handlePrevPage = () => currentPage > 1 && setCurrentPage(p => p - 1);
+  const toggleSort = () => setIncomingAsc(prev => !prev);
+  const handleNextPage = () => incomingCurrentPage < totalPages && setIncomingCurrentPage(p => p + 1);
+  const handlePrevPage = () => incomingCurrentPage > 1 && setIncomingCurrentPage(p => p - 1);
 
   return (
-    <div className="table-wrapper">
-      <div className="table-container">
+    <div className="incoming-wrapper">
+      <div className="incoming-container">
         <table className="incoming-table">
           <thead>
             <tr>
-              <th className="sortable-header" onClick={toggleSort}>
-                ลำดับ {asc ? "▲" : "▼"}
+              <th className="incoming-sortable-header" onClick={toggleSort}>
+                ลำดับ {incomingAsc ? "▲" : "▼"}
               </th>
               <th>บริษัท/ร้านค้า</th>
               <th>เลขที่ มอ.</th>
@@ -74,31 +72,31 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
           </tbody>
         </table>
 
-        <div className="pagination-wrapper">
-          <div className="pagination-info">
+        <div className="incoming-pagination-wrapper">
+          <div className="incoming-pagination-info">
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
           </div>
-          <div className="pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrevPage}>ก่อนหน้า</button>
+          <div className="incoming-pagination-buttons">
+            <button className="incoming-btn" disabled={incomingCurrentPage === 1} onClick={handlePrevPage}>ก่อนหน้า</button>
             <input
               type="text"
-              className="page-input"
-              placeholder={inputPage === '' ? `${currentPage} / ${totalPages}` : ''}
-              value={inputPage}
-              onFocus={() => setInputPage(' ')}
-              onChange={(e) => setInputPage(e.target.value)}
+              className="incoming-page-input"
+              placeholder={incomingInputPage === '' ? `${incomingCurrentPage} / ${totalPages}` : ''}
+              value={incomingInputPage}
+              onFocus={() => setIncomingInputPage('')}
+              onChange={(e) => setIncomingInputPage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  const page = parseInt(inputPage, 10);
+                  const page = parseInt(incomingInputPage, 10);
                   if (!isNaN(page) && page >= 1 && page <= totalPages) {
-                    setCurrentPage(page);
+                    setIncomingCurrentPage(page);
                   }
-                  setInputPage('');
+                  setIncomingInputPage('');
                   e.target.blur();
                 }
               }}
             />
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNextPage}>ถัดไป</button>
+            <button className="incoming-btn" disabled={incomingCurrentPage === totalPages} onClick={handleNextPage}>ถัดไป</button>
           </div>
         </div>
       </div>
