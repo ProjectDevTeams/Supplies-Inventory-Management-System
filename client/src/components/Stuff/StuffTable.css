@@ -1,4 +1,4 @@
-.table-wrapper {
+.stuff-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,7 +6,7 @@
   padding: 0.5rem;
 }
 
-.table-container {
+.stuff-container {
   width: 100%;
   max-width: 1200px;
   margin-top: 0.2rem;
@@ -34,12 +34,23 @@
   font-weight: bold;
 }
 
-/* ถ้าต้องการคง status color ให้คอมเมนต์ด้านล่าง */
-.status.pending,
-.status.approved,
-.status.rejected {
-  color: #333;
-  font-weight: normal;
+/* สถานะ */
+.stuff-status {
+  font-weight: bold;
+  padding: 0.4em 0.8em;
+  border-radius: 4px;
+}
+
+.stuff-pending {
+  color: #d48b00;
+}
+
+.stuff-approved {
+  color: #0f9d58;
+}
+
+.stuff-rejected {
+  color: #dc3545;
 }
 
 /* Pagination */
@@ -63,7 +74,7 @@
   gap: 0.5rem;
 }
 
-.stuff-pagination-buttons .btn {
+.stuff-btn {
   padding: 0.5rem 1.2rem;
   background-color: #ffffff;
   color: #333;
@@ -73,17 +84,17 @@
   cursor: pointer;
 }
 
-.stuff-pagination-buttons .btn:hover {
+.stuff-btn:hover {
   background-color: #e6f0ff;
 }
 
-.stuff-pagination-buttons .btn:disabled {
+.stuff-btn:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-.org-page-input {
+.stuff-page-input {
   width: 60px;
   text-align: center;
   padding: 0.4rem 0.6rem;
@@ -93,22 +104,20 @@
   background-color: #007bff;
   color: white;
   font-weight: bold;
-  appearance: textfield;
-  -moz-appearance: textfield;
 }
 
-.org-page-input:focus {
+.stuff-page-input:focus {
   outline: none;
   border-color: rgba(0, 123, 255, 0.7);
 }
 
-.org-page-input::-webkit-inner-spin-button,
-.org-page-input::-webkit-outer-spin-button {
+.stuff-page-input::-webkit-inner-spin-button,
+.stuff-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.org-page-input::placeholder {
+.stuff-page-input::placeholder {
   color: white;
   opacity: 1;
 }

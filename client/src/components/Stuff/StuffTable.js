@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './StuffTable.css';
 
 const mockData = [
@@ -43,8 +43,8 @@ export default function StuffTable({ searchTerm }) {
   const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   return (
-    <div className="table-wrapper">
-      <div className="table-container">
+    <div className="stuff-wrapper">
+      <div className="stuff-container">
         <table className="stuff-table">
           <thead>
             <tr>
@@ -66,7 +66,7 @@ export default function StuffTable({ searchTerm }) {
                 <td>{item.stock}</td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-                <td className={`status ${item.status}`}>
+                <td className={`stuff-status stuff-${item.status}`}>
                   {renderStatus(item.status)}
                 </td>
               </tr>
@@ -79,10 +79,10 @@ export default function StuffTable({ searchTerm }) {
             แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
           </div>
           <div className="stuff-pagination-buttons">
-            <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+            <button className="stuff-btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
             <input
               type="text"
-              className="org-page-input"
+              className="stuff-page-input"
               placeholder={`${currentPage} / ${totalPages}`}
               value={inputPage}
               onFocus={() => setInputPage('')}
@@ -98,7 +98,7 @@ export default function StuffTable({ searchTerm }) {
                 }
               }}
             />
-            <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
+            <button className="stuff-btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
           </div>
         </div>
       </div>
