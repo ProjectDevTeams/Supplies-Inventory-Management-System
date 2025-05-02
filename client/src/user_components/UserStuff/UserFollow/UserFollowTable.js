@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './UserFollowTable.css';
 import { FaPrint } from 'react-icons/fa';
 
-function UserFollowTable() {
+function UserFollowTable({ searchTerm = "" }) {
   const data = [
     {
       id: 1,
@@ -54,14 +54,24 @@ function UserFollowTable() {
     }
   ];
 
+  // ✅ กรองข้อมูลจากทุกช่อง
+  const filteredData = data.filter((row) =>
+    row.id.toString().includes(searchTerm) ||
+    row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.items.toString().includes(searchTerm) ||
+    row.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.status.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const [userfollowCurrentPage, setUserfollowCurrentPage] = useState(1);
   const [userfollowItemsPerPage] = useState(5);
   const [userfollowInputPage, setUserfollowInputPage] = useState(1);
 
   const userfollowIndexOfLastItem = userfollowCurrentPage * userfollowItemsPerPage;
   const userfollowIndexOfFirstItem = userfollowIndexOfLastItem - userfollowItemsPerPage;
-  const userfollowCurrentItems = data.slice(userfollowIndexOfFirstItem, userfollowIndexOfLastItem);
-  const userfollowTotalPages = Math.ceil(data.length / userfollowItemsPerPage);
+  const userfollowCurrentItems = filteredData.slice(userfollowIndexOfFirstItem, userfollowIndexOfLastItem);
+  const userfollowTotalPages = Math.ceil(filteredData.length / userfollowItemsPerPage);
 
   const handleUserfollowPrev = () => {
     if (userfollowCurrentPage > 1) {
@@ -116,8 +126,7 @@ function UserFollowTable() {
                 row.status === "อนุมัติแล้ว" ? "status-approved" :
                 row.status === "รออนุมัติ" ? "status-pending" :
                 row.status === "รอดำเนินการ" ? "status-processing" :
-                row.status === "ยกเลิก" ? "status-cancelled" :
-                ""
+                row.status === "ยกเลิก" ? "status-cancelled" : ""
               }>
                 {row.status}
               </td>
@@ -128,7 +137,7 @@ function UserFollowTable() {
 
       <div className="userfollow-pagination">
         <div className="userfollow-pagination-info">
-          แสดง {userfollowIndexOfFirstItem + 1} ถึง {Math.min(userfollowIndexOfLastItem, data.length)} จาก {data.length} แถว
+          แสดง {userfollowIndexOfFirstItem + 1} ถึง {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="userfollow-pagination-buttons">
           <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>
