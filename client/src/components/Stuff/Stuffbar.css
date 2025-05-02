@@ -9,12 +9,13 @@
 }
 
 .stuff-header {
+  padding: 1em;
   display: flex;
   flex-direction: column;
-  padding: 1em 2em;
-  background-color: var(--color-bg);
-  width: 100%;
   gap: 0.8em;
+  background-color: #f9f9f9;
+  align-items: flex-start;
+  width: auto;
 }
 
 .stuff-title {

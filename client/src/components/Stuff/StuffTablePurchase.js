@@ -46,54 +46,52 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
   };
 
   return (
-    <div className="stuff-wrapper">
-      <div className="stuff-container">
-        <table className="stuff-table">
-          <thead>
-            <tr>
-              <th onClick={toggleSort} style={{ cursor: 'pointer' }}>
-                ลำดับ {asc ? '▲' : '▼'}
-              </th>
-              <th>เลขที่ใบเบิก</th>
-              <th>คลังวัสดุ</th>
-              <th>จำนวน</th>
-              <th>วันที่สร้าง</th>
-              <th>สถานะ</th>
+    <div className="stuff-container">
+      <table className="stuff-table">
+        <thead>
+          <tr>
+            <th onClick={toggleSort} style={{ cursor: 'pointer' }}>
+              ลำดับ {asc ? '▲' : '▼'}
+            </th>
+            <th>เลขที่ใบเบิก</th>
+            <th>คลังวัสดุ</th>
+            <th>จำนวน</th>
+            <th>วันที่สร้าง</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map(i => (
+            <tr key={i.id}>
+              <td>{i.id}</td>
+              <td>{i.code}</td>
+              <td>{i.stock}</td>
+              <td>{i.amount}</td>
+              <td>{i.date}</td>
+              <td className={`stuff-status stuff-${i.status}`}>
+                {renderStatus(i.status)}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {items.map(i => (
-              <tr key={i.id}>
-                <td>{i.id}</td>
-                <td>{i.code}</td>
-                <td>{i.stock}</td>
-                <td>{i.amount}</td>
-                <td>{i.date}</td>
-                <td className={`stuff-status stuff-${i.status}`}>
-                  {renderStatus(i.status)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
 
-        <div className="stuff-pagination">
-          <div className="stuff-pagination-info">
-            แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
-          </div>
-          <div className="stuff-pagination-buttons">
-            <button className="stuff-btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
-            <input
-              type="text"
-              className="stuff-page-input"
-              placeholder={`${page} / ${total}`}
-              value={input}
-              onFocus={() => setInput('')}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={onKey}
-            />
-            <button className="stuff-btn" disabled={page === total} onClick={next}>ถัดไป</button>
-          </div>
+      <div className="stuff-pagination">
+        <div className="stuff-pagination-info">
+          แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
+        </div>
+        <div className="stuff-pagination-buttons">
+          <button className="stuff-btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
+          <input
+            type="text"
+            className="stuff-page-input"
+            placeholder={`${page} / ${total}`}
+            value={input}
+            onFocus={() => setInput('')}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={onKey}
+          />
+          <button className="stuff-btn" disabled={page === total} onClick={next}>ถัดไป</button>
         </div>
       </div>
     </div>

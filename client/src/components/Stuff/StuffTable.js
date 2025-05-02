@@ -43,63 +43,61 @@ export default function StuffTable({ searchTerm }) {
   const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   return (
-    <div className="stuff-wrapper">
-      <div className="stuff-container">
-        <table className="stuff-table">
-          <thead>
-            <tr>
-              <th onClick={() => setAsc(prev => !prev)} style={{ cursor: 'pointer' }}>
-                ลำดับ {asc ? '▲' : '▼'}
-              </th>
-              <th>เลขที่ใบเบิก</th>
-              <th>คลังวัสดุ</th>
-              <th>จำนวน</th>
-              <th>วันที่สร้าง</th>
-              <th>สถานะ</th>
+    <div className="stuff-container">
+      <table className="stuff-table">
+        <thead>
+          <tr>
+            <th onClick={() => setAsc(prev => !prev)} style={{ cursor: 'pointer' }}>
+              ลำดับ {asc ? '▲' : '▼'}
+            </th>
+            <th>เลขที่ใบเบิก</th>
+            <th>คลังวัสดุ</th>
+            <th>จำนวน</th>
+            <th>วันที่สร้าง</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map(item => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.code}</td>
+              <td>{item.stock}</td>
+              <td>{item.amount}</td>
+              <td>{item.date}</td>
+              <td className={`stuff-status stuff-${item.status}`}>
+                {renderStatus(item.status)}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {currentItems.map(item => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.code}</td>
-                <td>{item.stock}</td>
-                <td>{item.amount}</td>
-                <td>{item.date}</td>
-                <td className={`stuff-status stuff-${item.status}`}>
-                  {renderStatus(item.status)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
 
-        <div className="stuff-pagination">
-          <div className="stuff-pagination-info">
-            แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
-          </div>
-          <div className="stuff-pagination-buttons">
-            <button className="stuff-btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
-            <input
-              type="text"
-              className="stuff-page-input"
-              placeholder={`${currentPage} / ${totalPages}`}
-              value={inputPage}
-              onFocus={() => setInputPage('')}
-              onChange={(e) => setInputPage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const page = parseInt(inputPage, 10);
-                  if (!isNaN(page) && page >= 1 && page <= totalPages) {
-                    setCurrentPage(page);
-                  }
-                  setInputPage('');
-                  e.target.blur();
+      <div className="stuff-pagination">
+        <div className="stuff-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+        </div>
+        <div className="stuff-pagination-buttons">
+          <button className="stuff-btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+          <input
+            type="text"
+            className="stuff-page-input"
+            placeholder={`${currentPage} / ${totalPages}`}
+            value={inputPage}
+            onFocus={() => setInputPage('')}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const page = parseInt(inputPage, 10);
+                if (!isNaN(page) && page >= 1 && page <= totalPages) {
+                  setCurrentPage(page);
                 }
-              }}
-            />
-            <button className="stuff-btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
-          </div>
+                setInputPage('');
+                e.target.blur();
+              }
+            }}
+          />
+          <button className="stuff-btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
         </div>
       </div>
     </div>

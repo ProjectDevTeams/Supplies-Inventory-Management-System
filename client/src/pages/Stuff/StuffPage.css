@@ -19,19 +19,3 @@
     margin-left: 200px; 
   }
   
-  
-  .content-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3em;
-    background-color: #f5f8fc;
-    padding: 1em;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .stuff-table-container {
-    margin-top: 1rem;
-  }
-  

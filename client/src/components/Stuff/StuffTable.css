@@ -1,18 +1,12 @@
-.stuff-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 0.5rem;
-}
-
 .stuff-container {
   width: 100%;
-  max-width: 1200px;
-  margin-top: 0.2rem;
-  background: white;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  height: 100vh;
+  padding: 1em;
+  background-color: #f5f8fc;
+  box-sizing: border-box;
+  margin: 0 auto;
+  margin-left: 0.1em;
+
 }
 
 .stuff-table {
@@ -56,7 +50,6 @@
 /* Pagination */
 .stuff-pagination {
   width: 100%;
-  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
