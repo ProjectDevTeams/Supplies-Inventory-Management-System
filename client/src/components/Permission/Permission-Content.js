@@ -4,7 +4,6 @@ import "./Permission-Content.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 function PermissionContent() {
   const navigate = useNavigate();
 
@@ -23,14 +22,23 @@ function PermissionContent() {
 
   const [data, setData] = useState(initialData);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ เพิ่ม search term
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  // ✅ ฟิลเตอร์ข้อมูลตามคำค้นหา
+  const filteredData = data.filter(([id, name, created, updated]) =>
+    [name, created].some((field) =>
+      field.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
@@ -39,7 +47,9 @@ function PermissionContent() {
   const handleSortClick = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     const sorted = [...data].sort((a, b) => {
-      return newOrder === "asc" ? parseInt(a[0]) - parseInt(b[0]) : parseInt(b[0]) - parseInt(a[0]);
+      return newOrder === "asc"
+        ? parseInt(a[0]) - parseInt(b[0])
+        : parseInt(b[0]) - parseInt(a[0]);
     });
     setSortOrder(newOrder);
     setData(sorted);
@@ -64,9 +74,14 @@ function PermissionContent() {
         <div className="perm-title">แบ่งสิทธิ์</div>
         <div className="perm-controls">
           <div className="perm-search-box">
-          <FontAwesomeIcon icon={faSearch} className="search-icon"/>
-            
-            <input type="text" placeholder="ค้นหา" className="perm-search-input" />
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="ค้นหา"
+              className="perm-search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           <button className="perm-add-btn" onClick={() => navigate("/permission/add")}>
             + เพิ่มสิทธิ์
@@ -101,7 +116,7 @@ function PermissionContent() {
 
       <div className="perm-pagination-wrapper">
         <div className="perm-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="perm-pagination-buttons">
           <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>
