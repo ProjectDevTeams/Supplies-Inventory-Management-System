@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './UserHistoryTable.css';
 import { FaPrint } from 'react-icons/fa';
 
-function UserHistoryTable() {
+function UserHistoryTable({ searchTerm = "" }) {
   const data = [
     {
       id: 1,
@@ -22,14 +22,24 @@ function UserHistoryTable() {
     }
   ];
 
+  // ✅ เพิ่มการกรองข้อมูลจากทุกช่อง
+  const filteredData = data.filter((row) =>
+    row.id.toString().includes(searchTerm) ||
+    row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.items.toString().includes(searchTerm) ||
+    row.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.status.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const [userhistoryCurrentPage, setUserhistoryCurrentPage] = useState(1);
   const [userhistoryItemsPerPage] = useState(5);
   const [userhistoryInputPage, setUserhistoryInputPage] = useState(1);
 
   const userhistoryIndexOfLastItem = userhistoryCurrentPage * userhistoryItemsPerPage;
   const userhistoryIndexOfFirstItem = userhistoryIndexOfLastItem - userhistoryItemsPerPage;
-  const userhistoryCurrentItems = data.slice(userhistoryIndexOfFirstItem, userhistoryIndexOfLastItem);
-  const userhistoryTotalPages = Math.ceil(data.length / userhistoryItemsPerPage);
+  const userhistoryCurrentItems = filteredData.slice(userhistoryIndexOfFirstItem, userhistoryIndexOfLastItem);
+  const userhistoryTotalPages = Math.ceil(filteredData.length / userhistoryItemsPerPage);
 
   const handleUserhistoryPrev = () => {
     if (userhistoryCurrentPage > 1) {
@@ -94,7 +104,7 @@ function UserHistoryTable() {
 
       <div className="userhistory-pagination">
         <div className="userhistory-pagination-info">
-          แสดง {userhistoryIndexOfFirstItem + 1} ถึง {Math.min(userhistoryIndexOfLastItem, data.length)} จาก {data.length} แถว
+          แสดง {userhistoryIndexOfFirstItem + 1} ถึง {Math.min(userhistoryIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="userhistory-pagination-buttons">
           <button className="btn" disabled={userhistoryCurrentPage === 1} onClick={handleUserhistoryPrev}>
