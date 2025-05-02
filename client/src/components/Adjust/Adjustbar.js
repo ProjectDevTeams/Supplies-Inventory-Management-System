@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import "./Adjustbar.css";
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 function Adjustbar( { onAddClick, searchTerm, setSearchTerm } ) {
 
@@ -16,14 +19,14 @@ function Adjustbar( { onAddClick, searchTerm, setSearchTerm } ) {
       <div className="adjust-controls">
         {/* ช่องค้นหา */}
         <div className="search-container">
+        <FontAwesomeIcon icon={faSearch} className="search-icon"/>
           <input
             type="text"
             placeholder="ค้นหา"
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <span className="search-icon">🔍</span>
-          {/* <input type="text" placeholder="ค้นหา" /> */}
+        
         </div>
 
         {/* ปุ่มเพิ่มหัวข้อ */}

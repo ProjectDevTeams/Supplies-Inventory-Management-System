@@ -3,6 +3,10 @@ import "./Humanbar.css";
 import AddpeoplePopup from '../../components/Human/addpeople-popup';
 // import EditpeoplePopup from '../../components/Human/Editpeople-popup';
 
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+
 function Humanbar({ searchTerm, setSearchTerm }) { // รับ props เพิ่ม
   const [showPopup, setShowPopup] = useState(false); // State สำหรับการแสดง Popup
 
@@ -25,13 +29,14 @@ function Humanbar({ searchTerm, setSearchTerm }) { // รับ props เพิ�
 
       <div className="toolbar">
         <div className="search-container">
+        <FontAwesomeIcon icon={faSearch} className="search-icon"/>
           <input 
             type="text" 
             placeholder="ค้นหา" 
             value={searchTerm} 
             onChange={handleSearchChange} 
           />
-          <span className="search-icon">🔍</span>
+          
         </div>
 
         <div className="button-group">

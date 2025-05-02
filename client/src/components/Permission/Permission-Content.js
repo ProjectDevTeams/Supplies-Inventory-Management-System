@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Permission-Content.css";
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 function PermissionContent() {
   const navigate = useNavigate();
@@ -61,7 +64,8 @@ function PermissionContent() {
         <div className="perm-title">แบ่งสิทธิ์</div>
         <div className="perm-controls">
           <div className="perm-search-box">
-            <span className="perm-search-icon">🔍</span>
+          <FontAwesomeIcon icon={faSearch} className="search-icon"/>
+            
             <input type="text" placeholder="ค้นหา" className="perm-search-input" />
           </div>
           <button className="perm-add-btn" onClick={() => navigate("/permission/add")}>

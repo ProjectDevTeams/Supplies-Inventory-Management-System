@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import "./Consumablebar.css";
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
   const navigate = useNavigate();
@@ -16,13 +19,15 @@ function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
 
         <div className="toolbar">
           <div className="search-container">
+            <FontAwesomeIcon icon={faSearch} className="search-icon"/>
             <input
               type="text"
               placeholder="ค้นหา"
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            <span className="search-icon">🔍</span>
+              
+            
           </div>
 
           <div className="button-group">
