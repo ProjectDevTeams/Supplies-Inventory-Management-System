@@ -8,26 +8,26 @@ import './IncomingPage.css';
 
 function IncomingPage() {
   const [tableData, setTableData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // ✅ เพิ่ม searchTerm
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleExportExcel = () => {
     exportToExcel(tableData);
   };
 
   return (
-    <div className="stuff-navbar">
+    <div className="incoming-navbar">
       <Navbar />
-      <div className="stuff-sidebar">
+      <div className="incoming-sidebar">
         <Sidebar />
-        <main className="stuff-content">
-          <section className="content-header">
+        <main className="incoming-content">
+          <section className="incoming-header">
             <Incomingbar
               onExportExcel={handleExportExcel}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
             />
           </section>
-          <section className="stuff-table-container">
+          <section className="incoming-table-container">
             <IncomingTable
               searchTerm={searchTerm}
               onDataReady={setTableData}

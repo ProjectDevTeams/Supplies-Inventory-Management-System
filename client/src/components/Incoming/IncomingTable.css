@@ -1,19 +1,10 @@
-.incoming-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 0.5rem;
-}
-
 .incoming-container {
   width: 100%;
-  max-width: 1200px;
-  margin-top: 0.2rem;
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  padding: 0 2em;
+  background-color: #f5f8fc;
+  box-sizing: border-box;
+  margin: 0 auto; 
 }
 
 .incoming-table {
@@ -41,12 +32,10 @@
 
 .incoming-pagination-wrapper {
   width: 100%;
-  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
-  flex-wrap: wrap;
 }
 
 .incoming-pagination-info {
