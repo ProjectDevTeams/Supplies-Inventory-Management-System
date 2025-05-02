@@ -142,7 +142,7 @@ function OrganizationsTable() {
 
           <input
             type="number"
-            className="org-page-input"
+            className="organizations-page-input"
             value={inputPage}
             min={1}
             max={totalPages}
