@@ -165,3 +165,78 @@
 .pagination a:first-child {
   font-weight: bold;
 }
+
+/* ========== Media Query สำหรับ Responsive ========== */
+@media (max-width: 768px) {
+  .top-bar {
+    padding: 0.8em 1em;
+    gap: 0.6em;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+    height: 38px;
+    padding: 0 8px;
+  }
+
+  .search-box input {
+    font-size: 0.95rem;
+  }
+
+  .top-title {
+    font-size: 1.2em;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.9em;
+  }
+
+  .table-container {
+    padding: 0.5em;
+    margin: 0.5em;
+    overflow-x: auto;
+  }
+
+  .hum-table {
+    font-size: 13px;
+    width: 100%;
+  }
+
+  .hum-table th,
+  .hum-table td {
+    padding: 0.4em 0.6em;
+    white-space: nowrap;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+    font-size: 0.95em;
+  }
+
+  .pagination-info {
+    margin-right: 0;
+  }
+
+  .pagination span,
+  .pagination a {
+    font-size: 0.9em;
+    padding: 4px 10px;
+    min-width: 2em;
+  }
+}

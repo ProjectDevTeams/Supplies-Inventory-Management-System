@@ -1,105 +1,140 @@
 /* ==================== Container ของตาราง ==================== */
 .human-table-container {
-    width: 100%;
-    padding: 1em;
-    background-color: #f5f8fc;
-    box-sizing: border-box;
-    margin: 0 auto;
-    margin-left: 0.1em; /* ปรับซ้ายตามดีไซน์ */
-    margin-top: -1em;
-  }
-  
-  /* ==================== ตาราง ==================== */
-  .hum-table {
-    width: 100%;
-    margin: 1em auto;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    table-layout: auto;
-  }
-  
-  .hum-table th,
-  .hum-table td {
-    border: 1px solid #999;
-    padding: 0.6em 0.8em;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-  
-  .hum-table th {
-    background-color: #dfe8f6;
-    font-weight: bold;
-  }
-  .hum-table tbody tr:hover {
-    background-color: #e0f0ff; /* ฟ้าอ่อนเวลาชี้ */
-    color: #3498db; /* สีฟ้าตามปุ่ม */
-    cursor: pointer; /* เปลี่ยนเมาส์เป็น pointer เมื่อชี้ */
+  width: 100%;
+  height: 100vh;
+  padding: 1em;
+  background-color: #f5f8fc;
+  box-sizing: border-box;
+  margin: 0 auto;
+  margin-left: 0.1em;
+  margin-top: -1em;
 }
-  /* ==================== ช่องซ้าย ==================== */
-  .left-align {
-    text-align: left;
-    padding-left: 1em;
+
+/* ==================== ตาราง ==================== */
+.hum-table {
+  width: 100%;
+  margin: 1em auto;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  table-layout: auto;
+}
+
+.hum-table th,
+.hum-table td {
+  border: 1px solid #999;
+  padding: 0.6em 0.8em;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.hum-table th {
+  background-color: #dfe8f6;
+  font-weight: bold;
+}
+
+.hum-table tbody tr:hover {
+  background-color: #e0f0ff;
+  color: #3498db;
+  cursor: pointer;
+}
+
+/* ==================== ช่องซ้าย ==================== */
+.left-align {
+  text-align: left;
+  padding-left: 1em;
+}
+
+/* ==================== สีสถานะ ==================== */
+.status.approved {
+  color: #2d7a3e;
+  font-weight: bold;
+}
+
+.human-pagination-wrapper {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.human-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.human-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.human-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.human-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.human-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.human-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+.human-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.human-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.human-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.human-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.human-page-input::-webkit-inner-spin-button,
+.human-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .human-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
   }
-  
-  /* ==================== สีสถานะ ==================== */
-  .status.approved {
-    color: #2d7a3e; /* เขียว */
-    font-weight: bold;
-  }
-  
-  /* ==================== Pagination ส่วนแสดงผลข้อมูล ==================== */
-  .pagination-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.5em;
-    padding: 0 1em;
-    flex-wrap: wrap;
-  }
-  
-  .pagination-info {
-    font-size: 0.95em;
-    color: #333;
-    margin-bottom: 0.5em;
-  }
-  
-  /* ==================== Pagination ปุ่มและ Input ==================== */
-  .pagination-buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .page-input {
-    width: 60px;
-    padding: 5px;
-    text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* ปุ่มทั่วไป */
-  .btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  /* Hover ปุ่ม */
-  .btn:hover {
-    background-color: #2980b9;
-  }
-  
-  /* ปุ่ม Disabled */
-  .btn.disabled {
-    background-color: #ccc;
-    color: #777;
-    cursor: not-allowed;
-  }
-  
+}
