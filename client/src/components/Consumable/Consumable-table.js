@@ -124,11 +124,12 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   >
                     {item.status}
                   </span>
+                  
                   <div className="item-actions">
-                    <button type="button" className="edit">✏ แก้ไข</button>
-                    <button type="button" className="adjust">ปรับยอด</button>
-
+                    <button type="button" className="consumable-edit">✏ แก้ไข</button>
+                    <button type="button" className="consumable-adjust">ปรับยอด</button>
                   </div>
+                  
                 </td>
                 <td className="consumable-td">{item.brought}</td>
                 <td className="consumable-td">{item.low}</td>
