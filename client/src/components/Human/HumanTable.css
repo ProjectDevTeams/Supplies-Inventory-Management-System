@@ -137,3 +137,13 @@
     gap: 0.5em;
   }
 }
+
+.status.pending {
+  color: #d48b00; /* สีเหลือง */
+  font-weight: bold;
+}
+
+.status.rejected {
+  color: #e63946; /* สีแดง */
+  font-weight: bold;
+}
