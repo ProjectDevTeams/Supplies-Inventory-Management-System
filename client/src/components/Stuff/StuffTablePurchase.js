@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './StuffTable.css';
 
 const purchaseData = [
-  { id:1, code:"001-01/2568", stock:"วัสดุในคลัง", amount:2, date:"5 ม.ค. 68", status:"approved" },
-  { id:2, code:"002-01/2568", stock:"วัสดุในคลัง", amount:1, date:"10 ม.ค. 68", status:"pending" },
-  { id:3, code:"003-01/2568", stock:"วัสดุในคลัง", amount:3, date:"15 ม.ค. 68", status:"rejected" },
-  { id:4, code:"004-01/2568", stock:"วัสดุในคลัง", amount:2, date:"18 ม.ค. 68", status:"approved" },
-  { id:5, code:"005-01/2568", stock:"วัสดุในคลัง", amount:5, date:"20 ม.ค. 68", status:"approved" },
-  { id:6, code:"006-01/2568", stock:"วัสดุในคลัง", amount:1, date:"25 ม.ค. 68", status:"pending" },
+  { id: 1, code: "001-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "5 ม.ค. 68", status: "approved" },
+  { id: 2, code: "002-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "pending" },
+  { id: 3, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 3, date: "15 ม.ค. 68", status: "rejected" },
+  { id: 4, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "18 ม.ค. 68", status: "approved" },
+  { id: 5, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 5, date: "20 ม.ค. 68", status: "approved" },
+  { id: 6, code: "006-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "25 ม.ค. 68", status: "pending" },
 ];
 
 export default function StuffTablePurchase({ searchTerm = '' }) {
@@ -61,19 +61,24 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
           </tr>
         </thead>
         <tbody>
-          {items.map(i => (
-            <tr key={i.id}>
-              <td>{i.id}</td>
-              <td>{i.code}</td>
-              <td>{i.stock}</td>
-              <td>{i.amount}</td>
-              <td>{i.date}</td>
-              <td className={`stuff-status stuff-${i.status}`}>
-                {renderStatus(i.status)}
-              </td>
+          {items.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
-          ))}
+          ) : (
+            items.map(i => (
+              <tr key={i.id}>
+                <td>{i.id}</td>
+                <td>{i.code}</td>
+                <td>{i.stock}</td>
+                <td>{i.amount}</td>
+                <td>{i.date}</td>
+                <td className={`stuff-status stuff-${i.status}`}>{renderStatus(i.status)}</td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="stuff-pagination">
