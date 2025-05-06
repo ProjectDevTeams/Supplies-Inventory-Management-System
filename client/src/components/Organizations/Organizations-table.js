@@ -11,14 +11,12 @@ function OrganizationsTable() {
       ? JSON.parse(saved)
       : [
           { id: "1", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "13 พ.ย. 66" },
-          { id: "2", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "14 พ.ย. 66" },
-          { id: "3", name: "บริษัท โกลบอล 205 (ประเทศไทย) จำกัด", created: "14 พ.ย. 66" },
-          { id: "4", name: "ห้างหุ้นส่วนจำกัด นนทภัณฑ์ สเตชั่นเนอรี่", created: "24 พ.ย. 66" },
-          { id: "5", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" },
+          { id: "2", name: "บริษัท โกลบอล 205 (ประเทศไทย) จำกัด", created: "14 พ.ย. 66" },
+          { id: "3", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" },
         ];
   });
 
-  const itemsPerPage = 5;
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [showManagePopup, setShowManagePopup] = useState(false);
@@ -26,40 +24,29 @@ function OrganizationsTable() {
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
 
-  const totalPages = Math.ceil(companies.length / itemsPerPage);
+  const filteredCompanies = companies.filter(company =>
+    company.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const sortedCompanies = [...companies].sort((a, b) => {
-    return sortOrder === "asc"
-      ? parseInt(a.id) - parseInt(b.id)
-      : parseInt(b.id) - parseInt(a.id);
-  });
+  const sortedCompanies = [...filteredCompanies].sort((a, b) =>
+    sortOrder === "asc" ? parseInt(a.id) - parseInt(b.id) : parseInt(b.id) - parseInt(a.id)
+  );
 
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(sortedCompanies.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const displayedCompanies = sortedCompanies.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
-  }, [currentPage]);
+    setCurrentPage(1);
+  }, [searchTerm]);
 
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [totalPages, currentPage]);
-
-  const handleCompanyClick = (companyId) => {
-    setSelectedCompanyId(companyId);
+  const handleCompanyClick = (id) => {
+    setSelectedCompanyId(id);
     setShowManagePopup(true);
   };
-
-  const handleCloseManagePopup = () => {
-    setSelectedCompanyId(null);
-    setShowManagePopup(false);
-  };
-
-  const handleOpenAddPopup = () => setShowAddPopup(true);
-  const handleCloseAddPopup = () => setShowAddPopup(false);
 
   const handleAddCompany = (newCompany) => {
     const maxId = Math.max(...companies.map((c) => parseInt(c.id)));
@@ -71,16 +58,14 @@ function OrganizationsTable() {
     setCurrentPage(Math.ceil(updated.length / itemsPerPage));
   };
 
-  const handleDeleteCompany = (id) => {
-    const updated = companies.filter((c) => c.id !== id);
+  const handleEditCompany = (id, newName) => {
+    const updated = companies.map((c) => c.id === id ? { ...c, name: newName } : c);
     setCompanies(updated);
     localStorage.setItem("companies", JSON.stringify(updated));
   };
 
-  const handleEditCompany = (id, newName) => {
-    const updated = companies.map((c) =>
-      c.id === id ? { ...c, name: newName } : c
-    );
+  const handleDeleteCompany = (id) => {
+    const updated = companies.filter((c) => c.id !== id);
     setCompanies(updated);
     localStorage.setItem("companies", JSON.stringify(updated));
   };
@@ -91,7 +76,11 @@ function OrganizationsTable() {
 
   return (
     <div className="organizations-bar-container">
-      <Organizationsbar onAddClick={handleOpenAddPopup} />
+      <Organizationsbar
+        onAddClick={() => setShowAddPopup(true)}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
 
       <table className="organizations-bar-table">
         <thead>
@@ -107,45 +96,42 @@ function OrganizationsTable() {
           </tr>
         </thead>
         <tbody>
-          {displayedCompanies.map((company) => (
-            <tr
-              key={company.id}
-              onClick={() => handleCompanyClick(company.id)}
-              className="org-clickable-row"
-            >
-              <td>{company.id}</td>
-              <td>{company.name}</td>
-              <td>
-                {company.created}
-                <br />
-                <span className="organizations-bar-subtext">
-                  ฝ่ายเวชภัณฑ์งานบ้าน วิทยาลัยพยาบาล
-                </span>
+          {displayedCompanies.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="organizations-no-data-message">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
-              <td>---</td>
             </tr>
-          ))}
+          ) : (
+            displayedCompanies.map((company) => (
+              <tr
+                key={company.id}
+                onClick={() => handleCompanyClick(company.id)}
+                className="org-clickable-row"
+              >
+                <td>{company.id}</td>
+                <td>{company.name}</td>
+                <td>{company.created}</td>
+                <td>—</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
       <div className="organizations-pagination-wrapper">
         <div className="organizations-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, companies.length)} จาก {companies.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCompanies.length)} จาก {sortedCompanies.length} แถว
         </div>
         <div className="organizations-pagination-buttons">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
-          >
-            ก่อนหน้า
-          </button>
-
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>ก่อนหน้า</button>
           <input
             type="number"
             className="organizations-page-input"
             value={inputPage}
             min={1}
             max={totalPages}
+            placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
             onChange={(e) => setInputPage(e.target.value)}
             onKeyDown={(e) => {
@@ -157,20 +143,14 @@ function OrganizationsTable() {
                 e.target.blur();
               }
             }}
-            placeholder={`${currentPage} / ${totalPages}`}
           />
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-          >
-            ถัดไป
-          </button>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>ถัดไป</button>
         </div>
       </div>
 
       {showManagePopup && selectedCompanyId && (
         <OrganizationsManagePopup
-          onClose={handleCloseManagePopup}
+          onClose={() => setShowManagePopup(false)}
           companyData={companies.find((c) => c.id === selectedCompanyId)}
           onDeleteCompany={handleDeleteCompany}
           onEditCompany={handleEditCompany}
@@ -179,7 +159,7 @@ function OrganizationsTable() {
 
       {showAddPopup && (
         <OrganizationsAddPopup
-          onClose={handleCloseAddPopup}
+          onClose={() => setShowAddPopup(false)}
           onAddCompany={handleAddCompany}
         />
       )}
