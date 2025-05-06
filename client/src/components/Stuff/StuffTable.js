@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
+import { Link } from 'react-router-dom';
 
 const mockData = [
   { id: 1, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
@@ -67,11 +68,15 @@ export default function StuffTable({ searchTerm }) {
           ) : (
             currentItems.map(item => (
               <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.code}</td>
-                <td>{item.stock}</td>
-                <td>{item.amount}</td>
-                <td>{item.date}</td>
+                <td>{item.id}</td> {/* ✅ ลำดับ */}
+                <td>
+                  <Link to="/stuff/detail" state={{ id: item.id }} className="stuff-link">
+                    {item.code}
+                  </Link>
+                </td>
+                <td>{item.stock}</td>        {/* ✅ คลังวัสดุ */}
+                <td>{item.amount}</td>       {/* ✅ จำนวน */}
+                <td>{item.date}</td>         {/* ✅ วันที่ */}
                 <td className={`stuff-status stuff-${item.status}`}>
                   {renderStatus(item.status)}
                 </td>
