@@ -50,6 +50,10 @@ function AdjustTable({ searchTerm }) {
     setCurrentPage(1);
   };
 
+  useEffect(() => {
+    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
+  }, [currentPage]);
+
   return (
     <div className="adjustment-table-container">
       <table id="adjustment-table">
@@ -111,9 +115,9 @@ function AdjustTable({ searchTerm }) {
               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
                 if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
-                  setInputPage("");
+                  setCurrentPage(val);                
                 }
+                e.target.blur();
               }
             }}
             placeholder={`${currentPage} / ${totalPages}`}

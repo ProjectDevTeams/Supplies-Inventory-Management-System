@@ -43,6 +43,10 @@ function OrganizationsTable() {
     setCurrentPage(1);
   }, [searchTerm]);
 
+  useEffect(() => {
+    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
+  }, [currentPage]);
+  
   const handleCompanyClick = (id) => {
     setSelectedCompanyId(id);
     setShowManagePopup(true);
