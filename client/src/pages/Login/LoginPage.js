@@ -34,8 +34,7 @@ function LoginPage() {
               <Link to="/forget" className="forgot-password">ลืมรหัสผ่าน</Link>
             </div>
 
-            <button className="login-button">เข้าสู่ระบบ</button>
-
+            <button type="button" className="login-button">เข้าสู่ระบบ</button>
             <div className="switch-page">
               ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
             </div>
