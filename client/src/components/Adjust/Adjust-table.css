@@ -165,3 +165,14 @@
     gap: 0.5em;
   }
 }
+.adjustment-td {
+  text-align: center; /* จัดกลางทุกช่อง */
+  vertical-align: middle;
+}
+
+.status-approved,
+.status-pending,
+.status-not-pending {
+  text-align: center;
+  font-weight: bold;
+}
