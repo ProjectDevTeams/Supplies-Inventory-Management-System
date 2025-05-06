@@ -1,7 +1,7 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import "./Consumable-table.css";
-import AddnewPopup from "./addnew-popup"; 
+import AddnewPopup from "./addnew-popup";
 import Consumable from "./Consumablebar";
 
 const mockData = [
@@ -62,7 +62,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
 
   return (
     <div className="table-container-consumable">
-      <Consumable 
+      <Consumable
         onAddClick={() => setShowPopup(true)}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -83,35 +83,43 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
           </tr>
         </thead>
         <tbody className="consumable-tbody">
-          {currentItems.map((item, index) => (
-            <tr key={index} className="consumable-tr">
-              <td className="consumable-td">{item.code}</td>
-              <td className="consumable-td">
-                <img src={item.image} alt={item.name} className="item-image" />
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="9" className="consumable-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
-              <td className="item-cell consumable-td">
-                <b>ชื่อ :</b> {item.name}
-                <br />
-                หมวดหมู่ : {item.category}
-                <br />
-                หน่วยนับ : {item.unit} | คลังวัสดุ : {item.location}
-                <br />
-                ราคา/หน่วย : {item.price}
-                <br />
-                สถานะ : <span className={`item-status ${item.status === "ใกล้หมดสต็อก!" ? "low-stock" : "in-stock"}`}>{item.status}</span>
-                <div className="item-actions">
-                  <a href="#" className="edit">✏ แก้ไข</a>
-                  <a href="#" className="adjust">ปรับยอด</a>
-                </div>
-              </td>
-              <td className="consumable-td">{item.brought}</td>
-              <td className="consumable-td">{item.low}</td>
-              <td className="consumable-td">{item.high}</td>
-              <td className="consumable-td">{item.in}</td>
-              <td className="consumable-td">{item.out}</td>
-              <td className="consumable-td">{item.remain}</td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item, index) => (
+              <tr key={index} className="consumable-tr">
+                <td className="consumable-td">{item.code}</td>
+                <td className="consumable-td">
+                  <img src={item.image} alt={item.name} className="item-image" />
+                </td>
+                <td className="item-cell consumable-td">
+                  <b>ชื่อ :</b> {item.name}
+                  <br />
+                  หมวดหมู่ : {item.category}
+                  <br />
+                  หน่วยนับ : {item.unit} | คลังวัสดุ : {item.location}
+                  <br />
+                  ราคา/หน่วย : {item.price}
+                  <br />
+                  สถานะ : <span className={`item-status ${item.status === "ใกล้หมดสต็อก!" ? "low-stock" : "in-stock"}`}>{item.status}</span>
+                  <div className="item-actions">
+                    <a href="#" className="edit">✏ แก้ไข</a>
+                    <a href="#" className="adjust">ปรับยอด</a>
+                  </div>
+                </td>
+                <td className="consumable-td">{item.brought}</td>
+                <td className="consumable-td">{item.low}</td>
+                <td className="consumable-td">{item.high}</td>
+                <td className="consumable-td">{item.in}</td>
+                <td className="consumable-td">{item.out}</td>
+                <td className="consumable-td">{item.remain}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
