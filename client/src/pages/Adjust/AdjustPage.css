@@ -14,12 +14,7 @@
   display: flex;
   flex-direction: column;
   background-color: #f9f9f9;
-  padding: 1em;
+  padding: 2em;
   box-sizing: border-box;
-  margin-left: 200px;
-}
-
-.content-header,
-.adjust-table-container {
-  width: 100%;
+  margin-left: 200px; 
 }

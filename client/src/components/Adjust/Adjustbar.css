@@ -1,26 +1,25 @@
 .adjust-header {
+  padding: 1em;
   display: flex;
   flex-direction: column;
-  padding: 1em;
+  gap: 0.8em;
   background-color: #f9f9f9;
   align-items: flex-start;
   width: auto;
-  margin-top: -0.6em;
-  padding-left: 15em;
 }
 
 .adjust-title {
   font-weight: bold;
   font-size: 1.4em;
-  margin-bottom: 0.5rem;
   color: #003366;
 }
 
 .adjust-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 1em;
   align-items: center;
+  gap: 0.8em;
+  width: 100%;
 }
 
 /* ช่องค้นหา */

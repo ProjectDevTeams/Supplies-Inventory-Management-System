@@ -2,15 +2,14 @@
 .adjustment-table-container {
   width: 100%;
   height: 100vh;
-  padding: 1.5rem;
+  padding: 1em;
   background-color: #f5f8fc;
-  padding-left: 14em;
   box-sizing: border-box;
 }
 
 /* ✅ ตัว table */
 #adjustment-table {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
   background-color: white; /* ตารางสีขาว */
@@ -72,7 +71,7 @@
 
  /* ✅ Pagination แบบใหม่ */
  .adjust-pagination-wrapper {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;

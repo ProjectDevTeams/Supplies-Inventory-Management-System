@@ -15,7 +15,7 @@ function Adjustbar({ onAddClick, searchTerm, setSearchTerm }) {
 
   return (
     <div className="adjust-header">
-      <h2 className="adjust-title">ปรับยอด</h2>
+      <div className="adjust-title">ปรับยอด</div>
 
       <div className="adjust-controls">
         {/* ช่องค้นหา */}
