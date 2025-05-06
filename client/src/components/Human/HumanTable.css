@@ -147,3 +147,7 @@
   color: #e63946; /* สีแดง */
   font-weight: bold;
 }
+
+th {
+  user-select: none;
+}
