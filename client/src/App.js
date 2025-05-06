@@ -19,8 +19,10 @@ import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 
-
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
+import ResetPassword from "./pages/Reset Password/ResetPassword";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -45,6 +47,9 @@ function App() {
         <Route path="/userstuff" element={<UserStuffPage />} />
 
         <Route path="/forget" element={<ForgetPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
+
+
       </Routes>
     </BrowserRouter>
   );
