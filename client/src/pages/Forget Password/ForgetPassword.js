@@ -18,7 +18,7 @@ function ForgetPassword() {
     <input type="email" placeholder="Enter email address" />
   </div>
 
-  <button className="forget-submit-button">ส่ง</button>
+  <button type='button' className="forget-submit-button">ส่ง</button>
 </div>
 
       <div className="forget-right">
