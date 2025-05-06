@@ -85,26 +85,29 @@ function HumanTable({ searchTerm }) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id} onClick={() => handleEditClick(item)}>
-              <td>{item.id}</td>
-              <td>{item.username}</td>
-              <td>{item.fullname}</td>
-              <td>{item.group}</td>
-              <td>{item.email}</td>
-              <td className={`status ${item.status === 'อนุมัติ' ? 'approved' : item.status === 'รออนุมัติ' ? 'pending' : 'rejected'}`}>
-                {item.status}
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="human-no-data-message">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item) => (
+              <tr key={item.id} onClick={() => handleEditClick(item)}>
+                <td>{item.id}</td>
+                <td>{item.username}</td>
+                <td>{item.fullname}</td>
+                <td>{item.group}</td>
+                <td>{item.email}</td>
+                <td className={`status ${item.status === 'อนุมัติ' ? 'approved' : item.status === 'รออนุมัติ' ? 'pending' : 'rejected'}`}>
+                  {item.status}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
-      </table>
 
-      {currentItems.length === 0 && (
-        <div className="no-data-message">
-          ไม่พบข้อมูลที่ตรงกับคำค้นหา "{searchTerm}"
-        </div>
-      )}
+      </table>
 
       <div className="human-pagination-wrapper">
         <div className="human-pagination-info">

@@ -119,6 +119,7 @@ function OrganizationsTable() {
         </tbody>
       </table>
 
+
       <div className="organizations-pagination-wrapper">
         <div className="organizations-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCompanies.length)} จาก {sortedCompanies.length} แถว

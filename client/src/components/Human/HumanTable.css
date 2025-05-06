@@ -151,3 +151,10 @@
 th {
   user-select: none;
 }
+
+.human-no-data-message {
+  text-align: center;
+  color: black;
+  font-weight: normal;
+  padding: 1em;
+}

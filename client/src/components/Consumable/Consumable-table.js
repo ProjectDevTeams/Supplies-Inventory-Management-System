@@ -117,21 +117,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   <br />
                   สถานะ :{" "}
                   <span
-                    className={`item-status ${
-                      item.status === "ใกล้หมดสต็อก!"
+                    className={`item-status ${item.status === "ใกล้หมดสต็อก!"
                         ? "low-stock"
                         : "in-stock"
-                    }`}
+                      }`}
                   >
                     {item.status}
                   </span>
                   <div className="item-actions">
-                    <a href="#" className="edit">
-                      ✏ แก้ไข
-                    </a>
-                    <a href="#" className="adjust">
-                      ปรับยอด
-                    </a>
+                    <button type="button" className="edit">✏ แก้ไข</button>
+                    <button type="button" className="adjust">ปรับยอด</button>
+
                   </div>
                 </td>
                 <td className="consumable-td">{item.brought}</td>
@@ -145,6 +141,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
           )}
         </tbody>
       </table>
+
 
       {showPopup && <AddnewPopup onClose={() => setShowPopup(false)} />}
 

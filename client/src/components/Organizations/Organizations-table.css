@@ -167,8 +167,8 @@
 
 .organizations-no-data-message {
   text-align: center;
-  color: black;
+  color: #000; /* สีดำ */
+  font-style: normal;
   font-weight: normal;
-  padding: 1em;
+  padding: 1rem;
 }
-

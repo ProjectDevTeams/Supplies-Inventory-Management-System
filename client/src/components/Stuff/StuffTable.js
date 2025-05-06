@@ -82,6 +82,8 @@ export default function StuffTable({ searchTerm }) {
 
       </table>
 
+
+
       <div className="stuff-pagination">
         <div className="stuff-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
