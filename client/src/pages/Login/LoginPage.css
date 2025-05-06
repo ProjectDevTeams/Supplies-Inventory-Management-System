@@ -117,3 +117,18 @@ h2 {
   height: 100%;
   object-fit: cover;
 }
+
+.login-eye-view{
+  padding-top: 7px;
+  width: 60%;
+  opacity: 0.5;
+}
+
+.login-eye-icon {
+  position: absolute;
+  right: 14px;
+  top: 38px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #999;
+}
