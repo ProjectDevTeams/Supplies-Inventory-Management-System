@@ -1,12 +1,11 @@
-// OutMaterialTable_History.js
+// BalanceMaterialTable_History.js
 import React from "react";
-import "./AddMaterialTable_History.css"; // ยังใช้ CSS เดิม
-
+import "./BalanceMaterialTable_History.css"; // ยังใช้ CSS เดิม
 
 function BalanceMaterialTable_History() {
   return (
-    <div className="history-table-container">
-      <table className="history-table">
+    <div className="history-balance-table-container">
+      <table className="history-balance-table">
         <thead>
           <tr>
             <th>ลำดับ</th>  
@@ -24,7 +23,7 @@ function BalanceMaterialTable_History() {
             <td>วัสดุในคลัง</td>
             <td>ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม</td>
             <td>11 ก.ค. 66</td>
-            <td className="status approved">อนุมัติ</td>
+            <td className="history-balance-status approved">อนุมัติ</td>
           </tr>
           <tr>
             <td>1446</td>
@@ -32,7 +31,7 @@ function BalanceMaterialTable_History() {
             <td>วัสดุในคลัง</td>
             <td>ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม</td>
             <td>4 ก.ค. 66</td>
-            <td className="status approved">อนุมัติ</td>
+            <td className="history-balance-status approved">อนุมัติ</td>
           </tr>
           <tr>
             <td>1442</td>
@@ -40,7 +39,7 @@ function BalanceMaterialTable_History() {
             <td>วัสดุในคลัง</td>
             <td>ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม</td>
             <td>1 ม.ค. 66</td>
-            <td className="status approved">อนุมัติ</td>
+            <td className="history-balance-status approved">อนุมัติ</td>
           </tr>
           <tr>
             <td>1441</td>
@@ -48,7 +47,7 @@ function BalanceMaterialTable_History() {
             <td>วัสดุนอกคลัง</td>
             <td>ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม</td>
             <td>29 มิ.ย. 66</td>
-            <td className="status approved">อนุมัติ</td>
+            <td className="history-balance-status approved">อนุมัติ</td>
           </tr>
         </tbody>
       </table>
@@ -57,4 +56,3 @@ function BalanceMaterialTable_History() {
 }
 
 export default BalanceMaterialTable_History;
-

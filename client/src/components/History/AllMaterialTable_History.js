@@ -1,11 +1,11 @@
 // HistoryChangeTable.js
 import React from "react";
-import "./AddMaterialTable_History.css"; // ใช้ CSS เดิมได้เลย
+import "./AllMaterialTable_History.css"; // ใช้ CSS เดิม
 
 function AllMaterialTable_History() {
   return (
-    <div className="history-table-container">
-      <table className="history-table">
+    <div className="history-all-table-container">
+      <table className="history-all-table">
         <thead>
           <tr>
             <th>วันที่</th>
@@ -21,7 +21,7 @@ function AllMaterialTable_History() {
             <td>ยอดยกมา</td>
             <td>+3</td>
             <td>3</td>
-            <td className="left-align">
+            <td className="history-all-left-align">
               ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม
             </td>
           </tr>
@@ -30,7 +30,7 @@ function AllMaterialTable_History() {
             <td>รับเข้าวัสดุ</td>
             <td>+5</td>
             <td>8</td>
-            <td className="left-align">
+            <td className="history-all-left-align">
               ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม
             </td>
           </tr>
@@ -39,7 +39,7 @@ function AllMaterialTable_History() {
             <td>เบิกวัสดุ</td>
             <td>-7</td>
             <td>1</td>
-            <td className="left-align">
+            <td className="history-all-left-align">
               ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม
             </td>
           </tr>

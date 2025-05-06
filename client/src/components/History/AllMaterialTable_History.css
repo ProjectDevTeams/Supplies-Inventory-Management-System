@@ -1,4 +1,4 @@
-.history-add-table-container {
+.history-all-table-container {
   width: 100vw;
   max-width: 1170px;
   padding: 1em;
@@ -8,7 +8,7 @@
   padding-left: 1em;
 }
 
-.history-add-table {
+.history-all-table {
   width: 100%;
   margin: 1em auto;
   border-collapse: collapse;
@@ -17,8 +17,8 @@
   table-layout: fixed;
 }
 
-.history-add-table th,
-.history-add-table td {
+.history-all-table th,
+.history-all-table td {
   border: 1px solid #999;
   padding: 0.5em;
   text-align: center;
@@ -27,53 +27,43 @@
   word-wrap: break-word;
 }
 
-.history-add-table th {
+.history-all-table th {
   background-color: #dfe8f6;
   font-weight: bold;
 }
 
-.history-add-table th:nth-child(1),
-.history-add-table td:nth-child(1) {
-  width: 7%;
+.history-all-table th:nth-child(1),
+.history-all-table td:nth-child(1) {
+  width: 4%;
   height: 4em;
 }
 
-.history-add-table th:nth-child(2),
-.history-add-table td:nth-child(2) {
-  width: 5%;
-}
-
-.history-add-table th:nth-child(3),
-.history-add-table td:nth-child(3) {
+.history-all-table th:nth-child(2),
+.history-all-table td:nth-child(2) {
   width: 4%;
 }
 
-.history-add-table th:nth-child(4),
-.history-add-table td:nth-child(4) {
+.history-all-table th:nth-child(3),
+.history-all-table td:nth-child(3) {
   width: 4%;
 }
 
-.history-add-table th:nth-child(5),
-.history-add-table td:nth-child(5) {
-  width: 6%;
+.history-all-table th:nth-child(4),
+.history-all-table td:nth-child(4) {
+  width: 4%;
 }
 
-.history-add-table th:nth-child(6),
-.history-add-table td:nth-child(6) {
-  width: 6.5%;
+.history-all-table th:nth-child(5),
+.history-all-table td:nth-child(5) {
+  width: 15%;
 }
 
-.history-add-table th:nth-child(7),
-.history-add-table td:nth-child(7){
-  width: 21%;
-}
-
-.history-add-left-align {
+.history-all-left-align {
   text-align: left;
   padding-left: 1em;
 }
 
-.history-add-pagination {
+.history-all-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -85,13 +75,13 @@
   flex-wrap: wrap;
 }
 
-.history-add-pagination-info {
+.history-all-pagination-info {
   color: #333;
   margin-right: auto;
 }
 
-.history-add-pagination span,
-.history-add-pagination a {
+.history-all-pagination span,
+.history-all-pagination a {
   padding: 0.3em 0.6em;
   margin: 0 0.2em;
   border: 1px solid #ccc;
@@ -101,16 +91,16 @@
   border-radius: 3px;
 }
 
-.history-add-pagination .current {
+.history-all-pagination .current {
   background-color: #2176bd;
   color: white;
 }
 
-.history-add-pagination .disabled {
+.history-all-pagination .disabled {
   color: #aaa;
 }
 
-.history-add-status.approved {
+.history-all-status.approved {
   color: #2d7a3e;
   font-weight: bold;
 }

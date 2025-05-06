@@ -1,12 +1,10 @@
 import React from "react";
 import "./AddMaterialTable_History.css";
 
-
-
 function AddMaterialTable_History() {
   return (
-    <div className="history-table-container">
-      <table className="history-table">
+    <div className="history-add-table-container">
+      <table className="history-add-table">
         <thead>
           <tr>
             <th>วันที่</th>
@@ -26,7 +24,7 @@ function AddMaterialTable_History() {
             <td>87.50</td>
             <td>8</td>
             <td>140.00</td>
-            <td className="left-align">
+            <td className="history-add-left-align">
               ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม
             </td>
           </tr>
@@ -37,4 +35,3 @@ function AddMaterialTable_History() {
 }
 
 export default AddMaterialTable_History;
-
