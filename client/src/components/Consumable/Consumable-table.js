@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import "./Consumable-table.css";
 import AddnewPopup from "./addnew-popup";
 import Consumable from "./Consumablebar";
@@ -27,15 +26,13 @@ const mockData = [
   { code: "OF020", image: "https://via.placeholder.com/60", name: "แผ่นพลาสติกใส", category: "วัสดุสำนักงาน", unit: "แผ่น", location: "คลังรอง", price: 3, status: "ใกล้หมดสต็อก!", in: 2, out: 1, remain: 1, low: 1, high: 4, brought: 1 }
 ];
 
-
 const itemsPerPage = 5;
 
 function Consumable_Table({ searchTerm, setSearchTerm }) {
-
-  // const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [inputPage, setInputPage] = useState("");
+  const [sortAsc, setSortAsc] = useState(true); // ✅ เพิ่มตรงนี้
 
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -51,10 +48,12 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       item.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  // ✅ เรียงตามรหัสตามลำดับลูกศร
+  const sortedData = [...filteredData].sort((a, b) =>
+    sortAsc ? a.code.localeCompare(b.code) : b.code.localeCompare(a.code)
+  );
+
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
@@ -71,7 +70,14 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       <table className="consumable-table">
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
-            <th className="consumable-th">รหัส</th>
+            {/* ✅ เพิ่มฟังก์ชัน sort พร้อมลูกศร */}
+            <th
+              className="consumable-th"
+              onClick={() => setSortAsc((prev) => !prev)}
+              style={{ cursor: "pointer" }}
+            >
+              รหัส {sortAsc ? "▲" : "▼"}
+            </th>
             <th className="consumable-th">รูปภาพ</th>
             <th className="consumable-th">รายการ</th>
             <th className="consumable-th">ยอดยกมา</th>
@@ -94,7 +100,11 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
               <tr key={index} className="consumable-tr">
                 <td className="consumable-td">{item.code}</td>
                 <td className="consumable-td">
-                  <img src={item.image} alt={item.name} className="item-image" />
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="item-image"
+                  />
                 </td>
                 <td className="item-cell consumable-td">
                   <b>ชื่อ :</b> {item.name}
@@ -105,10 +115,23 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   <br />
                   ราคา/หน่วย : {item.price}
                   <br />
-                  สถานะ : <span className={`item-status ${item.status === "ใกล้หมดสต็อก!" ? "low-stock" : "in-stock"}`}>{item.status}</span>
+                  สถานะ :{" "}
+                  <span
+                    className={`item-status ${
+                      item.status === "ใกล้หมดสต็อก!"
+                        ? "low-stock"
+                        : "in-stock"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
                   <div className="item-actions">
-                    <a href="#" className="edit">✏ แก้ไข</a>
-                    <a href="#" className="adjust">ปรับยอด</a>
+                    <a href="#" className="edit">
+                      ✏ แก้ไข
+                    </a>
+                    <a href="#" className="adjust">
+                      ปรับยอด
+                    </a>
                   </div>
                 </td>
                 <td className="consumable-td">{item.brought}</td>
@@ -127,10 +150,16 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
 
       <div className="consumable-pagination-wrapper">
         <div className="consumable-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง{" "}
+          {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
         </div>
         <div className="consumable-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            ก่อนหน้า
+          </button>
 
           <input
             type="number"
@@ -152,7 +181,12 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             }}
           />
 
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>
