@@ -103,15 +103,24 @@ function PermissionContent() {
           </tr>
         </thead>
         <tbody>
-          {displayedData.map(([id, name, created, updated]) => (
-            <tr key={id} className="perm-clickable-row" onClick={() => handleRowClick(id, name)}>
-              <td>{id}</td>
-              <td>{name}</td>
-              <td>{created}</td>
-              <td>{updated}</td>
+          {displayedData.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="perm-no-data-message">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
+              </td>
             </tr>
-          ))}
+          ) : (
+            displayedData.map(([id, name, created, updated]) => (
+              <tr key={id} className="perm-clickable-row" onClick={() => handleRowClick(id, name)}>
+                <td>{id}</td>
+                <td>{name}</td>
+                <td>{created}</td>
+                <td>{updated}</td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="perm-pagination-wrapper">

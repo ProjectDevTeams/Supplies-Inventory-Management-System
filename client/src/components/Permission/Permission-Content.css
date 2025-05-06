@@ -215,3 +215,10 @@
     gap: 0.5em;
   }
 }
+
+.perm-no-data-message {
+  text-align: center;
+  color: black;
+  font-weight: normal;
+  padding: 1em;
+}
