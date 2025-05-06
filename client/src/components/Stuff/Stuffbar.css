@@ -19,9 +19,9 @@
 }
 
 .stuff-title {
-  font-size: 1.4em;
   font-weight: bold;
-  color: var(--color-text);
+  font-size: 1.4em;
+  color: #003366;
 }
 
 .stuff-controls {

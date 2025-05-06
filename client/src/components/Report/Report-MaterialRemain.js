@@ -33,18 +33,18 @@ function ReportMaterialRemain() {
     const header = [
       ["", "รายงานยอดคงเหลือวัสดุ"],
       ["", "วันที่ 1 ก.พ. 67 ถึง 31 มี.ค. 67"],
-      ["รหัส", "สินค้า", "", "ยอดยกมา", "ยอดซื้อ", "ยอดเบิก", "คงเหลือ", "มูลค่า"]
+      ["รหัส", "สินค้า", "หน่วย", "ยอดยกมา", "ยอดซื้อ", "ยอดเบิก", "คงเหลือ", "มูลค่า"]
     ];
 
     const dataWithCode = materials.map((row, index) => [
       `001-${String(index + 1).padStart(3, "0")}`,
       row[0],
-      "มูลค่า",
+      row[1],
       row[2],
       row[3],
       row[4],
       row[5],
-      row[6]
+      Math.round(row[6]) // ✅ ไม่มีจุดทศนิยม
     ]);
 
     const wsData = [...header, ...dataWithCode];
@@ -84,7 +84,7 @@ function ReportMaterialRemain() {
               {row.map((cell, i) => (
                 <td key={i}>
                   {typeof cell === "number"
-                    ? cell.toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    ? cell.toLocaleString(undefined, { maximumFractionDigits: 0 })
                     : cell}
                 </td>
               ))}
@@ -98,13 +98,9 @@ function ReportMaterialRemain() {
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, materials.length)} จาก {materials.length} รายการ
         </div>
         <div className="report-pagination-buttons">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
             ก่อนหน้า
           </button>
-
           <input
             type="number"
             className="report-page-input"
@@ -124,11 +120,7 @@ function ReportMaterialRemain() {
             }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
-
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
             ถัดไป
           </button>
         </div>

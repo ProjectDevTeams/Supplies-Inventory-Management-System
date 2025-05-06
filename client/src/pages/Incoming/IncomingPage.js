@@ -20,14 +20,14 @@ function IncomingPage() {
       <div className="incoming-sidebar">
         <Sidebar />
         <main className="incoming-content">
-          <section className="incoming-header">
+          <section>
             <Incomingbar
               onExportExcel={handleExportExcel}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
             />
           </section>
-          <section className="incoming-table-container">
+          <section>
             <IncomingTable
               searchTerm={searchTerm}
               onDataReady={setTableData}

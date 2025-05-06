@@ -31,7 +31,12 @@ function ReportAnnual() {
 
   const exportToExcel = () => {
     const header = [["ชื่อวัสดุ", "หน่วย", "รวมยอดเบิก", "มูลค่ารวม"]];
-    const rows = data.map((row) => [...row]);
+    const rows = data.map((row) => [
+      row[0],
+      row[1],
+      Math.round(row[2]),     // ✅ ไม่มีทศนิยม
+      Math.round(row[3])      // ✅ ไม่มีทศนิยม
+    ]);
     const wsData = [...header, ...rows];
 
     const worksheet = XLSX.utils.aoa_to_sheet(wsData);
@@ -67,7 +72,7 @@ function ReportAnnual() {
               {row.map((cell, i) => (
                 <td key={i}>
                   {typeof cell === "number"
-                    ? cell.toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    ? cell.toLocaleString(undefined, { maximumFractionDigits: 0 })
                     : cell}
                 </td>
               ))}

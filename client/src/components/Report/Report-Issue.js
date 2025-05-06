@@ -31,7 +31,14 @@ function ReportIssue() {
 
   const exportToExcel = () => {
     const header = [["วันที่", "เลขที่", "ชื่อ", "สกุล", "จำนวนรายการ", "มูลค่า"]];
-    const rows = data.map((row) => [...row]);
+    const rows = data.map((row) => [
+      row[0],
+      row[1],
+      row[2],
+      row[3],
+      row[4],
+      Math.round(row[5]) // ✅ ไม่มีทศนิยม
+    ]);
     const wsData = [...header, ...rows];
 
     const worksheet = XLSX.utils.aoa_to_sheet(wsData);
@@ -69,7 +76,7 @@ function ReportIssue() {
               <td>{row[1]}</td>
               <td>{row[2]} {row[3]}</td>
               <td>{row[4]}</td>
-              <td>{row[5].toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+              <td>{Math.round(row[5]).toLocaleString()}</td> {/* ✅ ไม่มีทศนิยม */}
             </tr>
           ))}
         </tbody>
