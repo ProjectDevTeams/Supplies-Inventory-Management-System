@@ -114,3 +114,11 @@
   color: white;
   opacity: 1;
 }
+
+.stuff-no-data {
+  text-align: center;
+  color: #000; /* สีดำ */
+  font-style: normal;
+  font-weight: normal;
+  padding: 1rem;
+}

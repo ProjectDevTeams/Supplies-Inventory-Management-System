@@ -58,19 +58,28 @@ export default function StuffTable({ searchTerm }) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(item => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.code}</td>
-              <td>{item.stock}</td>
-              <td>{item.amount}</td>
-              <td>{item.date}</td>
-              <td className={`stuff-status stuff-${item.status}`}>
-                {renderStatus(item.status)}
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="stuff-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.code}</td>
+                <td>{item.stock}</td>
+                <td>{item.amount}</td>
+                <td>{item.date}</td>
+                <td className={`stuff-status stuff-${item.status}`}>
+                  {renderStatus(item.status)}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="stuff-pagination">
