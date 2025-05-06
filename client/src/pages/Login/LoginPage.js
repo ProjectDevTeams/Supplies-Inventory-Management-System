@@ -22,7 +22,9 @@ function LoginPage() {
               <input type="password" placeholder="Enter password" />
             </div>
 
-            <div className="forgot-password">ลืมรหัสผ่าน</div>
+            <div className="forgot-password">
+              <Link to="/forget" className="forgot-password">ลืมรหัสผ่าน</Link>
+            </div>
 
             <button className="login-button">เข้าสู่ระบบ</button>
 
