@@ -106,3 +106,12 @@
   font-weight: normal;
   padding: 1rem;
 }
+
+.incoming-link {
+  color: #000;
+  font-weight: normal;
+  text-decoration: none;
+}
+.incoming-link:hover {
+  text-decoration: underline;
+}

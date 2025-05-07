@@ -110,3 +110,101 @@
   color: #2d7a3e;
   font-weight: bold;
 }
+
+
+
+ /* ✅ Pagination แบบใหม่ */
+ .history-balance-pagination-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.history-balance-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.history-balance-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.history-balance-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.history-balance-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.history-balance-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.history-balance-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+/* ช่องเลขหน้า */
+.history-balance-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.history-balance-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.history-balance-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.history-balance-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.history-balance-page-input::-webkit-inner-spin-button,
+.history-balance-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .history-balance-th,
+  .history-balance-td {
+    font-size: 0.85em;
+    padding: 0.5em;
+  }
+
+  .history-balance-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}

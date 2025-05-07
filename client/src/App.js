@@ -23,6 +23,8 @@ import SettingPage from "./pages/Setting/SettingPage";
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
+import MaterialsPage from "./pages/Incoming/MaterialsPage";
+
 
 import EmailVerification from "./pages/Email Verification/Email_Verification";
 
@@ -48,6 +50,7 @@ function App() {
         {/* เมนูใบเบิก */}
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/detail" element={<DetailPage />} />
+        <Route path="/incoming/materials" element={<MaterialsPage />} />
 
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />

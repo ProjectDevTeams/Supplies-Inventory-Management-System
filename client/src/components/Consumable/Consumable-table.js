@@ -33,11 +33,13 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
   const [showPopup, setShowPopup] = useState(false);
   const [inputPage, setInputPage] = useState("");
   const [sortAsc, setSortAsc] = useState(true); // ✅ เพิ่มตรงนี้
+  const [sortBy, setSortBy] = useState("code");
 
   const totalPages = Math.ceil(mockData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
+  
   const filteredData = mockData.filter(
     (item) =>
       item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -49,9 +51,18 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
   );
 
   // ✅ เรียงตามรหัสตามลำดับลูกศร
-  const sortedData = [...filteredData].sort((a, b) =>
-    sortAsc ? a.code.localeCompare(b.code) : b.code.localeCompare(a.code)
-  );
+  // ปรับฟังก์ชัน sort:
+  const sortedData = [...filteredData].sort((a, b) => {
+    let valA = a[sortBy];
+    let valB = b[sortBy];
+
+    if (typeof valA === "number") {
+      return sortAsc ? valA - valB : valB - valA;
+    } else {
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    }
+  });
+
 
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
@@ -71,21 +82,105 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
             {/* ✅ เพิ่มฟังก์ชัน sort พร้อมลูกศร */}
+
             <th
               className="consumable-th"
-              onClick={() => setSortAsc((prev) => !prev)}
-              style={{ cursor: "pointer" }}
+              onClick={() => {
+                if (sortBy === "code") setSortAsc((prev) => !prev);
+                else {
+                  setSortBy("code");
+                  setSortAsc(true);
+                }
+              }}
             >
-              รหัส {sortAsc ? "▲" : "▼"}
+              รหัส {sortBy === "code" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
             <th className="consumable-th">รูปภาพ</th>
             <th className="consumable-th">รายการ</th>
-            <th className="consumable-th">ยอดยกมา</th>
-            <th className="consumable-th">ยอดต่ำสุด</th>
-            <th className="consumable-th">ยอดสูงสุด</th>
-            <th className="consumable-th">รับ</th>
-            <th className="consumable-th">จ่าย</th>
-            <th className="consumable-th">คงเหลือ</th>
+
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "brought") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("brought");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              ยอดยกมา {sortBy === "brought" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>
+
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "low") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("low");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              ยอดต่ำสุด {sortBy === "low" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>
+
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "high") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("high");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              ยอดสูงสุด {sortBy === "high" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>
+
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "in") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("in");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              รับ {sortBy === "in" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>
+              
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "out") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("out");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              จ่าย {sortBy === "out" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>
+           
+            <th
+              className="consumable-th"
+              onClick={() => {
+                if (sortBy === "remain") {
+                  setSortAsc((prev) => !prev);
+                } else {
+                  setSortBy("remain");
+                  setSortAsc(true);
+                }
+              }}
+            >
+              คงเหลือ {sortBy === "remain" ? (sortAsc ? "▲" : "▼") : "▲"}
+            </th>          
           </tr>
         </thead>
         <tbody className="consumable-tbody">
@@ -117,19 +212,20 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   <br />
                   สถานะ :{" "}
                   <span
-                    className={`item-status ${item.status === "ใกล้หมดสต็อก!"
-                        ? "low-stock"
-                        : "in-stock"
-                      }`}
+                    className={`item-status ${
+                      item.status === "ใกล้หมดสต็อก!" ? "low-stock" : "in-stock"
+                    }`}
                   >
                     {item.status}
                   </span>
-                  
                   <div className="item-actions">
-                    <button type="button" className="consumable-edit">✏ แก้ไข</button>
-                    <button type="button" className="consumable-adjust">ปรับยอด</button>
+                    <button type="button" className="consumable-edit">
+                      ✏ แก้ไข
+                    </button>
+                    <button type="button" className="consumable-adjust">
+                      ปรับยอด
+                    </button>
                   </div>
-                  
                 </td>
                 <td className="consumable-td">{item.brought}</td>
                 <td className="consumable-td">{item.low}</td>
@@ -142,7 +238,6 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
           )}
         </tbody>
       </table>
-
 
       {showPopup && <AddnewPopup onClose={() => setShowPopup(false)} />}
 
