@@ -24,6 +24,7 @@ import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
 import MaterialsPage from "./pages/Incoming/MaterialsPage";
+import BalancePage from './pages/Adjust/BalancePage'; 
 
 
 import EmailVerification from "./pages/Email Verification/Email_Verification";
@@ -55,6 +56,7 @@ function App() {
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
+        <Route path="/adjust/balance" element={<BalancePage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/human" element={<HumanPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />

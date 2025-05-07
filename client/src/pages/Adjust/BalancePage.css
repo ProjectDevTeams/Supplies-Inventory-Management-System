@@ -1,0 +1,35 @@
+.balance-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #eaf1fb;
+  font-family: "Prompt", sans-serif;
+}
+
+.adjust-navbar {
+  display: flex;
+  flex-direction: column;
+}
+
+.adjust-sidebar {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+/* ✅ sidebar fix width */
+.sidebar-container {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.balance-content {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start; /* ✅ ให้เริ่มจากซ้าย (ติดกับ Sidebar) */
+  align-items: flex-start;
+  padding: 2rem 3rem 2rem 2rem; /* ✅ เพิ่ม padding ขวาให้พอดี */
+  background-color: #f0f6ff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}

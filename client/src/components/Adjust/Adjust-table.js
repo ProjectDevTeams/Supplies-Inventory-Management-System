@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Adjust-table.css";
 
 const mockAdjustData = [
@@ -15,6 +16,7 @@ const mockAdjustData = [
 ];
 
 function AdjustTable({ searchTerm }) {
+  const navigate = useNavigate(); 
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
@@ -74,15 +76,20 @@ function AdjustTable({ searchTerm }) {
               <tr key={item.id} className="adjustment-tr">
                 <td className="adjustment-td">{item.id}</td>
                 <td className="adjustment-td">{item.from}</td>
-                <td className="adjustment-td">{item.company}</td>
+                <td
+                  className="adjustment-td"
+                  style={{ color: "blue", textDecoration: "underline", cursor: "pointer" }}
+                  onClick={() => navigate('/adjust/balance')}
+                >
+                  {item.company}
+                </td>
                 <td className="adjustment-td">{item.orderDate}</td>
-                <td className={`adjustment-td ${
-                  item.state === "อนุมัติ"
+                <td className={`adjustment-td ${item.state === "อนุมัติ"
                     ? "status-approved"
                     : item.state === "รออนุมัติ"
-                    ? "status-pending"
-                    : "status-not-pending"
-                }`}>
+                      ? "status-pending"
+                      : "status-not-pending"
+                  }`}>
                   {item.state}
                 </td>
               </tr>
@@ -115,7 +122,7 @@ function AdjustTable({ searchTerm }) {
               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
                 if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);                
+                  setCurrentPage(val);
                 }
                 e.target.blur();
               }
