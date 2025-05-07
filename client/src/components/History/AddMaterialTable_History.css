@@ -118,7 +118,7 @@
 
 
  /* ✅ Pagination แบบใหม่ */
- .history-pagination-wrapper {
+ .history-add-pagination-wrapper {
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -127,18 +127,18 @@
   margin-top: 1em;
 }
 
-.history-pagination-info {
+.history-add-pagination-info {
   color: #333;
   font-size: 14px;
 }
 
-.history-pagination-buttons {
+.history-add-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.history-pagination-buttons button {
+.history-add-pagination-buttons button {
   padding: 0.5rem 1.2rem;
   background-color: #ffffff;
   color: #333;
@@ -148,23 +148,23 @@
   cursor: pointer;
 }
 
-.history-pagination-buttons button:hover {
+.history-add-pagination-buttons button:hover {
   background-color: #e6f0ff;
 }
 
-.history-pagination-buttons button:disabled {
+.history-add-pagination-buttons button:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-.history-pagination-buttons .active {
+.history-add-pagination-buttons .active {
   background-color: #2176bd;
   color: white;
 }
 
 /* ช่องเลขหน้า */
-.history-page-input {
+.history-add-page-input {
   width: 55px;
   text-align: center;
   padding: 0.4rem 0.6rem;
@@ -178,35 +178,35 @@
   -moz-appearance: textfield;
 }
 
-.history-page-input::placeholder {
+.history-add-page-input::placeholder {
   color: white;
   opacity: 1;
 }
 
-.history-page-input:focus {
+.history-add-page-input:focus {
   outline: none;
   border-color: rgba(0, 123, 255, 0.7);
 }
 
-.history-page-input:focus::placeholder {
+.history-add-page-input:focus::placeholder {
   color: transparent;
 }
 
-.history-page-input::-webkit-inner-spin-button,
-.history-page-input::-webkit-outer-spin-button {
+.history-add-page-input::-webkit-inner-spin-button,
+.history-add-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* ✅ Responsive */
 @media (max-width: 768px) {
-  .history-th,
-  .history-td {
+  .history-add-th,
+  .history-add-td {
     font-size: 0.85em;
     padding: 0.5em;
   }
 
-  .history-pagination-wrapper {
+  .history-add-pagination-wrapper {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5em;
