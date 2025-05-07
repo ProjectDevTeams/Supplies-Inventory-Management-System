@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Report-MaterialRemain.css";
+import { materials } from "../../mockdata/Data-Report-MaterialRemain"; // Importing data
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 function ReportMaterialRemain() {
-  const materials = [
-    ["ผ้าหมึก EPSON LQ-310", "กล่อง", 3, 0, 0, 2, 300.0],
-    ["หมึกพิมพ์เลเซอร์ Global nano toner", "กล่อง", 1, 0, 0, 1, 1990.0],
-    ["กระดาษเช็ดหน้าแบบกล่อง (140 แผ่น/กล่อง)", "กล่อง", 4, 20, 0, 0, 0.0],
-    ["ถุงมือพลาสติก (1 แพ็ค บรรจุ 24 ชิ้น)", "แพ็ค", 14, 0, 0, 14, 179.76],
-    ["ถุงขยะสีแดง (30×40)", "กิโลกรัม", 13, 0, 0, 13, 723.32],
-    ["ถุงขยะสีขาว (30×40)", "กิโลกรัม", 124, 0, 43, 81, 4333.5],
-    ["ถุงขยะสีดำ (18×20)", "กิโลกรัม", 30, 0, 8, 22, 918.06],
-    ["สบู่เหลวล้างมือ", "แกลลอน", 7, 0, 4, 3, 449.4],
-    ["แอลกอฮอล์ล้างมือ แบบน้ำ", "แกลลอน", 2, 0, 2, 0, 900.0],
-    ["หลอดขนาด 21 ซม. (40แพ็ค/ลัง)", "แพ็ค", 40, 0, 0, 40, 428.0]
-  ];
-
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
@@ -36,14 +24,15 @@ function ReportMaterialRemain() {
       ["รหัส", "สินค้า", "หน่วย", "ยอดยกมา", "ยอดซื้อ", "ยอดเบิก", "คงเหลือ", "มูลค่า"]
     ];
 
+    // Removed "created" date column from export data
     const dataWithCode = materials.map((row, index) => [
       `001-${String(index + 1).padStart(3, "0")}`,
-      row[0],
-      row[1],
-      row[2],
-      row[3],
-      row[4],
-      row[5],
+      row[0],  // สินค้า
+      row[1],  // หน่วย
+      row[2],  // ยอดยกมา
+      row[3],  // ยอดซื้อ
+      row[4],  // ยอดเบิก
+      row[5],  // ยอดคงเหลือ
       Math.round(row[6]) // ✅ ไม่มีจุดทศนิยม
     ]);
 
@@ -81,7 +70,7 @@ function ReportMaterialRemain() {
         <tbody>
           {displayedData.map((row, index) => (
             <tr key={index}>
-              {row.map((cell, i) => (
+              {row.slice(0, 7).map((cell, i) => (  // Removed created column here too
                 <td key={i}>
                   {typeof cell === "number"
                     ? cell.toLocaleString(undefined, { maximumFractionDigits: 0 })
