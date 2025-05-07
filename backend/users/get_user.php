@@ -1,4 +1,8 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Content-Type: application/json");
 require_once '../db.php';
 
 // ตรวจสอบว่ามีการส่ง id มาหรือไม่

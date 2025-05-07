@@ -1,4 +1,9 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Content-Type: application/json");
+
 require_once '../db.php';
 
 // รับข้อมูล JSON ที่ถูกส่งมาจาก frontend
