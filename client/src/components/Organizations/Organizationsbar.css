@@ -40,6 +40,7 @@
 }
 
 .org-btn-green {
+  height: 45px;
   background-color: #2d7a3e;
   padding: 0.5em 1em;
   border: none;

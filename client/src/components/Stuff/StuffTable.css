@@ -122,8 +122,8 @@
 }
 
 .stuff-link {
-  color: #0073ff;
-  font-weight: bold;
+  color: #000; /* สีดำ */
+  font-weight: normal;
   text-decoration: none;
 }
 
