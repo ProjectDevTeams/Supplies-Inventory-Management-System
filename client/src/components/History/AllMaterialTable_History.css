@@ -104,3 +104,103 @@
   color: #2d7a3e;
   font-weight: bold;
 }
+
+
+
+
+ /* ✅ Pagination แบบใหม่ */
+ .history-all-pagination-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.history-all-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.history-all-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.history-all-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.history-all-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.history-all-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.history-all-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+/* ช่องเลขหน้า */
+.history-all-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.history-all-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.history-all-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.history-all-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.history-all-page-input::-webkit-inner-spin-button,
+.history-all-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .history-all-th,
+  .history-all-td {
+    font-size: 0.85em;
+    padding: 0.5em;
+  }
+
+  .history-all-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}
+
