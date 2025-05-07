@@ -21,7 +21,7 @@ import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
-
+import EmailVerification from "./pages/Email Verification/Email_Verification";
 
 function App() {
   return (
@@ -48,6 +48,7 @@ function App() {
 
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/verification" element={<EmailVerification />} />
 
 
       </Routes>
