@@ -9,25 +9,40 @@
   background: white;
   padding: 2rem 3rem;
   border-radius: 10px;
-  width: 100%;
-  max-width: 1000px;
+  width: 60%;
   margin: 0 auto;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   font-family: 'Prompt', sans-serif;
   font-size: 1rem;
   box-sizing: border-box;
+  text-align: center; 
 }
 
 .detail-title {
-  font-size: 1.4rem;
+  font-size: 2rem; /* ✅ เพิ่มขนาด */
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   text-align: center;
   color: #003366;
 }
 
+.detail-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 4rem;
+  row-gap: 1rem;
+  justify-content: start;
+  font-size: 1rem;
+  margin-top: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
 .detail-grid p {
   margin-bottom: 1rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -38,10 +53,15 @@
 }
 
 .detail-table {
-  width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+
+  /* เพิ่ม 2 บรรทัดนี้ */
+  margin-left: auto;
+  margin-right: auto;
+
   font-size: 1rem;
+  width: 85%; /* หรือใส่ max-width: 100% ก็ได้ */
 }
 
 .detail-table th,
@@ -86,8 +106,60 @@
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
+  margin-left: auto;
 }
 
 .btn-back:hover {
   background-color: #e67c00;
+}
+
+/* สีตัวอักษรของ option ใน dropdown */
+.detail-status select option[value="approved"] {
+  color: green;
+}
+
+.detail-status select option[value="rejected"] {
+  color: red;
+}
+
+/* สีตัวอักษรใน select เมื่อเลือก */
+.detail-status select.approved {
+  color: green;
+}
+
+.detail-status select.rejected {
+  color: red;
+}
+
+.stuff-navbar {
+  width: 100%;
+  height: 100%;
+}
+
+.stuff-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.stuff-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 2em;
+  box-sizing: border-box;
+  margin-left: 200px; /* ระยะห่างด้านซ้าย ให้พอมีที่ว่างให้ Sidebar */
+}
+
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: 1fr; /* มือถือให้เป็นคอลัมน์เดียว */
+  }
+}
+
+.detail-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
 }

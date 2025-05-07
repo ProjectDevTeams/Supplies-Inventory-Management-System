@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
 import Navbar from '../../Navbar/Navbar';
 import './Detail.css';
@@ -13,11 +13,12 @@ const mockData = {
   items: [
     { name: "Pentax ใบมีดตัดเตอร์ใหญ่ L150", qty: 2, unit: "กล่อง", price: 22.00 }
   ],
-  status: "approved",
+  status: "",
   receiveStatus: ""
 };
 
 export default function Detail() {
+  const [status, setStatus] = useState(mockData.status);
   const total = mockData.items.reduce((sum, i) => sum + (i.qty * i.price), 0).toFixed(2);
 
   return (
@@ -30,15 +31,14 @@ export default function Detail() {
           <div className="detail-box">
             <h2 className="detail-title">ใบเบิกวัสดุ</h2>
             <div className="detail-grid">
-              <p><b>เลขที่/ปีงบประมาณ</b><br /> {mockData.code}</p>
-              <p><b>วันที่</b><br /> {mockData.date}</p>
-              <p><b>ชื่อ</b><br /> {mockData.name}</p>
-              <p><b>สังกัด</b><br /> {mockData.department}</p>
-              <p><b>เบิกจำนวน</b><br /> {mockData.items.length} รายการ</p>
-              <p><b>คลัง</b><br /> {mockData.stock}</p>
-              <p><b>เพื่อใช้ในงาน/กิจกรรม</b><br /> {mockData.usage}</p>
+              <p><b>เลขที่/ปีงบประมาณ</b></p><p>{mockData.code}</p>
+              <p><b>วันที่</b></p><p>{mockData.date}</p>
+              <p><b>ชื่อ</b></p><p>{mockData.name}</p>
+              <p><b>สังกัด</b></p><p>{mockData.department}</p>
+              <p><b>เบิกจำนวน</b></p><p>{mockData.items.length} รายการ</p>
+              <p><b>คลัง</b></p><p>{mockData.stock}</p>
+              <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{mockData.usage}</p>
             </div>
-
             <h3 className="detail-subtitle">รายการวัสดุ</h3>
             <table className="detail-table">
               <thead>
@@ -67,7 +67,11 @@ export default function Detail() {
 
             <div className="detail-status">
               <label>สถานะการอนุมัติ : </label>
-              <select defaultValue={mockData.status}>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className={`${status} detail-select`}
+              >
                 <option value="">สถานะ:</option>
                 <option value="approved">อนุมัติ</option>
                 <option value="rejected">ไม่อนุมัติ</option>
@@ -81,7 +85,10 @@ export default function Detail() {
               </span>
             </div>
 
-            <button className="btn-back" onClick={() => window.history.back()}>กลับ</button>
+            <div className="detail-button-container">
+              <button className="btn-back" onClick={() => window.history.back()}>กลับ</button>
+            </div>
+
           </div>
         </main>
       </div>
