@@ -1,3 +1,3 @@
 <?php
-// แก้ไขวัสดุ
+// update_material.php placeholder
 ?>

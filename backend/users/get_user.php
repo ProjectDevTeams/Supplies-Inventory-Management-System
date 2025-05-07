@@ -1,3 +1,3 @@
 <?php
-// ดึงข้อมูลผู้ใช้รายบุคคล
+// get_user.php placeholder
 ?>
