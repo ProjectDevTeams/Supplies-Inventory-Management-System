@@ -120,3 +120,4 @@ function AllMaterialTable_History() {
 }
 
 export default AllMaterialTable_History;
+
