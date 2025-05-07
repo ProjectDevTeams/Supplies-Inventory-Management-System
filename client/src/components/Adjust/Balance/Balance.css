@@ -9,7 +9,7 @@
 }
   
   .balance-header {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: bold;
     color: #003366;
     margin-bottom: 1.5rem;
@@ -17,7 +17,7 @@
   
   .balance-box {
     background-color: #fff;
-    padding: 2.5rem 3rem; /* ✅ เพิ่ม padding บน-ล่างให้ content ไม่ชิด */
+    padding: 2.5rem 3rem; 
     border-radius: 8px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -30,12 +30,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10rem;
+    gap: 8rem;
     margin-bottom: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
   
   .balance-row strong {
+    margin-left: 8rem;
     min-width: 120px;
     color: #000;
   }
