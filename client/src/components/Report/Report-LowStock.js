@@ -37,7 +37,13 @@ function ReportLowStock() {
 
   const exportToExcel = () => {
     const header = [["ชื่อวัสดุ", "หน่วย", "ยอดต่ำสุด", "ยอดคงเหลือ", "มูลค่ารวม"]];
-    const rows = filteredData.map((row) => [...row]);
+    const rows = filteredData.map((row) => [
+      row[0],
+      row[1],
+      row[2],
+      row[3],
+      Math.round(row[4]) // ✅ ไม่มีทศนิยม
+    ]);
     const wsData = [...header, ...rows];
 
     const worksheet = XLSX.utils.aoa_to_sheet(wsData);
@@ -86,7 +92,7 @@ function ReportLowStock() {
               {row.map((cell, i) => (
                 <td key={i}>
                   {typeof cell === "number"
-                    ? cell.toLocaleString(undefined, { minimumFractionDigits: 2 })
+                    ? Math.round(cell).toLocaleString() // ✅ ไม่มีทศนิยมบนหน้าจอ
                     : cell}
                 </td>
               ))}

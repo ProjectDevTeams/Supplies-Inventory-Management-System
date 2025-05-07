@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Adjustbar from "../../components/Adjust/Adjustbar";
 import AdjustTable from '../../components/Adjust/Adjust-table';
+import './AdjustPage.css';
 
 function AdjustPage() {
   const [searchTerm, setSearchTerm] = useState(""); // เก็บข้อความค้นหา
@@ -13,15 +14,11 @@ function AdjustPage() {
       <div className="adjust-sidebar">
         <Sidebar />
         <main className="adjust-content">
-          <section className="content-header">
+          <section>
           <Adjustbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            {/* <Adjustbar /> */}
           </section>
-          <section className="adjust-table-container">
-            
+          <section>
           <AdjustTable searchTerm={searchTerm} />
-
-           {/* <AdjustTable/> */}
           </section>
         </main>
       </div>

@@ -164,3 +164,11 @@
     gap: 0.5em;
   }
 }
+
+.organizations-no-data-message {
+  text-align: center;
+  color: #000; /* สีดำ */
+  font-style: normal;
+  font-weight: normal;
+  padding: 1rem;
+}

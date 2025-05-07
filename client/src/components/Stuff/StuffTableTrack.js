@@ -17,7 +17,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
 
   const sorted = [...trackData].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
 
-  const renderStatus = (st) => st.includes('ไม่') ? 'ไม่อนุมัติ' : 'รับของเรียบร้อย';
+  const renderStatus = (st) => st.includes('ไม่') ? 'ไม่อนุมัติ' : 'อนุมัติ';
 
   const filtered = sorted.filter(item =>
     item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,19 +56,24 @@ export default function StuffTableTrack({ searchTerm = '' }) {
           </tr>
         </thead>
         <tbody>
-          {items.map(i => (
-            <tr key={i.id}>
-              <td>{i.id}</td>
-              <td>{i.code}</td>
-              <td>{i.stock}</td>
-              <td>{i.amount}</td>
-              <td>{i.date}</td>
-              <td className={`stuff-status stuff-${i.status.includes('ไม่') ? 'rejected' : 'approved'}`}>
-                {renderStatus(i.status)}
-              </td>
+          {items.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
-          ))}
+          ) : (
+            items.map(i => (
+              <tr key={i.id}>
+                <td>{i.id}</td>
+                <td>{i.code}</td>
+                <td>{i.stock}</td>
+                <td>{i.amount}</td>
+                <td>{i.date}</td>
+                <td className={`stuff-status stuff-${i.status.includes('ไม่') ? 'rejected' : 'approved'}`}>{renderStatus(i.status)}</td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="stuff-pagination">

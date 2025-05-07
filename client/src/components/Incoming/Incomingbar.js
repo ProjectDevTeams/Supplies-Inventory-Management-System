@@ -8,7 +8,7 @@ function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
 
   return (
     <div className="incoming-header">
-      <h2 className="incoming-title">รับเข้าวัสดุ</h2>
+      <div className="incoming-title">รับเข้าวัสดุ</div>
 
       <div className="incoming-controls">
         {/* 🔍 Search */}

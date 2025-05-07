@@ -59,16 +59,25 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.company}</td>
-              <td>{item.po}</td>
-              <td>{item.orderDate}</td>
-              <td>{item.amount.toLocaleString()}</td>
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="incoming-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
+              </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.company}</td>
+                <td>{item.po}</td>
+                <td>{item.orderDate}</td>
+                <td>{item.amount.toLocaleString()}</td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="incoming-pagination-wrapper">

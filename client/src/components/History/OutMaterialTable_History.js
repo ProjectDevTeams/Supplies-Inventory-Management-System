@@ -1,11 +1,11 @@
 // OutMaterialTable_History.js
 import React from "react";
-import "./AddMaterialTable_History.css"; // ยังใช้ CSS เดิม
+import "./OutMaterialTable_History.css"; // ใช้ CSS เดิม
 
 function OutMaterialTable_History() {
   return (
-    <div className="history-table-container">
-      <table className="history-table">
+    <div className="history-out-table-container">
+      <table className="history-out-table">
         <thead>
           <tr>
             <th>วันที่</th>
@@ -24,10 +24,10 @@ function OutMaterialTable_History() {
             <td>122.50</td>
             <td>1</td>
             <td>17.50</td>
-            <td className="left-align">
-              ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม
+            <td className="history-out-left-align">
+            ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม 
             </td>
-            <td className="status approved">อนุมัติ</td>
+            <td className="history-out-status approved">อนุมัติ</td>
           </tr>
         </tbody>
       </table>

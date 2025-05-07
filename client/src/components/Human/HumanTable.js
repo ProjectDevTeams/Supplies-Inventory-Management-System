@@ -25,6 +25,7 @@ function HumanTable({ searchTerm }) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
+  const [sortAsc, setSortAsc] = useState(true); // ✅ เพิ่มการเรียงลำดับ
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -33,9 +34,9 @@ function HumanTable({ searchTerm }) {
 
   useEffect(() => {
     setInputPage("");
-  }, [currentPage])
+  }, [currentPage]);
 
-
+  // ✅ กรอง + เรียงลำดับข้อมูล
   const filteredData = data.filter(item =>
     item.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -44,10 +45,14 @@ function HumanTable({ searchTerm }) {
     item.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const sortedData = [...filteredData].sort((a, b) =>
+    sortAsc ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id)
+  );
+
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleEditClick = (person) => {
     setSelectedPerson(person);
@@ -68,7 +73,10 @@ function HumanTable({ searchTerm }) {
       <table className="hum-table">
         <thead>
           <tr>
-            <th>ลำดับ</th>
+            {/* ✅ เพิ่ม sort แบบคลิกได้ */}
+            <th onClick={() => setSortAsc(prev => !prev)} style={{ cursor: 'pointer' }}>
+              ลำดับ {sortAsc ? '▲' : '▼'}
+            </th>
             <th>username</th>
             <th>ชื่อ - สกุล</th>
             <th>กำหนดกลุ่มผู้ใช้งาน</th>
@@ -77,57 +85,60 @@ function HumanTable({ searchTerm }) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id} onClick={() => handleEditClick(item)}>
-              <td>{item.id}</td>
-              <td>{item.username}</td>
-              <td>{item.fullname}</td>
-              <td>{item.group}</td>
-              <td>{item.email}</td>
-              <td className={`status ${item.status === 'อนุมัติ' ? 'approved' : item.status === 'รออนุมัติ' ? 'pending' : 'rejected'}`}>
-                {item.status}
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="human-no-data-message">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item) => (
+              <tr key={item.id} onClick={() => handleEditClick(item)}>
+                <td>{item.id}</td>
+                <td>{item.username}</td>
+                <td>{item.fullname}</td>
+                <td>{item.group}</td>
+                <td>{item.email}</td>
+                <td className={`status ${item.status === 'อนุมัติ' ? 'approved' : item.status === 'รออนุมัติ' ? 'pending' : 'rejected'}`}>
+                  {item.status}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
-      {currentItems.length === 0 && (
-        <div className="no-data-message">
-          ไม่พบข้อมูลที่ตรงกับคำค้นหา "{searchTerm}"
+      <div className="human-pagination-wrapper">
+        <div className="human-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedData.length)} จาก {sortedData.length} แถว
         </div>
-      )}
+        <div className="human-pagination-buttons">
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
 
-<div className="human-pagination-wrapper">
-  <div className="human-pagination-info">
-    แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
-  </div>
-  <div className="human-pagination-buttons">
-    <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
+          <input
+            type="number"
+            className="human-page-input"
+            value={inputPage}
+            min={1}
+            max={totalPages}
+            placeholder={`${currentPage} / ${totalPages}`}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const val = parseInt(inputPage.trim(), 10);
+                if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                  setCurrentPage(val);
+                }
+                e.target.blur();
+              }
+            }}
+          />
 
-    <input
-      type="number"
-      className="human-page-input"
-      value={inputPage}
-      min={1}
-      max={totalPages}
-      placeholder={`${currentPage} / ${totalPages}`}
-      onFocus={() => setInputPage("")}
-      onChange={(e) => setInputPage(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          const val = parseInt(inputPage.trim(), 10);
-          if (!isNaN(val) && val >= 1 && val <= totalPages) {
-            setCurrentPage(val);
-          }
-          e.target.blur();
-        }
-      }}
-    />
-
-    <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
-  </div>
-</div>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
+        </div>
+      </div>
 
       {showEditPopup && (
         <EditpeoplePopup

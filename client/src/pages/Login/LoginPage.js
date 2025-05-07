@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
+
+  const [showPassword, setShowPassword] = useState(false);
+
+
   return (
     <div className="body-login">
       <div className="login-container">
@@ -19,13 +23,18 @@ function LoginPage() {
 
             <div className="input-group">
               <label>Password</label>
-              <input type="password" placeholder="Enter password" />
+              {/* function ลูกตาเปิด / ปิด ดูรหัส */}
+              <input type= {showPassword ? "text" : "password"} placeholder="Enter password" />
+              <span className='login-eye-icon' onClick={() => setShowPassword(!showPassword)}>
+                <img className="login-eye-view" src={showPassword ? "/image/eyeview.png" : "/image/eyehide.png"}/>
+              </span>
             </div>
 
-            <div className="forgot-password">ลืมรหัสผ่าน</div>
+            <div className="forgot-password">
+              <Link to="/forget" className="forgot-password">ลืมรหัสผ่าน</Link>
+            </div>
 
-            <button className="login-button">เข้าสู่ระบบ</button>
-
+            <button type="button" className="login-button">เข้าสู่ระบบ</button>
             <div className="switch-page">
               ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
             </div>

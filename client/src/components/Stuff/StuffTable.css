@@ -4,9 +4,6 @@
   padding: 1em;
   background-color: #f5f8fc;
   box-sizing: border-box;
-  margin: 0 auto;
-  margin-left: 0.1em;
-
 }
 
 .stuff-table {
@@ -50,10 +47,11 @@
 /* Pagination */
 .stuff-pagination {
   width: 100%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 1em;
 }
 
 .stuff-pagination-info {
@@ -113,4 +111,22 @@
 .stuff-page-input::placeholder {
   color: white;
   opacity: 1;
+}
+
+.stuff-no-data {
+  text-align: center;
+  color: #000; /* สีดำ */
+  font-style: normal;
+  font-weight: normal;
+  padding: 1rem;
+}
+
+.stuff-link {
+  color: #0073ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.stuff-link:hover {
+  text-decoration: underline;
 }
