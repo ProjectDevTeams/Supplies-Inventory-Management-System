@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Kanit', Arial, sans-serif;
+}
+
 /* พื้นหลังเทา */
 .add-popup-container {
     position: fixed;
@@ -17,7 +26,6 @@
     background: #fff;
     border: 1px solid #444;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    font-family: 'Kanit', sans-serif;
   }
   
   /* หัวป๊อปอัป */

@@ -42,85 +42,87 @@ function ReportContent() {
   };
 
   return (
-    <div className="report-bar">
-      <div className="report-title">
-        รายงาน{currentReport ? ` / ${reportNames[currentReport]}` : ""}
-      </div>
-
-      <div className="report-controls">
-        <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>
-          รายงานยอดคงเหลือวัสดุ
-        </button>
-        <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>
-          รายงานการรับเข้า
-        </button>
-        <button className="report-btn report-orange" onClick={() => handleReportClick("annual")}>
-          รายงานรายจ่ายประจำปี
-        </button>
-        <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>
-          รายงานการเบิก-จ่าย
-        </button>
-        <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>
-          รายงานวัสดุใกล้หมดสต็อก
-        </button>
-      </div>
-
-      {currentReport && (
-        <div className="report-search">
-          <div className="report-search-row">
-            <div className="report-search-group">
-              <label>ตั้งแต่</label>
-              <div className="report-dropdowns">
-                <select value={fromMonth} onChange={(e) => setFromMonth(e.target.value)}>
-                  <option>เลือกเดือน</option>
-                  {months.map((month) => <option key={month}>{month}</option>)}
-                </select>
-                <select value={fromYear} onChange={(e) => setFromYear(e.target.value)}>
-                  <option>เลือกปี</option>
-                  {years.map((year) => <option key={year}>{year}</option>)}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="report-search-row">
-            <div className="report-search-group">
-              <label>จนถึง</label>
-              <div className="report-dropdowns">
-                <select value={toMonth} onChange={(e) => setToMonth(e.target.value)}>
-                  <option>เลือกเดือน</option>
-                  {months.map((month) => <option key={month}>{month}</option>)}
-                </select>
-                <select value={toYear} onChange={(e) => setToYear(e.target.value)}>
-                  <option>เลือกปี</option>
-                  {years.map((year) => <option key={year}>{year}</option>)}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* ✅ ย้ายคลังวัสดุ + ปุ่มค้นหา มาอยู่แถวเดียวกัน */}
-          <div className="report-search-row">
-            <div className="report-search-group">
-              <label>คลังวัสดุ</label>
-              <select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
-                {warehouses.map((item) => <option key={item}>{item}</option>)}
-              </select>
-            </div>
-
-            <div className="report-search-button">
-              <button className="report-btn-search" onClick={handleSearch}>ค้นหา</button>
-            </div>
-          </div>
+    <div className="report-bar-container">
+      <div className="report-bar">
+        <div className="report-title">
+          รายงาน{currentReport ? ` / ${reportNames[currentReport]}` : ""}
         </div>
-      )}
 
-      {/* ✅ แสดงผลแต่ละรายงาน */}
-      {showResult && currentReport === "remain" && <ReportMaterialRemain />}
-      {showResult && currentReport === "receive" && <ReportReceive />}
-      {showResult && currentReport === "annual" && <ReportAnnual />}
-      {showResult && currentReport === "issue" && <ReportIssue />}
-      {showResult && currentReport === "lowstock" && <ReportLowStock />}
+        <div className="report-controls">
+          <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>
+            รายงานยอดคงเหลือวัสดุ
+          </button>
+          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>
+            รายงานการรับเข้า
+          </button>
+          <button className="report-btn report-orange" onClick={() => handleReportClick("annual")}>
+            รายงานรายจ่ายประจำปี
+          </button>
+          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>
+            รายงานการเบิก-จ่าย
+          </button>
+          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>
+            รายงานวัสดุใกล้หมดสต็อก
+          </button>
+        </div>
+
+        {currentReport && (
+          <div className="report-search">
+            <div className="report-search-row">
+              <div className="report-search-group">
+                <label>ตั้งแต่</label>
+                <div className="report-dropdowns">
+                  <select value={fromMonth} onChange={(e) => setFromMonth(e.target.value)}>
+                    <option>เลือกเดือน</option>
+                    {months.map((month) => <option key={month}>{month}</option>)}
+                  </select>
+                  <select value={fromYear} onChange={(e) => setFromYear(e.target.value)}>
+                    <option>เลือกปี</option>
+                    {years.map((year) => <option key={year}>{year}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="report-search-row">
+              <div className="report-search-group">
+                <label>จนถึง</label>
+                <div className="report-dropdowns">
+                  <select value={toMonth} onChange={(e) => setToMonth(e.target.value)}>
+                    <option>เลือกเดือน</option>
+                    {months.map((month) => <option key={month}>{month}</option>)}
+                  </select>
+                  <select value={toYear} onChange={(e) => setToYear(e.target.value)}>
+                    <option>เลือกปี</option>
+                    {years.map((year) => <option key={year}>{year}</option>)}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* ✅ ย้ายคลังวัสดุ + ปุ่มค้นหา มาอยู่แถวเดียวกัน */}
+            <div className="report-search-row">
+              <div className="report-search-group">
+                <label>คลังวัสดุ</label>
+                <select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}>
+                  {warehouses.map((item) => <option key={item}>{item}</option>)}
+                </select>
+              </div>
+
+              <div className="report-search-button">
+                <button className="report-btn-search" onClick={handleSearch}>ค้นหา</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ✅ แสดงผลแต่ละรายงาน */}
+        {showResult && currentReport === "remain" && <ReportMaterialRemain />}
+        {showResult && currentReport === "receive" && <ReportReceive />}
+        {showResult && currentReport === "annual" && <ReportAnnual />}
+        {showResult && currentReport === "issue" && <ReportIssue />}
+        {showResult && currentReport === "lowstock" && <ReportLowStock />}
+      </div>
     </div>
   );
 }
