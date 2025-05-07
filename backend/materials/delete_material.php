@@ -1,3 +1,3 @@
 <?php
-// ลบวัสดุ
+// delete_material.php placeholder
 ?>

@@ -1,3 +1,3 @@
 <?php
-// ดูรายละเอียดวัสดุ
+// get_material.php placeholder
 ?>
