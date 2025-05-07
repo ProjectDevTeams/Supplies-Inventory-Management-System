@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import "./IncomingTable.css";
 
 const mockIncomingData = [
@@ -69,7 +70,11 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
             currentItems.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
-                <td>{item.company}</td>
+                <td>
+                  <Link to="/incoming/materials" className="incoming-link">
+                    {item.company}
+                  </Link>
+                </td>
                 <td>{item.po}</td>
                 <td>{item.orderDate}</td>
                 <td>{item.amount.toLocaleString()}</td>
