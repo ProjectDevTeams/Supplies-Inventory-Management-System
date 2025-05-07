@@ -36,7 +36,7 @@
 /* ✅ เซลล์ td */
 .adjustment-td {
   padding: 1rem;
-  color: #333;
+  color: black;
   font-size: 1rem;
   border-bottom: 1px solid #060d14;
   text-align: center;
@@ -174,4 +174,16 @@
 .status-not-pending {
   text-align: center;
   font-weight: bold;
+}
+
+.company-link {
+  color: #000000;
+  cursor: pointer;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.company-link:hover {
+  text-decoration: underline;
+  color: #000000;
 }

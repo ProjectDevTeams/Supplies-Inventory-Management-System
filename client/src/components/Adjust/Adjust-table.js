@@ -16,7 +16,7 @@ const mockAdjustData = [
 ];
 
 function AdjustTable({ searchTerm }) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
@@ -53,7 +53,7 @@ function AdjustTable({ searchTerm }) {
   };
 
   useEffect(() => {
-    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
+    setInputPage("");
   }, [currentPage]);
 
   return (
@@ -77,8 +77,7 @@ function AdjustTable({ searchTerm }) {
                 <td className="adjustment-td">{item.id}</td>
                 <td className="adjustment-td">{item.from}</td>
                 <td
-                  className="adjustment-td"
-                  style={{ color: "blue", textDecoration: "underline", cursor: "pointer" }}
+                  className="adjustment-td company-link"
                   onClick={() => navigate('/adjust/balance')}
                 >
                   {item.company}
@@ -96,9 +95,7 @@ function AdjustTable({ searchTerm }) {
             ))
           ) : (
             <tr>
-              <td className="adjustment-td" colSpan="5">
-                ไม่มีข้อมูลที่ตรงกับคำค้นหา
-              </td>
+              <td className="adjustment-td" colSpan="5">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           )}
         </tbody>
