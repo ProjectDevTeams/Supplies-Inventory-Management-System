@@ -1,100 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 import "./Organizations-table.css";
+import Organizationsbar from "./Organizationsbar";
 import OrganizationsManagePopup from "./Organizations-Manage-Popup";
 import OrganizationsAddPopup from "./Organizations-Add-Popup";
-import Organizationsbar from "./Organizationsbar";
+import { API_URL } from "../../config";
 
-function OrganizationsTable() {
-  const [companies, setCompanies] = useState(() => {
-    const saved = localStorage.getItem("companies");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          { id: "1", name: "ห้างหุ้นส่วนจำกัด นนทวัสดุอุตสาหกรรม (2021)", created: "13 พ.ย. 66" },
-          { id: "2", name: "บริษัท โกลบอล 205 (ประเทศไทย) จำกัด", created: "14 พ.ย. 66" },
-          { id: "3", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" },
-          { id: "4", name: "ห้างหุ้นส่วนจำกัด นนทภัณฑ์ สเตชั่นเนอรี่", created: "24 พ.ย. 66" },
-          { id: "5", name: "บริษัท แสงออร์ดี สมบูรณ์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)", created: "4 เม.ย. 67" }
-        ];
-  });
+export default function OrganizationsTable() {
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [input, setInput] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [manageId, setManageId] = useState();
+  const [adding, setAdding] = useState(false);
+  const perPage = 5;
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [showManagePopup, setShowManagePopup] = useState(false);
-  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
-  const [showAddPopup, setShowAddPopup] = useState(false);
-  const [sortOrder, setSortOrder] = useState("asc");
-
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const sortedCompanies = [...filteredCompanies].sort((a, b) =>
-    sortOrder === "asc" ? parseInt(a.id) - parseInt(b.id) : parseInt(b.id) - parseInt(a.id)
-  );
-
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(sortedCompanies.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedCompanies = sortedCompanies.slice(indexOfFirstItem, indexOfLastItem);
-
+  // fetch once
   useEffect(() => {
-    setInputPage("");
-    setCurrentPage(1);
-  }, [searchTerm]);
+    axios
+      .get(`${API_URL}/companies/get_companies.php`)
+      .then(r => {
+        if (r.data.status === "success")
+          setData(
+            r.data.data.map(c => ({
+              id: String(c.id),
+              name: c.name,
+              created_at: c.created_at.split(" ")[0],
+              updated_at: c.updated_at?.split(" ")[0] || "",
+              created_by: c.created_by,       // may be null
+            }))
+          );
+      })
+      .catch(console.error);
+  }, []);
 
-  useEffect(() => {
-    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
-  }, [currentPage]);
-  
-  const handleCompanyClick = (id) => {
-    setSelectedCompanyId(id);
-    setShowManagePopup(true);
-  };
+  // date formatter
+  const fmt = d => (d ? d.split("-").reverse().join("-") : "--");
 
-  const handleAddCompany = (newCompany) => {
-    const maxId = Math.max(...companies.map((c) => parseInt(c.id)));
-    const nextId = maxId + 1;
-    const companyToSave = { ...newCompany, id: nextId.toString() };
-    const updated = [...companies, companyToSave];
-    setCompanies(updated);
-    localStorage.setItem("companies", JSON.stringify(updated));
-    setCurrentPage(Math.ceil(updated.length / itemsPerPage));
-  };
+  // filter / sort / paginate
+  const { items, total } = useMemo(() => {
+    let arr = data.filter(c =>
+      (c.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      fmt(c.created_at).includes(search) ||
+      fmt(c.updated_at).includes(search)
+    );
+    arr.sort((a, b) => (sortAsc ? a.id - b.id : b.id - a.id));
+    const total = arr.length;
+    const start = (page - 1) * perPage;
+    return { items: arr.slice(start, start + perPage), total };
+  }, [data, search, sortAsc, page]);
 
-  const handleEditCompany = (id, newName) => {
-    const updated = companies.map((c) => c.id === id ? { ...c, name: newName } : c);
-    setCompanies(updated);
-    localStorage.setItem("companies", JSON.stringify(updated));
-  };
-
-  const handleDeleteCompany = (id) => {
-    const updated = companies.filter((c) => c.id !== id);
-    setCompanies(updated);
-    localStorage.setItem("companies", JSON.stringify(updated));
-  };
-
-  const handleSortClick = () => {
-    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-  };
+  const totalPages = Math.ceil(total / perPage);
 
   return (
     <div className="organizations-bar-container">
       <Organizationsbar
-        onAddClick={() => setShowAddPopup(true)}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
+        onAddClick={() => setAdding(true)}
+        searchTerm={search}
+        setSearchTerm={t => {
+          setSearch(t);
+          setPage(1);
+        }}
       />
 
       <table className="organizations-bar-table">
         <thead>
           <tr>
-            <th>
-              <span onClick={handleSortClick} style={{ cursor: "pointer" }}>
-                ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
-              </span>
+            <th onClick={() => setSortAsc(a => !a)} style={{ cursor: "pointer" }}>
+              ลำดับ {sortAsc ? "▲" : "▼"}
             </th>
             <th>บริษัท/ร้านค้า</th>
             <th>วันที่สร้าง</th>
@@ -102,76 +76,96 @@ function OrganizationsTable() {
           </tr>
         </thead>
         <tbody>
-          {displayedCompanies.length === 0 ? (
+          {items.length === 0 ? (
             <tr>
-              <td colSpan="4" className="organizations-no-data-message">
-                ไม่มีข้อมูลที่ตรงกับคำค้นหา
-              </td>
+              <td colSpan="4">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
-            displayedCompanies.map((company) => (
+            items.map(c => (
               <tr
-                key={company.id}
-                onClick={() => handleCompanyClick(company.id)}
+                key={c.id}
                 className="org-clickable-row"
+                onClick={() => setManageId(c.id)}
               >
-                <td>{company.id}</td>
-                <td>{company.name}</td>
-                <td>{company.created}</td>
-                <td>—</td>
+                <td>{c.id}</td>
+                <td>{c.name}</td>
+                <td>
+                  {fmt(c.created_at)}
+                  <br />
+                  <span className="organizations-bar-subtext">
+                    {/* fall‑back to "—" when created_by is null */}
+                    {c.created_by || "—"}
+                  </span>
+                </td>
+                <td>{c.updated_at ? fmt(c.updated_at) : "—"}</td>
               </tr>
             ))
           )}
         </tbody>
       </table>
 
-
       <div className="organizations-pagination-wrapper">
         <div className="organizations-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCompanies.length)} จาก {sortedCompanies.length} แถว
+          แสดง {(page - 1) * perPage + 1} ถึง{" "}
+          {Math.min(page * perPage, total)} จาก {total} แถว
         </div>
         <div className="organizations-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>ก่อนหน้า</button>
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+            ก่อนหน้า
+          </button>
           <input
             type="number"
             className="organizations-page-input"
-            value={inputPage}
-            min={1}
-            max={totalPages}
-            placeholder={`${currentPage} / ${totalPages}`}
-            onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
+            placeholder={`${page} / ${totalPages}`}
+            value={input}
+            onFocus={() => setInput("")}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
               if (e.key === "Enter") {
-                const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
-                }
+                const v = parseInt(input, 10);
+                if (v >= 1 && v <= totalPages) setPage(v);
                 e.target.blur();
               }
             }}
           />
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>ถัดไป</button>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(p => p + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
 
-      {showManagePopup && selectedCompanyId && (
+      {manageId && (
         <OrganizationsManagePopup
-          onClose={() => setShowManagePopup(false)}
-          companyData={companies.find((c) => c.id === selectedCompanyId)}
-          onDeleteCompany={handleDeleteCompany}
-          onEditCompany={handleEditCompany}
+          onClose={() => setManageId(undefined)}
+          companyData={data.find(c => c.id === manageId)}
+          onDeleteCompany={id => setData(ds => ds.filter(d => d.id !== id))}
+          onEditCompany={(id, name) =>
+            setData(ds => ds.map(d => (d.id === id ? { ...d, name } : d)))
+          }
         />
       )}
 
-      {showAddPopup && (
+      {adding && (
         <OrganizationsAddPopup
-          onClose={() => setShowAddPopup(false)}
-          onAddCompany={handleAddCompany}
+          onClose={() => setAdding(false)}
+          onAddCompany={nc => {
+            const next = String(Math.max(...data.map(d => +d.id)) + 1);
+            setData([
+              ...data,
+              {
+                id: next,
+                name: nc.name,
+                created_at: new Date().toISOString().slice(0, 10),
+                updated_at: "",
+                created_by: "—",
+              },
+            ]);
+          }}
         />
       )}
     </div>
   );
 }
-
-export default OrganizationsTable;

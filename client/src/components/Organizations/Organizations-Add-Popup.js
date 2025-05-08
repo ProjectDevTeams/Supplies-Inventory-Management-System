@@ -1,25 +1,35 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./Organizations-Add-Popup.css";
 
-function OrganizationsAddPopup({ onClose, onAddCompany }) {
+export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (name.trim() === "") {
+    if (!name.trim()) {
       alert("กรุณากรอกชื่อร้านค้าใหม่");
       return;
     }
-
-    // ส่งข้อมูล id ชั่วคราว + name + created
-    const newCompany = {
-      id: "temp", // id จริงไปสร้างใน OrganizationsTable
-      name: name,
-      created: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' }),
-    };
-
-    onAddCompany(newCompany);
-    onClose();
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${API_URL}/companies/add_company.php`,
+        { name }
+      );
+      if (res.data.status === "success") {
+        onAddCompany(res.data.data);
+        onClose();
+      } else {
+        alert("เกิดข้อผิดพลาด: " + res.data.message);
+      }
+    } catch {
+      alert("ไม่สามารถบันทึกได้ กรุณาลองใหม่อีกครั้ง");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,24 +37,23 @@ function OrganizationsAddPopup({ onClose, onAddCompany }) {
       <div className="add-popup-box">
         <div className="add-popup-header">
           <span>เพิ่มร้านค้าใหม่</span>
-          <button className="add-close-btn" onClick={onClose}>✕</button>
+          <button className="add-close-btn" onClick={onClose} disabled={loading}>✕</button>
         </div>
-
         <div className="add-popup-body">
           <form onSubmit={handleSubmit}>
             <div className="add-form-row">
               <label>ชื่อบริษัท/ห้าง/ร้าน</label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
                 placeholder="กรอกชื่อร้านค้าใหม่"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                disabled={loading}
               />
             </div>
-
             <div className="add-form-footer">
-              <button type="submit" className="add-submit-btn">
-                บันทึก
+              <button type="submit" className="add-submit-btn" disabled={loading}>
+                {loading ? "กำลังบันทึก..." : "บันทึก"}
               </button>
             </div>
           </form>
@@ -53,5 +62,3 @@ function OrganizationsAddPopup({ onClose, onAddCompany }) {
     </div>
   );
 }
-
-export default OrganizationsAddPopup;

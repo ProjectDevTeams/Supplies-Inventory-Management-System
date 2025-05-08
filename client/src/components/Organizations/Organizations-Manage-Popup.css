@@ -82,7 +82,7 @@
   }
   
   /* ส่วนท้าย */
-  .manage-form-footer {
+  .manage-popup-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
