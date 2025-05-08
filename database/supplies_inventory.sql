@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2025 at 04:34 AM
+-- Generation Time: May 08, 2025 at 06:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +55,7 @@ CREATE TABLE `companies` (
   `name` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_by` int(11) DEFAULT NULL,
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -63,9 +63,9 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
-(1, 'บริษัท ไทยสโตร์ จำกัด', '2025-05-06 09:20:18', 1, '2025-05-08 09:32:19'),
-(2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', 2, '2025-05-08 09:32:19'),
-(3, 'บริษัท โปรพลังไฟ', '2025-05-06 09:20:18', 3, '2025-05-08 09:32:19');
+(1, 'บริษัท ไทยสโตร์ จำกัด', '2025-05-06 09:20:18', 1, '2025-05-08 02:32:19'),
+(2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', 2, '2025-05-08 02:32:19'),
+(3, 'บริษัท โปรพลังไฟ', '2025-05-06 09:20:18', 3, '2025-05-08 02:32:19');
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE `permissions` (
   `manage_company` tinyint(1) DEFAULT 0,
   `manage_users` tinyint(1) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL,
   `user` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -165,9 +165,10 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `stock_type`, `menu_stuff`, `manage_data`, `manage_category`, `manage_unit`, `view_withdraw`, `track_withdraw`, `request_more`, `view_all_history`, `history_receive`, `history_withdraw`, `history_adjust`, `report_stock_balance`, `report_receive_monthly`, `report_expense_yearly`, `report_withdraw`, `report_low_stock`, `approve_withdraw`, `receive_goods`, `adjust_stock`, `manage_company`, `manage_users`, `created_at`, `updated_at`, `user`) VALUES
-(1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23', 0),
-(2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23', 0),
-(3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23', 0);
+(1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
+(2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
+(3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
+(4, 'หัวหน้างาน', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:05:02', '2025-05-08 04:05:02', 1);
 
 -- --------------------------------------------------------
 
@@ -458,7 +459,7 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
