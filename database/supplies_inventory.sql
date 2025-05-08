@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2025 at 04:36 AM
+-- Generation Time: May 08, 2025 at 04:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -153,17 +153,19 @@ CREATE TABLE `permissions` (
   `receive_goods` tinyint(1) DEFAULT 0,
   `adjust_stock` tinyint(1) DEFAULT 0,
   `manage_company` tinyint(1) DEFAULT 0,
-  `manage_users` tinyint(1) DEFAULT 0
+  `manage_users` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `permissions`
 --
 
-INSERT INTO `permissions` (`id`, `name`, `stock_type`, `menu_stuff`, `manage_data`, `manage_category`, `manage_unit`, `view_withdraw`, `track_withdraw`, `request_more`, `view_all_history`, `history_receive`, `history_withdraw`, `history_adjust`, `report_stock_balance`, `report_receive_monthly`, `report_expense_yearly`, `report_withdraw`, `report_low_stock`, `approve_withdraw`, `receive_goods`, `adjust_stock`, `manage_company`, `manage_users`) VALUES
-(1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `permissions` (`id`, `name`, `stock_type`, `menu_stuff`, `manage_data`, `manage_category`, `manage_unit`, `view_withdraw`, `track_withdraw`, `request_more`, `view_all_history`, `history_receive`, `history_withdraw`, `history_adjust`, `report_stock_balance`, `report_receive_monthly`, `report_expense_yearly`, `report_withdraw`, `report_low_stock`, `approve_withdraw`, `receive_goods`, `adjust_stock`, `manage_company`, `manage_users`, `created_at`, `updated_at`) VALUES
+(1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23'),
+(2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23'),
+(3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 15:02:23');
 
 -- --------------------------------------------------------
 
