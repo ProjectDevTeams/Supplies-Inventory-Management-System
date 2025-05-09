@@ -1,20 +1,20 @@
-.adjust-header {
+/* src/components/Adjust/Adjustbar.css */
+.adjustbar-header {
   padding: 1em;
   display: flex;
   flex-direction: column;
   gap: 0.8em;
   background-color: #f9f9f9;
   align-items: flex-start;
-  width: auto;
 }
 
-.adjust-title {
+.adjustbar-title {
   font-weight: bold;
   font-size: 1.4em;
   color: #003366;
 }
 
-.adjust-controls {
+.adjustbar-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -22,12 +22,11 @@
   width: 100%;
 }
 
-/* ช่องค้นหา */
-.search-container {
+.adjustbar-search-container {
   position: relative;
 }
 
-.search-container input {
+.adjustbar-search-input {
   padding: 0.5em 0.5em 0.5em 2em;
   border: 2px solid #aab3bb;
   border-radius: 3px;
@@ -35,7 +34,7 @@
   min-width: 250px;
 }
 
-.search-icon {
+.adjustbar-search-icon {
   position: absolute;
   left: 0.5em;
   top: 50%;
@@ -44,14 +43,25 @@
   pointer-events: none;
 }
 
-/* ปุ่ม */
-.btn.green {
-  background-color: #2d7a3e;
+.adjustbar-btn {
   padding: 0.5em 1em;
-  border: none;
   border-radius: 3px;
   font-size: 1em;
   color: white;
   cursor: pointer;
   font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.adjustbar-btn.add {
+  background-color: #2d7a3e;
+}
+
+.adjustbar-btn.add:hover {
+  background-color: #23602d;
+}
+
+.adjustbar-btn.add.active {
+  background-color: #1f512a;
 }
