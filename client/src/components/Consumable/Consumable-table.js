@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Consumable-table.css";
 import AddnewPopup from "./addnew-popup";
@@ -58,13 +58,20 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       item.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Sort data based on the column and order
+  // Sorting only by id for ascending/descending order
   const sortedData = [...filteredData].sort((a, b) => {
     let valA = a[sortBy];
     let valB = b[sortBy];
 
+    // Handle number sorting for id
+    if (sortBy === "id") {
+      valA = parseInt(valA, 10); // Convert to number
+      valB = parseInt(valB, 10);
+    }
+
+    // Compare based on ascending or descending order
     if (typeof valA === "number") {
-      return sortAsc ? valA - valB : valB - valA;
+      return sortAsc ? valA - valB : valB - valA;  // Sorting by numeric order
     } else {
       return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
@@ -90,100 +97,38 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "id") setSortAsc(prev => !prev);
-                else {
-                  setSortBy("id");
-                  setSortAsc(true);
-                }
+                // Handle sorting only for 'id' column
+                setSortBy("id");
+                setSortAsc(prev => !prev); // Toggle between ascending/descending order
               }}
             >
-              รหัส {sortBy === "id" ? (sortAsc ? "▲" : "▼") : "▲"}
+              ลำดับ {sortBy === "id" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
             <th className="consumable-th">รูปภาพ</th>
             <th className="consumable-th">รายการ</th>
 
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "carry_over_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("carry_over_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              ยอดยกมา {sortBy === "carry_over_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              ยอดยกมา
             </th>
 
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "min_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("min_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              ยอดต่ำสุด {sortBy === "min_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              ยอดต่ำสุด
             </th>
 
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "max_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("max_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              ยอดสูงสุด {sortBy === "max_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              ยอดสูงสุด
             </th>
 
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "received_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("received_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              รับ {sortBy === "received_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              รับ
             </th>
               
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "issued_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("issued_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              จ่าย {sortBy === "issued_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              จ่าย
             </th>
            
-            <th
-              className="consumable-th"
-              onClick={() => {
-                if (sortBy === "remaining_quantity") {
-                  setSortAsc(prev => !prev);
-                } else {
-                  setSortBy("remaining_quantity");
-                  setSortAsc(true);
-                }
-              }}
-            >
-              คงเหลือ {sortBy === "remaining_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
+            <th className="consumable-th">
+              คงเหลือ
             </th>          
           </tr>
         </thead>
@@ -217,7 +162,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   สถานะ :{" "}
                   <span
                     className={`item-status ${
-                      item.status === "ใกล้หมดสต็อก!" ? "low-stock" : "in-stock"
+                      item.status.includes("วัสดุใกล้หมดสต็อก") ? "low-stock" : "in-stock"
                     }`}
                   >
                     {item.status}

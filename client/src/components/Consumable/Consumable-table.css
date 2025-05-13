@@ -42,9 +42,11 @@
 .item-status {
   font-weight: bold;
 }
+
 .item-status.low-stock {
   color: red;
 }
+
 .item-status.in-stock {
   color: green;
 }
