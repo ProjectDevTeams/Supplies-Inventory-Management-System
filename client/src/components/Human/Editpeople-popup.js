@@ -54,14 +54,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
       const res = await axios.post(`${API_URL}/users/delete_user.php`, {
         id: formData.id
       });
-
-      if (res.data.success) {
-        alert("ลบข้อมูลสำเร็จ");
-        if (onSave) onSave();   // รีโหลดตาราง
-        if (onClose) onClose(); // ปิด popup
-      } else {
-        alert("ไม่สามารถลบได้: " + res.data.message);
-      }
+      if (onSave) onSave();   // รีโหลดตาราง
+      if (onClose) onClose(); // ปิด popup
     } catch (err) {
       console.error("Delete API error:", err);
       alert("เกิดข้อผิดพลาดในการลบข้อมูล");
