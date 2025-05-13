@@ -12,8 +12,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     email: '',
     phone: '',
     role: '',
-    approval_status: '',    
-    permission_id: '',      
+    approval_status: '',
+    permission_id: '',
     password: '',
   });
 
@@ -25,7 +25,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
         role: person.role || '',
         approval_status: person.approval_status || '',
         permission_id: person.permission_id || '',
-        password: '',
+        password: '', // ไม่แสดงรหัสผ่านเก่า
       });
     }
   }, [person]);
@@ -38,24 +38,23 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
-    if (res.data.success) {
-      alert("อัปเดตข้อมูล: " + res.data.message);
-
-      // ✅ แจ้งให้ตารางรีเฟรชข้อมูลใหม่
-      onSave(); // ไม่ต้องส่งข้อมูลกลับ — แค่สั่งให้ fetch ใหม่
-    } else {
-      alert("อัปเดตข้อมูล: " + res.data.message);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
+      if (onSave) onSave();
+      if (onClose) onClose();     // ✅ รีเฟรชข้อมูล
+      //   if (onClose) onClose(); 
+      // if (res.data.success) {
+      //   if (onSave) onSave();     // ✅ รีเฟรชข้อมูล
+      //   if (onClose) onClose();   // ✅ ปิด popup
+      // } else {
+      //   console.error("Update failed:", res.data.message);
+      // }
+    } catch (err) {
+      console.error("API error:", err);
     }
-  } catch (err) {
-    console.error("API error:", err);
-    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
-  }
-};
-
+  };
 
   return (
     <div className="his-popup-container">
@@ -70,65 +69,31 @@ const handleSubmit = async (e) => {
             <div className="form-grid">
               <div className="form-row">
                 <label>username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
+                <input type="text" name="username" value={formData.username} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>รหัสผ่าน</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
+                <input type="password" name="password" value={formData.password} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>ชื่อ-สกุล</label>
-                <input
-                  type="text"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                />
+                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>ตำแหน่งงาน</label>
-                <input
-                  type="text"
-                  name="position"
-                  value={formData.position}
-                  onChange={handleChange}
-                />
+                <input type="text" name="position" value={formData.position} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>โทรศัพท์</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
+                <select name="role" value={formData.role} onChange={handleChange}>
                   <option value="">เลือกสิทธิการใช้งาน</option>
                   <option value="admin">แอดมิน</option>
                   <option value="user">ผู้ใช้งานทั่วไป</option>
@@ -136,11 +101,7 @@ const handleSubmit = async (e) => {
               </div>
               <div className="form-row">
                 <label>สิทธิ์การเข้าถึง (permission_id)</label>
-                <select
-                  name="permission_id"
-                  value={formData.permission_id}
-                  onChange={handleChange}
-                >
+                <select name="permission_id" value={formData.permission_id} onChange={handleChange}>
                   <option value="">เลือกสิทธิ์</option>
                   <option value="1">Admin</option>
                   <option value="2">User</option>
@@ -148,11 +109,7 @@ const handleSubmit = async (e) => {
               </div>
               <div className="form-row">
                 <label>สถานะ</label>
-                <select
-                  name="approval_status"
-                  value={formData.approval_status}
-                  onChange={handleChange}
-                >
+                <select name="approval_status" value={formData.approval_status} onChange={handleChange}>
                   <option value="อนุมัติ">อนุมัติ</option>
                   <option value="รออนุมัติ">รออนุมัติ</option>
                   <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>

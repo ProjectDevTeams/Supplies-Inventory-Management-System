@@ -62,12 +62,9 @@ function HumanTable({ searchTerm }) {
     setShowEditPopup(true);
   };
 
-  const handleSave = (updatedPerson) => {
-    const updatedData = data.map(person =>
-      person.id === updatedPerson.id ? updatedPerson : person
-    );
-    setData(updatedData);
-    setShowEditPopup(false);
+  const handleSave = () => {
+    fetchData();               // ✅ โหลดข้อมูลใหม่
+    setShowEditPopup(false);   // ✅ ปิด popup
   };
 
   return (
@@ -144,7 +141,7 @@ function HumanTable({ searchTerm }) {
         <EditpeoplePopup
           person={selectedPerson}
           onClose={() => setShowEditPopup(false)}
-          onSave={handleSave}
+          onSave={handleSave} // ✅ ใช้ fetch + ปิด popup
         />
       )}
     </div>
