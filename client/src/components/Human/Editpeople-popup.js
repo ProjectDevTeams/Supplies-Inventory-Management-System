@@ -14,7 +14,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     role: '',
     approval_status: '',
     permission_id: '',
-    password: '',
   });
 
   useEffect(() => {
@@ -25,7 +24,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
         role: person.role || '',
         approval_status: person.approval_status || '',
         permission_id: person.permission_id || '',
-        password: '', // ไม่แสดงรหัสผ่านเก่า
       });
     }
   }, [person]);
@@ -43,16 +41,30 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     try {
       const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
       if (onSave) onSave();
-      if (onClose) onClose();     // ✅ รีเฟรชข้อมูล
-      //   if (onClose) onClose(); 
-      // if (res.data.success) {
-      //   if (onSave) onSave();     // ✅ รีเฟรชข้อมูล
-      //   if (onClose) onClose();   // ✅ ปิด popup
-      // } else {
-      //   console.error("Update failed:", res.data.message);
-      // }
+      if (onClose) onClose();     
     } catch (err) {
       console.error("API error:", err);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?")) return;
+
+    try {
+      const res = await axios.post(`${API_URL}/users/delete_user.php`, {
+        id: formData.id
+      });
+
+      if (res.data.success) {
+        alert("ลบข้อมูลสำเร็จ");
+        if (onSave) onSave();   // รีโหลดตาราง
+        if (onClose) onClose(); // ปิด popup
+      } else {
+        alert("ไม่สามารถลบได้: " + res.data.message);
+      }
+    } catch (err) {
+      console.error("Delete API error:", err);
+      alert("เกิดข้อผิดพลาดในการลบข้อมูล");
     }
   };
 
@@ -70,10 +82,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
               <div className="form-row">
                 <label>username</label>
                 <input type="text" name="username" value={formData.username} onChange={handleChange} />
-              </div>
-              <div className="form-row">
-                <label>รหัสผ่าน</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} />
               </div>
               <div className="form-row">
                 <label>ชื่อ-สกุล</label>
@@ -100,14 +108,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 </select>
               </div>
               <div className="form-row">
-                <label>สิทธิ์การเข้าถึง (permission_id)</label>
-                <select name="permission_id" value={formData.permission_id} onChange={handleChange}>
-                  <option value="">เลือกสิทธิ์</option>
-                  <option value="1">Admin</option>
-                  <option value="2">User</option>
-                </select>
-              </div>
-              <div className="form-row">
                 <label>สถานะ</label>
                 <select name="approval_status" value={formData.approval_status} onChange={handleChange}>
                   <option value="อนุมัติ">อนุมัติ</option>
@@ -118,7 +118,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
             </div>
 
             <div className="form-footer space-between">
-              <button type="button" className="cancel-btn red" onClick={onClose}>ลบ</button>
+              <button type="button" className="cancel-btn red" onClick={handleDelete}>ลบ</button>
               <button type="submit" className="submit-btn green">บันทึก</button>
             </div>
           </form>
