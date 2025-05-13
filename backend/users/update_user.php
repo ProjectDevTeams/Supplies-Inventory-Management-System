@@ -1,61 +1,26 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json");
-require_once '../db.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+include '../db.php';
 
-// รับข้อมูล JSON จาก frontend
-$data = json_decode(file_get_contents("php://input"), true);
-
-// ตรวจสอบว่ามี id และข้อมูลอื่นที่จำเป็น
-if (
-    !isset($data['id']) ||
-    !isset($data['username']) ||
-    !isset($data['full_name']) ||
-    !isset($data['position']) ||
-    !isset($data['email']) ||
-    !isset($data['phone']) ||
-    !isset($data['permission_id'])
-) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Missing required fields"
-    ]);
-    exit;
-}
+$data = json_decode(file_get_contents("php://input"));
 
 try {
-    $stmt = $conn->prepare("
-        UPDATE users SET 
-            username = :username,
-            full_name = :full_name,
-            position = :position,
-            email = :email,
-            phone = :phone,
-            permission_id = :permission_id
-        WHERE id = :id
-    ");
-
-    $stmt->bindParam(':username', $data['username']);
-    $stmt->bindParam(':full_name', $data['full_name']);
-    $stmt->bindParam(':position', $data['position']);
-    $stmt->bindParam(':email', $data['email']);
-    $stmt->bindParam(':phone', $data['phone']);
-    $stmt->bindParam(':permission_id', $data['permission_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
-
-    $stmt->execute();
-
-    echo json_encode([
-        "status" => "success",
-        "message" => "User updated successfully"
+    $stmt = $conn->prepare("UPDATE users SET username=?, full_name=?, position=?, email=?, phone=?, permission_id=?, approval_status=? WHERE id=?");
+    $stmt->execute([
+        $data->username,
+        $data->full_name,
+        $data->position,
+        $data->email,
+        $data->phone,
+        $data->permission_id,
+        $data->approval_status,
+        $data->id
     ]);
-
+    echo json_encode(["message" => "แก้ไขผู้ใช้สำเร็จ"]);
 } catch (PDOException $e) {
-    echo json_encode([
-        "status" => "error",
-        "message" => $e->getMessage()
-    ]);
+    echo json_encode(["error" => $e->getMessage()]);
 }
 ?>

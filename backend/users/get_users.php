@@ -1,41 +1,15 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json");
-require_once '../db.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+include '../db.php';
 
 try {
-    // เตรียมคำสั่ง SQL พร้อม JOIN กับ permissions
-    $stmt = $conn->prepare("
-        SELECT 
-            users.id,
-            users.username,
-            users.full_name,
-            users.position,
-            users.email,
-            users.phone,
-            permissions.name AS permission_name,
-            users.permission_id
-        FROM users
-        LEFT JOIN permissions ON users.permission_id = permissions.id
-    ");
-
-    $stmt->execute();
-
-    // ดึงข้อมูลทั้งหมดในรูปแบบ associative array
+    $stmt = $conn->query("SELECT * FROM users");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // ส่งออกข้อมูลเป็น JSON
-    echo json_encode([
-        "status" => "success",
-        "data" => $users
-    ]);
-
+    echo json_encode($users);
 } catch (PDOException $e) {
-    echo json_encode([
-        "status" => "error",
-        "message" => $e->getMessage()
-    ]);
+    echo json_encode(["error" => $e->getMessage()]);
 }
 ?>
