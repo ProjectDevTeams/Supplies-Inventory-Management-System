@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./Adjust-table.css";
-
-const mockAdjustData = [
-  { id: "1", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 พ.ย. 66", state: "อนุมัติ" },
-  { id: "2", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 พ.ย. 66", state: "อนุมัติ" },
-  { id: "3", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 ก.ย. 66", state: "อนุมัติ" },
-  { id: "4", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 ก.ค. 66", state: "อนุมัติ" },
-  { id: "5", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 ก.ค. 66", state: "อนุมัติ" },
-  { id: "6", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 ก.ค. 66", state: "อนุมัติ" },
-  { id: "7", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "21 ก.ค. 66", state: "อนุมัติ" },
-  { id: "8", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "19 ก.ค. 66", state: "อนุมัติ" },
-  { id: "9", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "19 ก.ค. 66", state: "อนุมัติ" },
-  { id: "10", from: "วัสดุในคลัง", company: "ฝ่ายโครงสร้างพื้นฐานด้านวิทยาศาสตร์ เทคโนโลยี และนวัตกรรม", orderDate: "19 ก.ค. 66", state: "อนุมัติ" },
-];
 
 function AdjustTable({ searchTerm }) {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
   const itemsPerPage = 10;
 
-  const filteredData = mockAdjustData.filter((item) =>
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/adjustments/get_adjustments.php`)
+      .then((res) => {
+        console.log("✅ ข้อมูลจาก API:", res.data); // ✅ ตรวจข้อมูล
+        if (Array.isArray(res.data)) {
+          setData(res.data);
+        } else {
+          console.error("รูปแบบข้อมูลไม่ถูกต้อง:", res.data);
+        }
+      })
+      .catch((err) => {
+        console.error("ดึงข้อมูลล้มเหลว:", err);
+      });
+  }, []);
+
+  const filteredData = data.filter((item) =>
     item.id.toString().includes(searchTerm.toLowerCase()) ||
-    item.from.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.orderDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.state.toLowerCase().includes(searchTerm.toLowerCase())
+    item.stock_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.material_id.toString().includes(searchTerm.toLowerCase()) ||
+    item.created_at.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.adjust_quantity.toString().includes(searchTerm.toLowerCase())
   );
 
   const sortedData = [...filteredData].sort((a, b) =>
@@ -65,9 +71,9 @@ function AdjustTable({ searchTerm }) {
               ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
             </th>
             <th className="adjustment-th">จากคลัง</th>
-            <th className="adjustment-th">บริษัท/ร้านค้า</th>
-            <th className="adjustment-th">วันที่ซื้อ</th>
-            <th className="adjustment-th">สถานะ</th>
+            <th className="adjustment-th">รหัสวัสดุ</th>
+            <th className="adjustment-th">จำนวนที่ปรับ</th>
+            <th className="adjustment-th">วันที่</th>
           </tr>
         </thead>
         <tbody id="adjustment-tbody">
@@ -75,22 +81,15 @@ function AdjustTable({ searchTerm }) {
             currentItems.map((item) => (
               <tr key={item.id} className="adjustment-tr">
                 <td className="adjustment-td">{item.id}</td>
-                <td className="adjustment-td">{item.from}</td>
+                <td className="adjustment-td">{item.stock_type}</td>
                 <td
                   className="adjustment-td company-link"
                   onClick={() => navigate('/adjust/balance')}
                 >
-                  {item.company}
+                  {item.material_id}
                 </td>
-                <td className="adjustment-td">{item.orderDate}</td>
-                <td className={`adjustment-td ${item.state === "อนุมัติ"
-                    ? "status-approved"
-                    : item.state === "รออนุมัติ"
-                      ? "status-pending"
-                      : "status-not-pending"
-                  }`}>
-                  {item.state}
-                </td>
+                <td className="adjustment-td">{item.adjust_quantity}</td>
+                <td className="adjustment-td">{item.created_at.split(" ")[0]}</td>
               </tr>
             ))
           ) : (
