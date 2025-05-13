@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../config"; // ✅ แก้ path ให้ถูกกับโปรเจกต์คุณ
 import "./Permission-Content.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function PermissionContent() {
   const navigate = useNavigate();
-
-  const initialData = [
-    ["1", "แอดมิน ฝ่ายบริการโครงสร้างพื้นฐานฯ", "27 มี.ค. 65", "24 พ.ย. 65"],
-    ["2", "สำนักงานความร่วมมืออุตสาหกรรม", "27 มี.ค. 65", "—"],
-    ["3", "ศูนย์ทรัพย์สินทางปัญญา", "27 มี.ค. 65", "—"],
-    ["4", "ศูนย์บ่มเพาะวิสาหกิจ", "27 มี.ค. 65", "—"],
-    ["5", "ฝ่ายยุทธศาสตร์และแผน", "17 พ.ค. 65", "—"],
-    ["6", "ศูนย์นวัตกรรมการออกแบบ", "17 พ.ค. 65", "—"],
-    ["7", "สำนักงานกลาง", "17 พ.ค. 65", "9 พ.ย. 65"],
-    ["8", "สถาบันพัฒนาการเป็นผู้ประกอบการนักศึกษา", "17 พ.ค. 65", "—"],
-    ["9", "ประชาสัมพันธ์และสื่อสารองค์กร", "31 ส.ค. 65", "7 ธ.ค. 65"],
-    ["10", "STI", "31 ส.ค. 65", "—"],
-  ];
-
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ เพิ่ม search term
-
-  const itemsPerPage = 10;
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
 
-  // ✅ ฟิลเตอร์ข้อมูลตามคำค้นหา
-  const filteredData = data.filter(([id, name, created, updated]) =>
-    [name, created].some((field) =>
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    axios.get(`${API_URL}/permissions/get_permissions.php`)
+      .then(res => {
+        if (res.data.status === "success") {
+          setData(res.data.data);
+        }
+      })
+      .catch(err => {
+        console.error("โหลดข้อมูลสิทธิ์ล้มเหลว", err);
+      });
+  }, []);
+
+  const filteredData = data.filter((item) =>
+    [item.name, item.created_at].some((field) =>
       field.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -48,8 +47,8 @@ function PermissionContent() {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     const sorted = [...data].sort((a, b) => {
       return newOrder === "asc"
-        ? parseInt(a[0]) - parseInt(b[0])
-        : parseInt(b[0]) - parseInt(a[0]);
+        ? a.id - b.id
+        : b.id - a.id;
     });
     setSortOrder(newOrder);
     setData(sorted);
@@ -61,8 +60,8 @@ function PermissionContent() {
         data: {
           id,
           groupName: name,
-          warehouse: "",
-          permissions: {},
+          warehouse: "", // แก้ภายหลังหากมีข้อมูลคลัง
+          permissions: {}, // แก้ภายหลังหากต้องการส่งสิทธิ์แบบละเอียด
         },
       },
     });
@@ -97,7 +96,7 @@ function PermissionContent() {
                 ลำดับ <span className="perm-sort-arrow">{sortOrder === "asc" ? "▲" : "▼"}</span>
               </span>
             </th>
-            <th>บริษัท/ร้านค้า</th>
+            <th>ชื่อสิทธิ์</th>
             <th>วันที่สร้าง</th>
             <th>วันที่แก้ไข</th>
           </tr>
@@ -110,17 +109,16 @@ function PermissionContent() {
               </td>
             </tr>
           ) : (
-            displayedData.map(([id, name, created, updated]) => (
-              <tr key={id} className="perm-clickable-row" onClick={() => handleRowClick(id, name)}>
-                <td>{id}</td>
-                <td>{name}</td>
-                <td>{created}</td>
-                <td>{updated}</td>
+            displayedData.map((item) => (
+              <tr key={item.id} className="perm-clickable-row" onClick={() => handleRowClick(item.id, item.name)}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{item.created_at}</td>
+                <td>{item.updated_at}</td>
               </tr>
             ))
           )}
         </tbody>
-
       </table>
 
       <div className="perm-pagination-wrapper">
@@ -128,9 +126,7 @@ function PermissionContent() {
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="perm-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>
-            ก่อนหน้า
-          </button>
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>ก่อนหน้า</button>
           <input
             type="number"
             className="perm-page-input"
@@ -150,9 +146,7 @@ function PermissionContent() {
             }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>
-            ถัดไป
-          </button>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>ถัดไป</button>
         </div>
       </div>
     </div>
