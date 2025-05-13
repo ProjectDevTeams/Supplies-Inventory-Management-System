@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2025 at 05:00 AM
+-- Generation Time: May 13, 2025 at 07:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -75,7 +75,6 @@ INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`)
 
 CREATE TABLE `materials` (
   `id` int(11) NOT NULL,
-  `material_code` varchar(100) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
@@ -97,11 +96,11 @@ CREATE TABLE `materials` (
 -- Dumping data for table `materials`
 --
 
-INSERT INTO `materials` (`id`, `material_code`, `image`, `name`, `category_id`, `unit_id`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'M001', '', 'ปากกา', 1, 1, 'วัสดุในคลัง', 10, 100, 20, 5.00, 50, 0, 0, 0, '2025-05-06 09:20:18'),
-(2, 'M002', '', 'กระดาษ A4', 2, 2, 'วัสดุในคลัง', 5, 200, 30, 100.00, 120, 0, 0, 0, '2025-05-06 09:20:18'),
-(3, 'M003', '', 'ปลั๊กไฟ', 3, 1, 'วัสดุนอกคลัง', 2, 50, 10, 150.00, 15, 0, 0, 0, '2025-05-06 09:20:18'),
-(4, 'TEST-LOW-001', '', 'ตัวอย่างวัสดุใกล้หมด', 1, 1, 'วัสดุในคลัง', 10, 100, 5, 20.00, 3, 10, 5, -2, '2025-05-07 02:29:12');
+INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit_id`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
+(1, '', 'ปากกา', 1, 1, 'วัสดุในคลัง', 10, 100, 20, 5.00, 50, 0, 0, 0, '2025-05-06 09:20:18'),
+(2, '', 'กระดาษ A4', 2, 2, 'วัสดุในคลัง', 5, 200, 30, 100.00, 120, 0, 0, 0, '2025-05-06 09:20:18'),
+(3, '', 'ปลั๊กไฟ', 3, 1, 'วัสดุนอกคลัง', 2, 50, 10, 150.00, 15, 0, 0, 0, '2025-05-06 09:20:18'),
+(4, '', 'ตัวอย่างวัสดุใกล้หมด', 1, 1, 'วัสดุในคลัง', 10, 100, 5, 20.00, 3, 10, 5, -2, '2025-05-07 02:29:12');
 
 -- --------------------------------------------------------
 
@@ -111,18 +110,17 @@ INSERT INTO `materials` (`id`, `material_code`, `image`, `name`, `category_id`, 
 
 CREATE TABLE `material_categories` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `short_name` varchar(50) NOT NULL
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `material_categories`
 --
 
-INSERT INTO `material_categories` (`id`, `name`, `short_name`) VALUES
-(1, 'เครื่องเขียน', 'คข'),
-(2, 'อุปกรณ์สำนักงาน', 'อส'),
-(3, 'อุปกรณ์ไฟฟ้า', 'อฟ');
+INSERT INTO `material_categories` (`id`, `name`) VALUES
+(1, 'เครื่องเขียน'),
+(2, 'อุปกรณ์สำนักงาน'),
+(3, 'อุปกรณ์ไฟฟ้า');
 
 -- --------------------------------------------------------
 
@@ -292,7 +290,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission_id`, `approval_status`) VALUES
 (1, 'user01', 'pass123', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'อนุมัติ'),
 (3, 'admin', 'adminpass', 'ผู้ดูแล ระบบ', 'แอดมิน', 'admin@example.com', '0834567890', 3, 'อนุมัติ'),
-(14, 'Test00', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'Test00', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 1, 'รออนุมัติ');
+(14, 'ทดสอบ', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'ไม่อนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -363,7 +361,6 @@ ALTER TABLE `companies`
 --
 ALTER TABLE `materials`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `material_code` (`material_code`),
   ADD KEY `category_id` (`category_id`),
   ADD KEY `unit_id` (`unit_id`);
 
