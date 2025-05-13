@@ -1,48 +1,61 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./Editpeople-popup.css";
 
 function EditpeoplePopup({ person, onClose, onSave }) {
   const [formData, setFormData] = useState({
     id: '',
     username: '',
-    fullname: '',
-    group: '',
+    full_name: '',
+    position: '',
     email: '',
     phone: '',
     role: '',
-    status: '',
+    approval_status: '',    
+    permission_id: '',      
+    password: '',
   });
 
-  // ใช้ useEffect เพื่อปรับค่า formData เมื่อมีการส่งข้อมูล person เข้ามา
   useEffect(() => {
     if (person) {
-      // คัดลอกทุกฟิลด์จาก person มาที่ formData
       setFormData({
         ...person,
         phone: person.phone || '',
         role: person.role || '',
+        approval_status: person.approval_status || '',
+        permission_id: person.permission_id || '',
+        password: '',
       });
     }
   }, [person]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // ส่งข้อมูลที่ถูกแก้ไขกลับไปที่ HumanTable.js
-    onSave({
-      ...formData,
-      // เพิ่ม id ให้เหมือนเดิมเพื่อให้การอัปเดตข้อมูลถูกต้อง
-      id: person.id
-    });
-    onClose();  // ปิด Popup หลังจากบันทึกข้อมูล
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
+    if (res.data.success) {
+      alert("อัปเดตข้อมูล: " + res.data.message);
+
+      // ✅ แจ้งให้ตารางรีเฟรชข้อมูลใหม่
+      onSave(); // ไม่ต้องส่งข้อมูลกลับ — แค่สั่งให้ fetch ใหม่
+    } else {
+      alert("อัปเดตข้อมูล: " + res.data.message);
+    }
+  } catch (err) {
+    console.error("API error:", err);
+    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+  }
+};
+
 
   return (
     <div className="his-popup-container">
@@ -69,6 +82,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 <input
                   type="password"
                   name="password"
+                  value={formData.password}
                   onChange={handleChange}
                 />
               </div>
@@ -76,8 +90,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 <label>ชื่อ-สกุล</label>
                 <input
                   type="text"
-                  name="fullname"
-                  value={formData.fullname}
+                  name="full_name"
+                  value={formData.full_name}
                   onChange={handleChange}
                 />
               </div>
@@ -85,8 +99,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 <label>ตำแหน่งงาน</label>
                 <input
                   type="text"
-                  name="group"
-                  value={formData.group}
+                  name="position"
+                  value={formData.position}
                   onChange={handleChange}
                 />
               </div>
@@ -121,10 +135,22 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 </select>
               </div>
               <div className="form-row">
+                <label>สิทธิ์การเข้าถึง (permission_id)</label>
+                <select
+                  name="permission_id"
+                  value={formData.permission_id}
+                  onChange={handleChange}
+                >
+                  <option value="">เลือกสิทธิ์</option>
+                  <option value="1">Admin</option>
+                  <option value="2">User</option>
+                </select>
+              </div>
+              <div className="form-row">
                 <label>สถานะ</label>
                 <select
-                  name="status"
-                  value={formData.status}
+                  name="approval_status"
+                  value={formData.approval_status}
                   onChange={handleChange}
                 >
                   <option value="อนุมัติ">อนุมัติ</option>
@@ -133,6 +159,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 </select>
               </div>
             </div>
+
             <div className="form-footer space-between">
               <button type="button" className="cancel-btn red" onClick={onClose}>ลบ</button>
               <button type="submit" className="submit-btn green">บันทึก</button>
