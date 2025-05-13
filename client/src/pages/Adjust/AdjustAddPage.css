@@ -1,0 +1,40 @@
+/* src/pages/Adjust/AdjustAddPage.css */
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Kanit", Arial, sans-serif;
+}
+
+.adjust-add-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.adjust-add-navbar {
+  flex: 0 0 auto;
+}
+
+.adjust-add-main {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.adjust-add-sidebar {
+  flex: 0 0 200px;           /* กำหนดความกว้าง sidebar */
+  border-right: 1px solid #ddd;
+}
+
+.adjust-add-content {
+  flex: 1 1 auto;
+  background-color: #f5f8fc;
+  padding: 1em;
+  margin-left: 0;            /* ไม่ต้องเว้น เพราะ sidebar คุมด้วย flex */
+  box-sizing: border-box;
+  overflow-y: auto;
+}

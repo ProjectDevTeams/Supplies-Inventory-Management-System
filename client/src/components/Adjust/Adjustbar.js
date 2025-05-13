@@ -1,43 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// src/components/Adjust/Adjustbar.js
+import React from "react";
+import { NavLink } from "react-router-dom";
 import "./Adjustbar.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AdjustAddPopup from "./Adjust-add-popup";
 
-function Adjustbar({ onAddClick, searchTerm, setSearchTerm }) {
-  const navigate = useNavigate();
-  const [showPopup, setShowPopup] = useState(false);
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
+function Adjustbar({ searchTerm, setSearchTerm }) {
   return (
-    <div className="adjust-header">
-      <div className="adjust-title">ปรับยอด</div>
-
-      <div className="adjust-controls">
-        {/* ช่องค้นหา */}
-        <div className="search-container">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+    <div className="adjustbar-header">
+      <div className="adjustbar-title">ปรับยอด</div>
+      <div className="adjustbar-controls">
+        <div className="adjustbar-search-container">
+          <FontAwesomeIcon icon={faSearch} className="adjustbar-search-icon" />
           <input
+            className="adjustbar-search-input"
             type="text"
             placeholder="ค้นหา"
             value={searchTerm}
-            onChange={handleSearchChange}
+            onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-
-        <div>
-          <button className="btn green" onClick={() => setShowPopup(true)}>
-            + เพิ่มหัวข้อ
-          </button>
-
-          {showPopup && (
-            <AdjustAddPopup onClose={() => setShowPopup(false)} />
-          )}
-        </div>
+        <NavLink
+          to="/adjust/add"
+          className={({ isActive }) =>
+            isActive ? "adjustbar-btn add active" : "adjustbar-btn add"
+          }
+        >
+          + เพิ่มหัวข้อ
+        </NavLink>
       </div>
     </div>
   );
