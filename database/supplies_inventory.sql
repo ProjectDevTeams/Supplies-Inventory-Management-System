@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2025 at 06:11 AM
+-- Generation Time: May 13, 2025 at 05:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,7 +55,7 @@ CREATE TABLE `companies` (
   `name` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_by` int(11) DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -64,8 +64,8 @@ CREATE TABLE `companies` (
 
 INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
 (1, 'บริษัท ไทยสโตร์ จำกัด', '2025-05-06 09:20:18', 1, '2025-05-08 02:32:19'),
-(2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', 2, '2025-05-08 02:32:19'),
-(3, 'บริษัท โปรพลังไฟ', '2025-05-06 09:20:18', 3, '2025-05-08 02:32:19');
+(2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', NULL, '2025-05-08 02:32:19'),
+(4, 'test1', '2025-05-09 03:25:54', NULL, '2025-05-11 07:35:15');
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE `permissions` (
   `manage_company` tinyint(1) DEFAULT 0,
   `manage_users` tinyint(1) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   `user` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -168,7 +168,12 @@ INSERT INTO `permissions` (`id`, `name`, `stock_type`, `menu_stuff`, `manage_dat
 (1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
 (2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
 (3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
-(4, 'หัวหน้างาน', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:05:02', '2025-05-08 04:05:02', 1);
+(4, 'หัวหน้างาน', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:05:02', '2025-05-08 04:05:02', 1),
+(5, 'เจ้าหน้าที่', 'วัสดุนอกคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-05-08 11:16:53', NULL, 1),
+(6, 'test', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-05-08 11:35:43', NULL, 1),
+(7, 'test01', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:36:12', NULL, 1),
+(8, 'test02', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:36:40', NULL, 1),
+(9, 'test03', 'วัสดุในคลัง', 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, '2025-05-08 11:37:50', '2025-05-08 05:13:39', 0);
 
 -- --------------------------------------------------------
 
@@ -216,7 +221,7 @@ CREATE TABLE `receive_materials` (
 INSERT INTO `receive_materials` (`id`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
 (1, 'วัสดุในคลัง', 1, 'INV001', 'PO001', '2024-01-01', 500.00),
 (2, 'วัสดุในคลัง', 2, 'INV002', 'PO002', '2024-02-01', 1000.00),
-(3, 'วัสดุนอกคลัง', 3, 'INV003', 'PO003', '2024-03-01', 450.00);
+(3, 'วัสดุนอกคลัง', NULL, 'INV003', 'PO003', '2024-03-01', 450.00);
 
 -- --------------------------------------------------------
 
@@ -276,17 +281,18 @@ CREATE TABLE `users` (
   `position` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `permission_id` int(11) DEFAULT NULL
+  `permission_id` int(11) DEFAULT NULL,
+  `approval_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission_id`) VALUES
-(1, 'user01', 'pass123', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1),
-(2, 'user02', 'pass123', 'สมหญิง สต็อกแน่น', 'หัวหน้า', 'somying@example.com', '0823456789', 2),
-(3, 'admin', 'adminpass', 'ผู้ดูแล ระบบ', 'แอดมิน', 'admin@example.com', '0834567890', 3);
+INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission_id`, `approval_status`) VALUES
+(1, 'user01', 'pass123', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'อนุมัติ'),
+(3, 'admin', 'adminpass', 'ผู้ดูแล ระบบ', 'แอดมิน', 'admin@example.com', '0834567890', 3, 'อนุมัติ'),
+(14, 'Test00', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'Test00', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 1, 'รออนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -311,7 +317,6 @@ CREATE TABLE `withdraw_materials` (
 
 INSERT INTO `withdraw_materials` (`id`, `stock_type`, `fiscal_code`, `created_at`, `requester_name`, `reason`, `created_by`, `total_quantity`) VALUES
 (1, 'วัสดุในคลัง', '001-02/2568', '2024-04-01', 'หัวหน้าแผนก A', 'ใช้ประชุม', 1, 10),
-(2, 'วัสดุในคลัง', '002-02/2568', '2024-04-10', 'หัวหน้าแผนก B', 'เติมคลัง', 2, 15),
 (3, 'วัสดุนอกคลัง', '003-02/2568', '2024-04-15', 'หัวหน้าคลังนอก', 'ออกภาคสนาม', 3, 5);
 
 -- --------------------------------------------------------
@@ -333,7 +338,6 @@ CREATE TABLE `withdraw_material_items` (
 
 INSERT INTO `withdraw_material_items` (`id`, `withdraw_id`, `material_id`, `quantity`) VALUES
 (1, 1, 1, 5),
-(2, 2, 2, 10),
 (3, 3, 3, 3);
 
 --
@@ -441,7 +445,7 @@ ALTER TABLE `adjustments`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `materials`
@@ -459,7 +463,7 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `purchase_requests`
@@ -489,7 +493,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `withdraw_materials`
@@ -517,7 +521,7 @@ ALTER TABLE `adjustments`
 -- Constraints for table `companies`
 --
 ALTER TABLE `companies`
-  ADD CONSTRAINT `companies_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `companies_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `materials`
@@ -536,7 +540,7 @@ ALTER TABLE `purchase_requests`
 -- Constraints for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  ADD CONSTRAINT `receive_materials_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`);
+  ADD CONSTRAINT `receive_materials_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `receive_material_items`
@@ -555,13 +559,13 @@ ALTER TABLE `users`
 -- Constraints for table `withdraw_materials`
 --
 ALTER TABLE `withdraw_materials`
-  ADD CONSTRAINT `withdraw_materials_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `withdraw_materials_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `withdraw_material_items`
 --
 ALTER TABLE `withdraw_material_items`
-  ADD CONSTRAINT `withdraw_material_items_ibfk_1` FOREIGN KEY (`withdraw_id`) REFERENCES `withdraw_materials` (`id`),
+  ADD CONSTRAINT `withdraw_material_items_ibfk_1` FOREIGN KEY (`withdraw_id`) REFERENCES `withdraw_materials` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `withdraw_material_items_ibfk_2` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
 COMMIT;
 
