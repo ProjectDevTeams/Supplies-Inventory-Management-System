@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2025 at 07:06 AM
+-- Generation Time: May 13, 2025 at 08:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -65,7 +65,7 @@ CREATE TABLE `companies` (
 INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
 (1, 'บริษัท ไทยสโตร์ จำกัด', '2025-05-06 09:20:18', 1, '2025-05-08 02:32:19'),
 (2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', NULL, '2025-05-08 02:32:19'),
-(4, 'test1', '2025-05-09 03:25:54', NULL, '2025-05-11 07:35:15');
+(3, 'test1', '2025-05-09 03:25:54', NULL, '2025-05-13 04:41:51');
 
 -- --------------------------------------------------------
 
@@ -219,7 +219,7 @@ CREATE TABLE `receive_materials` (
 INSERT INTO `receive_materials` (`id`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
 (1, 'วัสดุในคลัง', 1, 'INV001', 'PO001', '2024-01-01', 500.00),
 (2, 'วัสดุในคลัง', 2, 'INV002', 'PO002', '2024-02-01', 1000.00),
-(3, 'วัสดุนอกคลัง', NULL, 'INV003', 'PO003', '2024-03-01', 450.00);
+(3, 'วัสดุนอกคลัง', 3, 'INV003', 'PO003', '2024-03-01', 450.00);
 
 -- --------------------------------------------------------
 
@@ -248,26 +248,6 @@ INSERT INTO `receive_material_items` (`id`, `receive_id`, `material_id`, `price_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `units`
---
-
-CREATE TABLE `units` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `units`
---
-
-INSERT INTO `units` (`id`, `name`) VALUES
-(1, 'ชิ้น'),
-(2, 'กล่อง'),
-(3, 'ขวด');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -290,7 +270,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission_id`, `approval_status`) VALUES
 (1, 'user01', 'pass123', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'อนุมัติ'),
 (3, 'admin', 'adminpass', 'ผู้ดูแล ระบบ', 'แอดมิน', 'admin@example.com', '0834567890', 3, 'อนุมัติ'),
-(14, 'ทดสอบ', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'ไม่อนุมัติ');
+(14, 'Test00', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'Test00', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 1, 'รออนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -399,12 +379,6 @@ ALTER TABLE `receive_material_items`
   ADD KEY `material_id` (`material_id`);
 
 --
--- Indexes for table `units`
---
-ALTER TABLE `units`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -478,12 +452,6 @@ ALTER TABLE `receive_materials`
 -- AUTO_INCREMENT for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `units`
---
-ALTER TABLE `units`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
