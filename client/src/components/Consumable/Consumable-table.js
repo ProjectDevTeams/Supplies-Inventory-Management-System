@@ -1,57 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 import "./Consumable-table.css";
 import AddnewPopup from "./addnew-popup";
 import Consumable from "./Consumablebar";
-
-const mockData = [
-  { code: "OF001", image: "https://via.placeholder.com/60", name: "เทปกาวสองหน้า", category: "วัสดุสำนักงาน", unit: "ม้วน", location: "คลังหลัก", price: 220, status: "ใกล้หมดสต็อก!", in: 2, out: 2, remain: 1, low: 1, high: 5, brought: 1 },
-  { code: "OF002", image: "https://via.placeholder.com/60", name: "แฟ้ม A4 สีฟ้า", category: "แฟ้มเอกสาร", unit: "ชิ้น", location: "คลังหลัก", price: 15, status: "พร้อมใช้", in: 5, out: 1, remain: 4, low: 2, high: 10, brought: 2 },
-  { code: "OF003", image: "https://via.placeholder.com/60", name: "ดินสอ 2B", category: "เครื่องเขียน", unit: "แท่ง", location: "คลังรอง", price: 5, status: "ใกล้หมดสต็อก!", in: 3, out: 2, remain: 1, low: 1, high: 6, brought: 1 },
-  { code: "OF004", image: "https://via.placeholder.com/60", name: "ปากกาเจลสีดำ", category: "เครื่องเขียน", unit: "ด้าม", location: "คลังวัสดุ", price: 10, status: "พร้อมใช้", in: 6, out: 2, remain: 4, low: 2, high: 8, brought: 2 },
-  { code: "OF005", image: "https://via.placeholder.com/60", name: "กระดาษ A4", category: "กระดาษ", unit: "รีม", location: "คลังหลัก", price: 120, status: "ใกล้หมดสต็อก!", in: 2, out: 1, remain: 1, low: 2, high: 5, brought: 0 },
-  { code: "OF006", image: "https://via.placeholder.com/60", name: "คลิปหนีบกระดาษ", category: "เครื่องเขียน", unit: "กล่อง", location: "คลังรอง", price: 25, status: "พร้อมใช้", in: 4, out: 0, remain: 4, low: 2, high: 10, brought: 1 },
-  { code: "OF007", image: "https://via.placeholder.com/60", name: "แฟ้มแข็ง", category: "แฟ้มเอกสาร", unit: "เล่ม", location: "คลังหลัก", price: 30, status: "พร้อมใช้", in: 3, out: 1, remain: 2, low: 1, high: 4, brought: 0 },
-  { code: "OF008", image: "https://via.placeholder.com/60", name: "สมุดปกแข็ง", category: "สมุด", unit: "เล่ม", location: "คลังรอง", price: 35, status: "ใกล้หมดสต็อก!", in: 2, out: 1, remain: 1, low: 1, high: 3, brought: 1 },
-  { code: "OF009", image: "https://via.placeholder.com/60", name: "กระดาษโน้ต", category: "กระดาษ", unit: "ชุด", location: "คลังวัสดุ", price: 12, status: "พร้อมใช้", in: 5, out: 2, remain: 3, low: 2, high: 6, brought: 0 },
-  { code: "OF010", image: "https://via.placeholder.com/60", name: "เทปใส", category: "วัสดุสำนักงาน", unit: "ม้วน", location: "คลังหลัก", price: 8, status: "ใกล้หมดสต็อก!", in: 1, out: 1, remain: 0, low: 1, high: 3, brought: 1 },
-  { code: "OF011", image: "https://via.placeholder.com/60", name: "สติ๊กเกอร์ A4", category: "กระดาษ", unit: "แผ่น", location: "คลังรอง", price: 5, status: "พร้อมใช้", in: 3, out: 0, remain: 3, low: 2, high: 5, brought: 2 },
-  { code: "OF012", image: "https://via.placeholder.com/60", name: "แฟ้มซองพลาสติก", category: "แฟ้มเอกสาร", unit: "ซอง", location: "คลังหลัก", price: 7, status: "พร้อมใช้", in: 4, out: 1, remain: 3, low: 2, high: 6, brought: 1 },
-  { code: "OF013", image: "https://via.placeholder.com/60", name: "ลวดเย็บกระดาษ", category: "เครื่องเขียน", unit: "กล่อง", location: "คลังรอง", price: 18, status: "ใกล้หมดสต็อก!", in: 2, out: 2, remain: 0, low: 1, high: 3, brought: 0 },
-  { code: "OF014", image: "https://via.placeholder.com/60", name: "ปากกาลูกลื่น", category: "เครื่องเขียน", unit: "ด้าม", location: "คลังวัสดุ", price: 12, status: "พร้อมใช้", in: 5, out: 1, remain: 4, low: 2, high: 6, brought: 2 },
-  { code: "OF015", image: "https://via.placeholder.com/60", name: "แฟ้มห่วง", category: "แฟ้มเอกสาร", unit: "เล่ม", location: "คลังหลัก", price: 40, status: "พร้อมใช้", in: 3, out: 1, remain: 2, low: 2, high: 5, brought: 1 },
-  { code: "OF016", image: "https://via.placeholder.com/60", name: "เครื่องเย็บกระดาษ", category: "เครื่องใช้สำนักงาน", unit: "เครื่อง", location: "คลังรอง", price: 85, status: "พร้อมใช้", in: 2, out: 0, remain: 2, low: 1, high: 3, brought: 0 },
-  { code: "OF017", image: "https://via.placeholder.com/60", name: "น้ำยาล้างบอร์ด", category: "ทำความสะอาด", unit: "ขวด", location: "คลังวัสดุ", price: 30, status: "ใกล้หมดสต็อก!", in: 1, out: 1, remain: 0, low: 1, high: 2, brought: 1 },
-  { code: "OF018", image: "https://via.placeholder.com/60", name: "สก็อตเทป", category: "วัสดุสำนักงาน", unit: "ม้วน", location: "คลังหลัก", price: 6, status: "พร้อมใช้", in: 3, out: 1, remain: 2, low: 1, high: 4, brought: 0 },
-  { code: "OF019", image: "https://via.placeholder.com/60", name: "กล่องเอกสาร", category: "วัสดุสำนักงาน", unit: "กล่อง", location: "คลังหลัก", price: 55, status: "พร้อมใช้", in: 4, out: 0, remain: 4, low: 2, high: 6, brought: 2 },
-  { code: "OF020", image: "https://via.placeholder.com/60", name: "แผ่นพลาสติกใส", category: "วัสดุสำนักงาน", unit: "แผ่น", location: "คลังรอง", price: 3, status: "ใกล้หมดสต็อก!", in: 2, out: 1, remain: 1, low: 1, high: 4, brought: 1 }
-];
+import { API_URL } from "../../config";  // Import the API_URL
 
 const itemsPerPage = 5;
 
 function Consumable_Table({ searchTerm, setSearchTerm }) {
+  const [data, setData] = useState([]); // State to store fetched data
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [inputPage, setInputPage] = useState("");
-  const [sortAsc, setSortAsc] = useState(true); // ✅ เพิ่มตรงนี้
-  const [sortBy, setSortBy] = useState("code");
+  const [sortAsc, setSortAsc] = useState(true); // For sorting
+  const [sortBy, setSortBy] = useState("id");
 
-  const totalPages = Math.ceil(mockData.length / itemsPerPage);
+  // Fetch data from API on component mount
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/materials/get_materials.php`)  // Fetch from the API
+      .then(r => {
+        if (r.data.status === "success") {
+          setData(
+            r.data.data.map(item => ({
+              id: String(item.id),
+              image: item.image || "https://via.placeholder.com/60", // Default image if empty
+              name: item.name,
+              category_id: item.category,
+              unit: item.unit,
+              stock_type: item.location,
+              price: parseFloat(item.price),
+              status: item.status,
+              received_quantity: item.brought,
+              issued_quantity: item.issued_quantity,
+              remaining_quantity: item.remain,
+              min_quantity: item.low,
+              max_quantity: item.high,
+              carry_over_quantity: item.carry_over_quantity
+            }))
+          );
+        }
+      })
+      .catch(console.error);
+  }, []); // Empty dependency array means this will run once on mount
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  
-  const filteredData = mockData.filter(
-    (item) =>
-      item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  // Filter data based on search term
+  const filteredData = data.filter(
+    item =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.stock_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ เรียงตามรหัสตามลำดับลูกศร
-  // ปรับฟังก์ชัน sort:
+  // Sort data based on the column and order
   const sortedData = [...filteredData].sort((a, b) => {
     let valA = a[sortBy];
     let valB = b[sortBy];
@@ -63,11 +70,10 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
     }
   });
 
-
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
-    setInputPage(""); // เคลียร์เมื่อเปลี่ยนหน้า
+    setInputPage(""); // Clear input page when the page changes
   }, [currentPage]);
 
   return (
@@ -81,19 +87,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       <table className="consumable-table">
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
-            {/* ✅ เพิ่มฟังก์ชัน sort พร้อมลูกศร */}
-
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "code") setSortAsc((prev) => !prev);
+                if (sortBy === "id") setSortAsc(prev => !prev);
                 else {
-                  setSortBy("code");
+                  setSortBy("id");
                   setSortAsc(true);
                 }
               }}
             >
-              รหัส {sortBy === "code" ? (sortAsc ? "▲" : "▼") : "▲"}
+              รหัส {sortBy === "id" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
             <th className="consumable-th">รูปภาพ</th>
             <th className="consumable-th">รายการ</th>
@@ -101,85 +105,85 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "brought") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "carry_over_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("brought");
+                  setSortBy("carry_over_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              ยอดยกมา {sortBy === "brought" ? (sortAsc ? "▲" : "▼") : "▲"}
+              ยอดยกมา {sortBy === "carry_over_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
 
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "low") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "min_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("low");
+                  setSortBy("min_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              ยอดต่ำสุด {sortBy === "low" ? (sortAsc ? "▲" : "▼") : "▲"}
+              ยอดต่ำสุด {sortBy === "min_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
 
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "high") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "max_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("high");
+                  setSortBy("max_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              ยอดสูงสุด {sortBy === "high" ? (sortAsc ? "▲" : "▼") : "▲"}
+              ยอดสูงสุด {sortBy === "max_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
 
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "in") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "received_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("in");
+                  setSortBy("received_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              รับ {sortBy === "in" ? (sortAsc ? "▲" : "▼") : "▲"}
+              รับ {sortBy === "received_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
               
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "out") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "issued_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("out");
+                  setSortBy("issued_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              จ่าย {sortBy === "out" ? (sortAsc ? "▲" : "▼") : "▲"}
+              จ่าย {sortBy === "issued_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
            
             <th
               className="consumable-th"
               onClick={() => {
-                if (sortBy === "remain") {
-                  setSortAsc((prev) => !prev);
+                if (sortBy === "remaining_quantity") {
+                  setSortAsc(prev => !prev);
                 } else {
-                  setSortBy("remain");
+                  setSortBy("remaining_quantity");
                   setSortAsc(true);
                 }
               }}
             >
-              คงเหลือ {sortBy === "remain" ? (sortAsc ? "▲" : "▼") : "▲"}
+              คงเหลือ {sortBy === "remaining_quantity" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>          
           </tr>
         </thead>
@@ -193,10 +197,10 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
           ) : (
             currentItems.map((item, index) => (
               <tr key={index} className="consumable-tr">
-                <td className="consumable-td">{item.code}</td>
+                <td className="consumable-td">{item.id}</td>
                 <td className="consumable-td">
                   <img
-                    src={item.image}
+                    src={item.image || "https://via.placeholder.com/60"}
                     alt={item.name}
                     className="item-image"
                   />
@@ -204,9 +208,9 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                 <td className="item-cell consumable-td">
                   <b>ชื่อ :</b> {item.name}
                   <br />
-                  หมวดหมู่ : {item.category}
+                  หมวดหมู่ : {item.category_id}
                   <br />
-                  หน่วยนับ : {item.unit} | คลังวัสดุ : {item.location}
+                  หน่วยนับ : {item.unit} | คลังวัสดุ : {item.stock_type}
                   <br />
                   ราคา/หน่วย : {item.price}
                   <br />
@@ -227,12 +231,12 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                     </button>
                   </div>
                 </td>
-                <td className="consumable-td">{item.brought}</td>
-                <td className="consumable-td">{item.low}</td>
-                <td className="consumable-td">{item.high}</td>
-                <td className="consumable-td">{item.in}</td>
-                <td className="consumable-td">{item.out}</td>
-                <td className="consumable-td">{item.remain}</td>
+                <td className="consumable-td">{item.carry_over_quantity}</td>
+                <td className="consumable-td">{item.min_quantity}</td>
+                <td className="consumable-td">{item.max_quantity}</td>
+                <td className="consumable-td">{item.received_quantity}</td>
+                <td className="consumable-td">{item.issued_quantity}</td>
+                <td className="consumable-td">{item.remaining_quantity}</td>
               </tr>
             ))
           )}
@@ -244,7 +248,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       <div className="consumable-pagination-wrapper">
         <div className="consumable-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง{" "}
-          {Math.min(indexOfLastItem, mockData.length)} จาก {mockData.length} แถว
+          {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="consumable-pagination-buttons">
           <button
