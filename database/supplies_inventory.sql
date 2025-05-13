@@ -78,7 +78,7 @@ CREATE TABLE `materials` (
   `image` varchar(255) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `unit_id` int(11) DEFAULT NULL,
+  `unit` varchar(255) DEFAULT NULL,
   `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT 'วัสดุในคลัง',
   `carry_over_quantity` int(11) DEFAULT 0,
   `max_quantity` int(11) DEFAULT 0,
@@ -96,11 +96,27 @@ CREATE TABLE `materials` (
 -- Dumping data for table `materials`
 --
 
-INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit_id`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, '', 'ปากกา', 1, 1, 'วัสดุในคลัง', 10, 100, 20, 5.00, 50, 0, 0, 0, '2025-05-06 09:20:18'),
-(2, '', 'กระดาษ A4', 2, 2, 'วัสดุในคลัง', 5, 200, 30, 100.00, 120, 0, 0, 0, '2025-05-06 09:20:18'),
-(3, '', 'ปลั๊กไฟ', 3, 1, 'วัสดุนอกคลัง', 2, 50, 10, 150.00, 15, 0, 0, 0, '2025-05-06 09:20:18'),
-(4, '', 'ตัวอย่างวัสดุใกล้หมด', 1, 1, 'วัสดุในคลัง', 10, 100, 5, 20.00, 3, 10, 5, -2, '2025-05-07 02:29:12');
+INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
+(1, '', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 5, 1, 220.00, 1, 2, 2, 0, '2025-05-06 09:20:18'),
+(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 4, 5, 1, 0, '2025-05-06 09:20:18'),
+(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 1, 3, 2, 0, '2025-05-06 09:20:18'),
+(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 4, 6, 2, 0, '2025-05-06 09:20:18'),
+(5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
+(6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 4, 4, 0, 0, '2025-05-06 09:20:18'),
+(7, '', 'แฟ้มแข็ง', 1, 'เล่ม', 'วัสดุในคลัง', 0, 4, 1, 30.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
+(8, '', 'สมุดปกแข็ง', 1, 'เล่ม', 'วัสดุนอกคลัง', 1, 3, 1, 35.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
+(9, '', 'กระดาษโน้ต', 1, 'ชุด', 'วัสดุในคลัง', 0, 6, 2, 12.00, 3, 5, 2, 0, '2025-05-06 09:20:18'),
+(10, '', 'เทปใส', 1, 'ม้วน', 'วัสดุในคลัง', 1, 3, 1, 8.00, 0, 1, 1, 0, '2025-05-06 09:20:18'),
+(11, '', 'สติ๊กเกอร์ A4', 1, 'แผ่น', 'วัสดุนอกคลัง', 2, 5, 2, 5.00, 3, 3, 0, 0, '2025-05-06 09:20:18'),
+(12, '', 'แฟ้มซองพลาสติก', 1, 'ซอง', 'วัสดุในคลัง', 1, 6, 2, 7.00, 3, 4, 1, 0, '2025-05-06 09:20:18'),
+(13, '', 'ลวดเย็บกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 0, 3, 1, 18.00, 0, 2, 2, 0, '2025-05-06 09:20:18'),
+(14, '', 'ปากกาลูกลื่น', 1, 'ด้าม', 'วัสดุในคลัง', 2, 6, 2, 12.00, 4, 5, 1, 0, '2025-05-06 09:20:18'),
+(15, '', 'แฟ้มห่วง', 1, 'เล่ม', 'วัสดุในคลัง', 1, 5, 2, 40.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
+(16, '', 'เครื่องเย็บกระดาษ', 1, 'เครื่อง', 'วัสดุนอกคลัง', 0, 3, 1, 85.00, 2, 2, 0, 0, '2025-05-06 09:20:18'),
+(17, '', 'น้ำยาล้างบอร์ด', 1, 'ขวด', 'วัสดุในคลัง', 1, 2, 1, 30.00, 0, 1, 1, 0, '2025-05-06 09:20:18'),
+(18, '', 'สก็อตเทป', 1, 'ม้วน', 'วัสดุในคลัง', 0, 4, 1, 6.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
+(19, '', 'กล่องเอกสาร', 1, 'กล่อง', 'วัสดุในคลัง', 2, 6, 2, 55.00, 4, 4, 0, 0, '2025-05-06 09:20:18'),
+(20, '', 'แผ่นพลาสติกใส', 1, 'แผ่น', 'วัสดุนอกคลัง', 1, 4, 1, 3.00, 1, 2, 1, 0, '2025-05-06 09:20:18');
 
 -- --------------------------------------------------------
 
@@ -342,7 +358,7 @@ ALTER TABLE `companies`
 ALTER TABLE `materials`
   ADD PRIMARY KEY (`id`),
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `unit_id` (`unit_id`);
+  ADD KEY `unit` (`unit`);
 
 --
 -- Indexes for table `material_categories`
@@ -492,15 +508,13 @@ ALTER TABLE `companies`
 -- Constraints for table `materials`
 --
 ALTER TABLE `materials`
-  ADD CONSTRAINT `materials_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `material_categories` (`id`),
-  ADD CONSTRAINT `materials_ibfk_2` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`);
+  ADD CONSTRAINT `materials_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `material_categories` (`id`);
 
 --
 -- Constraints for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
   ADD CONSTRAINT `purchase_requests_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
-
 --
 -- Constraints for table `receive_materials`
 --
