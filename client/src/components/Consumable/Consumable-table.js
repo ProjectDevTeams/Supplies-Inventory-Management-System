@@ -145,9 +145,9 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                 <td className="consumable-td">{item.id}</td>
                 <td className="consumable-td">
                   <img
-                    src={item.image || "https://via.placeholder.com/60"}
+                    src={item.image ? `${API_URL}/${item.image}` : "https://via.placeholder.com/60"}
                     alt={item.name}
-                    className="item-image"
+                    className="consumable-image"
                   />
                 </td>
                 <td className="item-cell consumable-td">

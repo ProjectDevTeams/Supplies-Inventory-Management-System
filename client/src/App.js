@@ -7,7 +7,6 @@ import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import ConsumablePage from "./pages/Consumable/ConsumablePage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
-import UnitsCountPage from "./pages/Consumable/UnitsCount/UnitsCountPage";
 import StuffPage from "./pages/Stuff/StuffPage";
 import DetailPage from "./pages/Stuff/DetailPage";
 import IncomingPage from "./pages/Incoming/IncomingPage";
@@ -47,7 +46,6 @@ function App() {
         {/* เมนูจัดการวัสดุสิ้นเปลือง */}
         <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
-        <Route path="/consumable/unitscount" element={<UnitsCountPage />} />
 
         {/* เมนูใบเบิก */}
         <Route path="/stuff" element={<StuffPage />} />

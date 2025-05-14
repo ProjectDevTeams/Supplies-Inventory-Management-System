@@ -45,13 +45,6 @@ function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
             >
               จัดการหมวดหมู่
             </button>
-
-            <button
-              className="btn dark"
-              onClick={() => navigate("/consumable/unitscount")}
-            >
-              จัดการหน่วยนับ
-            </button>
           </div>
         </div>
       </div>

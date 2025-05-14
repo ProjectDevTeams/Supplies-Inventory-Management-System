@@ -20,7 +20,16 @@
   border: 1px solid #999;
   padding: 0.5em;
   text-align: center;
-  vertical-align: top;
+}
+
+/* ✅ ปรับขนาดให้พอดี พร้อมจัดกลาง */
+.consumable-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ✅ Headings */
