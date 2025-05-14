@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2025 at 08:09 AM
+-- Generation Time: May 14, 2025 at 10:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,9 +40,11 @@ CREATE TABLE `adjustments` (
 --
 
 INSERT INTO `adjustments` (`id`, `stock_type`, `material_id`, `adjust_quantity`, `created_at`) VALUES
-(1, 'วัสดุในคลัง', 1, -2, '2025-05-06 09:20:18'),
-(2, 'วัสดุในคลัง', 2, 5, '2025-05-06 09:20:18'),
-(3, 'วัสดุนอกคลัง', 3, -1, '2025-05-06 09:20:18');
+(1, 'วัสดุในคลัง', 1, 10, '2025-01-01 02:00:00'),
+(2, 'วัสดุในคลัง', 2, -5, '2025-01-02 03:00:00'),
+(3, 'วัสดุนอกคลัง', 3, 8, '2025-01-03 04:00:00'),
+(4, 'วัสดุในคลัง', 4, -2, '2025-01-04 06:00:00'),
+(5, 'วัสดุนอกคลัง', 5, 15, '2025-01-05 08:00:00');
 
 -- --------------------------------------------------------
 
@@ -63,9 +65,11 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
-(1, 'บริษัท ไทยสโตร์ จำกัด', '2025-05-06 09:20:18', 1, '2025-05-08 02:32:19'),
-(2, 'บริษัท ออฟฟิศซัพพลาย', '2025-05-06 09:20:18', NULL, '2025-05-08 02:32:19'),
-(3, 'test1', '2025-05-09 03:25:54', NULL, '2025-05-13 04:41:51');
+(6, 'บริษัท เอเทค คอร์ปอเรชั่น', '2025-05-14 08:01:30', NULL, NULL),
+(7, 'ห้างหุ้นส่วน ซีเอ็น เทรดดิ้ง', '2025-05-14 08:01:30', NULL, NULL),
+(8, 'บริษัท โกลบอล ซัพพลาย', '2025-05-14 08:01:30', NULL, NULL),
+(9, 'ร้าน อุปกรณ์สำนักงานดีดี', '2025-05-14 08:01:30', NULL, NULL),
+(10, 'บริษัท วัสดุก่อสร้างไทย', '2025-05-14 08:01:30', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -141,57 +145,6 @@ INSERT INTO `material_categories` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permissions`
---
-
-CREATE TABLE `permissions` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT 'วัสดุในคลัง',
-  `menu_stuff` tinyint(1) DEFAULT 0,
-  `manage_data` tinyint(1) DEFAULT 0,
-  `manage_category` tinyint(1) DEFAULT 0,
-  `manage_unit` tinyint(1) DEFAULT 0,
-  `view_withdraw` tinyint(1) DEFAULT 0,
-  `track_withdraw` tinyint(1) DEFAULT 0,
-  `request_more` tinyint(1) DEFAULT 0,
-  `view_all_history` tinyint(1) DEFAULT 0,
-  `history_receive` tinyint(1) DEFAULT 0,
-  `history_withdraw` tinyint(1) DEFAULT 0,
-  `history_adjust` tinyint(1) DEFAULT 0,
-  `report_stock_balance` tinyint(1) DEFAULT 0,
-  `report_receive_monthly` tinyint(1) DEFAULT 0,
-  `report_expense_yearly` tinyint(1) DEFAULT 0,
-  `report_withdraw` tinyint(1) DEFAULT 0,
-  `report_low_stock` tinyint(1) DEFAULT 0,
-  `approve_withdraw` tinyint(1) DEFAULT 0,
-  `receive_goods` tinyint(1) DEFAULT 0,
-  `adjust_stock` tinyint(1) DEFAULT 0,
-  `manage_company` tinyint(1) DEFAULT 0,
-  `manage_users` tinyint(1) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `user` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `permissions`
---
-
-INSERT INTO `permissions` (`id`, `name`, `stock_type`, `menu_stuff`, `manage_data`, `manage_category`, `manage_unit`, `view_withdraw`, `track_withdraw`, `request_more`, `view_all_history`, `history_receive`, `history_withdraw`, `history_adjust`, `report_stock_balance`, `report_receive_monthly`, `report_expense_yearly`, `report_withdraw`, `report_low_stock`, `approve_withdraw`, `receive_goods`, `adjust_stock`, `manage_company`, `manage_users`, `created_at`, `updated_at`, `user`) VALUES
-(1, 'เจ้าหน้าที่คลัง', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
-(2, 'หัวหน้าหน่วยงาน', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
-(3, 'ผู้ดูแลระบบ', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-07 15:02:23', '2025-05-07 08:02:23', 0),
-(4, 'หัวหน้างาน', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:05:02', '2025-05-08 04:05:02', 1),
-(5, 'เจ้าหน้าที่', 'วัสดุนอกคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-05-08 11:16:53', NULL, 1),
-(6, 'test', 'วัสดุในคลัง', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, '2025-05-08 11:35:43', NULL, 1),
-(7, 'test01', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:36:12', NULL, 1),
-(8, 'test02', 'วัสดุในคลัง', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2025-05-08 11:36:40', NULL, 1),
-(9, 'test03', 'วัสดุในคลัง', 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, '2025-05-08 11:37:50', '2025-05-08 05:13:39', 0);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `purchase_requests`
 --
 
@@ -208,9 +161,11 @@ CREATE TABLE `purchase_requests` (
 --
 
 INSERT INTO `purchase_requests` (`id`, `material_id`, `requested_quantity`, `reason`, `created_at`) VALUES
-(1, 1, 30, 'วัสดุใกล้หมด', '2025-05-06 09:20:19'),
-(2, 2, 50, 'ใช้ในกิจกรรมเดือนหน้า', '2025-05-06 09:20:19'),
-(3, 3, 10, 'มีโครงการใหม่ที่ต้องใช้', '2025-05-06 09:20:19');
+(1, 1, 50, 'จัดซื้อเพื่อเติมสต็อกประจำไตรมาส', '2025-05-14 08:08:54'),
+(2, 2, 20, 'เตรียมใช้ในงานซ่อมแซมระบบ', '2025-05-14 08:08:54'),
+(3, 3, 15, 'วัสดุหมด ต้องจัดซื้อเพิ่ม', '2025-05-14 08:08:54'),
+(4, 4, 30, 'คำขอจากฝ่ายผลิต', '2025-05-14 08:08:54'),
+(5, 5, 100, 'สำรองเพื่อรองรับโครงการใหม่', '2025-05-14 08:08:54');
 
 -- --------------------------------------------------------
 
@@ -233,9 +188,11 @@ CREATE TABLE `receive_materials` (
 --
 
 INSERT INTO `receive_materials` (`id`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
-(1, 'วัสดุในคลัง', 1, 'INV001', 'PO001', '2024-01-01', 500.00),
-(2, 'วัสดุในคลัง', 2, 'INV002', 'PO002', '2024-02-01', 1000.00),
-(3, 'วัสดุนอกคลัง', 3, 'INV003', 'PO003', '2024-03-01', 450.00);
+(1, 'วัสดุในคลัง', NULL, 'TIV001', 'PO001', '2025-01-01', 12500.00),
+(2, 'วัสดุในคลัง', NULL, 'TIV002', 'PO002', '2025-01-05', 8700.00),
+(3, 'วัสดุนอกคลัง', NULL, 'TIV003', 'PO003', '2025-01-10', 15000.00),
+(4, 'วัสดุในคลัง', NULL, 'TIV004', 'PO004', '2025-01-12', 6200.00),
+(5, 'วัสดุนอกคลัง', NULL, 'TIV005', 'PO005', '2025-01-15', 9200.00);
 
 -- --------------------------------------------------------
 
@@ -257,9 +214,11 @@ CREATE TABLE `receive_material_items` (
 --
 
 INSERT INTO `receive_material_items` (`id`, `receive_id`, `material_id`, `price_per_unit`, `quantity`) VALUES
-(1, 1, 1, 5.00, 50),
-(2, 2, 2, 100.00, 10),
-(3, 3, 3, 150.00, 3);
+(1, 1, 1, 50.00, 10),
+(2, 1, 2, 75.50, 5),
+(3, 2, 3, 100.00, 3),
+(4, 2, 1, 50.00, 2),
+(5, 3, 4, 150.00, 1);
 
 -- --------------------------------------------------------
 
@@ -275,7 +234,7 @@ CREATE TABLE `users` (
   `position` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `permission_id` int(11) DEFAULT NULL,
+  `permission` enum('ผู้ใช้งาน','แอดมิน','ผู้ช่วยแอดมิน') DEFAULT 'ผู้ใช้งาน',
   `approval_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -283,10 +242,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission_id`, `approval_status`) VALUES
-(1, 'user01', 'pass123', 'สมชาย คลังดี', 'เจ้าหน้าที่', 'somchai@example.com', '0812345678', 1, 'อนุมัติ'),
-(3, 'admin', 'adminpass', 'ผู้ดูแล ระบบ', 'แอดมิน', 'admin@example.com', '0834567890', 3, 'อนุมัติ'),
-(14, 'Test00', '$2y$10$IB1Fsa/.1Tw/yIlTuxSHre8Ayq624zkJND2GZedd1cDtXIqO5qyJS', 'Test00', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 1, 'รออนุมัติ');
+INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `approval_status`, `permission`) VALUES
+(1, 'admin1', 'admin1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'อนุมัติ', 'แอดมิน'),
+(2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'อนุมัติ', 'ผู้ช่วยแอดมิน'),
+(3, 'user1', 'user1234', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'อนุมัติ', 'ผู้ใช้งาน'),
+(4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'รออนุมัติ', 'ผู้ใช้งาน'),
+(5, 'admin2', 'securepass', 'นิภา แอดมิน', 'ผู้จัดการ', 'admin2@example.com', '0856789012', 'ไม่อนุมัติ', 'แอดมิน');
 
 -- --------------------------------------------------------
 
@@ -310,8 +271,11 @@ CREATE TABLE `withdraw_materials` (
 --
 
 INSERT INTO `withdraw_materials` (`id`, `stock_type`, `fiscal_code`, `created_at`, `requester_name`, `reason`, `created_by`, `total_quantity`) VALUES
-(1, 'วัสดุในคลัง', '001-02/2568', '2024-04-01', 'หัวหน้าแผนก A', 'ใช้ประชุม', 1, 10),
-(3, 'วัสดุนอกคลัง', '003-02/2568', '2024-04-15', 'หัวหน้าคลังนอก', 'ออกภาคสนาม', 3, 5);
+(1, 'วัสดุในคลัง', 'WD001', '2025-01-01', 'สมชาย แรงงาน', 'ใช้สำหรับงานซ่อมแซม', 1, 15),
+(2, 'วัสดุในคลัง', 'WD002', '2025-01-03', 'วราภรณ์ แผนกผลิต', 'เบิกเพื่อผลิตสินค้าล็อต A', 2, 20),
+(3, 'วัสดุนอกคลัง', 'WD003', '2025-01-05', 'ปิยะพงษ์ ทีมช่าง', 'จัดกิจกรรมภายในหน่วยงาน', 1, 10),
+(4, 'วัสดุในคลัง', 'WD004', '2025-01-07', 'นิภา ฝ่ายจัดซื้อ', 'เตรียมสต๊อกระยะสั้น', 3, 18),
+(5, 'วัสดุนอกคลัง', 'WD005', '2025-01-10', 'สายฝน ฝ่ายสื่อสาร', 'สนับสนุนกิจกรรมชุมชน', 2, 12);
 
 -- --------------------------------------------------------
 
@@ -331,8 +295,11 @@ CREATE TABLE `withdraw_material_items` (
 --
 
 INSERT INTO `withdraw_material_items` (`id`, `withdraw_id`, `material_id`, `quantity`) VALUES
-(1, 1, 1, 5),
-(3, 3, 3, 3);
+(1, 1, 1, 10),
+(2, 1, 2, 5),
+(3, 2, 3, 8),
+(4, 2, 1, 6),
+(5, 2, 2, 4);
 
 --
 -- Indexes for dumped tables
@@ -367,12 +334,6 @@ ALTER TABLE `material_categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `permissions`
---
-ALTER TABLE `permissions`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
@@ -399,8 +360,7 @@ ALTER TABLE `receive_material_items`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `permission_id` (`permission_id`);
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `withdraw_materials`
@@ -426,19 +386,19 @@ ALTER TABLE `withdraw_material_items`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -447,46 +407,40 @@ ALTER TABLE `material_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `permissions`
---
-ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `withdraw_materials`
 --
 ALTER TABLE `withdraw_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `withdraw_material_items`
 --
 ALTER TABLE `withdraw_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
@@ -515,6 +469,7 @@ ALTER TABLE `materials`
 --
 ALTER TABLE `purchase_requests`
   ADD CONSTRAINT `purchase_requests_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+
 --
 -- Constraints for table `receive_materials`
 --
@@ -527,12 +482,6 @@ ALTER TABLE `receive_materials`
 ALTER TABLE `receive_material_items`
   ADD CONSTRAINT `receive_material_items_ibfk_1` FOREIGN KEY (`receive_id`) REFERENCES `receive_materials` (`id`),
   ADD CONSTRAINT `receive_material_items_ibfk_2` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
-
---
--- Constraints for table `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`);
 
 --
 -- Constraints for table `withdraw_materials`
