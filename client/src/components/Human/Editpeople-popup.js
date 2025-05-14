@@ -5,25 +5,25 @@ import "./Editpeople-popup.css";
 
 function EditpeoplePopup({ person, onClose, onSave }) {
   const [formData, setFormData] = useState({
-    id: '',
-    username: '',
-    full_name: '',
-    position: '',
-    email: '',
-    phone: '',
-    role: '',
-    approval_status: '',
-    permission_id: '',
+    id: "",
+    username: "",
+    full_name: "",
+    position: "",
+    email: "",
+    phone: "",
+    role: "",
+    approval_status: "",
+    permission_id: "",
   });
 
   useEffect(() => {
     if (person) {
       setFormData({
         ...person,
-        phone: person.phone || '',
-        role: person.role || '',
-        approval_status: person.approval_status || '',
-        permission_id: person.permission_id || '',
+        phone: person.phone || "",
+        role: person.role || "",
+        approval_status: person.approval_status || "",
+        permission_id: person.permission_id || "",
       });
     }
   }, [person]);
@@ -39,11 +39,13 @@ function EditpeoplePopup({ person, onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
+      // เรียก API อัพเดตโดยไม่ต้องเก็บผลลัพธ์ในตัวแปร unused
+      await axios.post(`${API_URL}/users/update_user.php`, formData);
       if (onSave) onSave();
-      if (onClose) onClose();     
+      if (onClose) onClose();
     } catch (err) {
       console.error("API error:", err);
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
     }
   };
 
@@ -51,11 +53,10 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     if (!window.confirm("คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?")) return;
 
     try {
-      const res = await axios.post(`${API_URL}/users/delete_user.php`, {
-        id: formData.id
-      });
-      if (onSave) onSave();   // รีโหลดตาราง
-      if (onClose) onClose(); // ปิด popup
+      // เรียก API ลบโดยตรง
+      await axios.post(`${API_URL}/users/delete_user.php`, { id: formData.id });
+      if (onSave) onSave();
+      if (onClose) onClose();
     } catch (err) {
       console.error("Delete API error:", err);
       alert("เกิดข้อผิดพลาดในการลบข้อมูล");
@@ -75,23 +76,48 @@ function EditpeoplePopup({ person, onClose, onSave }) {
             <div className="form-grid">
               <div className="form-row">
                 <label>username</label>
-                <input type="text" name="username" value={formData.username} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-row">
                 <label>ชื่อ-สกุล</label>
-                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="full_name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-row">
                 <label>ตำแหน่งงาน</label>
-                <input type="text" name="position" value={formData.position} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="position"
+                  value={formData.position}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-row">
                 <label>Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-row">
                 <label>โทรศัพท์</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-row">
                 <label>สิทธิการใช้งาน</label>
@@ -103,7 +129,11 @@ function EditpeoplePopup({ person, onClose, onSave }) {
               </div>
               <div className="form-row">
                 <label>สถานะ</label>
-                <select name="approval_status" value={formData.approval_status} onChange={handleChange}>
+                <select
+                  name="approval_status"
+                  value={formData.approval_status}
+                  onChange={handleChange}
+                >
                   <option value="อนุมัติ">อนุมัติ</option>
                   <option value="รออนุมัติ">รออนุมัติ</option>
                   <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
@@ -112,8 +142,16 @@ function EditpeoplePopup({ person, onClose, onSave }) {
             </div>
 
             <div className="form-footer space-between">
-              <button type="button" className="cancel-btn red" onClick={handleDelete}>ลบ</button>
-              <button type="submit" className="submit-btn green">บันทึก</button>
+              <button
+                type="button"
+                className="cancel-btn red"
+                onClick={handleDelete}
+              >
+                ลบ
+              </button>
+              <button type="submit" className="submit-btn green">
+                บันทึก
+              </button>
             </div>
           </form>
         </div>

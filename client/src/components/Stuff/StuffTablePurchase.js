@@ -47,6 +47,9 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
 
   return (
     <div className="stuff-container">
+      <div className="stuff-description">
+        ตารางขอจัดซื้อเพิ่มเติม
+      </div>
       <table className="stuff-table">
         <thead>
           <tr>

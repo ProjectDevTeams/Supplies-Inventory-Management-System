@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+.stuff-description {
+  margin-bottom: 0.5em;
+}
+
 .stuff-table {
   width: 100%;
   border-collapse: collapse;
