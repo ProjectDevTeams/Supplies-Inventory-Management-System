@@ -171,9 +171,6 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                     <button type="button" className="consumable-edit">
                       ✏ แก้ไข
                     </button>
-                    <button type="button" className="consumable-adjust">
-                      ปรับยอด
-                    </button>
                   </div>
                 </td>
                 <td className="consumable-td">{item.carry_over_quantity}</td>
