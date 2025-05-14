@@ -1,23 +1,20 @@
 .human-table-container {
   width: 100%;
+  height: 100vh;
   padding: 1em;
-  background-color: #f5f8fc;
   box-sizing: border-box;
   margin: 0 auto;
   margin-left: 0.1em;
   margin-top: -1em;
-  overflow-x: auto;
-  height: auto;
 }
 
 .hum-table {
   width: 100%;
-  min-width: 800px;
   margin: 1em auto;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  table-layout: fixed;
+  table-layout: auto;
 }
 
 .hum-table th,
@@ -28,13 +25,12 @@
   vertical-align: middle;
   font-size: 0.95em;
   line-height: 1.4;
-  word-wrap: break-word;
 }
 
 .hum-table th {
   background-color: #dfe8f6;
+  color: #003366;
   font-weight: bold;
-  user-select: none;
 }
 
 .hum-table tbody tr:hover {
