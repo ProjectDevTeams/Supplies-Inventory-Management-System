@@ -14,9 +14,6 @@ import AdjustPage from "./pages/Adjust/AdjustPage";
 import HumanPage from "./pages/Human/HumanPage";
 import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
 import ReportPage from "./pages/Report/ReportPage";
-import PermissionPage from "./pages/Permission/PermissionPage";
-import PermissionAddPage from "./pages/Permission/PermissionAdd/PermissionAddPage";
-import PermissionEditPage from "./pages/Permission/PermissionEdit/PermissionEditPage";
 import SettingPage from "./pages/Setting/SettingPage";
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
@@ -59,11 +56,6 @@ function App() {
         <Route path="/human" element={<HumanPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />
-
-        {/* สิทธิ์ */}
-        <Route path="/permission" element={<PermissionPage />} />
-        <Route path="/permission/add" element={<PermissionAddPage />} />
-        <Route path="/permission/edit/:id" element={<PermissionEditPage />} />
 
         {/* การตั้งค่า */}
         <Route path="/setting" element={<SettingPage />} />
