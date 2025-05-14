@@ -1,155 +1,161 @@
 .categorize-table-container {
-    width: 100%;
-    height: 100vh;
-    padding: 1em;
-    background-color: #f5f8fc;
-  }
-  
-  /* ปรับขนาดตารางและขยับขวาเล็กน้อย */
-  .categorize-table {
-    width: 75%;
-    margin: 0.5em auto 1.5em auto;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  width: 100%;
+  height: 100vh;
+  padding: 2em;
+  background-color: #f5f8fc;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Table */
+.categorize-table {
+  width: 100%;
+  margin: 1em auto;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  table-layout: auto;
+}
+
+/* Table Header & Cell */
+.categorize-th,
+.categorize-td {
+  border: 1px solid #999;
+  padding: 0.7em 0.5em;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.categorize-th {
+  background-color: #d0d0d0;
+  font-weight: bold;
+}
+
+/* Action buttons in each row */
+.categorize-actions {
+  float: right;
+  display: flex;
+  gap: 0.5em;
+}
+
+.categorize-edit-btn,
+.categorize-delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.categorize-edit-btn {
+  color: orange;
+}
+
+.categorize-delete-btn {
+  color: red;
+}
+
+.img-edit-categorize,
+.img-remove-categorize {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* ✅ Pagination */
+.categorize-pagination-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.categorize-pagination-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.categorize-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.categorize-pagination-buttons button {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.categorize-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.categorize-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.categorize-pagination-buttons .active {
+  background-color: #2176bd;
+  color: white;
+}
+
+/* Page input */
+.categorize-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.categorize-page-input::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.categorize-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.categorize-page-input:focus::placeholder {
+  color: transparent;
+}
+
+.categorize-page-input::-webkit-inner-spin-button,
+.categorize-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
   .categorize-th,
   .categorize-td {
-    border: 1px solid #000;
-    padding: 0.8em;
-    text-align: center;
+    font-size: 0.85em;
+    padding: 0.5em;
   }
-  
-  .categorize-th {
-    background-color: #d0d0d0;
-    font-weight: bold;
-  }
-  
-  /* ปุ่มแก้ไข/ลบใน cell */
-  .categorize-actions {
-    float: right;
-    display: flex;
+
+  .categorize-pagination-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.5em;
   }
-  
-  .categorize-edit-btn,
-  .categorize-delete-btn {
-    background: none;
-    border: none;
-    font-size: 1.1em;
-    cursor: pointer;
-  }
-  
-  .categorize-edit-btn {
-    color: orange;
-  }
-  
-  .categorize-delete-btn {
-    color: red;
-  }
-  
-  .img-edit-categorize,
-  .img-remove-categorize {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    vertical-align: middle;
-  }
-  
-  /* ✅ Pagination แบบใหม่ */
-  .categorize-pagination-wrapper {
-    width: 75%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1em;
-  }
-  
-  .categorize-pagination-info {
-    color: #333;
-    font-size: 14px;
-  }
-  
-  .categorize-pagination-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .categorize-pagination-buttons button {
-    padding: 0.5rem 1.2rem;
-    background-color: #ffffff;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .categorize-pagination-buttons button:hover {
-    background-color: #e6f0ff;
-  }
-  
-  .categorize-pagination-buttons button:disabled {
-    background-color: #eeeeee;
-    color: #aaa;
-    pointer-events: none;
-  }
-  
-  .categorize-pagination-buttons .active {
-    background-color: #2176bd;
-    color: white;
-  }
-  
-  /* ช่องเลขหน้า */
-  .categorize-page-input {
-    width: 55px;
-    text-align: center;
-    padding: 0.4rem 0.6rem;
-    border: 2px solid rgba(0, 123, 255, 0.3);
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    appearance: textfield;
-    -moz-appearance: textfield;
-  }
-  
-  .categorize-page-input::placeholder {
-    color: white;
-    opacity: 1;
-  }
-  
-  .categorize-page-input:focus {
-    outline: none;
-    border-color: rgba(0, 123, 255, 0.7);
-  }
-  
-  .categorize-page-input:focus::placeholder {
-    color: transparent;
-  }
-  
-  .categorize-page-input::-webkit-inner-spin-button,
-  .categorize-page-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  /* ✅ Responsive */
-  @media (max-width: 768px) {
-    .categorize-th,
-    .categorize-td {
-      font-size: 0.85em;
-      padding: 0.5em;
-    }
-  
-    .categorize-pagination-wrapper {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5em;
-    }
-  }
-  
+}

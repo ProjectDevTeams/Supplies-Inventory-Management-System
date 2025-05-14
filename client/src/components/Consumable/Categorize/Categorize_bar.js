@@ -11,12 +11,10 @@ function Categorizebar({ onAddClick }) {
     <div>
       <div className="top-bar-categorize">
         <div className="top-title-categorize">วัสดุสิ้นเปลือง</div>
-
         <div className="toolbar-categorize">
           <div className="button-group-categorize">
-            <button className="btn primary-categorize" >จัดการหมวดหมู่</button>
             <button className="btn green-categorize" onClick={onAddClick}>+ เพิ่มรายการ</button>
-            <button className="btn dark-categorize"onClick={() => navigate("/consumable")}>กลับหน้าหลัก</button>
+            <button className="btn dark-categorize" onClick={() => navigate("/consumable")}>กลับหน้าหลัก</button>
           </div>
         </div>
       </div>

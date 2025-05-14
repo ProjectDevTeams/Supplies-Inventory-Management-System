@@ -1,13 +1,4 @@
-.report-bar-container {
-  width: 100%;
-  background-color: #f5f8fc;
-  box-sizing: border-box;
-  margin: 0 auto;
-  margin-left: 0.1em;
-  margin-top: -1em;
-}
-
-/* 🔷 พื้นหลัง + Container หลัก */
+/* Container หลักของหน้ารายงาน */
 .report-bar {
   display: flex;
   flex-direction: column;
@@ -15,18 +6,18 @@
   background-color: #f9f9f9;
   align-items: stretch;
   width: 100%;
-  max-width: none;
+  padding: 1em;
   box-sizing: border-box;
 }
 
-/* 🔷 หัวข้อ */
+/* หัวข้อ */
 .report-title {
   font-weight: bold;
   font-size: 1.4em;
   color: #003366;
 }
 
-/* 🔷 ปุ่มเมนูรายงาน */
+/* ปุ่มเมนูรายงาน */
 .report-controls {
   display: flex;
   gap: 2em;
@@ -44,34 +35,18 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }
-
 .report-btn:hover {
   transform: scale(1.05);
 }
 
-/* 🔷 สีปุ่มรายงาน */
-.report-blue {
-  background-color: #204d92;
-}
+/* สีปุ่มรายงาน */
+.report-blue   { background-color: #204d92; }
+.report-purple { background-color: #8e44ad; }
+.report-orange { background-color: #f39c12; }
+.report-yellow { background-color: #f1c40f; color: black; }
+.report-red    { background-color: #e74c3c; }
 
-.report-purple {
-  background-color: #8e44ad;
-}
-
-.report-orange {
-  background-color: #f39c12;
-}
-
-.report-yellow {
-  background-color: #f1c40f;
-  color: black;
-}
-
-.report-red {
-  background-color: #e74c3c;
-}
-
-/* 🔷 ฟอร์มค้นหา */
+/* ฟอร์มค้นหา */
 .report-search {
   display: flex;
   flex-direction: column;
@@ -108,7 +83,7 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* 🔷 ปุ่มค้นหา */
+/* ปุ่มค้นหา */
 .report-search-button {
   display: flex;
   align-items: flex-end;
@@ -126,18 +101,17 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   transition: background-color 0.3s, transform 0.2s;
 }
-
 .report-btn-search:hover {
   background-color: #0056b3;
   transform: scale(1.05);
 }
 
+/* Responsive สำหรับ Report */
 @media (max-width: 768px) {
   .report-search-row {
     flex-direction: column;
   }
-
-  /* ✅ บังคับให้ "คลังวัสดุ" อยู่ล่างสุดในแถวแรก */
+  /* บังคับให้ "คลังวัสดุ" อยู่ล่างสุดในแถวแรก */
   .report-search .report-search-row:first-of-type .report-search-group:nth-child(2) {
     order: 3;
   }

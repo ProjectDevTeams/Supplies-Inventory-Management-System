@@ -1,23 +1,20 @@
 import React from 'react';
 import Navbar from '../../../components/Navbar/Navbar';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import Categorizebar from '../../../components/Consumable/Categorize/Categorize_bar';
 import Categorize_table from '../../../components/Consumable/Categorize/Categorize_table';
-import './Categorize.css';
+import './CategorizePage.css';
 
 function CategorizePage() {
   return (
-    <div className="consumable-navbar">
+    <div className="consumable-categorize-navbar">
       <Navbar />
-      <div className="consumable-sidebar-categorize">
+      <div className="consumable-categorize-sidebar">
         <Sidebar />
-        <main className="consumable-content-categorize">
+        <main className="consumable-categorize-content">
           <Categorize_table />
         </main>
       </div>
     </div>
-
-  
   );
 }
 

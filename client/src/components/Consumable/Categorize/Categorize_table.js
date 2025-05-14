@@ -1,16 +1,18 @@
+// Categorize_table.js
 import React, { useState, useEffect } from "react";
 import "./Categorize_table.css";
 import AddCatagorizePopup from "./AddCategorize_popup";
 import Categorizebar from "./Categorize_bar";
 
+// เปลี่ยน mockData ให้เก็บเฉพาะชื่อหมวดหมู่
 const mockData = [
-  { id: "OF", name: "วัสดุสำนักงาน" },
-  { id: "SF", name: "วัสดุความปลอดภัย" },
-  { id: "MD", name: "วัสดุทางการแพทย์" },
-  { id: "CL", name: "วัสดุทำความสะอาด" },
-  { id: "ST", name: "เครื่องเขียน" },
-  { id: "EL", name: "อุปกรณ์ไฟฟ้า" },
-  { id: "CT", name: "เครื่องมือช่าง" },
+  { name: "วัสดุสำนักงาน" },
+  { name: "วัสดุความปลอดภัย" },
+  { name: "วัสดุทางการแพทย์" },
+  { name: "วัสดุทำความสะอาด" },
+  { name: "เครื่องเขียน" },
+  { name: "อุปกรณ์ไฟฟ้า" },
+  { name: "เครื่องมือช่าง" },
 ];
 
 function Categorize_table() {
@@ -19,11 +21,17 @@ function Categorize_table() {
   const [inputPage, setInputPage] = useState("");
 
   const itemsPerPage = 5;
-  const sortedCompanies = [...mockData].sort((a, b) => a.id.localeCompare(b.id));
-  const totalPages = Math.ceil(sortedCompanies.length / itemsPerPage);
+  // เรียงลำดับตามชื่อ
+  const sortedCategories = [...mockData].sort((a, b) =>
+    a.name.localeCompare(b.name, "th")
+  );
+  const totalPages = Math.ceil(sortedCategories.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedCompanies = sortedCompanies.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedCategories = sortedCategories.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   useEffect(() => {
     setInputPage("");
@@ -41,26 +49,34 @@ function Categorize_table() {
       {showPopup && <AddCatagorizePopup onClose={() => setShowPopup(false)} />}
 
       <table className="categorize-table">
-        <thead className="categorize-thead">
-          <tr className="categorize-header-row">
+        <thead>
+          <tr>
             <th className="categorize-th">อันดับ</th>
-            <th className="categorize-th">ID</th>
             <th className="categorize-th">หมวดหมู่</th>
           </tr>
         </thead>
-        <tbody className="categorize-tbody">
-          {displayedCompanies.map((item, index) => (
+        <tbody>
+          {displayedCategories.map((item, index) => (
             <tr key={index} className="categorize-row">
-              <td className="categorize-td">{indexOfFirstItem + index + 1}</td>
-              <td className="categorize-td">{item.id}</td>
+              <td className="categorize-td">
+                {indexOfFirstItem + index + 1}
+              </td>
               <td className="categorize-td">
                 {item.name}
                 <div className="categorize-actions">
                   <button className="categorize-edit-btn">
-                    <img className="img-edit-categorize" src="../image/Edit.png" alt="edit" />
+                    <img
+                      className="img-edit-categorize"
+                      src="../image/Edit.png"
+                      alt="edit"
+                    />
                   </button>
-                  <button className="categorize-edit-btn">
-                    <img className="img-remove-categorize" src="../image/delete.png" alt="delete" />
+                  <button className="categorize-delete-btn">
+                    <img
+                      className="img-remove-categorize"
+                      src="../image/delete.png"
+                      alt="delete"
+                    />
                   </button>
                 </div>
               </td>
@@ -71,10 +87,15 @@ function Categorize_table() {
 
       <div className="categorize-pagination-wrapper">
         <div className="categorize-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCompanies.length)} จาก {sortedCompanies.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCategories.length)} จาก {sortedCategories.length} แถว
         </div>
         <div className="categorize-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>ก่อนหน้า</button>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            ก่อนหน้า
+          </button>
 
           <input
             type="number"
@@ -96,7 +117,12 @@ function Categorize_table() {
             placeholder={`${currentPage} / ${totalPages}`}
           />
 
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>ถัดไป</button>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>
