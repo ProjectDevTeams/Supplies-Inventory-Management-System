@@ -12,35 +12,38 @@ function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
 
       <div className="incoming-controls">
         {/* 🔍 Search */}
-        <div className="search-container">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+        <div className="incoming-search-container">
+          <FontAwesomeIcon icon={faSearch} className="incoming-search-icon" />
           <input
             type="text"
             placeholder="ค้นหา"
             value={searchTerm}
             onChange={handleSearchChange}
+            className="incoming-search-input"
           />
         </div>
 
         {/* ➕ เพิ่มหัวข้อ */}
-        <button className="btn green">+ เพิ่มหัวข้อ</button>
+        <button className="incoming-btn-green">+ เพิ่มหัวข้อ</button>
 
         {/* 📅 ปีงบ */}
-        <select className="budget-select">
-          <option disabled selected>เลือกปีงบประมาณ</option>
+        <select className="incoming-budget-select">
+          <option disabled selected>
+            เลือกปี
+          </option>
           <option>2566</option>
           <option>2567</option>
           <option>2568</option>
         </select>
 
         {/* 🧾 Export */}
-        <button className="excel-export" onClick={onExportExcel}>
+        <button className="incoming-excel-export" onClick={onExportExcel}>
           <img src="/image/excel-icon.png" alt="Excel" />
           <span>Export Excel</span>
         </button>
       </div>
     </div>
   );
-}
+} // ← Make sure this closing brace is here
 
 export default Incomingbar;

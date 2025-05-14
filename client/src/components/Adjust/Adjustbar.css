@@ -56,12 +56,16 @@
 
 .adjustbar-btn.add {
   background-color: #2d7a3e;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
 }
 
 .adjustbar-btn.add:hover {
-  background-color: #23602d;
-}
-
-.adjustbar-btn.add.active {
-  background-color: #1f512a;
+  transform: scale(1.05);
 }
