@@ -10,7 +10,6 @@ import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import StuffPage from "./pages/Stuff/StuffPage";
 import DetailPage from "./pages/Stuff/DetailPage";
 import IncomingPage from "./pages/Incoming/IncomingPage";
-import HistoryPage from "./pages/History/HistoryPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
 import HumanPage from "./pages/Human/HumanPage";
 import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
@@ -57,7 +56,6 @@ function App() {
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
         <Route path="/adjust/balance" element={<BalancePage />} />
-        <Route path="/history" element={<HistoryPage />} />
         <Route path="/human" element={<HumanPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />
