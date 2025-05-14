@@ -7,7 +7,7 @@ export default function OrganizationsManagePopup({
   onClose,
   companyData,
   onDeleteCompany,
-  onEditCompany
+  onEditCompany,
 }) {
   const [name, setName] = useState(companyData.name);
   const [saving, setSaving] = useState(false);
@@ -28,9 +28,7 @@ export default function OrganizationsManagePopup({
         { id: companyData.id, name: name.trim() }
       );
       if (res.data.status === "success") {
-        // pass back the fresh data
         onEditCompany(companyData.id, res.data.data.name);
-        onClose();
       } else {
         alert("อัปเดตไม่สำเร็จ: " + res.data.message);
       }
@@ -44,7 +42,11 @@ export default function OrganizationsManagePopup({
 
   // delete handler
   const handleDelete = async () => {
-    if (!window.confirm(`คุณแน่ใจว่าต้องการลบ "${companyData.name}" หรือไม่?`)) {
+    if (
+      !window.confirm(
+        `คุณแน่ใจว่าต้องการลบ "${companyData.name}" หรือไม่?`
+      )
+    ) {
       return;
     }
     try {
@@ -55,7 +57,6 @@ export default function OrganizationsManagePopup({
       );
       if (res.data.status === "success") {
         onDeleteCompany(companyData.id);
-        onClose();
       } else {
         alert("ลบไม่สำเร็จ: " + res.data.message);
       }

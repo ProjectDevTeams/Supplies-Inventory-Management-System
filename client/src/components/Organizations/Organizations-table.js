@@ -16,31 +16,37 @@ export default function OrganizationsTable() {
   const [adding, setAdding] = useState(false);
   const perPage = 5;
 
-  // fetch once
+  // ฟังก์ชันดึงข้อมูลบริษัทจาก API
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/companies/get_companies.php`);
+      if (res.data.status === "success") {
+        setData(
+          res.data.data.map((c) => ({
+            id: String(c.id),
+            name: c.name,
+            created_at: c.created_at.split(" ")[0],
+            updated_at: c.updated_at?.split(" ")[0] || "",
+            created_by: c.created_by, // อาจเป็น null
+          }))
+        );
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
+  // เรียก fetchData เมื่อคอมโพเนนต์ mount
   useEffect(() => {
-    axios
-      .get(`${API_URL}/companies/get_companies.php`)
-      .then(r => {
-        if (r.data.status === "success")
-          setData(
-            r.data.data.map(c => ({
-              id: String(c.id),
-              name: c.name,
-              created_at: c.created_at.split(" ")[0],
-              updated_at: c.updated_at?.split(" ")[0] || "",
-              created_by: c.created_by,       // may be null
-            }))
-          );
-      })
-      .catch(console.error);
+    fetchData();
   }, []);
 
-  // date formatter
-  const fmt = d => (d ? d.split("-").reverse().join("-") : "--");
+  // ฟังก์ชันจัดรูปวันที่
+  const fmt = (d) => (d ? d.split("-").reverse().join("-") : "--");
 
   // filter / sort / paginate
   const { items, total } = useMemo(() => {
-    let arr = data.filter(c =>
+    let arr = data.filter((c) =>
       (c.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
       fmt(c.created_at).includes(search) ||
       fmt(c.updated_at).includes(search)
@@ -58,7 +64,7 @@ export default function OrganizationsTable() {
       <Organizationsbar
         onAddClick={() => setAdding(true)}
         searchTerm={search}
-        setSearchTerm={t => {
+        setSearchTerm={(t) => {
           setSearch(t);
           setPage(1);
         }}
@@ -67,7 +73,10 @@ export default function OrganizationsTable() {
       <table className="organizations-bar-table">
         <thead>
           <tr>
-            <th onClick={() => setSortAsc(a => !a)} style={{ cursor: "pointer" }}>
+            <th
+              onClick={() => setSortAsc((a) => !a)}
+              style={{ cursor: "pointer" }}
+            >
               ลำดับ {sortAsc ? "▲" : "▼"}
             </th>
             <th>บริษัท/ร้านค้า</th>
@@ -81,7 +90,7 @@ export default function OrganizationsTable() {
               <td colSpan="4">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
-            items.map(c => (
+            items.map((c) => (
               <tr
                 key={c.id}
                 className="org-clickable-row"
@@ -93,7 +102,6 @@ export default function OrganizationsTable() {
                   {fmt(c.created_at)}
                   <br />
                   <span className="organizations-bar-subtext">
-                    {/* fall‑back to "—" when created_by is null */}
                     {c.created_by || "—"}
                   </span>
                 </td>
@@ -110,7 +118,7 @@ export default function OrganizationsTable() {
           {Math.min(page * perPage, total)} จาก {total} แถว
         </div>
         <div className="organizations-pagination-buttons">
-          <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
             ก่อนหน้า
           </button>
           <input
@@ -119,8 +127,8 @@ export default function OrganizationsTable() {
             placeholder={`${page} / ${totalPages}`}
             value={input}
             onFocus={() => setInput("")}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => {
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
               if (e.key === "Enter") {
                 const v = parseInt(input, 10);
                 if (v >= 1 && v <= totalPages) setPage(v);
@@ -130,39 +138,37 @@ export default function OrganizationsTable() {
           />
           <button
             disabled={page === totalPages}
-            onClick={() => setPage(p => p + 1)}
+            onClick={() => setPage((p) => p + 1)}
           >
             ถัดไป
           </button>
         </div>
       </div>
 
+      {/* Popup จัดการบริษัท */}
       {manageId && (
         <OrganizationsManagePopup
           onClose={() => setManageId(undefined)}
-          companyData={data.find(c => c.id === manageId)}
-          onDeleteCompany={id => setData(ds => ds.filter(d => d.id !== id))}
-          onEditCompany={(id, name) =>
-            setData(ds => ds.map(d => (d.id === id ? { ...d, name } : d)))
-          }
+          companyData={data.find((c) => c.id === manageId)}
+          onDeleteCompany={(id) => {
+            fetchData();           // รีเฟรชตารางหลังลบ
+            setManageId(undefined);
+          }}
+          onEditCompany={(_, __) => {
+            fetchData();           // รีเฟรชตารางหลังแก้ไข
+            setManageId(undefined);
+          }}
         />
       )}
 
+      {/* Popup เพิ่มบริษัท */}
       {adding && (
         <OrganizationsAddPopup
           onClose={() => setAdding(false)}
-          onAddCompany={nc => {
-            const next = String(Math.max(...data.map(d => +d.id)) + 1);
-            setData([
-              ...data,
-              {
-                id: next,
-                name: nc.name,
-                created_at: new Date().toISOString().slice(0, 10),
-                updated_at: "",
-                created_by: "—",
-              },
-            ]);
+          onAddCompany={(nc) => {
+            // หลังเพิ่มสำเร็จ ให้รีเฟรชจาก server กลับมา
+            fetchData();
+            setAdding(false);
           }}
         />
       )}
