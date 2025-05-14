@@ -64,6 +64,9 @@ function AdjustTable({ searchTerm }) {
 
   return (
     <div className="adjustment-table-container">
+      <div className="adjustment-table-description">
+        ตารางการปรับยอด
+      </div>
       <table id="adjustment-table">
         <thead id="adjustment-thead">
           <tr className="adjustment-tr">

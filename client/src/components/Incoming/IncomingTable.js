@@ -47,6 +47,9 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
 
   return (
     <div className="incoming-container">
+      <div className="incoming-description">
+        ตารางการรับเข้าวัสดุ
+      </div>
       <table className="incoming-table">
         <thead>
           <tr>
