@@ -13,7 +13,6 @@ import {
   faUserTie,
   faStore,
   faChartBar,
-  faUsers,
   faCog,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -26,7 +25,6 @@ const menuItems = [
   { icon: faUserTie, label: "บุคลากร", to: "/human" },
   { icon: faStore, label: "บริษัท/ห้าง/ร้าน", to: "/organizations" },
   { icon: faChartBar, label: "รายงาน", to: "/report" },
-  { icon: faUsers, label: "แบ่งสิทธิ์", to: "/permission" },
   { icon: faCog, label: "ตั้งค่าระบบ", to: "/setting" },
 ];
 
