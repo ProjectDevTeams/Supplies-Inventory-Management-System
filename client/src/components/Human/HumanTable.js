@@ -1,34 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./HumanTable.css";
 import EditpeoplePopup from '../../components/Human/Editpeople-popup';
-import axios from "axios";
-import { API_URL } from "../../config";
 
-function HumanTable({ searchTerm }) {
+function HumanTable({ searchTerm, data, fetchData }) {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showEditPopup, setShowEditPopup] = useState(false);
-  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const itemsPerPage = 5;
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    axios
-      .get(`${API_URL}/users/get_users.php`)
-      .then((res) => {
-        const response = res.data;
-        const finalData = Array.isArray(response) ? response : response.data;
-        setData(finalData);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-      });
-  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -141,7 +121,7 @@ function HumanTable({ searchTerm }) {
         <EditpeoplePopup
           person={selectedPerson}
           onClose={() => setShowEditPopup(false)}
-          onSave={handleSave} // ✅ ใช้ fetch + ปิด popup
+          onSave={handleSave}
         />
       )}
     </div>

@@ -7,7 +7,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-function Humanbar({ searchTerm, setSearchTerm }) { // รับ props เพิ่ม
+function Humanbar({ searchTerm, setSearchTerm, onAddSuccess }) { // รับ props เพิ่ม
   const [showPopup, setShowPopup] = useState(false); // State สำหรับการแสดง Popup
 
   // ฟังก์ชันในการเปิด/ปิด AddpeoplePopup
@@ -48,7 +48,8 @@ function Humanbar({ searchTerm, setSearchTerm }) { // รับ props เพิ�
 
       {/* แสดง AddpeoplePopup เมื่อคลิกปุ่ม เพิ่มเจ้าหน้าที่ */}
       {showPopup && (
-        <AddpeoplePopup onClose={handleClosePopup} /> // ส่งฟังก์ชันปิดไปใน Popup
+        <AddpeoplePopup onClose={handleClosePopup}
+        onAdd={onAddSuccess} /> // ส่งฟังก์ชันปิดไปใน Popup
       )}
     </div>
   );

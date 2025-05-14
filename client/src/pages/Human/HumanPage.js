@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Humanbar from '../../components/Human/Humanbar';
 import HumanTable from '../../components/Human/HumanTable';
+import axios from "axios";
+import { API_URL } from "../../config";
 
 import './HumanPage.css';
 
 function HumanPage() {
-  const [searchTerm, setSearchTerm] = useState(""); // เก็บข้อความค้นหา
+  const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState([]);
+
+  // ✅ ประกาศ fetchData
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/users/get_users.php`);
+      const finalData = Array.isArray(res.data) ? res.data : res.data.data;
+      setData(finalData);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // ✅ โหลดตอน mount
+  }, []);
 
   return (
     <div className="human-navbar">
@@ -16,11 +34,16 @@ function HumanPage() {
         <Sidebar />
         <main className="human-content">
           <section className="content-header">
-            {/* ส่ง props searchTerm และ setSearchTerm ไปยัง Humanbar */}
-            <Humanbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-            {/* ส่ง props searchTerm ไปยัง HumanTable */}
-            <HumanTable searchTerm={searchTerm} />
+            <Humanbar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              onAddSuccess={fetchData} 
+            />
+            <HumanTable
+              searchTerm={searchTerm}
+              data={data}
+              fetchData={fetchData}
+            />
           </section>
         </main>
       </div>

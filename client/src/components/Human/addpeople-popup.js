@@ -3,7 +3,7 @@ import "./addpeople-popup.css";
 import axios from "axios";
 import { API_URL } from "../../config";
 
-function AddpeoplePopup({ onClose }) {
+function AddpeoplePopup({ onClose, onAdd }) {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -11,7 +11,7 @@ function AddpeoplePopup({ onClose }) {
     position: "",
     email: "",
     phone: "",
-    permission_id: "", // สมมติว่าเลือกสิทธิเป็น ID
+    permission_id: "",
     approval_status: "รออนุมัติ"
   });
 
@@ -24,7 +24,9 @@ function AddpeoplePopup({ onClose }) {
     e.preventDefault();
     try {
       await axios.post(`${API_URL}/users/add_user.php`, formData);
-      onClose(); // ปิด popup หลังเพิ่มเสร็จ
+
+      if (onAdd) onAdd();     // ✅ รีโหลดข้อมูลจาก backend
+      if (onClose) onClose(); // ✅ ปิด popup
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -43,23 +45,23 @@ function AddpeoplePopup({ onClose }) {
             <div className="form-grid">
               <div className="form-row">
                 <label>username</label>
-                <input type="text" name="username" value={formData.username} onChange={handleChange} />
+                <input type="text" name="username" value={formData.username} onChange={handleChange} required />
               </div>
               <div className="form-row">
                 <label>รหัสผ่าน</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} />
+                <input type="password" name="password" value={formData.password} onChange={handleChange} required />
               </div>
               <div className="form-row">
                 <label>ชื่อ-สกุล</label>
-                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} />
+                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
               </div>
               <div className="form-row">
                 <label>ตำแหน่งงาน</label>
-                <input type="text" name="position" value={formData.position} onChange={handleChange} />
+                <input type="text" name="position" value={formData.position} onChange={handleChange} required />
               </div>
               <div className="form-row">
                 <label>Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
               </div>
               <div className="form-row">
                 <label>โทรศัพท์</label>
@@ -67,7 +69,7 @@ function AddpeoplePopup({ onClose }) {
               </div>
               <div className="form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select name="permission_id" value={formData.permission_id} onChange={handleChange}>
+                <select name="permission_id" value={formData.permission_id} onChange={handleChange} required>
                   <option value="">เลือกสิทธิการใช้งาน</option>
                   <option value="1">STI</option>
                   <option value="2">แอดมิน ฝ่าย STI</option>
