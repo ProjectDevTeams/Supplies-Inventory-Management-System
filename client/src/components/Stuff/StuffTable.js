@@ -45,6 +45,9 @@ export default function StuffTable({ searchTerm }) {
 
   return (
     <div className="stuff-container">
+      <div className="stuff-description">
+        ตารางการรออนุมัติ
+      </div>
       <table className="stuff-table">
         <thead>
           <tr>

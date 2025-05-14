@@ -42,6 +42,9 @@ export default function StuffTableTrack({ searchTerm = '' }) {
 
   return (
     <div className="stuff-container">
+      <div className="stuff-description">
+        ตารางติดตามสถานะการเบิก
+      </div>
       <table className="stuff-table">
         <thead>
           <tr>
