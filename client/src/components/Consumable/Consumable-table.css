@@ -24,12 +24,9 @@
 
 /* ✅ ปรับขนาดให้พอดี พร้อมจัดกลาง */
 .consumable-image {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 200px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;  
 }
 
 /* ✅ Headings */
