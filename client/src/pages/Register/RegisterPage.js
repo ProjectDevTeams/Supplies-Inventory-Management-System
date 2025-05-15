@@ -32,6 +32,16 @@ function RegisterPage() {
               <input type="password" placeholder="ยืนยันรหัสผ่าน" />
             </div>
 
+            <div className="input-group">
+              <label>เบอร์โทรศัพท์</label>
+              <input type="text" placeholder="กรอกเบอร์โทรศัพท์" />
+            </div>
+
+            <div className="input-group">
+              <label>ตำแหน่งงาน</label>
+              <input type="text" placeholder="กรอกตำแหน่งงาน" />
+            </div>
+
             <button className="register-button">สมัครสมาชิก</button>
 
             <div className="switch-page">
