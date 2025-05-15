@@ -5,6 +5,7 @@ import ReportMaterialRemain from "./Report-MaterialRemain";
 import ReportReceive from "./Report-Receive";
 import ReportAnnual from "./Report-Annual";
 import ReportIssue from "./Report-Issue";
+import ReportAdjust from "./Report-Adjust";
 import ReportLowStock from "./Report-LowStock";
 
 function ReportContent() {
@@ -39,6 +40,7 @@ function ReportContent() {
     receive: "รายงานการรับเข้า",
     annual: "รายงานรายจ่ายประจำปี",
     issue: "รายงานการเบิก-จ่าย",
+    adjust: "รายงานการปรับยอด",
     lowstock: "รายงานวัสดุใกล้หมดสต็อก"
   };
 
@@ -51,10 +53,11 @@ function ReportContent() {
 
         <div className="report-controls">
           <button className="report-btn report-blue"    onClick={() => handleReportClick("remain")}>   รายงานยอดคงเหลือวัสดุ</button>
-          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>  รายงานการรับเข้า</button>
-          <button className="report-btn report-orange" onClick={() => handleReportClick("annual")}>   รายงานรายจ่ายประจำปี</button>
-          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>    รายงานการเบิก-จ่าย</button>
-          <button className="report-btn report-red"    onClick={() => handleReportClick("lowstock")}>รายงานวัสดุใกล้หมดสต็อก</button>
+          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>   รายงานการรับเข้า</button>
+          <button className="report-btn report-orange" onClick={() => handleReportClick("annual")}>    รายงานรายจ่ายประจำปี</button>
+          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>     รายงานการเบิก-จ่าย</button>
+          <button className="report-btn report-green" onClick={() => handleReportClick("adjust")}>     รายงานการปรับยอด</button>
+          <button className="report-btn report-red"    onClick={() => handleReportClick("lowstock")}>  รายงานวัสดุใกล้หมดสต็อก</button>
         </div>
 
         {currentReport && (
@@ -113,6 +116,7 @@ function ReportContent() {
         {showResult && currentReport === "receive" && <ReportReceive />}
         {showResult && currentReport === "annual"  && <ReportAnnual />}
         {showResult && currentReport === "issue"   && <ReportIssue />}
+        {showResult && currentReport === "adjust"   && <ReportAdjust />}
         {showResult && currentReport === "lowstock" && <ReportLowStock />}
       </div>
     </div>

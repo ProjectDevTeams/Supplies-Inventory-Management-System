@@ -54,7 +54,9 @@
 .report-purple { background-color: #8e44ad; }
 .report-orange { background-color: #f39c12; }
 .report-yellow { background-color: #f1c40f; color: black; }
+.report-green    { background-color: #4ca345; }
 .report-red    { background-color: #e74c3c; }
+
 
 /* ฟอร์มค้นหา */
 .report-search {
