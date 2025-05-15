@@ -1,17 +1,16 @@
 <?php
-header("Access-Control-Allow-Origin: *");               // อนุญาตให้เรียก API ได้จากทุกที่
-header("Access-Control-Allow-Headers: *");              // อนุญาต header ทุกชนิด
-header("Access-Control-Allow-Methods: *");              // อนุญาตวิธีการ HTTP ทุกรูปแบบ (GET, POST, ฯลฯ)
-header("Content-Type: application/json");                 // ระบุว่าส่งข้อมูลออกเป็น JSON
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Content-Type: application/json");
 
-require_once '../db.php'; // เชื่อมต่อฐานข้อมูลผ่าน PDO
+require_once '../db.php';
 
 try {
-    // เตรียมคำสั่ง SQL เพื่อดึงข้อมูลวัสดุทั้งหมด
-    $stmt = $conn->prepare(" 
+    // ดึงข้อมูลวัสดุ
+    $stmt = $conn->prepare("
         SELECT 
             m.id,
-            -- แปลง backslashes (\\) เป็น forward slashes (/) สำหรับ path รูปภาพ
             REPLACE(m.image, '\\\\', '/') AS image,
             m.name,
             mc.name AS category,
@@ -26,21 +25,36 @@ try {
             m.max_quantity AS high,
             m.received_quantity AS brought
         FROM materials m
-        LEFT JOIN material_categories mc 
-            ON m.category_id = mc.id
+        LEFT JOIN material_categories mc ON m.category_id = mc.id
     ");
+    $stmt->execute();
+    $materials = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt->execute();                             // รันคำสั่ง SQL
-    $materials = $stmt->fetchAll(PDO::FETCH_ASSOC); // ดึงข้อมูลทั้งหมดใส่ตัวแปร
+    // ===== 🧹 ลบรูปที่ไม่ได้ใช้งานจาก materials table =====
+    $dir = __DIR__ . '/picture/';
+    $basePath = 'materials/picture/';
 
-    // ส่งผลลัพธ์กลับเป็น JSON พร้อมสถานะ success
+    // ดึง path image ที่มีในตาราง materials
+    $usedPaths = array_column($materials, 'image');
+    $usedFiles = array_map(function($path) use ($basePath) {
+        return str_replace($basePath, '', $path);
+    }, $usedPaths);
+
+    // อ่านไฟล์ทั้งหมดในโฟลเดอร์
+    $files = scandir($dir);
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') continue;
+        if (!in_array($file, $usedFiles)) {
+            @unlink($dir . $file);
+        }
+    }
+    // =========================================================
+
     echo json_encode([
         "status" => "success",
         "data"   => $materials
     ]);
-
 } catch (PDOException $e) {
-    // กรณีเกิดข้อผิดพลาด ให้ส่ง JSON แจ้ง error message
     echo json_encode([
         "status"  => "error",
         "message" => $e->getMessage()

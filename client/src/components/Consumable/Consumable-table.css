@@ -24,7 +24,7 @@
 
 /* ✅ ปรับขนาดให้พอดี พร้อมจัดกลาง */
 .consumable-image {
-  width: 200px;
+  width: 150px;
   aspect-ratio: 1 / 1;
   object-fit: cover;  
 }
