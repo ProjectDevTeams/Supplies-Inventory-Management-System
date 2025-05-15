@@ -24,11 +24,20 @@ function LoginPage() {
       const data = res.data;
 
       if (data.status === "success") {
-        const permission = data.permission;
+        const user = {
+          id: data.id,
+          username: data.username,
+          full_name: data.full_name,
+          permission: data.permission
+        };
 
-        if (permission === "ผู้ใช้งาน") {
+       
+        localStorage.setItem("user", JSON.stringify(user));
+
+        
+        if (user.permission === "ผู้ใช้งาน") {
           navigate("/userstuff");
-        } else if (permission === "แอดมิน" || permission === "ผู้ช่วยแอดมิน") {
+        } else if (user.permission === "แอดมิน" || user.permission === "ผู้ช่วยแอดมิน") {
           navigate("/HomePage");
         } else {
           alert("สิทธิการใช้งานไม่ถูกต้อง");
@@ -75,6 +84,7 @@ function LoginPage() {
                 <img
                   className="login-eye-view"
                   src={showPassword ? "/image/eyeview.png" : "/image/eyehide.png"}
+                  alt="Toggle password"
                 />
               </span>
             </div>
