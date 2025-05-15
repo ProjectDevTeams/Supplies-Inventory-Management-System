@@ -35,3 +35,7 @@
     margin-top: 1rem;
   }
   
+  input::placeholder { 
+  color: #dacece;  /* สีคําในกล่องข้อความ */
+  opacity: 1;  /* ให้ไม่จาง */
+}
