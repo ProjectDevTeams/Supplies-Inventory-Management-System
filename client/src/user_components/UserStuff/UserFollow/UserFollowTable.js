@@ -107,10 +107,10 @@ function UserFollowTable({ searchTerm = "" }) {
             <th>ลำดับ</th>
             <th>เลขที่ใบเบิก</th>
             <th>ประเภท</th>
-            <th>ปริ้น</th>
             <th>จำนวนรายการ</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>ปริ้น</th>            
           </tr>
         </thead>
         <tbody>
@@ -119,7 +119,7 @@ function UserFollowTable({ searchTerm = "" }) {
               <td>{row.id}</td>
               <td>{row.number}</td>
               <td>{row.category}</td>
-              <td className="print-icon"><FaPrint /></td>
+              
               <td>{row.items}</td>
               <td>{row.date}</td>
               <td className={
@@ -130,7 +130,9 @@ function UserFollowTable({ searchTerm = "" }) {
               }>
                 {row.status}
               </td>
+              <td className="print-icon"><FaPrint /></td>
             </tr>
+            
           ))}
         </tbody>
       </table>
