@@ -36,14 +36,9 @@ function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
           <option>2568</option>
         </select>
 
-        {/* 🧾 Export */}
-        <button className="incoming-excel-export" onClick={onExportExcel}>
-          <img src="/image/excel-icon.png" alt="Excel" />
-          <span>Export Excel</span>
-        </button>
       </div>
     </div>
   );
-} // ← Make sure this closing brace is here
+}
 
 export default Incomingbar;

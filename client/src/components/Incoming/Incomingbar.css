@@ -79,32 +79,3 @@
   box-sizing: border-box;
   appearance: menulist;
 }
-
-.incoming-budget-select::-ms-expand {
-  display: block;
-}
-
-/* Export Excel */
-.incoming-excel-export {
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  color: #2e7d32;
-  font-size: 16px;
-  padding: 5px 10px;
-}
-
-.incoming-excel-export img {
-  height: 24px;
-  margin-right: 6px;
-}
-
-/* Remove spinner on number inputs globally if any */
-.incoming-search-input::-webkit-inner-spin-button,
-.incoming-search-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
