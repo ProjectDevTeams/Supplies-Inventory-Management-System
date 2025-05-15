@@ -80,7 +80,7 @@ function LoginPage() {
             </div>
 
             <div className="forgot-password">
-              <Link to="/forget" className="forgot-password">ลืมรหัสผ่าน</Link>
+              <Link to="/reset" className="forgot-password">ลืมรหัสผ่าน</Link>
             </div>
 
             <button type="button" className="login-button" onClick={handleLogin}>
