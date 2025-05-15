@@ -1,11 +1,11 @@
-// File: src/components/AddnewPopup.js
+// File: src/components/ConsumableAddnewPopup.js
 
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "./addnew-popup.css";
+import "./consumable-addnew-popup.css";
 
-function AddnewPopup({ onClose, onAdd }) {
+function ConsumableAddnewPopup({ onClose, onAdd }) {
   const [formData, setFormData] = useState({
     name: "",
     category_id: "",
@@ -16,30 +16,26 @@ function AddnewPopup({ onClose, onAdd }) {
     max_quantity: 0,
     price: 0,
     created_at: "",
-    image: ""  // auto-generated path
+    image: ""
   });
   const [file, setFile] = useState(null);
 
   const handleChange = (e) =>
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0] || null;
     setFile(selected);
 
     if (selected) {
-      // sanitize formData.name for filename
-      const base = formData.name
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9_-]/g, "_") || "file";
-      const time = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0,14);
-      const ext  = selected.name.split(".").pop();
+      const base = formData.name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_") || "file";
+      const time = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+      const ext = selected.name.split(".").pop();
       const filename = `${base}_${time}.${ext}`;
       const path = `materials/picture/${filename}`;
-      setFormData(prev => ({ ...prev, image: path }));
+      setFormData((prev) => ({ ...prev, image: path }));
     } else {
-      setFormData(prev => ({ ...prev, image: "" }));
+      setFormData((prev) => ({ ...prev, image: "" }));
     }
   };
 
@@ -50,11 +46,9 @@ function AddnewPopup({ onClose, onAdd }) {
     if (file) body.append("image", file);
 
     try {
-      const res = await axios.post(
-        `${API_URL}/materials/add_material.php`,
-        body,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const res = await axios.post(`${API_URL}/materials/add_material.php`, body, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (res.data.status === "success") {
         onAdd?.(res.data.data);
         onClose();
@@ -68,43 +62,29 @@ function AddnewPopup({ onClose, onAdd }) {
   };
 
   return (
-    <div className="popup-container">
-      <div className="popup-box">
-        <div className="popup-header">
+    <div className="consumable-addnew-popup-container">
+      <div className="consumable-addnew-popup-box">
+        <div className="consumable-addnew-popup-header">
           <span>เพิ่มรายการใหม่</span>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="consumable-addnew-close-btn" onClick={onClose}>✕</button>
         </div>
-        <div className="popup-body">
+        <div className="consumable-addnew-popup-body">
           <form onSubmit={handleSubmit}>
-            {/* ชื่อ */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ชื่อ</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
+              <input type="text" name="name" value={formData.name} onChange={handleChange} required />
             </div>
 
-            {/* ประเภท (category_id) */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ประเภท</label>
-              <select
-                name="category_id"
-                value={formData.category_id}
-                onChange={handleChange}
-                required
-              >
+              <select name="category_id" value={formData.category_id} onChange={handleChange} required>
                 <option value="">เลือกประเภท</option>
                 <option value="1">วัสดุสำนักงาน</option>
                 <option value="2">วัสดุความปลอดภัย</option>
               </select>
             </div>
 
-            {/* หน่วยนับ */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>หน่วยนับ</label>
               <input
                 list="units"
@@ -121,23 +101,16 @@ function AddnewPopup({ onClose, onAdd }) {
               </datalist>
             </div>
 
-            {/* คลังวัสดุ */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>คลังวัสดุ</label>
-              <select
-                name="stock_type"
-                value={formData.stock_type}
-                onChange={handleChange}
-                required
-              >
+              <select name="stock_type" value={formData.stock_type} onChange={handleChange} required>
                 <option value="">เลือกคลังวัสดุ</option>
                 <option value="วัสดุในคลัง">วัสดุในคลัง</option>
                 <option value="วัสดุนอกคลัง">วัสดุนอกคลัง</option>
               </select>
             </div>
 
-            {/* ยอดยกมา */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ยอดยกมา</label>
               <input
                 type="number"
@@ -147,8 +120,7 @@ function AddnewPopup({ onClose, onAdd }) {
               />
             </div>
 
-            {/* ยอดต่ำสุด */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ยอดต่ำสุด</label>
               <input
                 type="number"
@@ -158,8 +130,7 @@ function AddnewPopup({ onClose, onAdd }) {
               />
             </div>
 
-            {/* ยอดสูงสุด */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ยอดสูงสุด</label>
               <input
                 type="number"
@@ -169,8 +140,7 @@ function AddnewPopup({ onClose, onAdd }) {
               />
             </div>
 
-            {/* ราคา/หน่วย */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>ราคา/หน่วย</label>
               <input
                 type="number"
@@ -181,26 +151,24 @@ function AddnewPopup({ onClose, onAdd }) {
               />
             </div>
 
-            {/* แนบไฟล์ภาพ */}
-            <div className="form-row file-upload">
+            <div className="consumable-addnew-form-row consumable-addnew-file-upload">
               <label>แนบไฟล์ภาพ</label>
               <div className="upload-group">
                 <small>ขนาดไฟล์สูงสุด 5MB</small>
                 <input
                   type="file"
                   id="fileUpload"
-                  className="file-hidden"
+                  className="consumable-addnew-file-hidden"
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-                <label htmlFor="fileUpload" className="custom-file-btn">
+                <label htmlFor="fileUpload" className="consumable-addnew-custom-file-btn">
                   เลือกไฟล์
                 </label>
               </div>
             </div>
 
-            {/* วันที่สร้าง */}
-            <div className="form-row">
+            <div className="consumable-addnew-form-row">
               <label>วันที่สร้าง</label>
               <input
                 type="date"
@@ -210,9 +178,8 @@ function AddnewPopup({ onClose, onAdd }) {
               />
             </div>
 
-            {/* ปุ่มยืนยัน */}
-            <div className="form-footer">
-              <button type="submit" className="submit-btn">
+            <div className="consumable-addnew-form-footer">
+              <button type="submit" className="consumable-addnew-submit-btn">
                 ยืนยัน
               </button>
             </div>
@@ -223,4 +190,4 @@ function AddnewPopup({ onClose, onAdd }) {
   );
 }
 
-export default AddnewPopup;
+export default ConsumableAddnewPopup;
