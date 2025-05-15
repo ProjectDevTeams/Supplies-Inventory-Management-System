@@ -53,7 +53,7 @@ function UserStuff_Table({ searchTerm = "" }) {
             <th>รหัส</th>
             <th>รูปภาพ</th>
             <th>รายการ</th>
-            <th>จำนวนที่สามารถเบิกได้</th>
+            <th>จำนวนคงเหลือ</th>
             <th>ทำรายการ</th>
           </tr>
         </thead>

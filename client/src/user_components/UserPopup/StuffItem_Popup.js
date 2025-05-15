@@ -40,7 +40,7 @@ function StuffItem_Popup({ item, onClose }) {
 
               <div className="stuff-form-row split">
                 <div>
-                  <label className="stuff-label">จำนวนที่สามารถเบิกได้</label>
+                  <label className="stuff-label">จำนวนคงเหลือ</label>
                   <input type="text" className="stuff-input" value={item?.remain || 0} readOnly />
                 </div>
                 <div>
