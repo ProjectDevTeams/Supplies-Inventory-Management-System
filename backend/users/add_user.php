@@ -1,10 +1,11 @@
 <?php
-header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json");
 
-include '../db.php'; 
+
+include '../db.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -28,17 +29,17 @@ if (
     $approval_status = $data->approval_status;
 
     // ตรวจสอบ username ซ้ำ
-    $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    if ($stmt->fetch()) {
+    $check_stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+    $check_stmt->execute([$username]);
+    if ($check_stmt->fetch()) {
         echo json_encode(["status" => "error", "message" => "Username นี้ถูกใช้แล้ว"]);
         exit();
     }
 
-    // เพิ่มผู้ใช้
-    $insert = $conn->prepare("INSERT INTO users (username, password, full_name, position, email, phone, permission, approval_status)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $success = $insert->execute([
+    // เพิ่มข้อมูล
+    $stmt = $conn->prepare("INSERT INTO users (username, password, full_name, position, email, phone, permission, approval_status)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $success = $stmt->execute([
         $username, $password, $full_name, $position,
         $email, $phone, $permission, $approval_status
     ]);
@@ -51,4 +52,6 @@ if (
 } else {
     echo json_encode(["status" => "error", "message" => "ข้อมูลไม่ครบถ้วน"]);
 }
+
+$conn = null;
 ?>
