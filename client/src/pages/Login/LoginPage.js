@@ -1,11 +1,46 @@
-import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
+import { API_URL } from '../../config'; 
 
 function LoginPage() {
-
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
 
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(`${API_URL}/users/login.php`, formData);
+      const data = res.data;
+
+      if (data.status === "success") {
+        const permission = data.permission;
+
+        if (permission === "ผู้ใช้งาน") {
+          navigate("/userstuff");
+        } else if (permission === "แอดมิน" || permission === "ผู้ช่วยแอดมิน") {
+          navigate("/HomePage");
+        } else {
+          alert("สิทธิการใช้งานไม่ถูกต้อง");
+        }
+      } else {
+        alert(data.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+    }
+  };
 
   return (
     <div className="body-login">
@@ -18,15 +53,29 @@ function LoginPage() {
 
             <div className="input-group">
               <label>Username</label>
-              <input type="text" placeholder="Enter name" />
+              <input
+                type="text"
+                name="username"
+                placeholder="Enter name"
+                value={formData.username}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="input-group">
               <label>Password</label>
-              {/* function ลูกตาเปิด / ปิด ดูรหัส */}
-              <input type= {showPassword ? "text" : "password"} placeholder="Enter password" />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter password"
+                value={formData.password}
+                onChange={handleChange}
+              />
               <span className='login-eye-icon' onClick={() => setShowPassword(!showPassword)}>
-                <img className="login-eye-view" src={showPassword ? "/image/eyeview.png" : "/image/eyehide.png"}/>
+                <img
+                  className="login-eye-view"
+                  src={showPassword ? "/image/eyeview.png" : "/image/eyehide.png"}
+                />
               </span>
             </div>
 
@@ -34,7 +83,10 @@ function LoginPage() {
               <Link to="/forget" className="forgot-password">ลืมรหัสผ่าน</Link>
             </div>
 
-            <button type="button" className="login-button">เข้าสู่ระบบ</button>
+            <button type="button" className="login-button" onClick={handleLogin}>
+              เข้าสู่ระบบ
+            </button>
+
             <div className="switch-page">
               ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
             </div>

@@ -33,6 +33,9 @@ function App() {
         {/* หน้าแรก */}
         <Route index element={<HomePage />} />
 
+        {/* หน้าแรก */}
+        <Route path="/HomePage" element={<HomePage />} />
+
         {/* ระบบบัญชี */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
