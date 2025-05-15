@@ -16,65 +16,68 @@
   width: 100%;
   margin: 0 auto;
   border-collapse: collapse;
-  background-color: white; /* ตารางสีขาว */
+  background-color: white;
   border: 1px solid #999;
+  font-size: 14px;
 }
 
-/* ✅ หัวตาราง thead */
+/* ✅ หัวตาราง */
 #adjustment-thead {
   background-color: #dfe8f6;
-   border: 1px solid #999;
 }
 
-/* ✅ หัวคอลัมน์ th */
+/* ✅ หัวคอลัมน์ */
 .adjustment-th {
-  padding: 1rem;
+  border: 1px solid #999;
+  padding: 0.6em;
   text-align: center;
   font-weight: bold;
   color: #003366;
-  font-size: 1.05rem;
-  border-bottom: 1px solid #dee2e6;
-  border: 1px solid #999;
+  font-size: 14px;
 }
 
-/* ✅ เซลล์ td */
+/* ✅ เซลล์ */
 .adjustment-td {
-  padding: 1rem;
-  color: black;
-  font-size: 1rem;
-  border-bottom: 1px solid #060d14;
-  text-align: center;
-  vertical-align: top;
   border: 1px solid #999;
+  padding: 0.6em;
+  text-align: center;
+  color: black;
+  font-size: 14px;
+  vertical-align: middle;
+  transition: text-decoration 0.2s ease;
 }
 
-/* ✅ เซลล์ที่เนื้อหามีหลายบรรทัด */
+/* ✅ Hover เส้นใต้เฉพาะ td ที่ชี้ */
+.adjustment-td:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ✅ ข้อมูลหลายบรรทัด */
 .adjustment-td.multiline {
-  text-align: left; /* ข้อความชิดซ้าย */
-  font-size: 0.95rem;
+  text-align: left;
+  font-size: 14px;
   line-height: 1.4;
 }
 
-/* ✅ สถานะ อนุมัติ */
+/* ✅ สถานะ */
 .status-approved {
   color: green;
   font-weight: bold;
 }
 
-/* ✅ สถานะ รออนุมัติ */
 .status-pending {
   color: #f79c05;
   font-weight: bold;
 }
 
-/* ✅ สถานะ ไม่อนุมัติ */
 .status-not-pending {
   color: #ff0000;
   font-weight: bold;
 }
 
- /* ✅ Pagination แบบใหม่ */
- .adjust-pagination-wrapper {
+/* ✅ Pagination */
+.adjust-pagination-wrapper {
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -119,9 +122,9 @@
   color: white;
 }
 
-/* ช่องเลขหน้า */
+/* ✅ ช่องเลขหน้า */
 .adjust-page-input {
-  width: 55px;
+  width: 60px;
   text-align: center;
   padding: 0.4rem 0.6rem;
   border: 2px solid rgba(0, 123, 255, 0.3);
@@ -144,20 +147,24 @@
   border-color: rgba(0, 123, 255, 0.7);
 }
 
-.adjust-page-input:focus::placeholder {
-  color: transparent;
-}
-
 .adjust-page-input::-webkit-inner-spin-button,
 .adjust-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+/* ✅ ข้อความไม่มีข้อมูล */
+.adjust-no-data {
+  text-align: center;
+  color: black;
+  font-weight: normal;
+  padding: 1rem;
+}
+
 /* ✅ Responsive */
 @media (max-width: 768px) {
-  .adjust-th,
-  .adjust-td {
+  .adjustment-th,
+  .adjustment-td {
     font-size: 0.85em;
     padding: 0.5em;
   }
@@ -168,18 +175,8 @@
     gap: 0.5em;
   }
 }
-.adjustment-td {
-  text-align: center; /* จัดกลางทุกช่อง */
-  vertical-align: middle;
-}
 
-.status-approved,
-.status-pending,
-.status-not-pending {
-  text-align: center;
-  font-weight: bold;
-}
-
+/* ✅ ลิงก์ภายใน cell */
 .company-link {
   color: #000000;
   cursor: pointer;
