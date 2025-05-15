@@ -32,41 +32,41 @@ function AddpeoplePopup({ onClose, onAdd }) {
   };
 
   return (
-    <div className="his-popup-container">
-      <div className="his-popup-box">
-        <div className="his-popup-header blue">
+    <div className="addpeople-popup-container">
+      <div className="addpeople-popup-box">
+        <div className="addpeople-popup-header blue">
           <span>เพิ่มเจ้าหน้าที่ใหม่</span>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="addpeople-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="popup-body">
+        <div className="addpeople-popup-body">
           <form onSubmit={handleSubmit}>
-            <div className="form-grid">
-              <div className="form-row">
+            <div className="addpeople-form-grid">
+              <div className="addpeople-form-row">
                 <label>username</label>
                 <input type="text" name="username" value={formData.username} onChange={handleChange} required />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>รหัสผ่าน</label>
                 <input type="password" name="password" value={formData.password} onChange={handleChange} required />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>ชื่อ-สกุล</label>
                 <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>ตำแหน่งงาน</label>
                 <input type="text" name="position" value={formData.position} onChange={handleChange} required />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>Email</label>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>โทรศัพท์</label>
                 <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
               </div>
-              <div className="form-row">
+              <div className="addpeople-form-row">
                 <label>สิทธิการใช้งาน</label>
                 <select name="permission" value={formData.permission} onChange={handleChange} required>
                   <option value="">เลือกสิทธิการใช้งาน</option>
@@ -76,8 +76,8 @@ function AddpeoplePopup({ onClose, onAdd }) {
                 </select>
               </div>
             </div>
-            <div className="form-footer right">
-              <button type="submit" className="submit-btn green">บันทึก</button>
+            <div className="addpeople-form-footer right">
+              <button type="submit" className="addpeople-submit-btn green">บันทึก</button>
             </div>
           </form>
         </div>

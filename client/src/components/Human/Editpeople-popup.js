@@ -60,17 +60,17 @@ function EditpeoplePopup({ person, onClose, onSave }) {
   };
 
   return (
-    <div className="his-popup-container">
-      <div className="his-popup-box">
-        <div className="his-popup-header blue">
+    <div className="editpeople-popup-container">
+      <div className="editpeople-popup-box">
+        <div className="editpeople-popup-header blue">
           <span>แก้ไขข้อมูลบุคลากร</span>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="editpeople-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        <div className="his-popup-body">
+        <div className="editpeople-popup-body">
           <form onSubmit={handleSubmit}>
-            <div className="form-grid">
-              <div className="form-row">
+            <div className="editpeople-form-grid">
+              <div className="editpeople-form-row">
                 <label>username</label>
                 <input
                   type="text"
@@ -79,7 +79,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>ชื่อ-สกุล</label>
                 <input
                   type="text"
@@ -88,7 +88,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>ตำแหน่งงาน</label>
                 <input
                   type="text"
@@ -97,7 +97,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>Email</label>
                 <input
                   type="email"
@@ -106,7 +106,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>โทรศัพท์</label>
                 <input
                   type="text"
@@ -115,7 +115,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>สิทธิการใช้งาน</label>
                 <select name="permission" value={formData.permission} onChange={handleChange}>
                   <option value="">เลือกสิทธิการใช้งาน</option>
@@ -124,7 +124,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                   <option value="ผู้ช่วยแอดมิน">ผู้ช่วยแอดมิน</option>
                 </select>
               </div>
-              <div className="form-row">
+              <div className="editpeople-form-row">
                 <label>สถานะ</label>
                 <select
                   name="approval_status"
@@ -138,15 +138,15 @@ function EditpeoplePopup({ person, onClose, onSave }) {
               </div>
             </div>
 
-            <div className="form-footer space-between">
+            <div className="editpeople-form-footer space-between">
               <button
                 type="button"
-                className="cancel-btn red"
+                className="editpeople-cancel-btn red"
                 onClick={handleDelete}
               >
                 ลบ
               </button>
-              <button type="submit" className="submit-btn green">
+              <button type="submit" className="editpeople-submit-btn green">
                 บันทึก
               </button>
             </div>
