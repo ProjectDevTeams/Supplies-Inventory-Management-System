@@ -16,7 +16,6 @@ function AdjustTable({ searchTerm }) {
     axios
       .get(`${API_URL}/adjustments/get_adjustments.php`)
       .then((res) => {
-        console.log("✅ ข้อมูลจาก API:", res.data); // ✅ ตรวจข้อมูล
         if (Array.isArray(res.data)) {
           setData(res.data);
         } else {
@@ -65,7 +64,7 @@ function AdjustTable({ searchTerm }) {
   return (
     <div className="adjustment-table-container">
       <div className="adjustment-table-description">
-        ตารางการปรับยอด
+        ตารางประวัติการปรับยอด
       </div>
       <table id="adjustment-table">
         <thead id="adjustment-thead">
@@ -82,15 +81,15 @@ function AdjustTable({ searchTerm }) {
         <tbody id="adjustment-tbody">
           {currentItems.length > 0 ? (
             currentItems.map((item) => (
-              <tr key={item.id} className="adjustment-tr">
+              <tr
+                key={item.id}
+                className="adjustment-tr"
+                onClick={() => navigate('/adjust/balance')}
+                style={{ cursor: "pointer" }}
+              >
                 <td className="adjustment-td">{item.id}</td>
                 <td className="adjustment-td">{item.stock_type}</td>
-                <td
-                  className="adjustment-td company-link"
-                  onClick={() => navigate('/adjust/balance')}
-                >
-                  {item.material_id}
-                </td>
+                <td className="adjustment-td">{item.material_id}</td>
                 <td className="adjustment-td">{item.adjust_quantity}</td>
                 <td className="adjustment-td">{item.created_at.split(" ")[0]}</td>
               </tr>
