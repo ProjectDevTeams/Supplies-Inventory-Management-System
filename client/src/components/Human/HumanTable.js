@@ -71,7 +71,10 @@ function HumanTable({ searchTerm, data, fetchData }) {
             </tr>
           ) : (
             currentItems.map((item) => (
-              <tr key={item.id} onClick={() => handleEditClick(item)}>
+              <tr
+                key={item.id} onClick={() => handleEditClick(item)}
+                className="human-clickable-row"
+              >
                 <td>{item.id}</td>
                 <td>{item.username}</td>
                 <td>{item.full_name}</td>
