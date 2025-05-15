@@ -1,0 +1,116 @@
+/* พื้นหลังเทา */
+.consumable-addnew-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* กล่องป๊อปอัป */
+.consumable-addnew-popup-box {
+  width: 700px;
+  background: #fff;
+  border: 1px solid #444;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: sans-serif;
+}
+
+/* หัวป๊อปอัป */
+.consumable-addnew-popup-header {
+  background-color: #1223c0;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* ปุ่มปิด */
+.consumable-addnew-close-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+/* เนื้อหาในกล่อง */
+.consumable-addnew-popup-body {
+  padding: 20px;
+  border: 1px solid #007bff;
+}
+
+/* แถวในฟอร์ม */
+.consumable-addnew-form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* ป้าย label */
+.consumable-addnew-form-row label {
+  width: 120px;
+  font-weight: bold;
+}
+
+/* อินพุต */
+.consumable-addnew-form-row input,
+.consumable-addnew-form-row select {
+  flex: 1;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* กรณีพิเศษสำหรับแนบไฟล์ */
+.consumable-addnew-file-upload .upload-group {
+  display: flex;
+  flex-direction: column;
+  font-size: medium;
+}
+
+/* ส่วนท้าย */
+.consumable-addnew-form-footer {
+  text-align: right;
+  margin-top: 20px;
+}
+
+/* ปุ่มยืนยัน */
+.consumable-addnew-submit-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 18px;
+  font-size: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* ซ่อน input file ปกติ */
+.consumable-addnew-file-hidden {
+  display: none;
+}
+
+/* ปุ่มแทน input file */
+.consumable-addnew-custom-file-btn {
+  display: inline-block;
+  background-color: #222;
+  color: white;
+  padding: 8px 25px;
+  font-size: 17px;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 5px;
+}

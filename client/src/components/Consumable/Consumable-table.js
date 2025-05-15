@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Consumable-table.css";
-import AddnewPopup from "./addnew-popup";
+import ConsumableAddnewPopup from "./consumable-addnew-popup";
+import ConsumableEditPopup from "./consumable-edit-popup";
 import Consumable from "./Consumablebar";
 import { API_URL } from "../../config";
 
@@ -11,11 +12,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [editItem, setEditItem] = useState(null);
   const [inputPage, setInputPage] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const [sortBy, setSortBy] = useState("id");
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     axios
       .get(`${API_URL}/materials/get_materials.php`)
       .then((r) => {
@@ -31,7 +38,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
         }
       })
       .catch(console.error);
-  }, []);
+  };
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -56,9 +63,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
     if (typeof valA === "number") {
       return sortAsc ? valA - valB : valB - valA;
     } else {
-      return sortAsc
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
     }
   });
 
@@ -67,6 +72,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
+
+  const handleEditClick = (item) => {
+    setEditItem(item);
+    setShowEditPopup(true);
+  };
+
+  const handleUpdate = (updatedItem) => {
+    setData((prevData) =>
+      prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+  };
 
   return (
     <div className="table-container-consumable">
@@ -103,17 +119,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             currentItems.map((item, idx) => (
               <tr key={idx} className="consumable-tr">
                 <td className="consumable-td">{item.id}</td>
-                <td className="consumable-td">
-                  <img
-                    src={
-                      item.image
-                        ? `${API_URL}/${item.image}`
-                        : "https://via.placeholder.com/60"
-                    }
-                    alt={item.name}
-                    className="consumable-image"
-                  />
-                </td>
+                  <td className="consumable-td">
+                    {item.image ? (
+                      <img
+                        src={`${API_URL}/${item.image}`}
+                        alt={item.name}
+                        className="consumable-image"
+                      />
+                    ) : (
+                      <span style={{ color: "#999", fontStyle: "italic" }}>ไม่มีรูป</span>
+                    )}
+                  </td>
                 <td className="item-cell consumable-td">
                   <b>ชื่อ :</b> {item.name}
                   <br />
@@ -134,7 +150,11 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                     {item.status}
                   </span>
                   <div className="item-actions">
-                    <button type="button" className="consumable-edit">
+                    <button
+                      type="button"
+                      className="consumable-edit"
+                      onClick={() => handleEditClick(item)}
+                    >
                       ✏ แก้ไข
                     </button>
                   </div>
@@ -151,7 +171,14 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
         </tbody>
       </table>
 
-      {showPopup && <AddnewPopup onClose={() => setShowPopup(false)} />}
+      {showPopup && <ConsumableAddnewPopup onClose={() => setShowPopup(false)} />}
+      {showEditPopup && (
+        <ConsumableEditPopup
+          onClose={() => setShowEditPopup(false)}
+          onSave={handleUpdate}
+          item={editItem}
+        />
+      )}
 
       <div className="consumable-pagination-wrapper">
         <div className="consumable-pagination-info">
@@ -197,3 +224,4 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
 }
 
 export default Consumable_Table;
+
