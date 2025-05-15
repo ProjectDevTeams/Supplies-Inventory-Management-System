@@ -1,3 +1,37 @@
 <?php
-// get_receives.php placeholder
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Content-Type: application/json");
+require_once '../db.php'; // เชื่อมต่อฐานข้อมูล
+
+try {
+    $stmt = $conn->prepare("
+        SELECT 
+            i.id,
+            i.stock_type,
+            c.name AS company_name,
+            i.tax_invoice_number,
+            i.purchase_order_number,
+            DATE(i.created_at) AS created_at,
+            i.total_price
+        FROM receive_materials i
+        LEFT JOIN companies c ON i.company_id = c.id
+    ");
+
+    $stmt->execute();
+
+    $receive_materials = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode([
+        "status" => "success",
+        "data"   => $receive_materials
+    ]);
+
+} catch (PDOException $e) {
+    echo json_encode([
+        "status"  => "error",
+        "message" => $e->getMessage()
+    ]);
+}
 ?>

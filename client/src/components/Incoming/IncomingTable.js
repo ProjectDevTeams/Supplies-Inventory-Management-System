@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./IncomingTable.css";
 
-const mockIncomingData = [
-  { id: 1927, company: "บริษัท A", po: "018.1 67-1015", orderDate: "9 ก.ย. 67", amount: 1720.0 },
-  { id: 1913, company: "บริษัท B", po: "018.1 67-1234", orderDate: "14 ก.ค. 67", amount: 10700.0 },
-  { id: 1911, company: "บริษัท C", po: "018.1 67-5678", orderDate: "5 ก.ค. 67", amount: 1476.6 },
-  { id: 1887, company: "บริษัท D", po: "018.1 67-9101", orderDate: "3 เม.ย. 67", amount: 1979.5 },
-  { id: 1886, company: "บริษัท E", po: "018.1 67-1121", orderDate: "1 เม.ย. 67", amount: 31000.0 },
-  { id: 1870, company: "บริษัท F", po: "018.1 67-3141", orderDate: "5 มี.ค. 67", amount: 540.0 },
-  { id: 1863, company: "บริษัท G", po: "018.1 67-5161", orderDate: "27 ก.พ. 67", amount: 791.8 },
-  { id: 1839, company: "บริษัท H", po: "018.1 66-7181", orderDate: "27 พ.ย. 66", amount: 41448.0 },
-];
-
 export default function IncomingTable({ searchTerm = '', onDataReady }) {
+  const [data, setData] = useState([]);
   const [incomingCurrentPage, setIncomingCurrentPage] = useState(1);
   const [incomingInputPage, setIncomingInputPage] = useState('');
   const [incomingAsc, setIncomingAsc] = useState(true);
   const incomingItemsPerPage = 5;
 
-  const sortedData = [...mockIncomingData].sort((a, b) =>
+
+/// fetch Data จาก Database
+  useEffect(() => {
+    axios.get(`${API_URL}/receive/get_receives.php`)
+      .then(res => {
+        if (res.data.status === "success") {
+          const formatted = res.data.data.map(item => ({
+            id: item.id,
+            company: item.company_name || '-',
+            po: '-',                // เว้นว่างตามคำขอ
+            orderDate: '-',         // เว้นว่างตามคำขอ
+            amount: parseFloat(item.total_price) || 0
+          }));
+          setData(formatted);
+        }
+      })
+      .catch(err => console.error("API fetch error:", err));
+  }, []);
+
+  const sortedData = [...data].sort((a, b) =>
     incomingAsc ? a.id - b.id : b.id - a.id
   );
 
@@ -47,9 +58,7 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
 
   return (
     <div className="incoming-container">
-      <div className="incoming-description">
-        ตารางการรับเข้าวัสดุ
-      </div>
+      <div className="incoming-description">ตารางการรับเข้าวัสดุ</div>
       <table className="incoming-table">
         <thead>
           <tr>
@@ -70,9 +79,9 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
               </td>
             </tr>
           ) : (
-            currentItems.map((item) => (
+            currentItems.map((item, index) => (
               <tr key={item.id}>
-                <td>{item.id}</td>
+                <td>{indexOfFirstItem + index + 1}</td>
                 <td>
                   <Link to="/incoming/materials" className="incoming-link">
                     {item.company}
@@ -85,7 +94,6 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
             ))
           )}
         </tbody>
-
       </table>
 
       <div className="incoming-pagination-wrapper">
