@@ -11,9 +11,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     position: "",
     email: "",
     phone: "",
-    role: "",
-    approval_status: "",
-    permission_id: "",
+    permission: "", 
+    approval_status: ""
   });
 
   useEffect(() => {
@@ -21,9 +20,8 @@ function EditpeoplePopup({ person, onClose, onSave }) {
       setFormData({
         ...person,
         phone: person.phone || "",
-        role: person.role || "",
-        approval_status: person.approval_status || "",
-        permission_id: person.permission_id || "",
+        permission: person.permission || "", 
+        approval_status: person.approval_status || ""
       });
     }
   }, [person]);
@@ -39,7 +37,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // เรียก API อัพเดตโดยไม่ต้องเก็บผลลัพธ์ในตัวแปร unused
       await axios.post(`${API_URL}/users/update_user.php`, formData);
       if (onSave) onSave();
       if (onClose) onClose();
@@ -53,7 +50,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     if (!window.confirm("คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?")) return;
 
     try {
-      // เรียก API ลบโดยตรง
       await axios.post(`${API_URL}/users/delete_user.php`, { id: formData.id });
       if (onSave) onSave();
       if (onClose) onClose();
@@ -121,10 +117,11 @@ function EditpeoplePopup({ person, onClose, onSave }) {
               </div>
               <div className="form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select name="role" value={formData.role} onChange={handleChange}>
+                <select name="permission" value={formData.permission} onChange={handleChange}>
                   <option value="">เลือกสิทธิการใช้งาน</option>
-                  <option value="admin">แอดมิน</option>
-                  <option value="user">ผู้ใช้งานทั่วไป</option>
+                  <option value="ผู้ใช้งาน">ผู้ใช้งาน</option>
+                  <option value="แอดมิน">แอดมิน</option>
+                  <option value="ผู้ช่วยแอดมิน">ผู้ช่วยแอดมิน</option>
                 </select>
               </div>
               <div className="form-row">

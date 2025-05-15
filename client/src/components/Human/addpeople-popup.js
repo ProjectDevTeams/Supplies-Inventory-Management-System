@@ -11,7 +11,7 @@ function AddpeoplePopup({ onClose, onAdd }) {
     position: "",
     email: "",
     phone: "",
-    permission_id: "",
+    permission: "", 
     approval_status: "รออนุมัติ"
   });
 
@@ -24,9 +24,8 @@ function AddpeoplePopup({ onClose, onAdd }) {
     e.preventDefault();
     try {
       await axios.post(`${API_URL}/users/add_user.php`, formData);
-
-      if (onAdd) onAdd();     // ✅ รีโหลดข้อมูลจาก backend
-      if (onClose) onClose(); // ✅ ปิด popup
+      if (onAdd) onAdd();
+      if (onClose) onClose();
     } catch (error) {
       console.error("Error adding user:", error);
     }
@@ -69,12 +68,11 @@ function AddpeoplePopup({ onClose, onAdd }) {
               </div>
               <div className="form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select name="permission_id" value={formData.permission_id} onChange={handleChange} required>
+                <select name="permission" value={formData.permission} onChange={handleChange} required>
                   <option value="">เลือกสิทธิการใช้งาน</option>
-                  <option value="1">STI</option>
-                  <option value="2">แอดมิน ฝ่าย STI</option>
-                  <option value="3">ประชาสัมพันธ์และสื่อสารองค์กร</option>
-                  <option value="4">ฝ่ายยุทธศาสตร์และแผน</option>
+                  <option value="ผู้ใช้งาน">ผู้ใช้งาน</option>
+                  <option value="แอดมิน">แอดมิน</option>
+                  <option value="ผู้ช่วยแอดมิน">ผู้ช่วยแอดมิน</option>
                 </select>
               </div>
             </div>

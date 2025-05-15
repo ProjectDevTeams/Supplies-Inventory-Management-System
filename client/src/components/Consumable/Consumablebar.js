@@ -32,7 +32,7 @@ function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
 
           <div className="button-group">
             <button className="btn danger">
-              สินค้าใกล้หมดสต็อก <span className="count">60</span> รายการ
+              สินค้าใกล้หมดสต็อก
             </button>
 
             <button className="btn success" onClick={onAddClick}>
