@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 08:55 AM
+-- Generation Time: May 16, 2025 at 10:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,22 +29,68 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `adjustments` (
   `id` int(11) NOT NULL,
-  `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
-  `material_id` int(11) NOT NULL,
-  `adjust_quantity` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` date DEFAULT curdate() COMMENT 'วันที่สร้าง',
+  `updated_date` date DEFAULT curdate() COMMENT 'วันที่แก้ไข',
+  `status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ' COMMENT 'สถานะการอนุมัติ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `adjustments`
 --
 
-INSERT INTO `adjustments` (`id`, `stock_type`, `material_id`, `adjust_quantity`, `created_at`) VALUES
-(1, 'วัสดุในคลัง', 1, 10, '2025-01-01 02:00:00'),
-(2, 'วัสดุในคลัง', 2, -5, '2025-01-02 03:00:00'),
-(3, 'วัสดุนอกคลัง', 3, 8, '2025-01-03 04:00:00'),
-(4, 'วัสดุในคลัง', 4, -2, '2025-01-04 06:00:00'),
-(5, 'วัสดุนอกคลัง', 5, 15, '2025-01-05 08:00:00');
+INSERT INTO `adjustments` (`id`, `created_by`, `created_date`, `updated_date`, `status`) VALUES
+(6, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
+(7, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
+(8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ');
+
+--
+-- Triggers `adjustments`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_adjustments_set_quantity` AFTER UPDATE ON `adjustments` FOR EACH ROW BEGIN
+  IF NEW.status = 'อนุมัติ' AND OLD.status <> 'อนุมัติ' THEN
+    -- ตั้งค่า remaining_quantity ให้ตรงกับ quantity ใน adjustment_items
+    UPDATE materials m
+    JOIN adjustment_items ai ON ai.material_id = m.id
+    SET m.remaining_quantity = ai.quantity
+    WHERE ai.adjustment_id = NEW.id;
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_adjustments_update_date` BEFORE UPDATE ON `adjustments` FOR EACH ROW BEGIN
+  SET NEW.updated_date = CURRENT_DATE;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `adjustment_items`
+--
+
+CREATE TABLE `adjustment_items` (
+  `id` int(11) NOT NULL,
+  `adjustment_id` int(11) NOT NULL,
+  `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
+  `material_id` int(11) NOT NULL,
+  `quantity` int(11) DEFAULT 0 COMMENT 'จำนวนที่ปรับ'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `adjustment_items`
+--
+
+INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`) VALUES
+(1, 6, 'วัสดุในคลัง', 1, 5),
+(2, 6, 'วัสดุในคลัง', 2, 10),
+(3, 7, 'วัสดุนอกคลัง', 3, 8),
+(4, 7, 'วัสดุในคลัง', 4, 6),
+(5, 8, 'วัสดุในคลัง', 5, 3),
+(6, 8, 'วัสดุนอกคลัง', 6, 12);
 
 -- --------------------------------------------------------
 
@@ -103,12 +149,12 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 1, 2, 2, 0, '2025-05-12 17:00:00'),
-(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 4, 5, 1, 0, '2025-05-06 09:20:18'),
-(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 1, 3, 2, 0, '2025-05-06 09:20:18'),
-(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 4, 6, 2, 0, '2025-05-06 09:20:18'),
-(5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
-(6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 4, 4, 0, 0, '2025-05-06 09:20:18'),
+(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 5, 2, 2, 0, '2025-05-12 17:00:00'),
+(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-06 09:20:18'),
+(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 8, 3, 2, 0, '2025-05-06 09:20:18'),
+(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 6, 6, 2, 0, '2025-05-06 09:20:18'),
+(5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 3, 2, 1, 0, '2025-05-06 09:20:18'),
+(6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 12, 4, 0, 0, '2025-05-06 09:20:18'),
 (7, '', 'แฟ้มแข็ง', 1, 'เล่ม', 'วัสดุในคลัง', 0, 4, 1, 30.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
 (8, '', 'สมุดปกแข็ง', 1, 'เล่ม', 'วัสดุนอกคลัง', 1, 3, 1, 35.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
 (9, '', 'กระดาษโน้ต', 1, 'ชุด', 'วัสดุในคลัง', 0, 6, 2, 12.00, 3, 5, 2, 0, '2025-05-06 09:20:18'),
@@ -413,7 +459,15 @@ INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `ema
 --
 ALTER TABLE `adjustments`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `material_id` (`material_id`);
+  ADD KEY `created_by` (`created_by`);
+
+--
+-- Indexes for table `adjustment_items`
+--
+ALTER TABLE `adjustment_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `adjustment_id` (`adjustment_id`),
+  ADD KEY `fk_adjustment_material_id` (`material_id`);
 
 --
 -- Indexes for table `companies`
@@ -489,7 +543,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `adjustment_items`
+--
+ALTER TABLE `adjustment_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -553,7 +613,14 @@ ALTER TABLE `users`
 -- Constraints for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  ADD CONSTRAINT `adjustments_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+  ADD CONSTRAINT `adjustments_created_by_fk` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `adjustment_items`
+--
+ALTER TABLE `adjustment_items`
+  ADD CONSTRAINT `fk_adjustment_items` FOREIGN KEY (`adjustment_id`) REFERENCES `adjustments` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_adjustment_material_items` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
 
 --
 -- Constraints for table `companies`
