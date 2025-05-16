@@ -26,6 +26,7 @@
   vertical-align: middle;
   font-size: 0.95em;
   line-height: 1.4;
+  border: 1px solid #000;
 }
 
 .organizations-bar-table th {

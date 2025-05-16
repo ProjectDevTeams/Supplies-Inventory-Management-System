@@ -14,8 +14,8 @@
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  font-size: 14px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  table-layout: auto;
 }
 
 /* ✅ Header */
