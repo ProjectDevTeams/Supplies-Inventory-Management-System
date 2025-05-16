@@ -11,7 +11,7 @@ function OrganizationsPage() {
       <div className="organizations-sidebar">
         <Sidebar />
         <main className="organizations-content">
-          <section className="content-header">
+          <section className="organizations-content-header">
             <OrganizationsTable/>
           </section>
         </main>

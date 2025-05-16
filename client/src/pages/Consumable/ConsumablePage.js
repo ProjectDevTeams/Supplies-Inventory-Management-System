@@ -13,9 +13,7 @@ function ConsumablePage() {
       <div className="consumable-sidebar">
         <Sidebar />
         <main className="consumable-content">
-          <section className="consumable-table-container">
-
-            
+          <section className="consumable-content-header">
             <Consumable_Table searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           </section>
         </main>

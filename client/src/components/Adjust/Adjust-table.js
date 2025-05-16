@@ -27,14 +27,15 @@ function AdjustTable({ searchTerm }) {
       });
   }, []);
 
+  // กรองข้อมูลโดย searchTerm
   const filteredData = data.filter((item) =>
     item.id.toString().includes(searchTerm.toLowerCase()) ||
     item.stock_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.material_id.toString().includes(searchTerm.toLowerCase()) ||
-    item.created_at.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.adjust_quantity.toString().includes(searchTerm.toLowerCase())
+    (item.company_name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.created_at.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // จัดเรียงตาม id
   const sortedData = [...filteredData].sort((a, b) =>
     sortOrder === "asc" ? a.id - b.id : b.id - a.id
   );
@@ -61,6 +62,20 @@ function AdjustTable({ searchTerm }) {
     setInputPage("");
   }, [currentPage]);
 
+  // แปลงวันที่เป็นรูปแบบ dd/mm/yy และเพิ่มข้อความย่อย
+  const formatDateWithSubtext = (dateStr, subtext) => {
+    if (!dateStr) return "--";
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr; // ถ้าแปลงไม่ได้
+    const options = { day: "2-digit", month: "short", year: "2-digit" };
+    return (
+      <>
+        <div>{d.toLocaleDateString("th-TH", options)}</div>
+        <div style={{ fontSize: "0.8em", color: "#555" }}>{subtext}</div>
+      </>
+    );
+  };
+
   return (
     <div className="adjustment-table-container">
       <div className="adjustment-table-description">
@@ -73,9 +88,9 @@ function AdjustTable({ searchTerm }) {
               ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
             </th>
             <th className="adjustment-th">จากคลัง</th>
-            <th className="adjustment-th">รหัสวัสดุ</th>
-            <th className="adjustment-th">ผู้รับผิดชอบ</th>
-            <th className="adjustment-th">วันที่</th>
+            <th className="adjustment-th">บริษัท/ร้านค้า</th>
+            <th className="adjustment-th">วันที่ซื้อ</th>
+            <th className="adjustment-th">สถานะ</th>
           </tr>
         </thead>
         <tbody id="adjustment-tbody">
@@ -89,9 +104,13 @@ function AdjustTable({ searchTerm }) {
               >
                 <td className="adjustment-td">{item.id}</td>
                 <td className="adjustment-td">{item.stock_type}</td>
-                <td className="adjustment-td">{item.material_id}</td>
-                <td className="adjustment-td">{item.adjust_quantity}</td>
-                <td className="adjustment-td">{item.created_at.split(" ")[0]}</td>
+                <td className="adjustment-td">{item.company_name || "-"}</td>
+                <td className="adjustment-td">
+                  {formatDateWithSubtext(item.created_at, item.company_name ? `ฝ่าย${item.company_name}` : "")}
+                </td>
+                <td className="adjustment-td" style={{ fontWeight: "bold", color: "green" }}>
+                  {item.status || "อนุมัติ"}
+                </td>
               </tr>
             ))
           ) : (

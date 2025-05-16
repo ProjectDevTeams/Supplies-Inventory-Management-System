@@ -1,16 +1,12 @@
 /* ✅ Container */
 .adjustment-table-container {
   width: 100%;
-  padding: 1em;
-  background-color: #f5f8fc;
+  padding: 0 1em;
   box-sizing: border-box;
 }
 
 .adjustment-table-description {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 0.8em;
-  color: #003366;
+  margin-bottom: 0.5em;
 }
 
 /* ✅ Table */
@@ -29,23 +25,25 @@
 
 /* ✅ Header Cells */
 .adjustment-th {
-  padding: 12px;
+  border: 1px solid #999;
+  padding: 0.7em 0.5em;
   text-align: center;
-  font-weight: bold;
+  vertical-align: middle;
+  font-size: 0.95em;
+  line-height: 1.4;
+  background-color: #dfe8f6;
   color: #003366;
-  border: 1px solid #000000;
-  font-size: 14px;
+  font-weight: bold;
 }
 
 /* ✅ Body Cells */
 .adjustment-td {
-  padding: 12px;
+  border: 1px solid #999;
+  padding: 0.7em 0.5em;
   text-align: center;
-  color: #000;
-  font-size: 14px;
-  border: 1px solid #000000;
   vertical-align: middle;
-  transition: background-color 0.2s ease;
+  font-size: 0.95em;
+  line-height: 1.4;
 }
 
 /* ✅ Hover ทั้งแถว */
@@ -67,12 +65,11 @@
 
 /* ✅ Pagination */
 .adjust-pagination-wrapper {
-  margin-top: 1em;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1em;
+  margin-top: 0.5rem;
 }
 
 .adjust-pagination-info {
@@ -87,14 +84,13 @@
 }
 
 .adjust-pagination-buttons button {
-  padding: 0.4rem 1rem;
-  background-color: #fff;
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
   color: #333;
-  border: 1px solid #000000;
+  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .adjust-pagination-buttons button:hover {
@@ -124,6 +120,7 @@
   color: white;
   font-weight: bold;
   appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .adjust-page-input::placeholder {

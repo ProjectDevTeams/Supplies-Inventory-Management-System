@@ -22,7 +22,7 @@
     margin-left: 200px; /* <<< ให้ content ไม่ทับ sidebar */
   }
   
-  .content-header {
+  .consumable-content-header {
     display: flex;
     flex-direction: column;
     gap: 0.8em;
