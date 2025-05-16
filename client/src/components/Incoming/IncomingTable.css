@@ -24,7 +24,7 @@
   font-weight: bold;
   color: #003366;
   padding: 12px;
-  border: 1px solid #000;
+  border: 1px solid #999;
   text-align: center;
   font-size: 14px;
   cursor: default;
@@ -40,7 +40,7 @@
   text-align: center;
   color: #000;
   font-size: 14px;
-  border: 1px solid #000;
+  border: 1px solid #999;
   vertical-align: middle;
   transition: background-color 0.2s ease;
 }
@@ -100,7 +100,7 @@
   padding: 0.4rem 1rem;
   background-color: #fff;
   color: #333;
-  border: 1px solid #000;
+  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;

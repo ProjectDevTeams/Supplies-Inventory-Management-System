@@ -33,12 +33,12 @@
   background-color: #dfe8f6;
   color: #003366;
   font-weight: bold;
-  border: 1px solid #000;
+  border: 1px solid #999;
 }
 
 /* ✅ Body Cells */
 .adjustment-td {
-  border: 1px solid #000;
+  border: 1px solid #999;
   padding: 0.7em 0.5em;
   text-align: center;
   vertical-align: middle;
