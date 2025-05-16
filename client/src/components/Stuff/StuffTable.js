@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
+import { FaPrint } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const mockData = [
@@ -60,6 +61,7 @@ export default function StuffTable({ searchTerm }) {
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
@@ -81,9 +83,10 @@ export default function StuffTable({ searchTerm }) {
                 <td>{item.stock}</td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-               <td className={`status ${item.status === 'approved' ? 'approved' : item.status === 'pending' ? 'pending' : 'rejected'}`}>
-  {renderStatus(item.status)}
-</td>
+                <td className={`status ${item.status === 'approved' ? 'approved' : item.status === 'pending' ? 'pending' : 'rejected'}`}>
+                  {renderStatus(item.status)}
+                </td>
+                <td className="print-icon"><FaPrint /></td>
               </tr>
             ))
           )}
