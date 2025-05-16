@@ -18,10 +18,6 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
   const [sortAsc, setSortAsc] = useState(true);
   const [sortBy, setSortBy] = useState("id");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = () => {
     axios
       .get(`${API_URL}/materials/get_materials.php`)
@@ -39,6 +35,10 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       })
       .catch(console.error);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -78,12 +78,6 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
     setShowEditPopup(true);
   };
 
-  const handleUpdate = (updatedItem) => {
-    setData((prevData) =>
-      prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
-    );
-  };
-
   return (
     <div className="table-container-consumable">
       <Consumable
@@ -95,7 +89,7 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       <table className="consumable-table">
         <thead className="consumable-thead">
           <tr className="consumable-thead-row">
-            <th className="consumable-th" onClick={() => { setSortBy("id"); setSortAsc((p) => !p); }}>
+            <th className="consumable-th" onClick={() => { setSortBy("id"); setSortAsc(p => !p); }}>
               ลำดับ {sortBy === "id" ? (sortAsc ? "▲" : "▼") : "▲"}
             </th>
             <th className="consumable-th">รูปภาพ</th>
@@ -119,17 +113,13 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             currentItems.map((item, idx) => (
               <tr key={idx} className="consumable-tr">
                 <td className="consumable-td">{item.id}</td>
-                  <td className="consumable-td">
-                    {item.image ? (
-                      <img
-                        src={`${API_URL}/${item.image}`}
-                        alt={item.name}
-                        className="consumable-image"
-                      />
-                    ) : (
-                      <span style={{ color: "#999", fontStyle: "italic" }}>ไม่มีรูป</span>
-                    )}
-                  </td>
+                <td className="consumable-td">
+                  {item.image ? (
+                    <img src={`${API_URL}/${item.image}`} alt={item.name} className="consumable-image" />
+                  ) : (
+                    <span style={{ color: "#999", fontStyle: "italic" }}>ไม่มีรูป</span>
+                  )}
+                </td>
                 <td className="item-cell consumable-td">
                   <b>ชื่อ :</b> {item.name}
                   <br />
@@ -140,21 +130,11 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
                   ราคา/หน่วย : {item.price}
                   <br />
                   สถานะ :{" "}
-                  <span
-                    className={`item-status ${
-                      item.status.includes("วัสดุใกล้หมดสต็อก")
-                        ? "low-stock"
-                        : "in-stock"
-                    }`}
-                  >
+                  <span className={`item-status ${item.status.includes("วัสดุใกล้หมดสต็อก") ? "low-stock" : "in-stock"}`}>
                     {item.status}
                   </span>
                   <div className="item-actions">
-                    <button
-                      type="button"
-                      className="consumable-edit"
-                      onClick={() => handleEditClick(item)}
-                    >
+                    <button type="button" className="consumable-edit" onClick={() => handleEditClick(item)}>
                       ✏ แก้ไข
                     </button>
                   </div>
@@ -175,21 +155,17 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
       {showEditPopup && (
         <ConsumableEditPopup
           onClose={() => setShowEditPopup(false)}
-          onSave={handleUpdate}
+          refreshData={fetchData}
           item={editItem}
         />
       )}
 
       <div className="consumable-pagination-wrapper">
         <div className="consumable-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง{" "}
-          {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="consumable-pagination-buttons">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => p - 1)}
-          >
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
             ก่อนหน้า
           </button>
           <input
@@ -200,21 +176,16 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
             max={totalPages}
             placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
-                }
+                if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
                 e.target.blur();
               }
             }}
           />
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((p) => p + 1)}
-          >
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
             ถัดไป
           </button>
         </div>
@@ -224,4 +195,3 @@ function Consumable_Table({ searchTerm, setSearchTerm }) {
 }
 
 export default Consumable_Table;
-
