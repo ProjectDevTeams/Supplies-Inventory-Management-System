@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 05:22 AM
+-- Generation Time: May 16, 2025 at 06:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -208,17 +208,19 @@ CREATE TABLE `stuff_materials` (
   `created_at` date DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `reason` text DEFAULT NULL,
-  `total_amount` decimal(10,2) DEFAULT 0.00
+  `total_amount` decimal(10,2) DEFAULT 0.00,
+  `Admin_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ',
+  `User_status` enum('รอรับของ','รับของเรียบร้อยแล้ว') DEFAULT 'รอรับของ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `stuff_materials`
 --
 
-INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`) VALUES
-(1, 'SM-68/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานกิจกรรมบริษัท', 485.00),
-(2, 'SM-68/05/002', '2025-05-16', 3, 'เบิกสำหรับจัดอบรมภายใน', 45.00),
-(3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00);
+INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
+(1, '2568/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานกิจกรรมบริษัท', 485.00, 'รออนุมัติ', 'รอรับของ'),
+(2, 'SM-68/05/002', '2025-05-16', 3, 'เบิกสำหรับจัดอบรมภายใน', 45.00, 'รออนุมัติ', 'รอรับของ'),
+(3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
 
 -- --------------------------------------------------------
 
