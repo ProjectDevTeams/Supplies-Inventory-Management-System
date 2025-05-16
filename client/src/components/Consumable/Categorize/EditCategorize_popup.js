@@ -1,0 +1,66 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../../../config";
+import "./AddCategorize_popup.css";
+
+function EditCatagorizePopup({ onClose, onUpdate, category }) {
+  const [categoryName, setCategoryName] = useState("");
+
+  useEffect(() => {
+    if (category) {
+      setCategoryName(category.name);
+    }
+  }, [category]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!categoryName.trim()) {
+      alert("กรุณากรอกชื่อหมวดหมู่");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}/material_categories/update_material_categories.php`, {
+        id: category.id,
+        name: categoryName.trim()
+      });
+
+      if (res.data.status === "success") {
+        if (onUpdate) onUpdate();  // แจ้งให้ refresh ข้อมูล
+        if (onClose) onClose();    // ปิด popup
+      } else {
+        alert(res.data.message || "เกิดข้อผิดพลาด");
+      }
+    } catch (err) {
+      console.error("อัปเดตหมวดหมู่ล้มเหลว:", err);
+      alert("ไม่สามารถเชื่อมต่อ API");
+    }
+  };
+
+  return (
+    <div className="popup-overlay-categorize">
+      <div className="popup-box-categorize">
+        <div className="popup-header-categorize">
+          <span>แก้ไขชื่อหมวดหมู่</span>
+          <button className="close-btn-categorize" onClick={onClose}>✕</button>
+        </div>
+        <div className="popup-body-categorize">
+          <form className="popup-form-categorize" onSubmit={handleSubmit}>
+            <label htmlFor="category">หมวด</label>
+            <input
+              type="text"
+              id="category"
+              className="popup-input-categorize"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+            <button type="submit" className="popup-submit-categorize">ยืนยัน</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default EditCatagorizePopup;
