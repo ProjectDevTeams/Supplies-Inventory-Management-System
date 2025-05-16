@@ -3,12 +3,12 @@ import './StuffTable.css';
 import { useNavigate } from 'react-router-dom';
 
 const mockData = [
-  { id: 1, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
+  { id: 1, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "approved" },
   { id: 2, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "3 ก.พ. 68", status: "pending" },
-  { id: 3, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "pending" },
-  { id: 4, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "pending" },
+  { id: 3, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "rejected" },
+  { id: 4, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "approved" },
   { id: 5, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "20 ม.ค. 68", status: "pending" },
-  { id: 6, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "pending" },
+  { id: 6, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "rejected" },
 ];
 
 export default function StuffTable({ searchTerm }) {
@@ -81,9 +81,9 @@ export default function StuffTable({ searchTerm }) {
                 <td>{item.stock}</td>
                 <td>{item.amount}</td>
                 <td>{item.date}</td>
-                <td className={`stuff-status stuff-${item.status}`}>
-                  {renderStatus(item.status)}
-                </td>
+               <td className={`status ${item.status === 'approved' ? 'approved' : item.status === 'pending' ? 'pending' : 'rejected'}`}>
+  {renderStatus(item.status)}
+</td>
               </tr>
             ))
           )}
