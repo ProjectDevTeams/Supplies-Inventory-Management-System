@@ -9,9 +9,12 @@
   margin-top: -1em;
 }
 
+.organizations-table-description {
+  margin: 1em 0 0.5em;
+}
+
 .organizations-bar-table {
   width: 100%;
-  margin: 1em auto;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);

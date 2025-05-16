@@ -3,7 +3,6 @@ import "./consumable-edit-popup.css";
 import { API_URL } from "../../config";
 import axios from "axios";
 
-
 function ConsumableEditPopup({ onClose, item, refreshData }) {
   const [formData, setFormData] = useState({
     id: "",
@@ -20,78 +19,76 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    if (item) {
-      // ✅ fallback ป้องกัน uncontrolled input
-      setFormData({
-        ...item,
-        name: item.name || "",
-        category_id: item.category_id || "",
-        unit: item.unit || "",
-        stock_type: item.stock_type || "",
-        min_quantity: item.min_quantity || 0,
-        max_quantity: item.max_quantity || 0,
-        price: item.price || 0,
-        created_at: item.created_at || "",
-        image: item.image || ""
-      });
+    if (item?.id) {
+      axios
+        .get(`${API_URL}/materials/update_material.php?id=${item.id}`)
+        .then(res => {
+          const d = res.data.data;
+          const datePart = d.created_at.split(" ")[0];
+          setFormData({
+            id: d.id,
+            name: d.name,
+            category_id: d.category_id,
+            unit: d.unit,
+            stock_type: d.stock_type,
+            min_quantity: d.min_quantity,
+            max_quantity: d.max_quantity,
+            price: d.price,
+            created_at: datePart === "0000-00-00" ? "" : datePart,
+            image: d.image
+          });
+        })
+        .catch(err => console.error(err));
     }
   }, [item]);
 
-  const handleChange = (e) =>
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0] || null;
-    setFile(selected);
-    if (selected) {
-      const base = formData.name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_") || "file";
-      const time = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
-      const ext = selected.name.split(".").pop();
-      const filename = `${base}_${time}.${ext}`;
-      const path = `materials/picture/${filename}`;
-      setFormData((prev) => ({ ...prev, image: path }));
-    }
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const payload = new FormData();
-    Object.entries(formData).forEach(([k, v]) => payload.append(k, v));
-    payload.append("id", item.id);
-    if (file) payload.append("image", file);
+  const uploadImage = async () => {
+    if (!file) return formData.image;
+    const fd = new FormData();
+    fd.append("image", file);
+    const res = await axios.post(
+      `${API_URL}/materials/upload_image.php`,
+      fd,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    if (res.data.status !== "success") throw new Error();
+    return res.data.path;
+  };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!formData.id) return;
     try {
-      const res = await fetch(`${API_URL}/materials/update_material.php`, {
-        method: "POST",
-        body: payload,
-      });
-      const result = await res.json();
-      if (result.status === "success") {
-        alert("อัปเดตสำเร็จ");
-        refreshData?.(); // โหลดข้อมูลใหม่
+      const imagePath = await uploadImage();
+      const payload = { ...formData, image: imagePath };
+      const res = await axios.put(
+        `${API_URL}/materials/update_material.php`,
+        payload,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if (res.data.status === "success") {
+        refreshData?.();
         onClose();
+        setFile(null);
       } else {
-        alert("เกิดข้อผิดพลาด: " + result.message);
+        alert(res.data.message);
       }
     } catch (err) {
-      alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์");
-      console.error(err);
+      alert(err.response?.data?.message || err.message);
     }
   };
 
-
-   const [categories, setCategories] = useState([]);
-
+  const [categories, setCategories] = useState([]);
   useEffect(() => {
     axios
       .get(`${API_URL}/material_categories/get_material_categories.php`)
-      .then((res) => {
-        if (res.data.status === "success") {
-          setCategories(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.error("โหลดหมวดหมู่ล้มเหลว:", err);
+      .then(r => {
+        if (r.data.status === "success") setCategories(r.data.data);
       });
   }, []);
 
@@ -109,48 +106,40 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               <input
                 type="text"
                 name="name"
-                value={formData.name || ""}
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
             </div>
-
             <div className="consumable-edit-form-row">
               <label>ประเภท</label>
               <select
                 name="category_id"
-                value={formData.category_id || ""}
+                value={formData.category_id}
                 onChange={handleChange}
                 required
               >
-                {categories.map((cat) => (
+                <option value="">เลือกประเภท</option>
+                {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
-
             <div className="consumable-edit-form-row">
               <label>หน่วยนับ</label>
               <input
                 list="units"
                 name="unit"
-                value={formData.unit || ""}
+                value={formData.unit}
                 onChange={handleChange}
                 required
               />
-              <datalist id="units">
-                <option value="กระป๋อง" />
-                <option value="กิโลกรัม" />
-                <option value="ขวด" />
-                <option value="เครื่อง" />
-              </datalist>
             </div>
-
             <div className="consumable-edit-form-row">
               <label>คลังวัสดุ</label>
               <select
                 name="stock_type"
-                value={formData.stock_type || ""}
+                value={formData.stock_type}
                 onChange={handleChange}
                 required
               >
@@ -159,38 +148,34 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
                 <option value="วัสดุนอกคลัง">วัสดุนอกคลัง</option>
               </select>
             </div>
-
             <div className="consumable-edit-form-row">
               <label>ยอดต่ำสุด</label>
               <input
                 type="number"
                 name="min_quantity"
-                value={formData.min_quantity ?? 0}
+                value={formData.min_quantity}
                 onChange={handleChange}
               />
             </div>
-
             <div className="consumable-edit-form-row">
               <label>ยอดสูงสุด</label>
               <input
                 type="number"
                 name="max_quantity"
-                value={formData.max_quantity ?? 0}
+                value={formData.max_quantity}
                 onChange={handleChange}
               />
             </div>
-
             <div className="consumable-edit-form-row">
               <label>ราคา/หน่วย</label>
               <input
                 type="number"
                 name="price"
                 step="0.01"
-                value={formData.price ?? 0}
+                value={formData.price}
                 onChange={handleChange}
               />
             </div>
-
             <div className="consumable-edit-form-row consumable-edit-file-upload">
               <label>แนบไฟล์ภาพ</label>
               <div className="upload-group">
@@ -200,28 +185,24 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
                   id="fileUpload"
                   className="consumable-edit-file-hidden"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={e => setFile(e.target.files[0]||null)}
                 />
                 <label htmlFor="fileUpload" className="consumable-edit-custom-file-btn">
-                  เลือกไฟล์
+                  {file ? "เปลี่ยนไฟล์" : "เลือกไฟล์"}
                 </label>
               </div>
             </div>
-
             <div className="consumable-edit-form-row">
               <label>วันที่สร้าง</label>
               <input
                 type="date"
                 name="created_at"
-                value={formData.created_at || ""}
+                value={formData.created_at}
                 onChange={handleChange}
               />
             </div>
-
             <div className="consumable-edit-form-footer">
-              <button type="submit" className="consumable-edit-submit-btn">
-                บันทึก
-              </button>
+              <button type="submit" className="consumable-edit-submit-btn">บันทึก</button>
             </div>
           </form>
         </div>

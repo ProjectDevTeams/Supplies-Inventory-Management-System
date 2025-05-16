@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Incomingbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
+export default function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
+  const [budgetYear, setBudgetYear] = useState("");
+
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
+  const handleYearChange = (e) => setBudgetYear(e.target.value);
 
   return (
     <div className="incoming-header">
@@ -27,18 +30,19 @@ function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
         <button className="incoming-btn-green">+ เพิ่มหัวข้อ</button>
 
         {/* 📅 ปีงบ */}
-        <select className="incoming-budget-select">
-          <option disabled selected>
+        <select
+          className="incoming-budget-select"
+          value={budgetYear}
+          onChange={handleYearChange}
+        >
+          <option disabled value="">
             เลือกปี
           </option>
-          <option>2566</option>
-          <option>2567</option>
-          <option>2568</option>
+          <option value="2566">2566</option>
+          <option value="2567">2567</option>
+          <option value="2568">2568</option>
         </select>
-
       </div>
     </div>
   );
 }
-
-export default Incomingbar;
