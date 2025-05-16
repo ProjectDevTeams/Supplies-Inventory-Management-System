@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 06:20 AM
+-- Generation Time: May 16, 2025 at 08:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -177,24 +177,90 @@ INSERT INTO `purchase_requests` (`id`, `material_id`, `requested_quantity`, `rea
 
 CREATE TABLE `receive_materials` (
   `id` int(11) NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
   `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
   `company_id` int(11) DEFAULT NULL,
   `tax_invoice_number` varchar(100) DEFAULT NULL,
   `purchase_order_number` varchar(100) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
-  `total_price` decimal(12,2) DEFAULT 0.00
+  `total_price` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `receive_materials`
 --
 
-INSERT INTO `receive_materials` (`id`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
-(1, 'วัสดุในคลัง', NULL, 'TIV001', 'PO001', '2025-01-01', 12500.00),
-(2, 'วัสดุในคลัง', NULL, 'TIV002', 'PO002', '2025-01-05', 8700.00),
-(3, 'วัสดุนอกคลัง', NULL, 'TIV003', 'PO003', '2025-01-10', 15000.00),
-(4, 'วัสดุในคลัง', NULL, 'TIV004', 'PO004', '2025-01-12', 6200.00),
-(5, 'วัสดุนอกคลัง', 6, 'TIV005', 'PO005', '2025-01-15', 9200.00);
+INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
+(1, 3, 'วัสดุในคลัง', 6, 'INV-001', 'PO-001', '2025-05-16', 485.00),
+(2, 3, 'วัสดุในคลัง', 7, 'INV-002', 'PO-002', '2025-05-16', 70.00),
+(3, 3, 'วัสดุนอกคลัง', 8, 'INV-003', 'PO-003', '2025-05-16', 220.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receive_material_items`
+--
+
+CREATE TABLE `receive_material_items` (
+  `id` int(11) NOT NULL,
+  `receive_material_id` int(11) NOT NULL,
+  `material_name` varchar(255) NOT NULL,
+  `quantity` int(11) DEFAULT 0,
+  `price_per_unit` decimal(10,2) DEFAULT 0.00,
+  `total_price` decimal(10,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `receive_material_items`
+--
+
+INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_name`, `quantity`, `price_per_unit`, `total_price`) VALUES
+(1, 1, 'เทปกาวสองหน้า', 2, 220.00, 440.00),
+(2, 1, 'แฟ้ม A4 สีฟ้า', 3, 15.00, 45.00),
+(3, 2, 'ดินสอ 2B', 10, 5.00, 50.00),
+(4, 2, 'ปากกาเจลสีดำ', 2, 10.00, 20.00),
+(5, 3, 'กระดาษ A4', 1, 120.00, 120.00),
+(6, 3, 'คลิปหนีบกระดาษ', 4, 25.00, 100.00);
+
+--
+-- Triggers `receive_material_items`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_after_delete_receive_item` AFTER DELETE ON `receive_material_items` FOR EACH ROW BEGIN
+  UPDATE receive_materials
+  SET total_price = (
+    SELECT IFNULL(SUM(total_price), 0)
+    FROM receive_material_items
+    WHERE receive_material_id = OLD.receive_material_id
+  )
+  WHERE id = OLD.receive_material_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_after_insert_receive_item` AFTER INSERT ON `receive_material_items` FOR EACH ROW BEGIN
+  UPDATE receive_materials
+  SET total_price = (
+    SELECT IFNULL(SUM(total_price), 0)
+    FROM receive_material_items
+    WHERE receive_material_id = NEW.receive_material_id
+  )
+  WHERE id = NEW.receive_material_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_after_update_receive_item` AFTER UPDATE ON `receive_material_items` FOR EACH ROW BEGIN
+  UPDATE receive_materials
+  SET total_price = (
+    SELECT IFNULL(SUM(total_price), 0)
+    FROM receive_material_items
+    WHERE receive_material_id = NEW.receive_material_id
+  )
+  WHERE id = NEW.receive_material_id;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -382,7 +448,15 @@ ALTER TABLE `purchase_requests`
 --
 ALTER TABLE `receive_materials`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `company_id` (`company_id`);
+  ADD KEY `fk_receive_materials_company` (`company_id`),
+  ADD KEY `created_by` (`created_by`);
+
+--
+-- Indexes for table `receive_material_items`
+--
+ALTER TABLE `receive_material_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `receive_material_id` (`receive_material_id`);
 
 --
 -- Indexes for table `stuff_materials`
@@ -445,7 +519,13 @@ ALTER TABLE `purchase_requests`
 -- AUTO_INCREMENT for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `receive_material_items`
+--
+ALTER TABLE `receive_material_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `stuff_materials`
@@ -497,7 +577,14 @@ ALTER TABLE `purchase_requests`
 -- Constraints for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  ADD CONSTRAINT `receive_materials_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `fk_receive_materials_company` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_receive_materials_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `receive_material_items`
+--
+ALTER TABLE `receive_material_items`
+  ADD CONSTRAINT `fk_receive_material_items` FOREIGN KEY (`receive_material_id`) REFERENCES `receive_materials` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `stuff_materials`
