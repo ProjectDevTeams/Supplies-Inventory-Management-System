@@ -14,8 +14,8 @@
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  font-size: 14px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  table-layout: auto;
 }
 
 /* ✅ Thead */
@@ -25,7 +25,6 @@
 
 /* ✅ Header Cells */
 .adjustment-th {
-  border: 1px solid #999;
   padding: 0.7em 0.5em;
   text-align: center;
   vertical-align: middle;
@@ -34,6 +33,7 @@
   background-color: #dfe8f6;
   color: #003366;
   font-weight: bold;
+  border: 1px solid #999;
 }
 
 /* ✅ Body Cells */
@@ -69,7 +69,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .adjust-pagination-info {
