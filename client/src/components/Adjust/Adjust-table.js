@@ -74,7 +74,7 @@ function AdjustTable({ searchTerm }) {
             </th>
             <th className="adjustment-th">จากคลัง</th>
             <th className="adjustment-th">รหัสวัสดุ</th>
-            <th className="adjustment-th">จำนวนที่ปรับ</th>
+            <th className="adjustment-th">ผู้รับผิดชอบ</th>
             <th className="adjustment-th">วันที่</th>
           </tr>
         </thead>

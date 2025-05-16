@@ -71,7 +71,7 @@ function ReportAdjust() {
             <th>ลำดับ</th>
             <th>จากคลัง</th>
             <th>รหัสวัสดุ</th>
-            <th>จำนวนที่ปรับ</th>
+            <th>ผู้รับผิดชอบ</th>
             <th>วันที่</th>
           </tr>
         </thead>
