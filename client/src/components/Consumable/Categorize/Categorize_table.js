@@ -1,30 +1,47 @@
-// Categorize_table.js
 import React, { useState, useEffect } from "react";
 import "./Categorize_table.css";
 import AddCatagorizePopup from "./AddCategorize_popup";
 import Categorizebar from "./Categorize_bar";
-
-// เปลี่ยน mockData ให้เก็บเฉพาะชื่อหมวดหมู่
-const mockData = [
-  { name: "วัสดุสำนักงาน" },
-  { name: "วัสดุความปลอดภัย" },
-  { name: "วัสดุทางการแพทย์" },
-  { name: "วัสดุทำความสะอาด" },
-  { name: "เครื่องเขียน" },
-  { name: "อุปกรณ์ไฟฟ้า" },
-  { name: "เครื่องมือช่าง" },
-];
+import axios from "axios";
+import { API_URL } from "../../../config";
 
 function Categorize_table() {
   const [showPopup, setShowPopup] = useState(false);
+  const [data, setData] = useState([]); // ← ข้อมูลจริง
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
 
   const itemsPerPage = 5;
-  // เรียงลำดับตามชื่อ
-  const sortedCategories = [...mockData].sort((a, b) =>
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/material_categories/get_material_categories.php`);
+      if (res.data.status === "success" && Array.isArray(res.data.data)) {
+        setData(res.data.data);
+      }
+    } catch (err) {
+      console.error("โหลดข้อมูลหมวดหมู่ล้มเหลว:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+  if (!window.confirm("คุณแน่ใจว่าต้องการลบหมวดหมู่นี้หรือไม่?")) return;
+  try {
+    await axios.post(`${API_URL}/material_categories/delete_material_categories.php`, { id });
+    fetchCategories(); // โหลดใหม่หลังลบ
+  } catch (err) {
+    console.error("เกิดข้อผิดพลาดในการลบหมวดหมู่:", err);
+  }
+};
+
+  const sortedCategories = [...data].sort((a, b) =>
     a.name.localeCompare(b.name, "th")
   );
+
   const totalPages = Math.ceil(sortedCategories.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -46,7 +63,10 @@ function Categorize_table() {
   return (
     <div className="categorize-table-container">
       <Categorizebar onAddClick={() => setShowPopup(true)} />
-      {showPopup && <AddCatagorizePopup onClose={() => setShowPopup(false)} />}
+      {showPopup && <AddCatagorizePopup onClose={() => {
+        setShowPopup(false);
+        fetchCategories(); // โหลดใหม่หลังเพิ่ม
+      }} />}
 
       <table className="categorize-table">
         <thead>
@@ -57,10 +77,8 @@ function Categorize_table() {
         </thead>
         <tbody>
           {displayedCategories.map((item, index) => (
-            <tr key={index} className="categorize-row">
-              <td className="categorize-td">
-                {indexOfFirstItem + index + 1}
-              </td>
+            <tr key={item.id} className="categorize-row">
+              <td className="categorize-td">{indexOfFirstItem + index + 1}</td>
               <td className="categorize-td">
                 {item.name}
                 <div className="categorize-actions">
@@ -71,7 +89,7 @@ function Categorize_table() {
                       alt="edit"
                     />
                   </button>
-                  <button className="categorize-delete-btn">
+                  <button className="categorize-delete-btn" onClick={() => handleDelete(item.id)}>
                     <img
                       className="img-remove-categorize"
                       src="../image/delete.png"
