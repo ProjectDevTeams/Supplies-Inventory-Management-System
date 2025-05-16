@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
+import { FaPrint } from 'react-icons/fa';
 
 const trackData = [
-  { id: 1, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 2, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 3, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "ไม่อนุมัติ" },
-  { id: 4, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "รับของเรียบร้อย" },
-  { id: 5, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "ไม่อนุมัติ" },
+  { id: 1, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "approved" },
+  { id: 2, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "pending" },
+  { id: 3, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "rejected" },
+  { id: 4, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "approved" },
+  { id: 5, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "pending" },
 ];
 
 export default function StuffTableTrack({ searchTerm = '' }) {
@@ -17,7 +18,11 @@ export default function StuffTableTrack({ searchTerm = '' }) {
 
   const sorted = [...trackData].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
 
-  const renderStatus = (st) => st.includes('ไม่') ? 'ไม่อนุมัติ' : 'อนุมัติ';
+  const renderStatus = (st) => ({
+    pending: 'รออนุมัติ',
+    approved: 'รับของเรียบร้อย',
+    rejected: 'ไม่อนุมัติ',
+  }[st] || '-');
 
   const filtered = sorted.filter(item =>
     item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,6 +61,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +77,10 @@ export default function StuffTableTrack({ searchTerm = '' }) {
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
-                <td className={`stuff-status stuff-${i.status.includes('ไม่') ? 'rejected' : 'approved'}`}>{renderStatus(i.status)}</td>
+                <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
+                  {renderStatus(i.status)}
+                </td>
+                <td className="print-icon"><FaPrint /></td>
               </tr>
             ))
           )}

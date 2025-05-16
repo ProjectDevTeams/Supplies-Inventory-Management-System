@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
+import { FaPrint } from 'react-icons/fa';
 
 const purchaseData = [
   { id: 1, code: "001-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "5 ม.ค. 68", status: "approved" },
@@ -61,6 +62,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
@@ -76,7 +78,10 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
-                <td className={`stuff-status stuff-${i.status}`}>{renderStatus(i.status)}</td>
+                <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
+                  {renderStatus(i.status)}
+                </td>
+                <td className="print-icon"><FaPrint /></td>
               </tr>
             ))
           )}
