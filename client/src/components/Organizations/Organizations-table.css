@@ -9,6 +9,11 @@
   margin-top: -1em;
 }
 
+.organizations-table-description {
+  margin-bottom: 0.5em;
+  padding-top: 10em;
+}
+
 .organizations-bar-table {
   width: 100%;
   margin: 1em auto;
