@@ -24,14 +24,12 @@ function ConsumableAddnewPopup({ onClose, onAdd }) {
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // ⬇️ เมื่อเลือกไฟล์รูปภาพ
   const handleFileChange = (e) => {
     const selected = e.target.files[0] || null;
     setFile(selected);
 
     if (selected) {
-      // สร้างชื่อไฟล์ใหม่แบบปลอดภัย
-      const base = formData.name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_") || "file";
+      const base = "material";
       const time = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
       const ext = selected.name.split(".").pop();
       const filename = `${base}_${time}.${ext}`;

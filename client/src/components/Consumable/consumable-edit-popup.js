@@ -3,7 +3,6 @@ import "./consumable-edit-popup.css";
 import { API_URL } from "../../config";
 import axios from "axios";
 
-
 function ConsumableEditPopup({ onClose, item, refreshData }) {
   const [formData, setFormData] = useState({
     id: "",
@@ -19,9 +18,9 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
   });
   const [file, setFile] = useState(null);
 
+  // โหลดข้อมูล item มาแสดงในฟอร์ม
   useEffect(() => {
     if (item) {
-      // ✅ fallback ป้องกัน uncontrolled input
       setFormData({
         ...item,
         name: item.name || "",
@@ -37,15 +36,24 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
     }
   }, [item]);
 
+  // อัพเดตค่าฟอร์มเมื่อแก้ไข input
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  // เมื่อเลือกไฟล์รูปภาพ
   const handleFileChange = (e) => {
     const selected = e.target.files[0] || null;
     setFile(selected);
     if (selected) {
-      const base = formData.name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_") || "file";
-      const time = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+      // สร้างชื่อไฟล์แบบปลอดภัยจากชื่อวัสดุ หรือ fallback เป็น "material"
+      const base =
+        (formData.name &&
+          formData.name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_")) ||
+        "material";
+      const time = new Date()
+        .toISOString()
+        .replace(/[-:.TZ]/g, "")
+        .slice(0, 14);
       const ext = selected.name.split(".").pop();
       const filename = `${base}_${time}.${ext}`;
       const path = `materials/picture/${filename}`;
@@ -53,8 +61,15 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
     }
   };
 
+  // เมื่อกดบันทึก ส่งข้อมูลไป API
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!item?.id) {
+      alert("ไม่พบข้อมูลไอดีวัสดุ");
+      return;
+    }
+
     const payload = new FormData();
     Object.entries(formData).forEach(([k, v]) => payload.append(k, v));
     payload.append("id", item.id);
@@ -68,8 +83,9 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
       const result = await res.json();
       if (result.status === "success") {
         alert("อัปเดตสำเร็จ");
-        refreshData?.(); // โหลดข้อมูลใหม่
+        refreshData?.(); // โหลดข้อมูลใหม่หลังบันทึก
         onClose();
+        setFile(null); // เคลียร์ไฟล์หลังบันทึกสำเร็จ
       } else {
         alert("เกิดข้อผิดพลาด: " + result.message);
       }
@@ -79,8 +95,8 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
     }
   };
 
-
-   const [categories, setCategories] = useState([]);
+  // โหลดหมวดหมู่วัสดุจาก backend
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios
@@ -104,6 +120,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
         </div>
         <div className="consumable-edit-popup-body">
           <form onSubmit={handleSubmit}>
+            {/* ชื่อวัสดุ */}
             <div className="consumable-edit-form-row">
               <label>ชื่อ</label>
               <input
@@ -115,20 +132,23 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               />
             </div>
 
+            {/* หมวดหมู่ */}
             <div className="consumable-edit-form-row">
               <label>ประเภท</label>
               <select
                 name="category_id"
-                value={formData.category_id || ""}
+                value={formData.category_id ?? ""}
                 onChange={handleChange}
                 required
               >
+                <option value="">เลือกประเภท</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>
 
+            {/* หน่วยนับ */}
             <div className="consumable-edit-form-row">
               <label>หน่วยนับ</label>
               <input
@@ -138,19 +158,14 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
                 onChange={handleChange}
                 required
               />
-              <datalist id="units">
-                <option value="กระป๋อง" />
-                <option value="กิโลกรัม" />
-                <option value="ขวด" />
-                <option value="เครื่อง" />
-              </datalist>
             </div>
 
+            {/* คลังวัสดุ */}
             <div className="consumable-edit-form-row">
               <label>คลังวัสดุ</label>
               <select
                 name="stock_type"
-                value={formData.stock_type || ""}
+                value={formData.stock_type ?? ""}
                 onChange={handleChange}
                 required
               >
@@ -160,6 +175,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               </select>
             </div>
 
+            {/* ยอดต่ำสุด */}
             <div className="consumable-edit-form-row">
               <label>ยอดต่ำสุด</label>
               <input
@@ -170,6 +186,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               />
             </div>
 
+            {/* ยอดสูงสุด */}
             <div className="consumable-edit-form-row">
               <label>ยอดสูงสุด</label>
               <input
@@ -180,6 +197,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               />
             </div>
 
+            {/* ราคา/หน่วย */}
             <div className="consumable-edit-form-row">
               <label>ราคา/หน่วย</label>
               <input
@@ -191,6 +209,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               />
             </div>
 
+            {/* แนบไฟล์ภาพ */}
             <div className="consumable-edit-form-row consumable-edit-file-upload">
               <label>แนบไฟล์ภาพ</label>
               <div className="upload-group">
@@ -208,6 +227,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               </div>
             </div>
 
+            {/* วันที่สร้าง */}
             <div className="consumable-edit-form-row">
               <label>วันที่สร้าง</label>
               <input
@@ -218,6 +238,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
               />
             </div>
 
+            {/* ปุ่มบันทึก */}
             <div className="consumable-edit-form-footer">
               <button type="submit" className="consumable-edit-submit-btn">
                 บันทึก
