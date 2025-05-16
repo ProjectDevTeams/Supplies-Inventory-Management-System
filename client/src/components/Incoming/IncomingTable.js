@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { API_URL } from "../../config";
 import "./IncomingTable.css";
@@ -10,9 +10,9 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
   const [incomingInputPage, setIncomingInputPage] = useState('');
   const [incomingAsc, setIncomingAsc] = useState(true);
   const incomingItemsPerPage = 5;
+  const navigate = useNavigate();
 
-
-/// fetch Data จาก Database
+  // fetch data
   useEffect(() => {
     axios.get(`${API_URL}/receive/get_receives.php`)
       .then(res => {
@@ -20,8 +20,8 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
           const formatted = res.data.data.map(item => ({
             id: item.id,
             company: item.company_name || '-',
-            po: '-',                // เว้นว่างตามคำขอ
-            orderDate: '-',         // เว้นว่างตามคำขอ
+            po: '-',
+            orderDate: '-',
             amount: parseFloat(item.total_price) || 0
           }));
           setData(formatted);
@@ -80,13 +80,13 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
             </tr>
           ) : (
             currentItems.map((item, index) => (
-              <tr key={item.id}>
+              <tr
+                key={item.id}
+                className="incoming-tr"
+                onClick={() => navigate("/incoming/materials")}
+              >
                 <td>{indexOfFirstItem + index + 1}</td>
-                <td>
-                  <Link to="/incoming/materials" className="incoming-link">
-                    {item.company}
-                  </Link>
-                </td>
+                <td>{item.company}</td>
                 <td>{item.po}</td>
                 <td>{item.orderDate}</td>
                 <td>{item.amount.toLocaleString()}</td>
