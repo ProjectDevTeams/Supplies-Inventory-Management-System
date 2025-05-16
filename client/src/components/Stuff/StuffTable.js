@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const mockData = [
   { id: 1, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
@@ -16,6 +16,7 @@ export default function StuffTable({ searchTerm }) {
   const [inputPage, setInputPage] = useState('');
   const [asc, setAsc] = useState(true);
   const itemsPerPage = 4;
+  const navigate = useNavigate();
 
   const sortedData = [...mockData].sort((a, b) =>
     asc ? a.id - b.id : b.id - a.id
@@ -70,16 +71,16 @@ export default function StuffTable({ searchTerm }) {
             </tr>
           ) : (
             currentItems.map(item => (
-              <tr key={item.id}>
-                <td>{item.id}</td> {/* ✅ ลำดับ */}
-                <td>
-                  <Link to="/stuff/detail" state={{ id: item.id }} className="stuff-link">
-                    {item.code}
-                  </Link>
-                </td>
-                <td>{item.stock}</td>        {/* ✅ คลังวัสดุ */}
-                <td>{item.amount}</td>       {/* ✅ จำนวน */}
-                <td>{item.date}</td>         {/* ✅ วันที่ */}
+              <tr
+                key={item.id}
+                className="stuff-tr"
+                onClick={() => navigate("/stuff/detail", { state: { id: item.id } })}
+              >
+                <td>{item.id}</td>
+                <td>{item.code}</td>
+                <td>{item.stock}</td>
+                <td>{item.amount}</td>
+                <td>{item.date}</td>
                 <td className={`stuff-status stuff-${item.status}`}>
                   {renderStatus(item.status)}
                 </td>
@@ -87,10 +88,7 @@ export default function StuffTable({ searchTerm }) {
             ))
           )}
         </tbody>
-
       </table>
-
-
 
       <div className="stuff-pagination">
         <div className="stuff-pagination-info">
