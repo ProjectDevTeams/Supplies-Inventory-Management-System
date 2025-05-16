@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 import "./IncomingTable.css";
 
-export default function IncomingTable({ searchTerm = '', onDataReady }) {
+export default function IncomingTable({ searchTerm = '' }) {
   const [data, setData] = useState([]);
   const [incomingCurrentPage, setIncomingCurrentPage] = useState(1);
   const [incomingInputPage, setIncomingInputPage] = useState('');
@@ -41,11 +41,7 @@ export default function IncomingTable({ searchTerm = '', onDataReady }) {
     item.amount.toString().includes(searchTerm)
   );
 
-  useEffect(() => {
-    if (onDataReady) {
-      onDataReady(filteredData);
-    }
-  }, [filteredData, onDataReady]);
+
 
   const totalPages = Math.ceil(filteredData.length / incomingItemsPerPage);
   const indexOfLastItem = incomingCurrentPage * incomingItemsPerPage;
