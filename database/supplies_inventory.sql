@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2025 at 10:34 AM
+-- Generation Time: May 16, 2025 at 05:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -69,7 +69,9 @@ INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`)
 (7, 'ห้างหุ้นส่วน ซีเอ็น เทรดดิ้ง', '2025-05-14 08:01:30', NULL, NULL),
 (8, 'บริษัท โกลบอล ซัพพลาย', '2025-05-14 08:01:30', NULL, NULL),
 (9, 'ร้าน อุปกรณ์สำนักงานดีดี', '2025-05-14 08:01:30', NULL, NULL),
-(10, 'บริษัท วัสดุก่อสร้างไทย', '2025-05-14 08:01:30', NULL, NULL);
+(10, 'บริษัท วัสดุก่อสร้างไทย', '2025-05-14 08:01:30', NULL, NULL),
+(11, 'test', '2025-05-14 08:53:46', NULL, NULL),
+(12, 'tes123', '2025-05-14 08:54:07', NULL, '2025-05-14 08:54:30');
 
 -- --------------------------------------------------------
 
@@ -101,7 +103,7 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, '', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 5, 1, 220.00, 1, 2, 2, 0, '2025-05-06 09:20:18'),
+(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 1, 2, 2, 0, '2025-05-12 17:00:00'),
 (2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 4, 5, 1, 0, '2025-05-06 09:20:18'),
 (3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 1, 3, 2, 0, '2025-05-06 09:20:18'),
 (4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 4, 6, 2, 0, '2025-05-06 09:20:18'),
@@ -192,33 +194,113 @@ INSERT INTO `receive_materials` (`id`, `stock_type`, `company_id`, `tax_invoice_
 (2, 'วัสดุในคลัง', NULL, 'TIV002', 'PO002', '2025-01-05', 8700.00),
 (3, 'วัสดุนอกคลัง', NULL, 'TIV003', 'PO003', '2025-01-10', 15000.00),
 (4, 'วัสดุในคลัง', NULL, 'TIV004', 'PO004', '2025-01-12', 6200.00),
-(5, 'วัสดุนอกคลัง', NULL, 'TIV005', 'PO005', '2025-01-15', 9200.00);
+(5, 'วัสดุนอกคลัง', 6, 'TIV005', 'PO005', '2025-01-15', 9200.00);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `receive_material_items`
+-- Table structure for table `stuff_materials`
 --
 
-CREATE TABLE `receive_material_items` (
+CREATE TABLE `stuff_materials` (
   `id` int(11) NOT NULL,
-  `receive_id` int(11) DEFAULT NULL,
-  `material_id` int(11) DEFAULT NULL,
-  `price_per_unit` decimal(10,2) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `total_price` decimal(12,2) GENERATED ALWAYS AS (`price_per_unit` * `quantity`) STORED
+  `running_code` varchar(20) DEFAULT NULL,
+  `created_at` date DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `reason` text DEFAULT NULL,
+  `total_amount` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `receive_material_items`
+-- Dumping data for table `stuff_materials`
 --
 
-INSERT INTO `receive_material_items` (`id`, `receive_id`, `material_id`, `price_per_unit`, `quantity`) VALUES
-(1, 1, 1, 50.00, 10),
-(2, 1, 2, 75.50, 5),
-(3, 2, 3, 100.00, 3),
-(4, 2, 1, 50.00, 2),
-(5, 3, 4, 150.00, 1);
+INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`) VALUES
+(1, 'SM-68/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานกิจกรรมบริษัท', 485.00),
+(2, 'SM-68/05/002', '2025-05-16', 3, 'เบิกสำหรับจัดอบรมภายใน', 45.00),
+(3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stuff_material_items`
+--
+
+CREATE TABLE `stuff_material_items` (
+  `id` int(11) NOT NULL,
+  `stuff_material_id` int(11) NOT NULL,
+  `material_id` int(11) NOT NULL,
+  `quantity` int(11) DEFAULT 0,
+  `total_price` decimal(10,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `stuff_material_items`
+--
+
+INSERT INTO `stuff_material_items` (`id`, `stuff_material_id`, `material_id`, `quantity`, `total_price`) VALUES
+(1, 1, 1, 2, 440.00),
+(2, 1, 2, 3, 45.00),
+(3, 2, 3, 5, 25.00),
+(4, 2, 4, 2, 20.00),
+(5, 3, 5, 1, 120.00),
+(6, 3, 6, 4, 100.00);
+
+--
+-- Triggers `stuff_material_items`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_calc_total_price` BEFORE INSERT ON `stuff_material_items` FOR EACH ROW BEGIN
+  DECLARE materialPrice DECIMAL(10,2);
+  SELECT price INTO materialPrice FROM materials WHERE id = NEW.material_id;
+  SET NEW.total_price = materialPrice * NEW.quantity;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_total_amount_after_delete` AFTER DELETE ON `stuff_material_items` FOR EACH ROW BEGIN
+  UPDATE stuff_materials
+  SET total_amount = (
+    SELECT IFNULL(SUM(total_price), 0)
+    FROM stuff_material_items
+    WHERE stuff_material_id = OLD.stuff_material_id
+  )
+  WHERE id = OLD.stuff_material_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_total_amount_after_insert` AFTER INSERT ON `stuff_material_items` FOR EACH ROW BEGIN
+  UPDATE stuff_materials
+  SET total_amount = (
+    SELECT SUM(total_price)
+    FROM stuff_material_items
+    WHERE stuff_material_id = NEW.stuff_material_id
+  )
+  WHERE id = NEW.stuff_material_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_total_amount_after_update` AFTER UPDATE ON `stuff_material_items` FOR EACH ROW BEGIN
+  UPDATE stuff_materials
+  SET total_amount = (
+    SELECT SUM(total_price)
+    FROM stuff_material_items
+    WHERE stuff_material_id = NEW.stuff_material_id
+  )
+  WHERE id = NEW.stuff_material_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_update_total_price` BEFORE UPDATE ON `stuff_material_items` FOR EACH ROW BEGIN
+  DECLARE materialPrice DECIMAL(10,2);
+  SELECT price INTO materialPrice FROM materials WHERE id = NEW.material_id;
+  SET NEW.total_price = materialPrice * NEW.quantity;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -242,64 +324,17 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `approval_status`, `permission`) VALUES
-(1, 'admin1', 'admin1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'อนุมัติ', 'แอดมิน'),
-(2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'อนุมัติ', 'ผู้ช่วยแอดมิน'),
-(3, 'user1', 'user1234', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'อนุมัติ', 'ผู้ใช้งาน'),
-(4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'รออนุมัติ', 'ผู้ใช้งาน'),
-(5, 'admin2', 'securepass', 'นิภา แอดมิน', 'ผู้จัดการ', 'admin2@example.com', '0856789012', 'ไม่อนุมัติ', 'แอดมิน');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `withdraw_materials`
---
-
-CREATE TABLE `withdraw_materials` (
-  `id` int(11) NOT NULL,
-  `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
-  `fiscal_code` varchar(100) DEFAULT NULL,
-  `created_at` date DEFAULT NULL,
-  `requester_name` varchar(255) DEFAULT NULL,
-  `reason` text DEFAULT NULL,
-  `created_by` int(11) DEFAULT NULL,
-  `total_quantity` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `withdraw_materials`
---
-
-INSERT INTO `withdraw_materials` (`id`, `stock_type`, `fiscal_code`, `created_at`, `requester_name`, `reason`, `created_by`, `total_quantity`) VALUES
-(1, 'วัสดุในคลัง', 'WD001', '2025-01-01', 'สมชาย แรงงาน', 'ใช้สำหรับงานซ่อมแซม', 1, 15),
-(2, 'วัสดุในคลัง', 'WD002', '2025-01-03', 'วราภรณ์ แผนกผลิต', 'เบิกเพื่อผลิตสินค้าล็อต A', 2, 20),
-(3, 'วัสดุนอกคลัง', 'WD003', '2025-01-05', 'ปิยะพงษ์ ทีมช่าง', 'จัดกิจกรรมภายในหน่วยงาน', 1, 10),
-(4, 'วัสดุในคลัง', 'WD004', '2025-01-07', 'นิภา ฝ่ายจัดซื้อ', 'เตรียมสต๊อกระยะสั้น', 3, 18),
-(5, 'วัสดุนอกคลัง', 'WD005', '2025-01-10', 'สายฝน ฝ่ายสื่อสาร', 'สนับสนุนกิจกรรมชุมชน', 2, 12);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `withdraw_material_items`
---
-
-CREATE TABLE `withdraw_material_items` (
-  `id` int(11) NOT NULL,
-  `withdraw_id` int(11) DEFAULT NULL,
-  `material_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `withdraw_material_items`
---
-
-INSERT INTO `withdraw_material_items` (`id`, `withdraw_id`, `material_id`, `quantity`) VALUES
-(1, 1, 1, 10),
-(2, 1, 2, 5),
-(3, 2, 3, 8),
-(4, 2, 1, 6),
-(5, 2, 2, 4);
+INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission`, `approval_status`) VALUES
+(1, 'admin1', 'admin1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'แอดมิน', 'อนุมัติ'),
+(2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'ผู้ช่วยแอดมิน', 'อนุมัติ'),
+(3, 'user1', '$2y$10$hR79d9RbIo8FlhJivkGkSOCrb3PIKJEXhfDzFFlpXYTQ1WE4YPDpq', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'ผู้ใช้งาน', 'อนุมัติ'),
+(4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(6, 'user123', '$2y$10$OtEWucdWjiBec9zRpE/54eXqvOmQ11bEOBV6ZUkIUBdbj/m4uO83q', 'สมศรี พนักงาน', 'เจ้าหน้าที่', 'user123@example.com', '0891234567', 'ผู้ใช้งาน', 'อนุมัติ'),
+(8, 'user789', '$2y$10$5aren321Auyl6Ry4e8kJyuuSCoux9OjbJMYnGuv/GYU5db6Nj8HOW', 'วราภรณ์ ผู้ใช้ (แก้ไข)', 'เจ้าหน้าที่พัสดุ', 'user1_new@example.com', '0899999999', 'ผู้ใช้งาน', 'อนุมัติ'),
+(9, 'Test00', '$2y$10$0qn.bVPRHj34TmQpGAPpg.g4b8q/xP0x32qyKMYOvlogMGujr5f3K', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(10, 'yindee', '$2y$10$1DpPL8AojeVFYYj2sNjfd.sJQrOiL7Ql4z2tiSf6ZPEh5rzZ6mYUi', 'phoorin', 'เจ้าหน้าที่', '123phoorin@gmail.com', '0961243799', 'ผู้ใช้งาน', 'อนุมัติ'),
+(11, 'nick', '$2y$10$ozbXD6q.2dUNUpDp1h64OeYFNZm.w/SFqlGayORS0meuGmTFLs.Eu', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(12, 'testadmin', '$2y$10$ZuiDFq96JhTJKKWlJ6/z6eHD87QfWAOS3bRzdUgDinEnl5Dc4bi9G', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ');
 
 --
 -- Indexes for dumped tables
@@ -348,12 +383,20 @@ ALTER TABLE `receive_materials`
   ADD KEY `company_id` (`company_id`);
 
 --
--- Indexes for table `receive_material_items`
+-- Indexes for table `stuff_materials`
 --
-ALTER TABLE `receive_material_items`
+ALTER TABLE `stuff_materials`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `receive_id` (`receive_id`),
-  ADD KEY `material_id` (`material_id`);
+  ADD UNIQUE KEY `running_code` (`running_code`),
+  ADD KEY `created_by` (`created_by`);
+
+--
+-- Indexes for table `stuff_material_items`
+--
+ALTER TABLE `stuff_material_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_stuff_material_id` (`stuff_material_id`),
+  ADD KEY `fk_material_id` (`material_id`);
 
 --
 -- Indexes for table `users`
@@ -361,22 +404,6 @@ ALTER TABLE `receive_material_items`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
-
---
--- Indexes for table `withdraw_materials`
---
-ALTER TABLE `withdraw_materials`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `fiscal_code` (`fiscal_code`),
-  ADD KEY `created_by` (`created_by`);
-
---
--- Indexes for table `withdraw_material_items`
---
-ALTER TABLE `withdraw_material_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `withdraw_id` (`withdraw_id`),
-  ADD KEY `material_id` (`material_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -392,7 +419,7 @@ ALTER TABLE `adjustments`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `materials`
@@ -419,28 +446,22 @@ ALTER TABLE `receive_materials`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `receive_material_items`
+-- AUTO_INCREMENT for table `stuff_materials`
 --
-ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `stuff_materials`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `stuff_material_items`
+--
+ALTER TABLE `stuff_material_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `withdraw_materials`
---
-ALTER TABLE `withdraw_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `withdraw_material_items`
---
-ALTER TABLE `withdraw_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
@@ -477,24 +498,17 @@ ALTER TABLE `receive_materials`
   ADD CONSTRAINT `receive_materials_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `receive_material_items`
+-- Constraints for table `stuff_materials`
 --
-ALTER TABLE `receive_material_items`
-  ADD CONSTRAINT `receive_material_items_ibfk_1` FOREIGN KEY (`receive_id`) REFERENCES `receive_materials` (`id`),
-  ADD CONSTRAINT `receive_material_items_ibfk_2` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+ALTER TABLE `stuff_materials`
+  ADD CONSTRAINT `fk_stuff_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `withdraw_materials`
+-- Constraints for table `stuff_material_items`
 --
-ALTER TABLE `withdraw_materials`
-  ADD CONSTRAINT `withdraw_materials_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `withdraw_material_items`
---
-ALTER TABLE `withdraw_material_items`
-  ADD CONSTRAINT `withdraw_material_items_ibfk_1` FOREIGN KEY (`withdraw_id`) REFERENCES `withdraw_materials` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `withdraw_material_items_ibfk_2` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
+ALTER TABLE `stuff_material_items`
+  ADD CONSTRAINT `fk_material_item_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`),
+  ADD CONSTRAINT `fk_stuff_material_items` FOREIGN KEY (`stuff_material_id`) REFERENCES `stuff_materials` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
