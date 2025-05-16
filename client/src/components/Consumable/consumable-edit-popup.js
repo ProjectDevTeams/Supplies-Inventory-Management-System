@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./consumable-edit-popup.css";
 import { API_URL } from "../../config";
+import axios from "axios";
+
 
 function ConsumableEditPopup({ onClose, item, refreshData }) {
   const [formData, setFormData] = useState({
@@ -77,6 +79,22 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
     }
   };
 
+
+   const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/material_categories/get_material_categories.php`)
+      .then((res) => {
+        if (res.data.status === "success") {
+          setCategories(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.error("โหลดหมวดหมู่ล้มเหลว:", err);
+      });
+  }, []);
+
   return (
     <div className="consumable-edit-popup-container">
       <div className="consumable-edit-popup-box">
@@ -105,9 +123,9 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
                 onChange={handleChange}
                 required
               >
-                <option value="">เลือกประเภท</option>
-                <option value="1">วัสดุสำนักงาน</option>
-                <option value="2">วัสดุความปลอดภัย</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
               </select>
             </div>
 
