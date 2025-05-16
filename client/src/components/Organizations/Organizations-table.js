@@ -69,10 +69,9 @@ export default function OrganizationsTable() {
           setPage(1);
         }}
       />
-      <div className=".organizations-table-description">
+      <div className="organizations-table-description">
         ตารางรายละเอียดบริษัท/ห้าง/ร้าน
       </div>
-
       <table className="organizations-bar-table">
         <thead>
           <tr>

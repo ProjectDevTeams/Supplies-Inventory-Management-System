@@ -1,12 +1,11 @@
 .human-table-container {
   width: 100%;
-  padding: 0 1em;
+  padding: 1em;
   box-sizing: border-box;
 }
 
 .hum-table {
   width: 100%;
-  margin: 1em auto;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -14,7 +13,6 @@
 
 .hum-table-description {
   margin-bottom: 0.5em;
-  padding-top: 10em;
 }
 
 .hum-table th,

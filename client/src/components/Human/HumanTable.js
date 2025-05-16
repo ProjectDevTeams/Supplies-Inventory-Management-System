@@ -49,7 +49,7 @@ function HumanTable({ searchTerm, data, fetchData }) {
 
   return (
     <div className="human-table-container">
-      <div className=".hum-table-description">
+      <div className="hum-table-description">
         ตารางรายละเอียดบุคลากร
       </div>
       <table className="hum-table">
