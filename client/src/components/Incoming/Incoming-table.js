@@ -110,7 +110,7 @@ export default function IncomingTable({ searchTerm = "" }) {
               <tr
                 key={item.id}
                 className="incoming-tr"
-                onClick={() => navigate("/incoming/detail")}
+                onClick={() => navigate(`/incoming/detail/${item.id}`)}
               >
                 <td>{item.id}</td>
                 <td>{item.company}</td>

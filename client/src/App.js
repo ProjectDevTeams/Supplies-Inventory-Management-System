@@ -68,7 +68,7 @@ function App() {
 
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />
-        <Route path="/incoming/detail" element={<IncomingDetailPage />} />
+        <Route path="/incoming/detail/:id" element={<IncomingDetailPage />} />
         <Route path="/incoming/add" element={<IncomingAddPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
