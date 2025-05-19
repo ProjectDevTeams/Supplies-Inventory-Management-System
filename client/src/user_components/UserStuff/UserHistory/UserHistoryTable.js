@@ -18,7 +18,7 @@ function UserHistoryTable({ searchTerm = "" }) {
       category: "จัดซื้อเพิ่มเติม",
       items: 1,
       date: "28 มี.ค. 67",
-      status: "อนุมัติ"
+      status: "รับของเรียบร้อย"
     }
   ];
 
