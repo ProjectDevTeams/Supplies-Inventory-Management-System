@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ เพิ่ม useNavigate
 import './StuffTable.css';
 
 const trackData = [
@@ -10,6 +11,7 @@ const trackData = [
 ];
 
 export default function StuffTableTrack({ searchTerm = '' }) {
+  const navigate = useNavigate(); // ✅ ประกาศ navigate
   const [page, setPage] = useState(1);
   const [input, setInput] = useState('');
   const [asc, setAsc] = useState(true);
@@ -71,7 +73,13 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             items.map(i => (
               <tr key={i.id}>
                 <td>{i.id}</td>
-                <td>{i.code}</td>
+                <td
+                  className="stuff-link"
+                  style={{ cursor: "pointer", textDecoration: "underline" }}
+                  onClick={() => navigate("/stuff/detailFollow")}
+                >
+                  {i.code}
+                </td>
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
@@ -82,7 +90,6 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             ))
           )}
         </tbody>
-
       </table>
 
       <div className="stuff-pagination">

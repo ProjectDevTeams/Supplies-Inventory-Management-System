@@ -9,6 +9,7 @@ import ConsumablePage from "./pages/Consumable/ConsumablePage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import StuffPage from "./pages/Stuff/StuffPage";
 import DetailPage from "./pages/Stuff/DetailPage";
+import DetailFollowPage from "./pages/Stuff/DetailFollowPage";
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
 import HumanPage from "./pages/Human/HumanPage";
@@ -49,6 +50,7 @@ function App() {
         {/* เมนูใบเบิก */}
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/detail" element={<DetailPage />} />
+        <Route path="/stuff/detailFollow" element={<DetailFollowPage />} />
         <Route path="/incoming/materials" element={<MaterialsPage />} />
 
         {/* เมนูอื่นๆ */}
