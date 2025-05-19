@@ -8,8 +8,10 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import ConsumablePage from "./pages/Consumable/ConsumablePage";
 import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import StuffPage from "./pages/Stuff/StuffPage";
-import DetailPage from "./pages/Stuff/DetailPage";
-import DetailFollowPage from "./pages/Stuff/DetailFollowPage";
+import StuffTrackPage from './pages/Stuff/StuffTrackPage';
+import StuffPurchasePage from './pages/Stuff/StuffPurchasePage';
+import StuffDetailPage from './pages/Stuff/DetailPage';
+import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
 import HumanPage from "./pages/Human/HumanPage";
@@ -49,8 +51,11 @@ function App() {
 
         {/* เมนูใบเบิก */}
         <Route path="/stuff" element={<StuffPage />} />
-        <Route path="/stuff/detail" element={<DetailPage />} />
-        <Route path="/stuff/detailFollow" element={<DetailFollowPage />} />
+        <Route path="/stuff/detail" element={<StuffDetailPage />} />
+        <Route path="/stuff/DetailTrack" element={<StuffDetailTrackPage />} />
+        <Route path="/stuff" element={<StuffPage />} />
+        <Route path="/stuff/track" element={<StuffTrackPage />} />
+        <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
 
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />

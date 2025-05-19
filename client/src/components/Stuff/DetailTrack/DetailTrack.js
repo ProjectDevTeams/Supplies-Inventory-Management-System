@@ -1,6 +1,6 @@
 import Sidebar from '../../Sidebar/Sidebar';
 import Navbar from '../../Navbar/Navbar';
-import './DetailFollow.css';
+import './DetailTrack.css';
 
 const mockData = {
   code: "003-02/2568",
