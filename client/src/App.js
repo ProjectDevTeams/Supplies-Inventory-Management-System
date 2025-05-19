@@ -10,7 +10,7 @@ import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import StuffPage from "./pages/Stuff/StuffPage";
 import StuffTrackPage from './pages/Stuff/StuffTrackPage';
 import StuffPurchasePage from './pages/Stuff/StuffPurchasePage';
-import StuffDetailPage from './pages/Stuff/DetailPage';
+import StuffDetailPage from './pages/Stuff/StuffDetailPage';
 import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
