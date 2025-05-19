@@ -10,7 +10,7 @@ import CategorizePage from "./pages/Consumable/Categorize/CategorizePage";
 import StuffPage from "./pages/Stuff/StuffPage";
 import StuffTrackPage from './pages/Stuff/StuffTrackPage';
 import StuffPurchasePage from './pages/Stuff/StuffPurchasePage';
-import StuffDetailPage from './pages/Stuff/DetailPage';
+import StuffDetailPage from './pages/Stuff/StuffDetailPage';
 import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
@@ -22,7 +22,6 @@ import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
-import IncomingAddPage from "./pages/Incoming/IncomingAddPage";
 import BalancePage from './pages/Adjust/BalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
 
@@ -61,7 +60,6 @@ function App() {
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/incoming/detail" element={<IncomingDetailPage />} />
-        <Route path="/incoming/add" element={<IncomingAddPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
         <Route path="/adjust/balance" element={<BalancePage />} />
