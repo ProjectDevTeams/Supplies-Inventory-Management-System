@@ -22,8 +22,10 @@ import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
+import IncomingAddPage from "./pages/Incoming/IncomingAddPage"
 import BalancePage from './pages/Adjust/BalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
+
 
 import Balance from "./components/Adjust/Balance/Balance";
 
@@ -67,6 +69,7 @@ function App() {
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/incoming/detail" element={<IncomingDetailPage />} />
+        <Route path="/incoming/add" element={<IncomingAddPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
         <Route path="/adjust/balance" element={<BalancePage />} />

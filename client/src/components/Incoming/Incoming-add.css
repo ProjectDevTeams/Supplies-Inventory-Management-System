@@ -1,5 +1,3 @@
-/* File: Incoming-add.css */
-
 .incoming-add-container {
   background: #fff;
   border-radius: 8px;
@@ -32,11 +30,33 @@
 
 .incoming-add-input {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #fafafa;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.incoming-add-input:focus {
+  outline: none;
+  border-color: #0056cc;
+  box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
+}
+
+.incoming-company-list[list],
+.incoming-material-list[list] {
+  appearance: none;
+  background-image: none !important;
+  padding-right: 1rem;
+  cursor: text;
+}
+
+.incoming-company-list:focus,
+.incoming-material-list:focus {
+  outline: none;
+  border-color: #0056cc;
+  box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
 }
 
 .incoming-add-divider {
@@ -45,18 +65,15 @@
   margin: 0;
 }
 
-/* รายการวัสดุแต่ละแถว */
 .incoming-add-item-row {
   border: 1px solid #e0e0e0;
   padding: 1rem;
   border-radius: 6px;
-  margin-bottom: 1rem;
+  background: #fafafa;
   display: grid;
   row-gap: 0.8rem;
-  background: #fafafa;
 }
 
-/* ปุ่มลบแถวรายการ */
 .incoming-add-remove-row {
   justify-self: end;
   background: #dc3545;
@@ -73,7 +90,6 @@
   background: #c82333;
 }
 
-/* ปุ่มเพิ่มรายการใหม่ */
 .incoming-add-add-row {
   justify-self: start;
   background: #007bff;
@@ -84,7 +100,7 @@
   cursor: pointer;
   font-size: 0.95rem;
   transition: background 0.2s;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
 }
 
 .incoming-add-add-row:hover {
@@ -98,37 +114,81 @@
   margin-top: 1rem;
 }
 
-.incoming-add-cancel,
-.incoming-add-save {
+.incoming-add-cancel {
+  background: #6c757d;
+  color: #fff;
   padding: 0.6rem 1.4rem;
-  font-size: 1rem;
   border: none;
   border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: 0.2s;
-}
-
-.incoming-add-cancel {
-  background: #ccc;
-  color: #333;
+  transition: background 0.2s;
 }
 
 .incoming-add-cancel:hover {
-  background: #bbb;
+  background: #5a6268;
 }
 
 .incoming-add-save {
   background: #28a745;
   color: #fff;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .incoming-add-save:hover {
   background: #218838;
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .incoming-add-row {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* Autosuggest dropdown styling */
+.react-autosuggest__container {
+  position: relative;
+}
+
+.react-autosuggest__input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.react-autosuggest__input:focus {
+  outline: none;
+  border-color: #0056cc;
+  box-shadow: 0 0 0 3px rgba(0,86,204,0.2);
+}
+
+.react-autosuggest__suggestions-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.react-autosuggest__suggestion {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: #e6f7ff;
 }
