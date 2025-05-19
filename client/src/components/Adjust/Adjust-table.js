@@ -155,7 +155,8 @@ function AdjustTable({ searchTerm }) {
           <button disabled={currentPage === totalPages} onClick={handleNextPage}>ถัดไป</button>
         </div>
       </div>
-    </div>
+    </div> 
+    
   );
 }
 

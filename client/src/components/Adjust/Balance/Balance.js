@@ -67,6 +67,7 @@ function Balance() {
         </button>
       </div>
     </div>
+    
   );
 }
 

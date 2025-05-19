@@ -28,7 +28,7 @@ import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
 import Balance from "./components/Adjust/Balance/Balance";
 
 
-import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage"; 
+import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
 
 
 
