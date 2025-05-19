@@ -22,7 +22,7 @@ import ResetPassword from "./pages/Reset Password/ResetPassword";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
 import BalancePage from './pages/Adjust/BalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
-
+import Balance from "./components/Adjust/Balance/Balance";
 
 import EmailVerification from "./pages/Email Verification/Email_Verification";
 
@@ -73,7 +73,7 @@ function App() {
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/verification" element={<EmailVerification />} />
 
-
+        <Route path="/adjust/balance/:id" element={<Balance />} />
 
       </Routes>
     </BrowserRouter>

@@ -17,7 +17,19 @@ function AdjustTable({ searchTerm }) {
     const fetchAll = async () => {
       try {
         const res = await axios.get(`${API_URL}/adjustment_items/get_adjustment_items.php`);
-        setAdjustments(Array.isArray(res.data.data) ? res.data.data : []);
+        const adjustments = res.data?.data || [];
+
+        const flatItems = adjustments.flatMap(adj =>
+          (adj.items || []).map(item => ({
+            ...item,
+            full_name: adj.full_name,
+            created_date: adj.created_date,
+            status: adj.status,
+            adjustment_id: adj.id
+          }))
+        );
+
+        setAdjustments(flatItems);
         setLoading(false);
       } catch (err) {
         console.error("โหลดข้อมูลล้มเหลว:", err);
@@ -85,7 +97,6 @@ function AdjustTable({ searchTerm }) {
             </th>
             <th className="adjustment-th">ผู้สร้าง</th>
             <th className="adjustment-th">วันที่สร้าง</th>
-            <th className="adjustment-th">จำนวนรายการ</th>
             <th className="adjustment-th">สถานะ</th>
           </tr>
         </thead>
@@ -95,7 +106,7 @@ function AdjustTable({ searchTerm }) {
               <tr
                 key={item.id}
                 className="adjustment-tr"
-                onClick={() => navigate("/adjust/balance")}
+                onClick={() => navigate(`/adjust/balance/${item.material_id}`)}
                 style={{ cursor: "pointer" }}
               >
                 <td className="adjustment-td">{item.id}</td>
@@ -103,7 +114,6 @@ function AdjustTable({ searchTerm }) {
                 <td className="adjustment-td">
                   {formatDateWithSubtext(item.created_date, item.full_name)}
                 </td>
-                <td className="adjustment-td">{item.items?.length || 0}</td>
                 <td className="adjustment-td" style={{ fontWeight: "bold", color: "green" }}>
                   {item.status || "อนุมัติ"}
                 </td>
