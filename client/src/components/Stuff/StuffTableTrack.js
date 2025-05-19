@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
-import { FaPrint } from 'react-icons/fa';
 
 const trackData = [
   { id: 1, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "approved" },
@@ -61,7 +60,6 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
-            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
@@ -80,7 +78,6 @@ export default function StuffTableTrack({ searchTerm = '' }) {
                 <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
                   {renderStatus(i.status)}
                 </td>
-                <td className="print-icon"><FaPrint /></td>
               </tr>
             ))
           )}
