@@ -26,12 +26,16 @@ import IncomingAddPage from "./pages/Incoming/IncomingAddPage"
 import BalancePage from './pages/Adjust/BalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
 
+<<<<<<< HEAD
 
 import Balance from "./components/Adjust/Balance/Balance";
 
 
 import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
 
+=======
+import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
+>>>>>>> 796ac920bf1aaa1583b91328380ba363d6dadc0b
 
 
 
