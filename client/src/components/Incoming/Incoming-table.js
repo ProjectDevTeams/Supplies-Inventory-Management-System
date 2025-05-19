@@ -18,7 +18,7 @@ export default function IncomingTable({ searchTerm = "" }) {
   // fetch data
   useEffect(() => {
     axios
-      .get(`${API_URL}/receive/get_receives.php`)
+      .get(`${API_URL}/receive_materials/get_receives.php`)
       .then((res) => {
         if (res.data.status === "success") {
           const formatted = res.data.data.map((item) => ({
