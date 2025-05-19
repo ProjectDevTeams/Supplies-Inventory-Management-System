@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
@@ -6,36 +6,33 @@ import "./Adjust-table.css";
 
 function AdjustTable({ searchTerm }) {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [adjustments, setAdjustments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
   const itemsPerPage = 10;
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/adjustments/get_adjustments.php`)
-      .then((res) => {
-        if (Array.isArray(res.data)) {
-          setData(res.data);
-        } else {
-          console.error("รูปแบบข้อมูลไม่ถูกต้อง:", res.data);
-        }
-      })
-      .catch((err) => {
-        console.error("ดึงข้อมูลล้มเหลว:", err);
-      });
+    const fetchAll = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/adjustment_items/get_adjustment_items.php`);
+        setAdjustments(Array.isArray(res.data.data) ? res.data.data : []);
+        setLoading(false);
+      } catch (err) {
+        console.error("โหลดข้อมูลล้มเหลว:", err);
+      }
+    };
+
+    fetchAll();
   }, []);
 
-  // กรองข้อมูลโดย searchTerm
-  const filteredData = data.filter((item) =>
+  const filteredData = adjustments.filter(item =>
     item.id.toString().includes(searchTerm.toLowerCase()) ||
-    item.stock_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.company_name ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.created_at.toLowerCase().includes(searchTerm.toLowerCase())
+    (item.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.created_date.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // จัดเรียงตาม id
   const sortedData = [...filteredData].sort((a, b) =>
     sortOrder === "asc" ? a.id - b.id : b.id - a.id
   );
@@ -54,7 +51,7 @@ function AdjustTable({ searchTerm }) {
   };
 
   const toggleSortOrder = () => {
-    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
     setCurrentPage(1);
   };
 
@@ -62,11 +59,10 @@ function AdjustTable({ searchTerm }) {
     setInputPage("");
   }, [currentPage]);
 
-  // แปลงวันที่เป็นรูปแบบ dd/mm/yy และเพิ่มข้อความย่อย
   const formatDateWithSubtext = (dateStr, subtext) => {
     if (!dateStr) return "--";
     const d = new Date(dateStr);
-    if (isNaN(d)) return dateStr; // ถ้าแปลงไม่ได้
+    if (isNaN(d)) return dateStr;
     const options = { day: "2-digit", month: "short", year: "2-digit" };
     return (
       <>
@@ -76,38 +72,38 @@ function AdjustTable({ searchTerm }) {
     );
   };
 
+  if (loading) return <div style={{ padding: "2rem" }}>🔄 กำลังโหลดข้อมูล...</div>;
+
   return (
     <div className="adjustment-table-container">
-      <div className="adjustment-table-description">
-        ตารางประวัติการปรับยอด
-      </div>
+      <div className="adjustment-table-description">ตารางประวัติการปรับยอด</div>
       <table id="adjustment-table">
         <thead id="adjustment-thead">
           <tr className="adjustment-tr">
             <th className="adjustment-th" onClick={toggleSortOrder} style={{ cursor: "pointer" }}>
               ลำดับ {sortOrder === "asc" ? "▲" : "▼"}
             </th>
-            <th className="adjustment-th">จากคลัง</th>
-            <th className="adjustment-th">บริษัท/ร้านค้า</th>
-            <th className="adjustment-th">วันที่ซื้อ</th>
+            <th className="adjustment-th">ผู้สร้าง</th>
+            <th className="adjustment-th">วันที่สร้าง</th>
+            <th className="adjustment-th">จำนวนรายการ</th>
             <th className="adjustment-th">สถานะ</th>
           </tr>
         </thead>
         <tbody id="adjustment-tbody">
           {currentItems.length > 0 ? (
-            currentItems.map((item) => (
+            currentItems.map(item => (
               <tr
                 key={item.id}
                 className="adjustment-tr"
-                onClick={() => navigate('/adjust/balance')}
+                onClick={() => navigate("/adjust/balance")}
                 style={{ cursor: "pointer" }}
               >
                 <td className="adjustment-td">{item.id}</td>
-                <td className="adjustment-td">{item.stock_type}</td>
-                <td className="adjustment-td">{item.company_name || "-"}</td>
+                <td className="adjustment-td">{item.full_name || `ID: ${item.created_by}`}</td>
                 <td className="adjustment-td">
-                  {formatDateWithSubtext(item.created_at, item.company_name ? `ฝ่าย${item.company_name}` : "")}
+                  {formatDateWithSubtext(item.created_date, item.full_name)}
                 </td>
+                <td className="adjustment-td">{item.items?.length || 0}</td>
                 <td className="adjustment-td" style={{ fontWeight: "bold", color: "green" }}>
                   {item.status || "อนุมัติ"}
                 </td>
