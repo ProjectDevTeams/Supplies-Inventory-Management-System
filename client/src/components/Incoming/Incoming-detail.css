@@ -1,0 +1,120 @@
+/* เอาสไตล์กล่องมาไว้ที่ container */
+.incoming-detail-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1.5rem;
+  font-family: "Prompt", sans-serif;
+}
+
+.incoming-detail-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #003366;
+}
+
+.incoming-detail-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.incoming-detail-row label {
+  font-weight: 500;
+  color: #333;
+}
+
+.incoming-detail-input,
+.incoming-detail-select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.incoming-detail-select {
+  background: #fff;
+}
+
+.incoming-detail-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0;
+}
+
+.incoming-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2rem;
+  row-gap: 1rem;
+}
+
+.incoming-detail-grid > div {
+  display: grid;
+  grid-template-rows: auto auto;
+  row-gap: 0.3rem;
+}
+
+.incoming-detail-grid label {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.incoming-detail-price-row {
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+.incoming-detail-summary {
+  background: #f9fbfd;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.incoming-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.incoming-detail-back-button {
+  background-color: #ff9900;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.incoming-detail-back-button:hover {
+  background-color: #e68a00;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .incoming-detail-row,
+  .incoming-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .incoming-detail-summary {
+    flex-direction: column;
+    row-gap: 0.5rem;
+    text-align: center;
+  }
+}

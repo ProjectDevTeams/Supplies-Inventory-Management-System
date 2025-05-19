@@ -40,42 +40,34 @@
 .organizations-bar-table th:nth-child(1),
 .organizations-bar-table td:nth-child(1) {
   width: 6%;
-  white-space: nowrap;
 }
-
 .organizations-bar-table th:nth-child(2),
 .organizations-bar-table td:nth-child(2) {
-  width: 45%;
-  text-align: center; /* เปลี่ยนจาก left → center */
+  width: 35%;
+  text-align: center;
   padding-left: 1em;
 }
-
 .organizations-bar-table th:nth-child(3),
 .organizations-bar-table td:nth-child(3) {
-  width: 25%;
+  width: 20%;
 }
-
 .organizations-bar-table th:nth-child(4),
 .organizations-bar-table td:nth-child(4) {
-  width: 24%;
+  width: 20%;
+}
+.organizations-bar-table th:nth-child(5),
+.organizations-bar-table td:nth-child(5) {
+  width: 19%;
 }
 
-.organizations-bar-subtext {
-  font-size: 0.85em;
-  color: #555;
-}
-
-/* คลิกได้ทั้งแถว */
 .org-clickable-row {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
 .org-clickable-row:hover {
   background-color: #f0f8ff;
 }
 
-/* ✅ Pagination */
 .organizations-pagination-wrapper {
   width: 100%;
   display: flex;
@@ -115,11 +107,6 @@
   pointer-events: none;
 }
 
-.organizations-pagination-buttons .active {
-  background-color: #2176bd;
-  color: white;
-}
-
 .organizations-page-input {
   width: 55px;
   text-align: center;
@@ -149,18 +136,17 @@
 }
 
 .organizations-page-input::-webkit-inner-spin-button,
-.human-page-input::-webkit-outer-spin-button {
+.organizations-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-/* ✅ Responsive */
+
 @media (max-width: 768px) {
   .organizations-bar-table th,
   .organizations-bar-table td {
     font-size: 0.85em;
     padding: 0.5em;
   }
-
   .organizations-pagination-wrapper {
     flex-direction: column;
     align-items: flex-start;
@@ -170,7 +156,7 @@
 
 .organizations-no-data-message {
   text-align: center;
-  color: #000; /* สีดำ */
+  color: #000;
   font-style: normal;
   font-weight: normal;
   padding: 1rem;

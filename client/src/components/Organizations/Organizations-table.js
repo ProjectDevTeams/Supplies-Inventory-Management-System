@@ -16,7 +16,6 @@ export default function OrganizationsTable() {
   const [adding, setAdding] = useState(false);
   const perPage = 5;
 
-  // ฟังก์ชันดึงข้อมูลบริษัทจาก API
   const fetchData = async () => {
     try {
       const res = await axios.get(`${API_URL}/companies/get_companies.php`);
@@ -25,9 +24,9 @@ export default function OrganizationsTable() {
           res.data.data.map((c) => ({
             id: String(c.id),
             name: c.name,
+            created_by: c.created_by,
             created_at: c.created_at.split(" ")[0],
             updated_at: c.updated_at?.split(" ")[0] || "",
-            created_by: c.created_by, // อาจเป็น null
           }))
         );
       }
@@ -36,18 +35,16 @@ export default function OrganizationsTable() {
     }
   };
 
-  // เรียก fetchData เมื่อคอมโพเนนต์ mount
   useEffect(() => {
     fetchData();
   }, []);
 
-  // ฟังก์ชันจัดรูปวันที่
   const fmt = (d) => (d ? d.split("-").reverse().join("-") : "--");
 
-  // filter / sort / paginate
   const { items, total } = useMemo(() => {
     let arr = data.filter((c) =>
-      (c.name ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      (c.created_by || "").toString().includes(search) ||
       fmt(c.created_at).includes(search) ||
       fmt(c.updated_at).includes(search)
     );
@@ -64,24 +61,21 @@ export default function OrganizationsTable() {
       <Organizationsbar
         onAddClick={() => setAdding(true)}
         searchTerm={search}
-        setSearchTerm={(t) => {
-          setSearch(t);
-          setPage(1);
-        }}
+        setSearchTerm={(t) => { setSearch(t); setPage(1); }}
       />
+
       <div className="organizations-table-description">
         ตารางรายละเอียดบริษัท/ห้าง/ร้าน
       </div>
+
       <table className="organizations-bar-table">
         <thead>
           <tr>
-            <th
-              onClick={() => setSortAsc((a) => !a)}
-              style={{ cursor: "pointer" }}
-            >
+            <th onClick={() => setSortAsc((a) => !a)} style={{ cursor: "pointer" }}>
               ลำดับ {sortAsc ? "▲" : "▼"}
             </th>
             <th>บริษัท/ร้านค้า</th>
+            <th>ผู้สร้าง</th>
             <th>วันที่สร้าง</th>
             <th>วันที่แก้ไข</th>
           </tr>
@@ -89,24 +83,15 @@ export default function OrganizationsTable() {
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="4">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td colSpan="5">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             items.map((c) => (
-              <tr
-                key={c.id}
-                className="org-clickable-row"
-                onClick={() => setManageId(c.id)}
-              >
+              <tr key={c.id} className="org-clickable-row" onClick={() => setManageId(c.id)}>
                 <td>{c.id}</td>
                 <td>{c.name}</td>
-                <td>
-                  {fmt(c.created_at)}
-                  <br />
-                  <span className="organizations-bar-subtext">
-                    {c.created_by || "—"}
-                  </span>
-                </td>
+                <td>{c.created_by || "—"}</td>
+                <td>{fmt(c.created_at)}</td>
                 <td>{c.updated_at ? fmt(c.updated_at) : "—"}</td>
               </tr>
             ))
@@ -116,13 +101,10 @@ export default function OrganizationsTable() {
 
       <div className="organizations-pagination-wrapper">
         <div className="organizations-pagination-info">
-          แสดง {(page - 1) * perPage + 1} ถึง{" "}
-          {Math.min(page * perPage, total)} จาก {total} แถว
+          แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, total)} จาก {total} แถว
         </div>
         <div className="organizations-pagination-buttons">
-          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-            ก่อนหน้า
-          </button>
+          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>ก่อนหน้า</button>
           <input
             type="number"
             className="organizations-page-input"
@@ -138,42 +120,25 @@ export default function OrganizationsTable() {
               }
             }}
           />
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            ถัดไป
-          </button>
+          <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>ถัดไป</button>
         </div>
       </div>
 
-      {/* Popup จัดการบริษัท */}
       {manageId && (
         <OrganizationsManagePopup
           onClose={() => setManageId(undefined)}
           companyData={data.find((c) => c.id === manageId)}
-          onDeleteCompany={(id) => {
-            fetchData();           // รีเฟรชตารางหลังลบ
-            setManageId(undefined);
-          }}
-          onEditCompany={(_, __) => {
-            fetchData();           // รีเฟรชตารางหลังแก้ไข
-            setManageId(undefined);
-          }}
+          onDeleteCompany={() => { fetchData(); setManageId(undefined); }}
+          onEditCompany={() => { fetchData(); setManageId(undefined); }}
         />
       )}
 
-      {/* Popup เพิ่มบริษัท */}
       {adding && (
         <OrganizationsAddPopup
           onClose={() => setAdding(false)}
-          onAddCompany={(nc) => {
-            // หลังเพิ่มสำเร็จ ให้รีเฟรชจาก server กลับมา
-            fetchData();
-            setAdding(false);
-          }}
+          onAddCompany={() => { fetchData(); setAdding(false); }}
         />
       )}
     </div>
-  );
+);
 }

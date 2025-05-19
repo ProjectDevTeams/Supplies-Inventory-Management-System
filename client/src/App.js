@@ -19,7 +19,7 @@ import SettingPage from "./pages/Setting/SettingPage";
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import ForgetPassword from "./pages/Forget Password/ForgetPassword";
 import ResetPassword from "./pages/Reset Password/ResetPassword";
-import MaterialsPage from "./pages/Incoming/MaterialsPage";
+import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
 import BalancePage from './pages/Adjust/BalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
 
@@ -51,10 +51,10 @@ function App() {
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/detail" element={<DetailPage />} />
         <Route path="/stuff/detailFollow" element={<DetailFollowPage />} />
-        <Route path="/incoming/materials" element={<MaterialsPage />} />
 
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />
+        <Route path="/incoming/detail" element={<IncomingDetailPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
         <Route path="/adjust/balance" element={<BalancePage />} />

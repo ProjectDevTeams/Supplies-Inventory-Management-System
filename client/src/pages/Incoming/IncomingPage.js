@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import Incomingbar from '../../components/Incoming/Incomingbar';
-import IncomingTable from "../../components/Incoming/IncomingTable";
+import Incomingbar from '../../components/Incoming/Incoming-bar';
+import IncomingTable from "../../components/Incoming/Incoming-table";
 import { exportToExcel } from "../../utils/exportToExcel";
 import './IncomingPage.css';
 
