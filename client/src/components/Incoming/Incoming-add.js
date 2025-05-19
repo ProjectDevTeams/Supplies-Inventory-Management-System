@@ -84,7 +84,7 @@ export default function IncomingAdd() {
       );
       const payload = { ...form, company_id: +form.company_id || null, items };
       const { data } = await axios.post(
-        `${API_URL}/receive/add_receive.php`,
+        `${API_URL}/receive_materials/add_receive.php`,
         payload,
         { headers: { "Content-Type": "application/json" } }
       );

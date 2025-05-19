@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from "react";
+// File: src/components/Incoming/Incoming-table.js
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
 import "./Incoming-table.css";
+
+const thaiMonths = [
+  "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.",
+  "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
+  "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+];
+
+function formatThaiDateDMY(dmy) {
+  const [dd, mm, yyyy] = dmy.split("-");
+  const day = dd.padStart(2, "0");
+  const month = thaiMonths[parseInt(mm, 10) - 1];
+  const year = (parseInt(yyyy, 10) + 543).toString();
+  return `${day} ${month} ${year}`;
+}
 
 export default function IncomingTable({ searchTerm = "" }) {
   const [data, setData] = useState([]);
@@ -18,7 +33,7 @@ export default function IncomingTable({ searchTerm = "" }) {
   // fetch data
   useEffect(() => {
     axios
-      .get(`${API_URL}/receive/get_receives.php`)
+      .get(`${API_URL}/receive_materials/get_receives.php`)
       .then((res) => {
         if (res.data.status === "success") {
           const formatted = res.data.data.map((item) => ({
@@ -91,17 +106,17 @@ export default function IncomingTable({ searchTerm = "" }) {
               </td>
             </tr>
           ) : (
-            currentItems.map((item, idx) => (
+            currentItems.map((item) => (
               <tr
                 key={item.id}
                 className="incoming-tr"
                 onClick={() => navigate("/incoming/detail")}
               >
-                <td>{indexOfFirstItem + idx + 1}</td>
+                <td>{item.id}</td>
                 <td>{item.company}</td>
                 <td>{item.po}</td>
                 <td>{item.created_by}</td>
-                <td>{item.created_at}</td>
+                <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
               </tr>
             ))
