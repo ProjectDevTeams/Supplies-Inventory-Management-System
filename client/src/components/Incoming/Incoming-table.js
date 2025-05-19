@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
@@ -97,7 +97,7 @@ export default function IncomingTable({ searchTerm = "" }) {
                 className="incoming-tr"
                 onClick={() => navigate("/incoming/detail")}
               >
-                <td>{indexOfFirstItem + idx + 1}</td>
+                <td>{item.id}</td>
                 <td>{item.company}</td>
                 <td>{item.po}</td>
                 <td>{item.created_by}</td>
