@@ -1,0 +1,121 @@
+/* Container หลัก */
+.detail-track-container {
+  background: white;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  font-family: 'Prompt', sans-serif;
+  box-sizing: border-box;
+}
+
+/* หัวเรื่องใหญ่ */
+.detail-track-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #003366;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* กล่องรายละเอียด */
+.detail-track-box {
+  text-align: left;
+}
+
+/* ชื่อเรื่องภายในกล่อง */
+.detail-track-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* กริดข้อมูลเบื้องต้น */
+.detail-track-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 3rem;
+  row-gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+/* ข้อความในกริด */
+.detail-track-grid p {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ชื่อหัวตารางรายการ */
+.detail-track-subtitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* ตารางรายการวัสดุ */
+.detail-track-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.detail-track-table th,
+.detail-track-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.detail-track-table th {
+  background-color: #e3edf8;
+  font-weight: bold;
+}
+
+/* สถานะต่างๆ */
+.detail-track-status {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.detail-track-status .approved {
+  color: green;
+  font-weight: bold;
+}
+
+.detail-track-status .received {
+  color: #0056d6;
+  font-weight: bold;
+}
+
+/* ปุ่มกลับ */
+.detail-track-actions {
+  text-align: right;
+}
+
+.btn-back {
+  background-color: #f79c05;
+  color: white;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-back:hover {
+  background-color: #e67c00;
+}
+
+/* Responsive สำหรับมือถือ */
+@media (max-width: 768px) {
+  .detail-track-grid {
+    grid-template-columns: 1fr;
+  }
+}

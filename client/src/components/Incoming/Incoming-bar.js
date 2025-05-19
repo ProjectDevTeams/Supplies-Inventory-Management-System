@@ -3,7 +3,7 @@ import "./Incoming-bar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export default function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }) {
+export default function Incomingbar({ searchTerm, setSearchTerm }) {
   const [budgetYear, setBudgetYear] = useState("");
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
@@ -26,10 +26,15 @@ export default function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }
           />
         </div>
 
-        {/* ➕ เพิ่มหัวข้อ */}
-        <button className="incoming-btn-green">+ เพิ่มหัวข้อ</button>
+        {/* ➕ เพิ่มการรับเข้าวัสดุ */}
+        <button
+          className="incoming-btn-green"
+          onClick={() => window.location.assign("/incoming/add")}
+        >
+          + เพิ่มการรับเข้าวัสดุ
+        </button>
 
-        {/* 📅 ปีงบ */}
+        {/* 📅 ปีงบประมาณ */}
         <select
           className="incoming-budget-select"
           value={budgetYear}
@@ -44,5 +49,5 @@ export default function Incomingbar({ onExportExcel, searchTerm, setSearchTerm }
         </select>
       </div>
     </div>
-  );
+);
 }

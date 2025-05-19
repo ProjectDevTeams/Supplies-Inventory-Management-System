@@ -2,8 +2,11 @@ import React from 'react';
 import './Stuffbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-function Stuffbar({ setActiveTab, activeTab, searchTerm, setSearchTerm }) {
+function Stuffbar({ searchTerm, setSearchTerm }) {
+  const navigate = useNavigate();
+
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   return (
@@ -22,24 +25,24 @@ function Stuffbar({ setActiveTab, activeTab, searchTerm, setSearchTerm }) {
           />
         </div>
 
-        {/* ปุ่มสลับตาราง */}
+        {/* ปุ่มเปลี่ยนหน้า */}
         <button
-          className={`btn blue ${activeTab === 'wait' ? 'active-tab' : ''}`}
-          onClick={() => setActiveTab('wait')}
+          className="btn blue"
+          onClick={() => navigate('/stuff')}
         >
           รออนุมัติ
         </button>
 
         <button
-          className={`btn purple ${activeTab === 'track' ? 'active-tab' : ''}`}
-          onClick={() => setActiveTab('track')}
+          className="btn purple"
+          onClick={() => navigate('/stuff/track')}
         >
           ติดตามสถานะการเบิก
         </button>
 
         <button
-          className={`btn orange ${activeTab === 'purchase' ? 'active-tab' : ''}`}
-          onClick={() => setActiveTab('purchase')}
+          className="btn orange"
+          onClick={() => navigate('/stuff/purchase')}
         >
           รายการขอจัดซื้อเพิ่มเติม
         </button>

@@ -5,7 +5,7 @@
   padding: 2rem;
   margin: 2rem auto;
   max-width: 900px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 1.5rem;
@@ -88,11 +88,11 @@
 .incoming-detail-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
 }
 
-.incoming-detail-back-button {
-  background-color: #ff9900;
-  color: #fff;
+.incoming-detail-back-button,
+.incoming-detail-save-button {
   font-size: 1rem;
   font-weight: 500;
   padding: 0.6rem 1.5rem;
@@ -102,8 +102,22 @@
   transition: background 0.2s;
 }
 
+.incoming-detail-back-button {
+  background-color: #ccc;
+  color: #333;
+}
+
 .incoming-detail-back-button:hover {
-  background-color: #e68a00;
+  background-color: #bbb;
+}
+
+.incoming-detail-save-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.incoming-detail-save-button:hover {
+  background-color: #218838;
 }
 
 /* Responsive */

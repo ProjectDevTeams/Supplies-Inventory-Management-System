@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Incoming-detail.css";
 
 function IncomingDetail() {
-  const [formData] = useState({
+  const [formData, setFormData] = useState({
     warehouse: "",
     company: "",
     taxNumber: "IV6707039",
@@ -13,7 +13,20 @@ function IncomingDetail() {
     unitPrice: 123.05,
   });
 
+  const handleChange = (field) => (e) => {
+    setFormData({
+      ...formData,
+      [field]: e.target.value,
+    });
+  };
+
   const totalPrice = (formData.quantity * formData.unitPrice).toFixed(2);
+
+  const handleSave = () => {
+    // ใส่ logic บันทึกข้อมูลที่นี่ (เช่น เรียก API)
+    console.log("Save data:", formData);
+    alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+  };
 
   return (
     <div className="incoming-detail-container">
@@ -21,17 +34,25 @@ function IncomingDetail() {
 
       <div className="incoming-detail-row">
         <label>คลังวัสดุ</label>
-        <select className="incoming-detail-select">
-          <option>เลือกคลังวัสดุ</option>
-          <option>วัสดุในคลัง</option>
-          <option>วัสดุนอกคลัง</option>
+        <select
+          className="incoming-detail-select"
+          value={formData.warehouse}
+          onChange={handleChange("warehouse")}
+        >
+          <option value="">เลือกคลังวัสดุ</option>
+          <option value="in">วัสดุในคลัง</option>
+          <option value="out">วัสดุนอกคลัง</option>
         </select>
       </div>
 
       <div className="incoming-detail-row">
         <label>บริษัท/ห้าง/ร้าน</label>
-        <select className="incoming-detail-select">
-          <option>เลือกบริษัท/ห้าง/ร้าน</option>
+        <select
+          className="incoming-detail-select"
+          value={formData.company}
+          onChange={handleChange("company")}
+        >
+          <option value="">เลือกบริษัท/ห้าง/ร้าน</option>
           <option>บริษัท แสงสวัสดิ์ สมจิตร์ เทรดดิ้ง จำกัด (สำนักงานใหญ่)</option>
           <option>ห้างหุ้นส่วนจำกัดกรินบิคเซอร์วิส</option>
           <option>ห้างหุ้นส่วนจำกัด นานาวัสดุอุตสาหกรรม (2021)</option>
@@ -54,6 +75,8 @@ function IncomingDetail() {
         <input
           type="text"
           className="incoming-detail-input"
+          value={formData.orderNumber}
+          onChange={handleChange("orderNumber")}
           placeholder="กรอกเลขที่ มอ."
         />
       </div>
@@ -64,7 +87,7 @@ function IncomingDetail() {
           type="date"
           className="incoming-detail-input"
           value={formData.date}
-          readOnly
+          onChange={handleChange("date")}
         />
       </div>
 
@@ -77,7 +100,7 @@ function IncomingDetail() {
             type="text"
             className="incoming-detail-input"
             value={formData.itemName}
-            readOnly
+            onChange={handleChange("itemName")}
           />
         </div>
         <div>
@@ -86,7 +109,7 @@ function IncomingDetail() {
             type="number"
             className="incoming-detail-input"
             value={formData.quantity}
-            readOnly
+            onChange={handleChange("quantity")}
           />
         </div>
         <div>
@@ -95,7 +118,7 @@ function IncomingDetail() {
             type="number"
             className="incoming-detail-input"
             value={formData.unitPrice}
-            readOnly
+            onChange={handleChange("unitPrice")}
           />
         </div>
         <div className="incoming-detail-price-row">
@@ -118,9 +141,15 @@ function IncomingDetail() {
         >
           กลับ
         </button>
+        <button
+          className="incoming-detail-save-button"
+          onClick={handleSave}
+        >
+          บันทึก
+        </button>
       </div>
     </div>
-  );
-}
+);
 
+}
 export default IncomingDetail;

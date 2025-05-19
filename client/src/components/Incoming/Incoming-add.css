@@ -1,0 +1,134 @@
+/* File: Incoming-add.css */
+
+.incoming-add-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 700px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+  font-family: "Prompt", sans-serif;
+  display: grid;
+  row-gap: 1.2rem;
+}
+
+.incoming-add-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #003366;
+}
+
+.incoming-add-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.incoming-add-row label {
+  font-weight: 500;
+  color: #333;
+}
+
+.incoming-add-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.incoming-add-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 0;
+}
+
+/* รายการวัสดุแต่ละแถว */
+.incoming-add-item-row {
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  display: grid;
+  row-gap: 0.8rem;
+  background: #fafafa;
+}
+
+/* ปุ่มลบแถวรายการ */
+.incoming-add-remove-row {
+  justify-self: end;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.incoming-add-remove-row:hover {
+  background: #c82333;
+}
+
+/* ปุ่มเพิ่มรายการใหม่ */
+.incoming-add-add-row {
+  justify-self: start;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+  margin-bottom: 1rem;
+}
+
+.incoming-add-add-row:hover {
+  background: #0069d9;
+}
+
+.incoming-add-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.incoming-add-cancel,
+.incoming-add-save {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.incoming-add-cancel {
+  background: #ccc;
+  color: #333;
+}
+
+.incoming-add-cancel:hover {
+  background: #bbb;
+}
+
+.incoming-add-save {
+  background: #28a745;
+  color: #fff;
+}
+
+.incoming-add-save:hover {
+  background: #218838;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .incoming-add-row {
+    grid-template-columns: 1fr !important;
+  }
+}

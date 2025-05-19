@@ -73,7 +73,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             items.map(i => (
               <tr
                 key={i.id}
-                onClick={() => navigate("/stuff/detailFollow")}
+                onClick={() => navigate("/stuff/DetailTrack")}
                 style={{ cursor: "pointer" }}
               >
                 <td>{i.id}</td>
