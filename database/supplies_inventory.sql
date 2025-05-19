@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 10:59 AM
+-- Generation Time: May 19, 2025 at 05:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -189,6 +189,53 @@ INSERT INTO `material_categories` (`id`, `name`) VALUES
 (1, 'เครื่องเขียน'),
 (2, 'อุปกรณ์สำนักงาน'),
 (3, 'อุปกรณ์ไฟฟ้า');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_extras`
+--
+
+CREATE TABLE `purchase_extras` (
+  `id` int(11) NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` date DEFAULT curdate(),
+  `reason` text DEFAULT NULL,
+  `approval_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `purchase_extras`
+--
+
+INSERT INTO `purchase_extras` (`id`, `created_by`, `created_date`, `reason`, `approval_status`) VALUES
+(1, 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'รออนุมัติ'),
+(2, 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'รออนุมัติ'),
+(3, 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'รออนุมัติ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_extra_items`
+--
+
+CREATE TABLE `purchase_extra_items` (
+  `id` int(11) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `purchase_extra_id` int(11) NOT NULL,
+  `material_id` int(11) DEFAULT NULL,
+  `new_material_name` varchar(255) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `purchase_extra_items`
+--
+
+INSERT INTO `purchase_extra_items` (`id`, `image`, `purchase_extra_id`, `material_id`, `new_material_name`, `quantity`) VALUES
+(1, 'materials/picture/tape.jpg', 1, 1, NULL, 5),
+(2, NULL, 2, NULL, 'พัดลมตั้งโต๊ะ 16 นิ้ว', 2),
+(3, NULL, 3, 2, NULL, 10);
 
 -- --------------------------------------------------------
 
@@ -491,6 +538,20 @@ ALTER TABLE `material_categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `purchase_extras`
+--
+ALTER TABLE `purchase_extras`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_purchase_extras_created_by` (`created_by`);
+
+--
+-- Indexes for table `purchase_extra_items`
+--
+ALTER TABLE `purchase_extra_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_purchase_extra_material` (`material_id`);
+
+--
 -- Indexes for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
@@ -570,6 +631,18 @@ ALTER TABLE `material_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `purchase_extras`
+--
+ALTER TABLE `purchase_extras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `purchase_extra_items`
+--
+ALTER TABLE `purchase_extra_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `purchase_requests`
 --
 ALTER TABLE `purchase_requests`
@@ -633,6 +706,18 @@ ALTER TABLE `companies`
 --
 ALTER TABLE `materials`
   ADD CONSTRAINT `materials_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `material_categories` (`id`);
+
+--
+-- Constraints for table `purchase_extras`
+--
+ALTER TABLE `purchase_extras`
+  ADD CONSTRAINT `fk_purchase_extras_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `purchase_extra_items`
+--
+ALTER TABLE `purchase_extra_items`
+  ADD CONSTRAINT `fk_purchase_extra_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `purchase_requests`
