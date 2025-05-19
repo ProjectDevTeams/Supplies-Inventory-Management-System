@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import Sidebar from '../../Sidebar/Sidebar';
 import Navbar from '../../Navbar/Navbar';
-import './DetailFollow.css';
+import './DetailTrack.css';
 
 const mockData = {
   code: "003-02/2568",
@@ -11,15 +10,19 @@ const mockData = {
   usage: "ใช้ในฝ่าย",
   stock: "วัสดุในคลัง",
   items: [
-    { name: "Pentax ใบมีดตัดเตอร์ใหญ่ L150", qty: 2, unit: "กล่อง", price: 22.00 }
+    { name: "Pentax ใบมีดตัดเตอร์ใหญ่ L150", qty: 2, unit: "กล่อง", price: 22.0 }
   ],
   status: "",
   receiveStatus: ""
 };
 
+// ✅ mock สถานะอนาคตเปลี่ยนเป็น API ได้
+const approvalStatusText = "อนุมัติแล้ว (ฝ่ายบริการโครงสร้างพื้นฐานด้านวิทยาศาสตร์ฯ 07 ก.พ. 68 11:38:45)";
+const receiveStatusText = "รับของแล้ว (นางสาวปรีดา พวงเพ็ชร์ 07 ก.พ. 68 11:45:25)";
+
 export default function DetailFo() {
-  const [status, setStatus] = useState(mockData.status);
-  const total = mockData.items.reduce((sum, i) => sum + (i.qty * i.price), 0).toFixed(2);
+
+  const total = mockData.items.reduce((sum, i) => sum + i.qty * i.price, 0).toFixed(2);
 
   return (
     <div className="stuff-navbar">
@@ -39,6 +42,7 @@ export default function DetailFo() {
               <p><b>คลัง</b></p><p>{mockData.stock}</p>
               <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{mockData.usage}</p>
             </div>
+
             <h3 className="detailFo-subtitle">รายการวัสดุ</h3>
             <table className="detailFo-table">
               <thead>
@@ -65,24 +69,16 @@ export default function DetailFo() {
               </tbody>
             </table>
 
-            <div className="detailFo-status">
-              <label>สถานะการอนุมัติ : </label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className={`${status} detailFo-select`}
-              >
-                <option value="">สถานะ:</option>
-                <option value="approved">อนุมัติ</option>
-                <option value="rejected">ไม่อนุมัติ</option>
-              </select>
-            </div>
-
-            <div className="detailFo-status">
-              <label>สถานะการรับของ : </label>
-              <span className={`status-label ${mockData.receiveStatus}`}>
-                {mockData.receiveStatus || " "}
-              </span>
+            {/* ✅ สถานะอนุมัติและรับของแบบ mock */}
+            <div className="detailFo-status-text">
+              <p>
+                <b>สถานะการอนุมัติ :</b>{" "}
+                <span className="approved">{approvalStatusText}</span>
+              </p>
+              <p>
+                <b>สถานะการรับของ :</b>{" "}
+                <span className="received">{receiveStatusText}</span>
+              </p>
             </div>
 
             <div className="detailFo-button-container">

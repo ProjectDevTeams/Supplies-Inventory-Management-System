@@ -7,24 +7,26 @@ import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
 import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
 import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
 import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup";
+import UserStuffBasketPopup from "../../user_components/UserPopup/StuffBasket_Popup";
 
 function UserStuffbar() {
   const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
   const [searchTerm, setSearchTerm] = useState("");
   const [showMorePopup, setShowMorePopup] = useState(false);
+  const [showBasketPopup, setShowBasketPopup] = useState(false);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "รายการขอจัดซื้อเพิ่มเติม") {
       setShowMorePopup(true);
     }
-  };
+  }; 
 
   const renderTable = () => {
     switch (activeTab) {
       case "เบิกวัสดุ":
         return <UserStuffTable searchTerm={searchTerm} />;
-      case "ติดตามสถานะ":
+      case "สถานะการเบิกวัสดุ ":
         return <UserFollowTable searchTerm={searchTerm} />;
       case "ประวัติการทำรายการ":
         return <UserHistoryTable searchTerm={searchTerm} />;
@@ -37,7 +39,12 @@ function UserStuffbar() {
     <>
       <div className="userstuff-bar">
         <div className="userstuff-menu">
-          {["เบิกวัสดุ", "ติดตามสถานะ", "ประวัติการทำรายการ", "รายการขอจัดซื้อเพิ่มเติม"].map((tab) => (
+          {[
+            "เบิกวัสดุ",
+            "สถานะการเบิกวัสดุ ",
+            "ประวัติการทำรายการ",
+            "รายการขอจัดซื้อเพิ่มเติม",
+          ].map((tab) => (
             <button
               key={tab}
               className={`userstuff-tab ${activeTab === tab ? "active" : ""}`}
@@ -50,7 +57,10 @@ function UserStuffbar() {
 
         <div className="userstuff-right">
           <div className="userstuff-search-box">
-            <FontAwesomeIcon icon={faSearch} className="userstuff-search-icon" />
+            <FontAwesomeIcon
+              icon={faSearch}
+              className="userstuff-search-icon"
+            />
             <input
               type="text"
               placeholder="ค้นหา"
@@ -61,18 +71,25 @@ function UserStuffbar() {
           </div>
 
           {activeTab === "เบิกวัสดุ" && (
-            <div className="userstuff-bag-icon">
+            <div
+              className="userstuff-bag-icon"
+              onClick={() => setShowBasketPopup(true)}
+            >
               <img src="/image/bagicon.png" alt="Bag" />
             </div>
           )}
         </div>
 
-        <div className="userstuff-table-content">
-          {renderTable()}
-        </div>
+        <div className="userstuff-table-content">{renderTable()}</div>
       </div>
 
-      {showMorePopup && <UserMorePopup onClose={() => setShowMorePopup(false)} />}
+      {showMorePopup && (
+        <UserMorePopup onClose={() => setShowMorePopup(false)} />
+      )}
+
+      {showBasketPopup && (
+        <UserStuffBasketPopup onClose={() => setShowBasketPopup(false)} />
+      )}
     </>
   );
 }

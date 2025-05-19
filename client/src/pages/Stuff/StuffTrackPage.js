@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Stuffbar from "../../components/Stuff/Stuffbar";
-import StuffTable from "../../components/Stuff/StuffTable";
+import StuffTableTrack from "../../components/Stuff/StuffTableTrack";
 import './StuffPage.css';
 
-export default function StuffPage() {
+export default function StuffTrackPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
@@ -19,7 +19,7 @@ export default function StuffPage() {
             setSearchTerm={setSearchTerm}
           />
           <section className="stuff-table-container">
-            <StuffTable searchTerm={searchTerm} />
+            <StuffTableTrack searchTerm={searchTerm} />
           </section>
         </main>
       </div>

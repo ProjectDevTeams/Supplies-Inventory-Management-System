@@ -1,6 +1,6 @@
 import React from 'react';
-import Detail from '../../components/Stuff/Detail/Detail';
+import StuffDetail from '../../components/Stuff/Detail/Detail';
 
-export default function DetailPage() {
-  return <Detail />;
+export default function StuffDetailPage() {
+  return <StuffDetail />;
 }
