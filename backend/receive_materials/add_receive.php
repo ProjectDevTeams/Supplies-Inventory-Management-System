@@ -1,4 +1,6 @@
 <?php
+// File: backend/receive_materials/add_receive.php
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -9,21 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// 2. บอกว่าเราส่ง JSON กลับ
 header("Content-Type: application/json; charset=UTF-8");
-
-// 3. เชื่อมต่อฐานข้อมูล
 require_once __DIR__ . '/../db.php';
 
 try {
-    // รองรับเพียง POST สำหรับสร้างบิลใหม่
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         echo json_encode(['status'=>'error','message'=>'Method Not Allowed']);
         exit;
     }
 
-    // อ่าน JSON body
     $data = json_decode(file_get_contents('php://input'), true);
     if (
         !isset(
@@ -43,17 +40,17 @@ try {
 
     $conn->beginTransaction();
 
-    // หา id ใหม่ สำหรับ receive_materials
-    $row = $conn->query("SELECT COALESCE(MAX(id),0) AS maxid FROM receive_materials")
-                ->fetch(PDO::FETCH_ASSOC);
+    // หา ID ใหม่
+    $row       = $conn->query("SELECT COALESCE(MAX(id),0) AS maxid FROM receive_materials")
+                     ->fetch(PDO::FETCH_ASSOC);
     $newBillId = $row['maxid'] + 1;
 
-    // คำนวณยอดรวมทั้งบิล
+    // คำนวณยอดรวม
     $totalBill = 0;
     foreach ($data['items'] as $itm) {
         if (
             !isset(
-                $itm['material_name'],
+                $itm['material_id'],
                 $itm['quantity'],
                 $itm['price_per_unit'],
                 $itm['total_price']
@@ -64,7 +61,7 @@ try {
         $totalBill += (float)$itm['total_price'];
     }
 
-    // INSERT บิลหลัก
+    // INSERT header
     $stmtBill = $conn->prepare("
         INSERT INTO receive_materials
           (id, created_by, stock_type, company_id, tax_invoice_number, purchase_order_number, created_at, total_price)
@@ -82,31 +79,31 @@ try {
         ':total_price'           => $totalBill
     ]);
 
-    // INSERT รายการย่อยใน receive_material_items
+    // INSERT รายการย่อย (ใช้ material_id แทน material_name)
     $stmtItem = $conn->prepare("
         INSERT INTO receive_material_items
-          (id, receive_material_id, material_name, quantity, price_per_unit, total_price)
+          (id, receive_material_id, material_id, quantity, price_per_unit, total_price)
         VALUES
-          (:id, :bill_id, :material_name, :quantity, :price_per_unit, :total_price)
+          (:id, :bill_id, :mat_id, :quantity, :price_per_unit, :total_price)
     ");
-    $row2 = $conn->query("SELECT COALESCE(MAX(id),0) AS maxid FROM receive_material_items")
-                ->fetch(PDO::FETCH_ASSOC);
+    $row2       = $conn->query("SELECT COALESCE(MAX(id),0) AS maxid FROM receive_material_items")
+                      ->fetch(PDO::FETCH_ASSOC);
     $nextItemId = $row2['maxid'] + 1;
+
     foreach ($data['items'] as $itm) {
         $stmtItem->execute([
-            ':id'            => $nextItemId,
-            ':bill_id'       => $newBillId,
-            ':material_name' => $itm['material_name'],
-            ':quantity'      => $itm['quantity'],
-            ':price_per_unit'=> $itm['price_per_unit'],
-            ':total_price'   => $itm['total_price']
+            ':id'              => $nextItemId,
+            ':bill_id'         => $newBillId,
+            ':mat_id'          => $itm['material_id'],        // ต้องมี material_id
+            ':quantity'        => $itm['quantity'],
+            ':price_per_unit'  => $itm['price_per_unit'],
+            ':total_price'     => $itm['total_price']
         ]);
         $nextItemId++;
     }
 
     $conn->commit();
 
-    // ตอบกลับสำเร็จ
     echo json_encode([
         'status'  => 'success',
         'bill_id' => $newBillId,
@@ -115,10 +112,7 @@ try {
     exit;
 }
 catch (Exception $e) {
-    // ย้อนกลับถ้าบางอย่างผิดพลาด
-    if ($conn->inTransaction()) {
-        $conn->rollBack();
-    }
+    if ($conn->inTransaction()) $conn->rollBack();
     http_response_code(400);
     echo json_encode(['status'=>'error','message'=>$e->getMessage()]);
 }

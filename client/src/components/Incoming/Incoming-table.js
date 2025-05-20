@@ -97,7 +97,7 @@ export default function IncomingTable({ searchTerm = "" }) {
             <th>ผู้สร้าง</th>
             <th>วันที่สร้าง</th>
             <th>ยอดซื้อรวม</th>
-            <th>สถานะ</th>  {/* เพิ่มคอลัมน์ สถานะ */}
+            <th>สถานะ</th>
           </tr>
         </thead>
         <tbody>
@@ -120,7 +120,7 @@ export default function IncomingTable({ searchTerm = "" }) {
                 <td>{item.created_by}</td>
                 <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
-                <td>{item.status}</td> {/* แสดงสถานะ */}
+                <td>{item.status}</td>
               </tr>
             ))
           )}

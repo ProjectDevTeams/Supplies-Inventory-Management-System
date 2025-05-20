@@ -1,4 +1,3 @@
-/* เอาสไตล์กล่องมาไว้ที่ container */
 .incoming-detail-container {
   background: #fff;
   border-radius: 10px;
@@ -50,28 +49,16 @@
   margin: 0;
 }
 
-.incoming-detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 2rem;
-  row-gap: 1rem;
+.incoming-detail-items-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.incoming-detail-grid > div {
-  display: grid;
-  grid-template-rows: auto auto;
-  row-gap: 0.3rem;
-}
-
-.incoming-detail-grid label {
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.incoming-detail-price-row {
-  display: flex;
-  align-items: center;
-  column-gap: 0.5rem;
+.incoming-detail-items-table th,
+.incoming-detail-items-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
 }
 
 .incoming-detail-summary {
@@ -120,10 +107,45 @@
   background-color: #218838;
 }
 
-/* Responsive */
+/* Autosuggest styles */
+.react-autosuggest__container {
+  position: relative;
+}
+.react-autosuggest__input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+}
+.react-autosuggest__input:focus {
+  outline: none;
+  border-color: #0056cc;
+  box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
+}
+.react-autosuggest__suggestions-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.react-autosuggest__suggestion {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.react-autosuggest__suggestion--highlighted {
+  background-color: #e6f7ff;
+}
+
 @media (max-width: 600px) {
-  .incoming-detail-row,
-  .incoming-detail-grid {
+  .incoming-detail-row {
     grid-template-columns: 1fr !important;
   }
   .incoming-detail-summary {

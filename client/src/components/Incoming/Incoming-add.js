@@ -1,4 +1,3 @@
-// File: src/components/Incoming/Incoming-add.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Autosuggest from "react-autosuggest";
@@ -70,19 +69,32 @@ export default function IncomingAdd() {
         : f
     );
 
+  const getSuggestions = (list, value) => {
+    const input = value.trim().toLowerCase();
+    return list.filter(x => x.name.toLowerCase().includes(input));
+  };
+  const renderSuggestion = sug => <span>{sug.name}</span>;
+
   const submit = async () => {
     setMsg({ error: "", success: "" });
     setLoading(true);
     try {
+      // *** ตรงนี้เปลี่ยนเป็นเอา material_id มาใช้ ***
       const items = form.items.map(
-        ({ material_name, quantity, price_per_unit }) => ({
-          material_name,
+        ({ material_id, quantity, price_per_unit }) => ({
+          material_id: +material_id,
           quantity: +quantity,
           price_per_unit: +price_per_unit,
           total_price: +quantity * +price_per_unit
         })
       );
-      const payload = { ...form, company_id: +form.company_id || null, items };
+
+      const payload = {
+        ...form,
+        company_id: +form.company_id || null,
+        items
+      };
+
       const { data } = await axios.post(
         `${API_URL}/receive_materials/add_receive.php`,
         payload,
@@ -100,18 +112,11 @@ export default function IncomingAdd() {
     }
   };
 
-  const getSuggestions = (list, value) => {
-    const input = value.trim().toLowerCase();
-    return list.filter(x => x.name.toLowerCase().includes(input));
-  };
-  const renderSuggestion = sug => <span>{sug.name}</span>;
-
   return (
     <div className="incoming-add-container">
-      <h2 className="incoming-add-title">เพิ่มรับเข้าวัสดุ</h2>
+      <div className="incoming-add-title">เพิ่มรับเข้าวัสดุ</div>
       {msg.error && <div className="error-message">{msg.error}</div>}
 
-      {/* คลังวัสดุ */}
       <div className="incoming-add-row">
         <label>คลังวัสดุ</label>
         <select
@@ -126,7 +131,6 @@ export default function IncomingAdd() {
         </select>
       </div>
 
-      {/* ชื่อบริษัท */}
       <div className="incoming-add-row">
         <label>ชื่อบริษัท</label>
         <Autosuggest
@@ -153,7 +157,6 @@ export default function IncomingAdd() {
         />
       </div>
 
-      {/* เลขที่กำกับภาษี & PO */}
       {["tax_invoice_number", "purchase_order_number"].map((f, i) => (
         <div className="incoming-add-row" key={f}>
           <label>
@@ -170,7 +173,6 @@ export default function IncomingAdd() {
         </div>
       ))}
 
-      {/* วันที่รับเข้า */}
       <div className="incoming-add-row">
         <label>วันที่รับเข้า</label>
         <input
@@ -184,10 +186,8 @@ export default function IncomingAdd() {
 
       <hr className="incoming-add-divider" />
 
-      {/* รายการวัสดุ */}
       {form.items.map((it, idx) => (
         <div className="incoming-add-item-row" key={idx}>
-          {/* ชื่อวัสดุ */}
           <div className="incoming-add-row">
             <label>ชื่อวัสดุ</label>
             <Autosuggest
@@ -214,7 +214,6 @@ export default function IncomingAdd() {
             />
           </div>
 
-          {/* จำนวน และ ราคาต่อหน่วย */}
           {["quantity", "price_per_unit"].map((field, j) => (
             <div className="incoming-add-row" key={field}>
               <label>{j === 0 ? "จำนวน" : "ราคาต่อหน่วย"}</label>
@@ -233,7 +232,6 @@ export default function IncomingAdd() {
             </div>
           ))}
 
-          {/* ปุ่มลบรายการ */}
           <button
             className="incoming-add-remove-row"
             onClick={() => removeItem(idx)}
