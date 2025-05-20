@@ -1,12 +1,4 @@
 /* File: Detail.css */
-
-.detail-stuff-header {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #003366;
-  margin-bottom: 1rem;
-}
-
 .detail-stuff-box {
   background: white;
   padding: 2rem 3rem;
@@ -136,28 +128,6 @@
 .detail-stuff-status select.rejected {
   color: red;
 }
-
-.stuff-navbar {
-  width: 100%;
-  height: 100%;
-}
-
-.stuff-sidebar {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-}
-
-.stuff-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #f9f9f9;
-  padding: 1em;
-  box-sizing: border-box;
-  margin-left: 200px; 
-}
-
 
 .detail-stuff-button-container {
   display: flex;

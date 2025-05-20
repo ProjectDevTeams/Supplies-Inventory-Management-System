@@ -50,77 +50,74 @@ export default function Detail() {
   };
 
   return (
-    <main className="stuff-content">
-      <h1 className="detail-stuff-header">ใบเบิกวัสดุ</h1>
-      <div className="detail-stuff-box">
-        <h2 className="detail-stuff-title">ใบเบิกวัสดุ</h2>
-        <div className="detail-stuff-grid">
-          <p><b>เลขที่/ปีงบประมาณ</b></p><p>{data.running_code}</p>
-          <p><b>วันที่</b></p><p>{data.created_at}</p>
-          <p><b>ชื่อ</b></p><p>{data.name}</p>
-          <p><b>สังกัด</b></p><p>{data.department}</p>
-          <p><b>เบิกจำนวน</b></p><p>{data.items.length} รายการ</p>
-          <p><b>คลัง</b></p><p>{data.stock_type}</p>
-          <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
-        </div>
-
-        <h3 className="detail-stuff-subtitle">รายการวัสดุ</h3>
-        <table className="detail-stuff-table">
-          <thead>
-            <tr>
-              <th>ลำดับ</th>
-              <th>รายการ</th>
-              <th>จำนวน/หน่วยนับ</th>
-              <th>มูลค่า</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.items.map((row, idx) => (
-              <tr key={idx}>
-                <td>{idx + 1}</td>
-                <td>{row.name}</td>
-                <td>{row.quantity} {row.unit}</td>
-                <td>{parseFloat(row.total_price).toFixed(2)}</td>
-              </tr>
-            ))}
-            <tr>
-              <td colSpan="3"><b>รวม</b></td>
-              <td>{total}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className="detail-stuff-status">
-          <label>สถานะการอนุมัติ : </label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className={`detail-stuff-select ${status}`}
-          >
-            <option value="">สถานะ:</option>
-            <option value="approved">อนุมัติ</option>
-            <option value="rejected">ไม่อนุมัติ</option>
-          </select>
-        </div>
-
-        <div className="detail-stuff-status">
-          <label>สถานะการรับของ : </label>
-          <span className={`status-stuff-label ${data.User_status}`}>
-            {data.User_status || " "}
-          </span>
-        </div>
-
-        <div className="detail-stuff-button-container">
-          <button className="btn-stuff-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
-          <button
-            className="detail-stuff-btn-save"
-            onClick={handleSave}
-            disabled={status === originalStatus} // ✅ ปิดปุ่มถ้าไม่มีการเปลี่ยนแปลง
-          >
-            บันทึก
-          </button>
-        </div>
+    <div className="detail-stuff-box">
+      <h2 className="detail-stuff-title">ใบเบิกวัสดุ</h2>
+      <div className="detail-stuff-grid">
+        <p><b>เลขที่/ปีงบประมาณ</b></p><p>{data.running_code}</p>
+        <p><b>วันที่</b></p><p>{data.created_at}</p>
+        <p><b>ชื่อ</b></p><p>{data.name}</p>
+        <p><b>สังกัด</b></p><p>{data.department}</p>
+        <p><b>เบิกจำนวน</b></p><p>{data.items.length} รายการ</p>
+        <p><b>คลัง</b></p><p>{data.stock_type}</p>
+        <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
       </div>
-    </main>
+
+      <h3 className="detail-stuff-subtitle">รายการวัสดุ</h3>
+      <table className="detail-stuff-table">
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>รายการ</th>
+            <th>จำนวน/หน่วยนับ</th>
+            <th>มูลค่า</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.items.map((row, idx) => (
+            <tr key={idx}>
+              <td>{idx + 1}</td>
+              <td>{row.name}</td>
+              <td>{row.quantity} {row.unit}</td>
+              <td>{parseFloat(row.total_price).toFixed(2)}</td>
+            </tr>
+          ))}
+          <tr>
+            <td colSpan="3"><b>รวม</b></td>
+            <td>{total}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div className="detail-stuff-status">
+        <label>สถานะการอนุมัติ : </label>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className={`detail-stuff-select ${status}`}
+        >
+          <option value="">สถานะ:</option>
+          <option value="approved">อนุมัติ</option>
+          <option value="rejected">ไม่อนุมัติ</option>
+        </select>
+      </div>
+
+      <div className="detail-stuff-status">
+        <label>สถานะการรับของ : </label>
+        <span className={`status-stuff-label ${data.User_status}`}>
+          {data.User_status || " "}
+        </span>
+      </div>
+
+      <div className="detail-stuff-button-container">
+        <button className="btn-stuff-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
+        <button
+          className="detail-stuff-btn-save"
+          onClick={handleSave}
+          disabled={status === originalStatus} // ✅ ปิดปุ่มถ้าไม่มีการเปลี่ยนแปลง
+        >
+          บันทึก
+        </button>
+      </div>
+    </div>
   );
 }
