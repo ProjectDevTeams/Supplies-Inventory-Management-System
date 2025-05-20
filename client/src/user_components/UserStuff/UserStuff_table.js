@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./UserStuff_table.css";
-import StuffItem_Popup from "../UserPopup/StuffItem_Popup";
+import StuffItemPopup from "../UserPopup/StuffItem_Popup";
 
 const mockData = [
   {code:"OF001",image:"https://via.placeholder.com/60",name:"แฟ้ม A4 สีฟ้า",category:"แฟ้มเอกสาร",remain:12},
@@ -27,10 +27,14 @@ const mockData = [
 
 const itemsPerPage = 5;
 
-function UserStuff_Table({ searchTerm = "" }) {
+function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
+
+  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
+  
 
   const filteredData = mockData.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -61,14 +65,22 @@ function UserStuff_Table({ searchTerm = "" }) {
           {currentItems.map((item, index) => (
             <tr key={index}>
               <td>{item.code}</td>
-              <td><img src={item.image} alt={item.name} className="stuff-image" /></td>
               <td>
-                <b>ชื่อ :</b> <span className="item-name">{item.name}</span><br />
-                <span className="userstuff-category">หมวดหมู่ : {item.category}</span>
+                <img src={item.image} alt={item.name} className="stuff-image" />
+              </td>
+              <td>
+                <b>ชื่อ :</b> <span className="item-name">{item.name}</span>
+                <br />
+                <span className="userstuff-category">
+                  หมวดหมู่ : {item.category}
+                </span>
               </td>
               <td>{item.remain}</td>
               <td>
-                <button className="userstuff-select-btn" onClick={() => setSelectedItem(item)}>
+                <button
+                  className="userstuff-select-btn"
+                  onClick={() => setSelectedItem(item)}
+                >
                   เลือก
                 </button>
               </td>
@@ -79,10 +91,17 @@ function UserStuff_Table({ searchTerm = "" }) {
 
       <div className="userstuff-pagination-wrapper">
         <div className="userstuff-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง{" "}
+          {Math.min(indexOfLastItem, filteredData.length)} จาก{" "}
+          {filteredData.length} แถว
         </div>
         <div className="userstuff-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>ก่อนหน้า</button>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            ก่อนหน้า
+          </button>
           <input
             type="number"
             className="userstuff-page-input"
@@ -100,12 +119,37 @@ function UserStuff_Table({ searchTerm = "" }) {
               }
             }}
           />
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>ถัดไป</button>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
 
       {selectedItem && (
-        <StuffItem_Popup item={selectedItem} onClose={() => setSelectedItem(null)} />
+
+        <StuffItemPopup
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onConfirm={(item, quantity) => {
+            const existing = basketItems.find((i) => i.code === item.code);
+            if (existing) {
+              setBasketItems((prev) =>
+                prev.map((i) =>
+                  i.code === item.code
+                    ? { ...i, quantity: i.quantity + quantity }
+                    : i
+                )
+              );
+            } else {
+              setBasketItems((prev) => [...prev, { ...item, quantity }]);
+            }
+            setSelectedItem(null); // ปิด popup หลังเลือกเสร็จ
+          }}
+        />
+
       )}
     </div>
   );

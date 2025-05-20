@@ -15,6 +15,8 @@ function UserStuffbar() {
   const [showMorePopup, setShowMorePopup] = useState(false);
   const [showBasketPopup, setShowBasketPopup] = useState(false);
 
+  const [basketItems, setBasketItems] = useState([]);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "รายการขอจัดซื้อเพิ่มเติม") {
@@ -25,7 +27,7 @@ function UserStuffbar() {
   const renderTable = () => {
     switch (activeTab) {
       case "เบิกวัสดุ":
-        return <UserStuffTable searchTerm={searchTerm} />;
+        return <UserStuffTable searchTerm={searchTerm} basketItems={basketItems} setBasketItems={setBasketItems} />;
       case "สถานะการเบิกวัสดุ ":
         return <UserFollowTable searchTerm={searchTerm} />;
       case "ประวัติการทำรายการ":
@@ -34,6 +36,31 @@ function UserStuffbar() {
         return null;
     }
   };
+
+  const handleConfirmRequest = async () => {
+    try {
+      const payload = {
+        created_by: 1, // สมมติ user id
+        materials: basketItems.map((item) => ({
+          code: item.code,
+          name: item.name,
+          quantity: item.quantity,
+          category: item.category,
+        })),
+      };
+
+      // ตัวอย่างการเรียก POST (mock)
+      // await axios.post(`${API_URL}/request/create_request.php`, payload);
+
+      console.log("📦 ส่งข้อมูลสำเร็จ", payload);
+      setBasketItems([]); // ล้างตะกร้า
+      setShowBasketPopup(false); // ปิด popup
+    } catch (err) {
+      console.error("❌ ส่งข้อมูลล้มเหลว", err);
+    }
+  };
+
+  const totalQuantity = basketItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
@@ -71,11 +98,16 @@ function UserStuffbar() {
           </div>
 
           {activeTab === "เบิกวัสดุ" && (
-            <div
-              className="userstuff-bag-icon"
-              onClick={() => setShowBasketPopup(true)}
-            >
-              <img src="/image/bagicon.png" alt="Bag" />
+            <div className="userstuff-bag-icon-wrapper">
+              <div
+                className="userstuff-bag-icon"
+                onClick={() => setShowBasketPopup(true)}
+              >
+                <img src="/image/bagicon.png" alt="Bag" />
+                {totalQuantity > 0 && (
+                  <span className="basket-badge">{totalQuantity}</span>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -88,7 +120,15 @@ function UserStuffbar() {
       )}
 
       {showBasketPopup && (
-        <UserStuffBasketPopup onClose={() => setShowBasketPopup(false)} />
+        <UserStuffBasketPopup
+          basketItems={basketItems}
+          onClose={() => setShowBasketPopup(false)}
+          onConfirm={handleConfirmRequest} // ✅ ใช้ฟังก์ชันนี้จริง
+          onCancel={() => {
+            setBasketItems([]); // ✅ ล้างรายการ
+            setShowBasketPopup(false); // ✅ ปิด popup
+          }}
+        />
       )}
     </>
   );

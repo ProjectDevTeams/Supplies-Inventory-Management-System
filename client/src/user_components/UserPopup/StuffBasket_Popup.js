@@ -1,31 +1,52 @@
 import React from 'react';
 import './StuffBasket_Popup.css';
 
-const StuffBasket_Popup = ({ onClose }) => {
+const StuffBasket_Popup = ({ basketItems = [], onClose, onConfirm, onCancel }) => {
+  const totalQty = basketItems.reduce((sum, i) => sum + i.quantity, 0);
+
   return (
-    <div className="stuff-popup-overlay">
-      <div className="stuff-popup">
-        <div className="stuff-popup-header">
-          <span className="stuff-popup-title">ยืนยันรายการ</span>
-          <button className="stuff-popup-close" onClick={onClose}>×</button>
+    <div className="stuff-basket-popup-overlay">
+      <div className="stuff-basket-popup">
+        <div className="stuff-basket-popup-header">
+          <span className="stuff-basket-popup-title">ยืนยันรายการ</span>
+          <button className="stuff-basket-popup-close" onClick={onClose}>
+            ×
+          </button>
         </div>
-        <div className="stuff-popup-body">
-          <div className="stuff-info-grid">
-            <div><label>ชื่อ</label><input type="text" value="นางสาวเพลิงดาว วิยา" readOnly /></div>
-            <div><label>สังกัด</label><input type="text" value="STI" readOnly /></div>
-            <div><label>เบิกจำนวน</label><input type="text" value="1 รายการ" readOnly /></div>
-            <div><label>คลัง</label><input type="text" value="วัสดุในคลัง" readOnly /></div>
-            <div><label>เพื่อใช้ในงาน/กิจกรรม</label><input type="text" readOnly /></div>
-            <div><label>หัวหน้างาน</label>
+
+        <div className="stuff-basket-popup-body">
+          <div className="stuff-basket-popup-info-grid">
+            <div>
+              <label>ชื่อ</label>
+              <input type="text" value="นางสาวเพลิงดาว วิยา" readOnly />
+            </div>
+            <div>
+              <label>สังกัด</label>
+              <input type="text" value="STI" readOnly />
+            </div>
+            <div>
+              <label>เบิกจำนวน</label>
+              <input type="text" value={`${basketItems.length} รายการ`} readOnly />
+            </div>
+            <div>
+              <label>คลัง</label>
+              <input type="text" value="วัสดุในคลัง" readOnly />
+            </div>
+            <div>
+              <label>เพื่อใช้ในงาน/กิจกรรม</label>
+              <input type="text" readOnly />
+            </div>
+            <div>
+              <label>หัวหน้างาน</label>
               <select disabled>
                 <option>หัวหน้างาน</option>
               </select>
             </div>
           </div>
 
-          <div className="stuff-table-section">
+          <div className="stuff-basket-popup-table-section">
             <h3>รายการวัสดุ</h3>
-            <table className="stuff-material-table">
+            <table className="stuff-basket-popup-material-table">
               <thead>
                 <tr>
                   <th>ลำดับ</th>
@@ -35,23 +56,32 @@ const StuffBasket_Popup = ({ onClose }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Pentax ใบมีดคัตเตอร์ใหญ่ L150</td>
-                  <td>2 กล่อง</td>
-                  <td>22.00</td>
-                </tr>
+                {basketItems.map((item, index) => (
+                  <tr key={item.code}>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td>{item.quantity} กล่อง</td>
+                    <td>-</td>
+                  </tr>
+                ))}
                 <tr>
                   <td colSpan="2">รวม</td>
-                  <td>1 รายการ</td>
-                  <td>22.00</td>
+                  <td>{totalQty} กล่อง</td>
+                  <td>-</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div className="stuff-popup-footer">
-          <button className="confirm-button">ยืนยัน</button>
+
+        <div className="stuff-basket-popup-footer">
+          <button className="stuff-basket-popup-cancel-btn" onClick={onCancel}>
+            ยกเลิก
+          </button>
+
+          <button className="stuff-basket-popup-confirm-btn" onClick={onConfirm}>
+            ยืนยัน
+          </button>
         </div>
       </div>
     </div>

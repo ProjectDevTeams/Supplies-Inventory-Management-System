@@ -1,4 +1,4 @@
-.stuff-popup-overlay {
+.stuff-basket-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   font-family: "Prompt", sans-serif;
 }
 
-.stuff-popup {
+.stuff-basket-popup {
   background: white;
   width: 900px;
   border: 1px solid #0066cc;
@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.stuff-popup-header {
+.stuff-basket-popup-header {
   background-color: #0052cc;
   color: white;
   padding: 10px 16px;
@@ -30,7 +30,7 @@
   align-items: center;
 }
 
-.stuff-popup-close {
+.stuff-basket-popup-close {
   background: transparent;
   border: none;
   font-size: 24px;
@@ -38,13 +38,13 @@
   cursor: pointer;
 }
 
-.stuff-popup-body {
+.stuff-basket-popup-body {
   padding: 20px 32px;
   display: block;
   text-align: left;
 }
 
-.stuff-info-grid {
+.stuff-basket-popup-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
@@ -52,15 +52,15 @@
   margin-bottom: 24px;
 }
 
-.stuff-info-grid label {
+.stuff-basket-popup-info-grid label {
   display: block;
   font-weight: bold;
   margin-bottom: 4px;
   color: #000;
 }
 
-.stuff-info-grid input,
-.stuff-info-grid select {
+.stuff-basket-popup-info-grid input,
+.stuff-basket-popup-info-grid select {
   width: 100%;
   padding: 6px 10px;
   border: 1px solid #999;
@@ -69,39 +69,34 @@
   background-color: #fff;
 }
 
-.stuff-table-section h3 {
+.stuff-basket-popup-table-section h3 {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 10px;
-
   margin-top: 20px;
-  text-align: left
-
-  /* text-align: center; */
+  text-align: left;
 }
 
-.stuff-material-table {
+.stuff-basket-popup-material-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
   background: white;
   margin-top: 10px;
-
-
 }
 
-.stuff-material-table th,
-.stuff-material-table td {
+.stuff-basket-popup-material-table th,
+.stuff-basket-popup-material-table td {
   border: 1px solid #999;
   padding: 8px;
   text-align: center;
 }
 
-.stuff-material-table th {
+.stuff-basket-popup-material-table th {
   background-color: #eaeaea;
 }
 
-.stuff-popup-footer {
+.stuff-basket-popup-footer {
   padding: 16px 32px;
   display: flex;
   justify-content: flex-end;
@@ -109,7 +104,7 @@
   margin-top: 15px;
 }
 
-.confirm-button {
+.stuff-basket-popup-confirm-btn {
   background-color: #0f9d58;
   color: white;
   border: none;
@@ -118,4 +113,20 @@
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.stuff-basket-popup-cancel-btn {
+  background-color: #ee0000;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-right: 1em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.stuff-basket-popup-cancel-btn:hover {
+  background-color: #999;
 }
