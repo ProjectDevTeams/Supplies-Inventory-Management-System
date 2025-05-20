@@ -21,45 +21,31 @@ export default function UserConfirmHistory() {
   const total = mockData.items.reduce((sum, i) => sum + (i.qty * i.price), 0).toFixed(2);
 
   return (
-    <div className="stuff-page">
+    <div className="user-confirm-page">
       <Navbar />
-      <main className="stuff-content">
+      <main className="user-confirm-content">
         
-        <div className="UserConfirm-His-box">
-          <h1 className="UserConfirm-His-title">ใบเบิกวัสดุ</h1>
-          <div className="UserConfirm-His-grid">
-            <p>
-              <b>เลขที่/ปีงบประมาณ</b>
-            </p>
+        <div className="user-confirm-box">
+          <h1 className="user-confirm-title">ใบเบิกวัสดุ</h1>
+          <div className="user-confirm-grid">
+            <p><b>เลขที่/ปีงบประมาณ</b></p>
             <p>{mockData.code}</p>
-            <p>
-              <b>วันที่</b>
-            </p>
+            <p><b>วันที่</b></p>
             <p>{mockData.date}</p>
-            <p>
-              <b>ชื่อ</b>
-            </p>
+            <p><b>ชื่อ</b></p>
             <p>{mockData.name}</p>
-            <p>
-              <b>สังกัด</b>
-            </p>
+            <p><b>สังกัด</b></p>
             <p>{mockData.department}</p>
-            <p>
-              <b>เบิกจำนวน</b>
-            </p>
+            <p><b>เบิกจำนวน</b></p>
             <p>{mockData.items.length} รายการ</p>
-            <p>
-              <b>คลัง</b>
-            </p>
+            <p><b>คลัง</b></p>
             <p>{mockData.stock}</p>
-            <p>
-              <b>เพื่อใช้ในงาน/กิจกรรม</b>
-            </p>
+            <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p>
             <p>{mockData.usage}</p>
           </div>
 
-          <h3 className="UserConfirm-His-subtitle">รายการวัสดุ</h3>
-          <table className="UserConfirm-His-table">
+          <h3 className="user-confirm-subtitle">รายการวัสดุ</h3>
+          <table className="user-confirm-table">
             <thead>
               <tr>
                 <th>ลำดับ</th>
@@ -73,49 +59,40 @@ export default function UserConfirmHistory() {
                 <tr key={idx}>
                   <td>{idx + 1}</td>
                   <td>{row.name}</td>
-                  <td>
-                    {row.qty} {row.unit}
-                  </td>
+                  <td>{row.qty} {row.unit}</td>
                   <td>{(row.qty * row.price).toFixed(2)}</td>
                 </tr>
               ))}
               <tr>
-                <td colSpan="3">
-                  <b>รวม</b>
-                </td>
+                <td colSpan="3"><b>รวม</b></td>
                 <td>{total}</td>
               </tr>
             </tbody>
           </table>
 
-          <div className="UserConfirm-His-status">
+          <div className="user-confirm-status">
             <label>สถานะการอนุมัติ : </label>
-            <span className="approval-text">
-              อนุมัติแล้ว (ฝ่ายบริการโครงสร้างพื้นฐานด้านวิทยาศาสตร์ฯ 12 ธ.ค. 67
-              11:38:45)
+            <span className="user-confirm-approval-text">
+              อนุมัติแล้ว (ฝ่ายบริการโครงสร้างพื้นฐานด้านวิทยาศาสตร์ฯ 12 ธ.ค. 67 11:38:45)
             </span>
           </div>
 
-          <div className="UserConfirm-His-status">
+          <div className="user-confirm-status">
             <label>สถานะการรับของ : </label>
-            <div className="custom-select-wrapper">
+            <div className="user-confirm-select-wrapper">
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className={`custom-status-select ${
-                  !status ? "placeholder" : ""
-                }`}
+                className={`user-confirm-status-select ${!status ? "placeholder" : ""}`}
               >
-                <option value="" disabled hidden>
-                  สถานะ
-                </option>
+                <option value="" disabled hidden>สถานะ</option>
                 <option value="inConfirm">รับของแล้ว</option>
               </select>
             </div>
           </div>
 
-          <div className="UserConfirm-His-button-container">
-            <button className="btn-back" onClick={() => window.history.back()}>
+          <div className="user-confirm-button-container">
+            <button className="user-confirm-btn-back" onClick={() => window.history.back()}>
               กลับ
             </button>
           </div>
