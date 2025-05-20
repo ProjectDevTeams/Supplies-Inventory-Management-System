@@ -1,4 +1,4 @@
-// File: src/components/Stuff/Detail/Detail.js 
+// File: src/components/Stuff/Detail/Detail.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -12,6 +12,7 @@ export default function Detail() {
 
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("");
+  const [originalStatus, setOriginalStatus] = useState(""); // ✅ เพิ่มเพื่อใช้เปรียบเทียบ
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -20,6 +21,7 @@ export default function Detail() {
         if (res.data.status === "success") {
           setData(res.data.data);
           setStatus(res.data.data.Admin_status);
+          setOriginalStatus(res.data.data.Admin_status); // ✅ เก็บสถานะดั้งเดิมไว้เปรียบเทียบ
         }
       } catch (error) {
         console.error("โหลดข้อมูลล้มเหลว:", error);
@@ -40,7 +42,7 @@ export default function Detail() {
         Admin_status: status
       });
       alert("บันทึกสถานะสำเร็จ");
-      navigate("/stuff"); 
+      navigate("/stuff");
     } catch (err) {
       console.error("อัปเดตสถานะล้มเหลว:", err);
       alert("ไม่สามารถบันทึกข้อมูลได้");
@@ -110,7 +112,13 @@ export default function Detail() {
 
         <div className="detail-stuff-button-container">
           <button className="btn-stuff-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
-          <button className="btn-stuff-save" onClick={handleSave}>บันทึก</button>
+          <button
+            className="detail-stuff-btn-save"
+            onClick={handleSave}
+            disabled={status === originalStatus} // ✅ ปิดปุ่มถ้าไม่มีการเปลี่ยนแปลง
+          >
+            บันทึก
+          </button>
         </div>
       </div>
     </main>
