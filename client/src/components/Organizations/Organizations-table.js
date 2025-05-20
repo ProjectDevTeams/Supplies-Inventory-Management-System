@@ -68,7 +68,7 @@ export default function OrganizationsTable() {
         ตารางรายละเอียดบริษัท/ห้าง/ร้าน
       </div>
 
-      <table className="organizations-bar-table">
+      <table className="organizations-table">
         <thead>
           <tr>
             <th onClick={() => setSortAsc((a) => !a)} style={{ cursor: "pointer" }}>

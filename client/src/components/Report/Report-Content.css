@@ -14,10 +14,8 @@
   flex-direction: column;
   gap: 0.8em;
   background-color: #f9f9f9;
-  align-items: stretch;
-  width: 100%;
-  padding: 1em;
-  box-sizing: border-box;
+  align-items: flex-start;
+  width: auto;
 }
 
 /* หัวข้อ */

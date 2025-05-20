@@ -43,6 +43,7 @@ export default function IncomingTable({ searchTerm = "" }) {
             created_by: item.created_by || "-",
             created_at: formatDate(item.created_at),
             amount: parseFloat(item.total_price) || 0,
+            status: item.status || "-"        // เพิ่มสถานะจาก API
           }));
           setData(formatted);
         }
@@ -57,7 +58,7 @@ export default function IncomingTable({ searchTerm = "" }) {
 
   // filter
   const filteredData = sortedData.filter((item) =>
-    [item.company, item.po, item.created_by, item.created_at, item.amount]
+    [item.company, item.po, item.created_by, item.created_at, item.amount, item.status]
       .some((field) =>
         field
           .toString()
@@ -96,12 +97,13 @@ export default function IncomingTable({ searchTerm = "" }) {
             <th>ผู้สร้าง</th>
             <th>วันที่สร้าง</th>
             <th>ยอดซื้อรวม</th>
+            <th>สถานะ</th>  {/* เพิ่มคอลัมน์ สถานะ */}
           </tr>
         </thead>
         <tbody>
           {currentItems.length === 0 ? (
             <tr>
-              <td colSpan="6" className="incoming-no-data">
+              <td colSpan="7" className="incoming-no-data">
                 ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
@@ -118,6 +120,7 @@ export default function IncomingTable({ searchTerm = "" }) {
                 <td>{item.created_by}</td>
                 <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
+                <td>{item.status}</td> {/* แสดงสถานะ */}
               </tr>
             ))
           )}

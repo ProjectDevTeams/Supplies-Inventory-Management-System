@@ -1,41 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Kanit", Arial, sans-serif;
-}
-
 .organizations-navbar {
     width: 100%;
     height: 100%;
   }
   
-  .organizations-sidebar {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-  }
-  
-  .organizations-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f8fc;
-    padding: 1em;
-    box-sizing: border-box;
-    margin-left: 200px;
-  }
-  
-  .organizations-content-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8em;
-    background-color: #f5f8fc;
-    padding: 1em;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-  }
+.organizations-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.organizations-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f8fc;
+  padding: 1em;
+  box-sizing: border-box;
+  margin-left: 200px;
+}
   
