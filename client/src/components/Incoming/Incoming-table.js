@@ -84,10 +84,10 @@ export default function IncomingTable({ searchTerm = "" }) {
 
   // แปลงสถานะเป็นคลาส
   const statusClass = (status) => {
-    if (status === "รออนุมัติ") return "stuff-status stuff-pending";
-    if (status === "อนุมัติ") return "stuff-status stuff-approved";
-    if (status === "ไม่อนุมัติ") return "stuff-status stuff-rejected";
-    return "stuff-status";
+    if (status === "รออนุมัติ") return "incoming-table-status incoming-table-pending";
+    if (status === "อนุมัติ") return "incoming-table-status incoming-table-approved";
+    if (status === "ไม่อนุมัติ") return "incoming-table-status incoming-table-rejected";
+    return "incoming-table-status";
   };
 
   return (

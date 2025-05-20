@@ -129,22 +129,21 @@
   margin: 0;
 }
 
-/* ✅ Status styling (จากโค้ดที่ให้มา) */
-.stuff-status {
+.incoming-table-status {
   font-weight: bold;
   padding: 0.4em 0.8em;
   border-radius: 4px;
 }
 
-.stuff-pending {
+.incoming-table-pending {
   color: #d48b00;
 }
 
-.stuff-approved {
+.incoming-table-approved {
   color: #0f9d58;
 }
 
-.stuff-rejected {
+.incoming-table-rejected {
   color: #dc3545;
 }
 
