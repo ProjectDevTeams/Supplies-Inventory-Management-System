@@ -87,7 +87,13 @@ export default function StuffTable({ searchTerm }) {
                 <td>{item.created_by}</td>
                 <td>{item.items?.length || 0}</td>
                 <td>{item.created_at}</td>
-                <td className={`status ${item.Admin_status}`}>{renderStatus(item.Admin_status)}</td>
+                <td className={`status ${item.Admin_status === "รออนุมัติ" ? "pending" :
+                    item.Admin_status === "อนุมัติ" ? "approved" :
+                      item.Admin_status === "ไม่อนุมัติ" ? "rejected" : ""
+                  }`}>
+                  {renderStatus(item.Admin_status)}
+                </td>
+
               </tr>
             ))
           )}

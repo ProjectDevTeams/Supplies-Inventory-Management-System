@@ -104,7 +104,9 @@ export default function StuffTableTrack({ searchTerm = '' }) {
                 <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
                   {renderStatus(i.status)}
                 </td>
-                <td>{i.user_status}</td>
+                <td className={`user-status ${i.user_status === 'รอรับของ' ? 'waiting' : i.user_status === 'รับของเรียบร้อยแล้ว' ? 'received' : ''}`}>
+                  {i.user_status === 'รับของเรียบร้อยแล้ว' ? 'รับของเรียบร้อย' : i.user_status}
+                </td>
               </tr>
             ))
           )}
