@@ -1,39 +1,49 @@
-import React, { useState } from 'react';
-import './StuffTable.css';
-import { useNavigate } from 'react-router-dom';
-
-const mockData = [
-  { id: 1, code: "006-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "7 ก.พ. 68", status: "pending" },
-  { id: 2, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "3 ก.พ. 68", status: "pending" },
-  { id: 3, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "27 ม.ค. 68", status: "pending" },
-  { id: 4, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "24 ม.ค. 68", status: "pending" },
-  { id: 5, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "20 ม.ค. 68", status: "pending" },
-  { id: 6, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 5, date: "15 ม.ค. 68", status: "pending" },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
+import { useNavigate } from "react-router-dom";
+import "./StuffTable.css";
 
 export default function StuffTable({ searchTerm }) {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState('');
+  const [inputPage, setInputPage] = useState("");
   const [asc, setAsc] = useState(true);
   const itemsPerPage = 4;
   const navigate = useNavigate();
 
-  const sortedData = [...mockData].sort((a, b) =>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+        if (res.data.status === "success") {
+          setData(res.data.data);
+        }
+      } catch (error) {
+        console.error("โหลดข้อมูลไม่สำเร็จ:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const renderStatus = (status) => {
+    if (status === "รออนุมัติ") return "รออนุมัติ";
+    if (status === "อนุมัติ") return "อนุมัติ";
+    if (status === "ไม่อนุมัติ") return "ไม่อนุมัติ";
+    return "-";
+  };
+
+  const sortedData = [...data].sort((a, b) =>
     asc ? a.id - b.id : b.id - a.id
   );
 
-  const renderStatus = (status) => {
-    if (status === 'pending') return 'รออนุมัติ';
-    if (status === 'approved') return 'อนุมัติ';
-    if (status === 'rejected') return 'ไม่อนุมัติ';
-    return '-';
-  };
-
-  const filteredData = sortedData.filter(item =>
-    item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.stock.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.date.includes(searchTerm) ||
-    renderStatus(item.status).includes(searchTerm)
+  const filteredData = sortedData.filter((item) =>
+    item.Admin_status === "รออนุมัติ" && (
+      (item.running_code?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+      (item.created_at || "").includes(searchTerm) ||
+      (item.created_by || "").includes(searchTerm) ||
+      renderStatus(item.Admin_status).includes(searchTerm)
+    )
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -46,18 +56,16 @@ export default function StuffTable({ searchTerm }) {
 
   return (
     <div className="stuff-container">
-      <div className="stuff-description">
-        ตารางการรออนุมัติ
-      </div>
+      <div className="stuff-description">ตารางการรออนุมัติ</div>
       <table className="stuff-table">
         <thead>
           <tr>
-            <th onClick={() => setAsc(prev => !prev)} style={{ cursor: 'pointer' }}>
-              ลำดับ {asc ? '▲' : '▼'}
+            <th onClick={() => setAsc((prev) => !prev)} style={{ cursor: "pointer" }}>
+              ลำดับ {asc ? "▲" : "▼"}
             </th>
             <th>เลขที่ใบเบิก</th>
-            <th>คลังวัสดุ</th>
-            <th>จำนวน</th>
+            <th>ชื่อผู้เบิก</th>
+            <th>จำนวนรายการ</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
           </tr>
@@ -65,25 +73,21 @@ export default function StuffTable({ searchTerm }) {
         <tbody>
           {currentItems.length === 0 ? (
             <tr>
-              <td colSpan="6" className="stuff-no-data">
-                ไม่มีข้อมูลที่ตรงกับคำค้นหา
-              </td>
+              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
-            currentItems.map(item => (
+            currentItems.map((item) => (
               <tr
                 key={item.id}
                 className="stuff-tr"
                 onClick={() => navigate("/stuff/detail", { state: { id: item.id } })}
               >
                 <td>{item.id}</td>
-                <td>{item.code}</td>
-                <td>{item.stock}</td>
-                <td>{item.amount}</td>
-                <td>{item.date}</td>
-                <td className={`status ${item.status === 'approved' ? 'approved' : item.status === 'pending' ? 'pending' : 'rejected'}`}>
-                  {renderStatus(item.status)}
-                </td>
+                <td>{item.running_code}</td>
+                <td>{item.created_by}</td>
+                <td>{item.items?.length || 0}</td>
+                <td>{item.created_at}</td>
+                <td className={`status ${item.Admin_status}`}>{renderStatus(item.Admin_status)}</td>
               </tr>
             ))
           )}
@@ -101,15 +105,15 @@ export default function StuffTable({ searchTerm }) {
             className="stuff-page-input"
             placeholder={`${currentPage} / ${totalPages}`}
             value={inputPage}
-            onFocus={() => setInputPage('')}
+            onFocus={() => setInputPage("")}
             onChange={(e) => setInputPage(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 const page = parseInt(inputPage, 10);
                 if (!isNaN(page) && page >= 1 && page <= totalPages) {
                   setCurrentPage(page);
                 }
-                setInputPage('');
+                setInputPage("");
                 e.target.blur();
               }
             }}

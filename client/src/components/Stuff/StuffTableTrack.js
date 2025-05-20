@@ -1,35 +1,54 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ✅ เพิ่ม useNavigate
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from "../../config";
 import './StuffTable.css';
 
-const trackData = [
-  { id: 1, code: "001-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "9 ม.ค. 68", status: "approved" },
-  { id: 2, code: "002-02/2568", stock: "วัสดุในคลัง", amount: 3, date: "12 ม.ค. 68", status: "approved" },
-  { id: 3, code: "003-02/2568", stock: "วัสดุในคลัง", amount: 1, date: "15 ม.ค. 68", status: "approved" },
-  { id: 4, code: "004-02/2568", stock: "วัสดุในคลัง", amount: 4, date: "20 ม.ค. 68", status: "rejected" },
-  { id: 5, code: "005-02/2568", stock: "วัสดุในคลัง", amount: 2, date: "25 ม.ค. 68", status: "rejected" },
-];
-
 export default function StuffTableTrack({ searchTerm = '' }) {
-  const navigate = useNavigate(); // ✅ ประกาศ navigate
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [input, setInput] = useState('');
   const [asc, setAsc] = useState(true);
+  const [trackData, setTrackData] = useState([]);
   const perPage = 3;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+        if (res.data.status === 'success') {
+          const transformed = res.data.data.map((item) => ({
+            id: item.id,
+            code: item.running_code,
+            stock: item.stock_type || 'วัสดุในคลัง',
+            amount: item.items?.length || 0,
+            date: item.created_at || '',
+            status: item.Admin_status === 'อนุมัติ' ? 'approved' : item.Admin_status === 'ไม่อนุมัติ' ? 'rejected' : 'pending',
+            user_status: item.User_status || '',
+          }));
+          setTrackData(transformed);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const sorted = [...trackData].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
 
   const renderStatus = (st) => ({
     pending: 'รออนุมัติ',
-    approved: 'รับของเรียบร้อย',
+    approved: 'อนุมัติ',
     rejected: 'ไม่อนุมัติ',
   }[st] || '-');
 
   const filtered = sorted.filter(item =>
-    item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.stock.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.date.includes(searchTerm) ||
-    renderStatus(item.status).includes(searchTerm)
+    item.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.stock?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.date?.includes(searchTerm) ||
+    renderStatus(item.status).includes(searchTerm) ||
+    item.user_status?.includes(searchTerm)
   );
 
   const total = Math.ceil(filtered.length / perPage);
@@ -62,18 +81,19 @@ export default function StuffTableTrack({ searchTerm = '' }) {
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>สถานะผู้ใช้</th>
           </tr>
         </thead>
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td colSpan="7" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             items.map(i => (
               <tr
                 key={i.id}
-                onClick={() => navigate("/stuff/DetailTrack")}
+                onClick={() => navigate("/stuff/DetailTrack", { state: { id: i.id } })}
                 style={{ cursor: "pointer" }}
               >
                 <td>{i.id}</td>
@@ -84,9 +104,9 @@ export default function StuffTableTrack({ searchTerm = '' }) {
                 <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
                   {renderStatus(i.status)}
                 </td>
+                <td>{i.user_status}</td>
               </tr>
             ))
-
           )}
         </tbody>
       </table>

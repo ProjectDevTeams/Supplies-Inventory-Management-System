@@ -1,24 +1,51 @@
-// File: src/components/Stuff/Detail/Detail.js
-import React, { useState } from 'react';
+// File: src/components/Stuff/Detail/Detail.js 
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../../../config';
 import './Detail.css';
 
-const mockData = {
-  code: "003-02/2568",
-  date: "2025-02-12 14:20:10",
-  name: "นางสาวเพลิงดาว วิริยา",
-  department: "STI",
-  usage: "ใช้ในฝ่าย",
-  stock: "วัสดุในคลัง",
-  items: [
-    { name: "Pentax ใบมีดตัดเตอร์ใหญ่ L150", qty: 2, unit: "กล่อง", price: 22.00 }
-  ],
-  status: "",
-  receiveStatus: ""
-};
-
 export default function Detail() {
-  const [status, setStatus] = useState(mockData.status);
-  const total = mockData.items.reduce((sum, i) => sum + (i.qty * i.price), 0).toFixed(2);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const id = location.state?.id;
+
+  const [data, setData] = useState(null);
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/stuff_material_items/get_stuff_material_items.php?id=${id}`);
+        if (res.data.status === "success") {
+          setData(res.data.data);
+          setStatus(res.data.data.Admin_status);
+        }
+      } catch (error) {
+        console.error("โหลดข้อมูลล้มเหลว:", error);
+      }
+    };
+
+    if (id) fetchDetail();
+  }, [id]);
+
+  if (!data) return <div className="loading">กำลังโหลดข้อมูล...</div>;
+
+  const total = data.items.reduce((sum, i) => sum + parseFloat(i.total_price), 0).toFixed(2);
+
+  const handleSave = async () => {
+    try {
+      await axios.post(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
+        id,
+        Admin_status: status
+      });
+      alert("บันทึกสถานะสำเร็จ");
+      navigate("/stuff"); 
+    } catch (err) {
+      console.error("อัปเดตสถานะล้มเหลว:", err);
+      alert("ไม่สามารถบันทึกข้อมูลได้");
+    }
+  };
 
   return (
     <main className="stuff-content">
@@ -26,13 +53,13 @@ export default function Detail() {
       <div className="detail-box">
         <h2 className="detail-title">ใบเบิกวัสดุ</h2>
         <div className="detail-grid">
-          <p><b>เลขที่/ปีงบประมาณ</b></p><p>{mockData.code}</p>
-          <p><b>วันที่</b></p><p>{mockData.date}</p>
-          <p><b>ชื่อ</b></p><p>{mockData.name}</p>
-          <p><b>สังกัด</b></p><p>{mockData.department}</p>
-          <p><b>เบิกจำนวน</b></p><p>{mockData.items.length} รายการ</p>
-          <p><b>คลัง</b></p><p>{mockData.stock}</p>
-          <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{mockData.usage}</p>
+          <p><b>เลขที่/ปีงบประมาณ</b></p><p>{data.running_code}</p>
+          <p><b>วันที่</b></p><p>{data.created_at}</p>
+          <p><b>ชื่อ</b></p><p>{data.name}</p>
+          <p><b>สังกัด</b></p><p>{data.department}</p>
+          <p><b>เบิกจำนวน</b></p><p>{data.items.length} รายการ</p>
+          <p><b>คลัง</b></p><p>{data.stock_type}</p>
+          <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
         </div>
 
         <h3 className="detail-subtitle">รายการวัสดุ</h3>
@@ -46,12 +73,12 @@ export default function Detail() {
             </tr>
           </thead>
           <tbody>
-            {mockData.items.map((row, idx) => (
+            {data.items.map((row, idx) => (
               <tr key={idx}>
                 <td>{idx + 1}</td>
                 <td>{row.name}</td>
-                <td>{row.qty} {row.unit}</td>
-                <td>{(row.qty * row.price).toFixed(2)}</td>
+                <td>{row.quantity} {row.unit}</td>
+                <td>{parseFloat(row.total_price).toFixed(2)}</td>
               </tr>
             ))}
             <tr>
@@ -69,20 +96,21 @@ export default function Detail() {
             className={`${status} detail-select`}
           >
             <option value="">สถานะ:</option>
-            <option value="approved">อนุมัติ</option>
-            <option value="rejected">ไม่อนุมัติ</option>
+            <option value="อนุมัติ">อนุมัติ</option>
+            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
           </select>
         </div>
 
         <div className="detail-status">
           <label>สถานะการรับของ : </label>
-          <span className={`status-label ${mockData.receiveStatus}`}>
-            {mockData.receiveStatus || " "}
+          <span className={`status-label ${data.User_status}`}>
+            {data.User_status || " "}
           </span>
         </div>
 
         <div className="detail-button-container">
-          <button className="btn-back" onClick={() => window.history.back()}>กลับ</button>
+          <button className="btn-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
+          <button className="btn-save" onClick={handleSave}>บันทึก</button>
         </div>
       </div>
     </main>

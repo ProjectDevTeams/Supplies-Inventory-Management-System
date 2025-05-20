@@ -1,26 +1,33 @@
-// File: DetailTrack.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../../../config';
 import './DetailTrack.css';
 
-const mockData = {
-  code: "003-02/2568",
-  date: "2025-02-12 14:20:10",
-  name: "นางสาวเพลิงดาว วิริยา",
-  department: "STI",
-  usage: "ใช้ในฝ่าย",
-  stock: "วัสดุในคลัง",
-  items: [
-    { name: "Pentax ใบมีดตัดเตอร์ใหญ่ L150", qty: 2, unit: "กล่อง", price: 22.0 }
-  ]
-};
-
-const approvalStatusText = "อนุมัติแล้ว (ฝ่ายบริการโครงสร้างพื้นฐานด้านวิทยาศาสตร์ฯ 07 ก.พ. 68 11:38:45)";
-const receiveStatusText = "รับของแล้ว (นางสาวปรีดา พวงเพ็ชร์ 07 ก.พ. 68 11:45:25)";
-
 export default function DetailTrack() {
-  const total = mockData.items
-    .reduce((sum, i) => sum + i.qty * i.price, 0)
-    .toFixed(2);
+  const location = useLocation();
+  const id = location.state?.id;
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/stuff_material_items/get_stuff_material_items.php?id=${id}`);
+        if (res.data.status === "success") {
+          setData(res.data.data);
+        }
+      } catch (error) {
+        console.error("โหลดข้อมูลล้มเหลว:", error);
+      }
+    };
+
+    if (id) fetchDetail();
+  }, [id]);
+
+  if (!data) return <div className="detail-track-container">กำลังโหลดข้อมูล...</div>;
+
+  const total = data.items.reduce((sum, i) => sum + parseFloat(i.total_price), 0).toFixed(2);
 
   return (
     <div className="detail-track-container">
@@ -29,13 +36,13 @@ export default function DetailTrack() {
       <div className="detail-track-box">
         <h2 className="detail-track-title">ใบเบิกวัสดุ</h2>
         <div className="detail-track-grid">
-          <p><b>เลขที่/ปีงบประมาณ</b></p><p>{mockData.code}</p>
-          <p><b>วันที่</b></p><p>{mockData.date}</p>
-          <p><b>ชื่อ</b></p><p>{mockData.name}</p>
-          <p><b>สังกัด</b></p><p>{mockData.department}</p>
-          <p><b>เบิกจำนวน</b></p><p>{mockData.items.length} รายการ</p>
-          <p><b>คลัง</b></p><p>{mockData.stock}</p>
-          <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{mockData.usage}</p>
+          <p><b>เลขที่/ปีงบประมาณ</b></p><p>{data.running_code}</p>
+          <p><b>วันที่</b></p><p>{data.created_at}</p>
+          <p><b>ชื่อ</b></p><p>{data.name}</p>
+          <p><b>สังกัด</b></p><p>{data.department}</p>
+          <p><b>เบิกจำนวน</b></p><p>{data.items.length} รายการ</p>
+          <p><b>คลัง</b></p><p>{data.stock_type}</p>
+          <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
         </div>
 
         <h3 className="detail-track-subtitle">รายการวัสดุ</h3>
@@ -49,12 +56,12 @@ export default function DetailTrack() {
             </tr>
           </thead>
           <tbody>
-            {mockData.items.map((row, idx) => (
+            {data.items.map((row, idx) => (
               <tr key={idx}>
                 <td>{idx + 1}</td>
                 <td>{row.name}</td>
-                <td>{row.qty} {row.unit}</td>
-                <td>{(row.qty * row.price).toFixed(2)}</td>
+                <td>{row.quantity} {row.unit}</td>
+                <td>{parseFloat(row.total_price).toFixed(2)}</td>
               </tr>
             ))}
             <tr>
@@ -63,17 +70,6 @@ export default function DetailTrack() {
             </tr>
           </tbody>
         </table>
-
-        <div className="detail-track-status">
-          <p>
-            <b>สถานะการอนุมัติ :</b>{" "}
-            <span className="approved">{approvalStatusText}</span>
-          </p>
-          <p>
-            <b>สถานะการรับของ :</b>{" "}
-            <span className="received">{receiveStatusText}</span>
-          </p>
-        </div>
 
         <div className="detail-track-actions">
           <button className="btn-back" onClick={() => window.history.back()}>
