@@ -15,10 +15,11 @@ try {
             i.tax_invoice_number,
             i.purchase_order_number,
             DATE(i.created_at) AS created_at,
-            i.total_price
+            i.total_price,
+            i.approval_status AS status     -- เพิ่มบรรทัดนี้
         FROM receive_materials i
-        LEFT JOIN users     u ON i.created_by      = u.id
-        LEFT JOIN companies c ON i.company_id      = c.id
+        LEFT JOIN users     u ON i.created_by = u.id
+        LEFT JOIN companies c ON i.company_id = c.id
     ");
 
     $stmt->execute();

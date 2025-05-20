@@ -1,7 +1,7 @@
-// File: src/components/Incoming/Incoming-detail.js
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Autosuggest from "react-autosuggest";
 import { API_URL } from "../../config";
 import "./Incoming-detail.css";
 
@@ -9,44 +9,57 @@ export default function IncomingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Header & items state
+  // State สำหรับ header, items, lookups และ suggestions
   const [header, setHeader] = useState({
     id: null,
     created_by: null,
     warehouse: "",
     company: "",
+    companyName: "",   // ใช้เก็บชื่อบริษัทสำหรับ Autosuggest
     taxNumber: "",
     orderNumber: "",
     date: "",
+    approvalStatus: ""
   });
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Lookup data
   const [materials, setMaterials] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [companySuggestions, setCompanySuggestions] = useState([]);
+  const [materialSuggestions, setMaterialSuggestions] = useState([]);
 
-  // Fetch bill header + items
+  // ฟังก์ชันกรองคำค้น
+  const getSuggestions = (list, value) => {
+    const input = value.trim().toLowerCase();
+    return list.filter(x => x.name.toLowerCase().includes(input));
+  };
+
+  // โหลดข้อมูลบิล + รายการ
   useEffect(() => {
     axios
       .get(`${API_URL}/receive_materials/update_receive.php?id=${id}`)
-      .then((res) => {
-        if (res.data.status === "success") {
-          const { bill, items } = res.data.data;
+      .then(res => {
+        const { status, data } = res.data;
+        if (status === "success") {
+          const { bill, items } = data;
           setHeader({
             id: bill.id,
             created_by: bill.created_by,
             warehouse: bill.stock_type,
             company: bill.company_id,
+            companyName: bill.company_name || "",
             taxNumber: bill.tax_invoice_number,
             orderNumber: bill.purchase_order_number,
             date: bill.created_at,
+            approvalStatus: bill.approval_status
           });
           setItems(
-            items.map((it) => ({
-              material_name: it.material_name,
+            items.map(it => ({
+              material_id: it.material_id,
+              material_name: it.material_name || "",
               quantity: it.quantity,
-              price_per_unit: it.price_per_unit,
+              price_per_unit: it.price_per_unit
             }))
           );
         } else {
@@ -54,56 +67,45 @@ export default function IncomingDetail() {
           navigate(-1);
         }
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         alert("เกิดข้อผิดพลาดในการโหลดข้อมูล");
         navigate(-1);
       })
       .finally(() => setLoading(false));
   }, [id, navigate]);
 
-  // Fetch materials + companies for selects
+  // โหลดรายการ lookup
   useEffect(() => {
-    async function fetchLookups() {
-      try {
-        const [mRes, cRes] = await Promise.all([
-          axios.get(`${API_URL}/materials/get_materials.php`),
-          axios.get(`${API_URL}/companies/get_companies.php`),
-        ]);
+    Promise.all([
+      axios.get(`${API_URL}/materials/get_materials.php`),
+      axios.get(`${API_URL}/companies/get_companies.php`)
+    ])
+      .then(([mRes, cRes]) => {
         setMaterials(mRes.data.data || []);
         setCompanies(cRes.data.data || []);
-      } catch (err) {
-        console.error("Lookup fetch error:", err);
-      }
-    }
-    fetchLookups();
+      })
+      .catch(console.error);
   }, []);
 
-  // Handlers for header fields
-  const handleHeaderChange = (field) => (e) => {
-    setHeader((prev) => ({ ...prev, [field]: e.target.value }));
-  };
+  // Handlers
+  const handleHeaderChange = field => e =>
+    setHeader(h => ({ ...h, [field]: e.target.value }));
 
-  // Handlers for items
-  const handleItemChange = (idx, field) => (e) => {
+  const handleItemChange = (i, field) => e => {
     const raw = e.target.value;
     const val =
       field === "quantity" || field === "price_per_unit"
         ? Number(raw)
         : raw;
-    setItems((prev) =>
-      prev.map((row, i) => (i === idx ? { ...row, [field]: val } : row))
+    setItems(prev =>
+      prev.map((row, idx) => (idx === i ? { ...row, [field]: val } : row))
     );
   };
 
-  // Compute totals
-  const lineTotal = (it) => (it.quantity * it.price_per_unit).toFixed(2);
+  const lineTotal = it => (it.quantity * it.price_per_unit).toFixed(2);
   const grandTotal = () =>
-    items
-      .reduce((sum, it) => sum + it.quantity * it.price_per_unit, 0)
-      .toFixed(2);
+    items.reduce((sum, it) => sum + it.quantity * it.price_per_unit, 0).toFixed(2);
 
-  // Submit updated bill
   const handleSave = () => {
     const payload = {
       id: header.id,
@@ -113,17 +115,19 @@ export default function IncomingDetail() {
       tax_invoice_number: header.taxNumber,
       purchase_order_number: header.orderNumber,
       created_at: header.date,
-      items: items.map((it) => ({
+      approval_status: header.approvalStatus,
+      items: items.map(it => ({
         material_name: it.material_name,
+        material_id: it.material_id,
         quantity: it.quantity,
         price_per_unit: it.price_per_unit,
-        total_price: parseFloat(lineTotal(it)),
-      })),
+        total_price: parseFloat(lineTotal(it))
+      }))
     };
 
     axios
       .put(`${API_URL}/receive_materials/update_receive.php`, payload)
-      .then((res) => {
+      .then(res => {
         if (res.data.status === "success") {
           alert("บันทึกข้อมูลเรียบร้อยแล้ว");
           navigate(-1);
@@ -131,10 +135,7 @@ export default function IncomingDetail() {
           alert("บันทึกไม่สำเร็จ: " + res.data.message);
         }
       })
-      .catch((err) => {
-        console.error(err);
-        alert("เกิดข้อผิดพลาดขณะบันทึก");
-      });
+      .catch(() => alert("เกิดข้อผิดพลาดขณะบันทึก"));
   };
 
   if (loading) {
@@ -145,7 +146,6 @@ export default function IncomingDetail() {
     <div className="incoming-detail-container">
       <h2 className="incoming-detail-title">รับเข้าวัสดุ บิล #{header.id}</h2>
 
-      {/* Header Section */}
       <div className="incoming-detail-row">
         <label>คลังวัสดุ</label>
         <select
@@ -161,18 +161,30 @@ export default function IncomingDetail() {
 
       <div className="incoming-detail-row">
         <label>บริษัท/ร้านค้า</label>
-        <select
-          className="incoming-detail-select"
-          value={header.company}
-          onChange={handleHeaderChange("company")}
-        >
-          <option value="">-- เลือกบริษัท --</option>
-          {companies.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+        <Autosuggest
+          suggestions={companySuggestions}
+          onSuggestionsFetchRequested={({ value }) =>
+            setCompanySuggestions(getSuggestions(companies, value))
+          }
+          onSuggestionsClearRequested={() =>
+            setCompanySuggestions([])
+          }
+          getSuggestionValue={sug => sug.name}
+          renderSuggestion={sug => <span>{sug.name}</span>}
+          inputProps={{
+            className: "incoming-detail-select",
+            placeholder: "-- เลือกบริษัท --",
+            value: header.companyName,
+            onChange: (_, { newValue }) => {
+              const c = companies.find(x => x.name === newValue);
+              setHeader(h => ({
+                ...h,
+                companyName: newValue,
+                company: c ? c.id : ""
+              }));
+            }
+          }}
+        />
       </div>
 
       <div className="incoming-detail-row">
@@ -181,7 +193,7 @@ export default function IncomingDetail() {
           type="text"
           className="incoming-detail-input"
           value={header.taxNumber}
-          readOnly
+          onChange={handleHeaderChange("taxNumber")}
         />
       </div>
 
@@ -205,9 +217,22 @@ export default function IncomingDetail() {
         />
       </div>
 
+      <div className="incoming-detail-row">
+        <label>สถานะอนุมัติ</label>
+        <select
+          className="incoming-detail-select"
+          value={header.approvalStatus}
+          onChange={handleHeaderChange("approvalStatus")}
+        >
+          <option value="">-- เลือกสถานะ --</option>
+          <option value="รออนุมัติ">รออนุมัติ</option>
+          <option value="อนุมัติ">อนุมัติ</option>
+          <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+        </select>
+      </div>
+
       <hr className="incoming-detail-divider" />
 
-      {/* Items Table */}
       <h3 className="incoming-detail-subtitle">รายการวัสดุ</h3>
       <table className="incoming-detail-items-table">
         <thead>
@@ -222,27 +247,34 @@ export default function IncomingDetail() {
           {items.map((it, idx) => (
             <tr key={idx}>
               <td>
-                <select
-                  className="incoming-detail-select"
-                  value={it.material_name}
-                  onChange={(e) =>
-                    handleItemChange(idx, "material_name")(e)
+                <Autosuggest
+                  suggestions={materialSuggestions}
+                  onSuggestionsFetchRequested={({ value }) =>
+                    setMaterialSuggestions(getSuggestions(materials, value))
                   }
-                >
-                  <option value="">-- เลือกวัสดุ --</option>
-                  {materials.map((m) => (
-                    <option key={m.id} value={m.name}>
-                      {m.name}
-                    </option>
-                  ))}
-                </select>
+                  onSuggestionsClearRequested={() =>
+                    setMaterialSuggestions([])
+                  }
+                  getSuggestionValue={sug => sug.name}
+                  renderSuggestion={sug => <span>{sug.name}</span>}
+                  inputProps={{
+                    className: "incoming-detail-select",
+                    placeholder: "-- เลือกวัสดุ --",
+                    value: it.material_name,
+                    onChange: (_, { newValue }) => {
+                      const m = materials.find(x => x.name === newValue);
+                      handleItemChange(idx, "material_name")({ target: { value: newValue } });
+                      handleItemChange(idx, "material_id")({ target: { value: m ? m.id : "" } });
+                    }
+                  }}
+                />
               </td>
               <td>
                 <input
                   type="number"
                   className="incoming-detail-input"
                   value={it.quantity}
-                  onChange={(e) => handleItemChange(idx, "quantity")(e)}
+                  onChange={handleItemChange(idx, "quantity")}
                 />
               </td>
               <td>
@@ -251,9 +283,7 @@ export default function IncomingDetail() {
                   step="0.01"
                   className="incoming-detail-input"
                   value={it.price_per_unit}
-                  onChange={(e) =>
-                    handleItemChange(idx, "price_per_unit")(e)
-                  }
+                  onChange={handleItemChange(idx, "price_per_unit")}
                 />
               </td>
               <td>{lineTotal(it)}</td>
@@ -266,17 +296,16 @@ export default function IncomingDetail() {
         <strong>ราคารวมทั้งบิล:</strong> {grandTotal()}
       </div>
 
-      {/* Actions */}
       <div className="incoming-detail-actions">
         <button
-          className="incoming-detail-back-button"
           onClick={() => navigate(-1)}
+          className="incoming-detail-back-button"
         >
           ย้อนกลับ
         </button>
         <button
-          className="incoming-detail-save-button"
           onClick={handleSave}
+          className="incoming-detail-save-button"
         >
           บันทึกการอัพเดต
         </button>
