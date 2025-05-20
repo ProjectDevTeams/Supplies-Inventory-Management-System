@@ -160,7 +160,7 @@ export default function IncomingAdd() {
       {["tax_invoice_number", "purchase_order_number"].map((f, i) => (
         <div className="incoming-add-row" key={f}>
           <label>
-            {i === 0 ? "เลขที่กำกับภาษี" : "เลขที่ใบสั่งซื้อ (PO)"}
+            {i === 0 ? "เลขที่กำกับภาษี" : "เลขที่ มอ. จัดซื้อ"}
           </label>
           <input
             type="text"

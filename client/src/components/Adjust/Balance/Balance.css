@@ -4,7 +4,6 @@
   font-family: "Prompt", sans-serif;
   padding: 2rem;
   box-sizing: border-box;
-  flex-grow: 1;
   width: 100%;
 }
 
@@ -15,15 +14,19 @@
   margin-bottom: 1.5rem;
 }
 
-.balance-box {
+.balance-items-wrapper {
+  margin-top: 1rem;
+}
+
+.balance-card {
   background-color: #fff;
   padding: 2.5rem 3rem;
   border-radius: 8px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: none;
   margin-bottom: 2rem;
   box-sizing: border-box;
+  border: 1px solid #dcdcdc;
 }
 
 .balance-row {
@@ -33,7 +36,8 @@
   gap: 8rem;
   margin-bottom: 1.5rem;
   font-size: 1.3rem;
-  flex-wrap: wrap;
+  font-weight: 500;
+  color: #333;
 }
 
 .balance-row strong {
@@ -51,54 +55,72 @@
   margin: 1.5rem 0;
 }
 
+.balance-status-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-left: 8rem;
+  font-size: 1.2rem;
+}
+
+.balance-select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  min-width: 180px;
+}
+
 .balance-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
   padding-right: 3rem;
 }
 
-.balance-back-button {
-  background-color: #28a745;
+.balance-back-button-orange {
+  background-color: #f79c05;
   color: white;
   font-size: 1rem;
-  font-weight: bold;
   padding: 0.7rem 2rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
   transition: background 0.2s ease;
 }
 
-.balance-back-button:hover {
-  background-color: #28a745;
+.balance-back-button-orange:hover {
+  background-color: #e69500;
 }
 
-/* ✅ Responsive: แสดงดีบนหน้าจอเล็ก */
-@media (max-width: 768px) {
-  .balance-box {
-    padding: 1.5rem;
-  }
-
-  .balance-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-    font-size: 1.1rem;
-  }
-
-  .balance-row strong {
-    margin-left: 0;
-  }
-
-  .balance-actions {
-    justify-content: center;
-    padding: 1rem 0 0;
-  }
-
-  .balance-back-button {
-    width: 100%;
-    max-width: 250px;
-  }
+.balance-back-button {
+  background-color: #2d9c4b;
+  color: white;
+  font-size: 1rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
 }
 
+.balance-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-right: 3rem;
+}
+
+.balance-status-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}

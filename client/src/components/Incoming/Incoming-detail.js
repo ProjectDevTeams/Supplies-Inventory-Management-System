@@ -198,7 +198,7 @@ export default function IncomingDetail() {
       </div>
 
       <div className="incoming-detail-row">
-        <label>เลขที่ใบสั่งซื้อ (PO)</label>
+        <label>เลขที่ มอ. จัดซื้อ</label>
         <input
           type="text"
           className="incoming-detail-input"
