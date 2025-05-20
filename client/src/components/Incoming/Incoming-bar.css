@@ -66,16 +66,3 @@
   transform: scale(1.05);
 }
 
-/* Select ปีงบประมาณ */
-.incoming-budget-select {
-  padding: 0.5em 0.75em;
-  font-size: 1rem;
-  color: #333;
-  border: 2px solid #aab3bb;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-  min-width: 200px;
-  box-sizing: border-box;
-  appearance: menulist;
-}

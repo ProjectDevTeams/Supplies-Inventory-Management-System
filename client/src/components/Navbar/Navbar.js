@@ -2,13 +2,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
+import { confirmLogout, showLogoutSuccess } from '../SweetAlert/LogOutSweetAlert';
 
 function Navbar() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    // ขอให้ผู้ใช้ยืนยันก่อน
+    const ok = await confirmLogout();
+    if (!ok) return; // ถ้าเลือกยกเลิก ก็ไม่ทำอะไรต่อ
+
+    // ลบข้อมูลผู้ใช้
     localStorage.removeItem("user");
+
+    // แจ้งเตือนออกจากระบบสำเร็จ
+    await showLogoutSuccess();
+
+    // นำทางไปหน้า login
     navigate("/login");
   };
 
