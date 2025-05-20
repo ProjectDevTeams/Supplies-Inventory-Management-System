@@ -1,14 +1,13 @@
 /* ✅ Container */
 .table-container-consumable {
   width: 100%;
-  padding: 1em;
   background-color: #f5f8fc;
 }
 
 /* ✅ Main Table */
 .consumable-table {
   width: 98%;
-  margin: 1em auto;
+  margin: 1em;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);

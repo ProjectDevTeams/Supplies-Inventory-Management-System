@@ -13,7 +13,7 @@
   margin: 1em 0 0.5em;
 }
 
-.organizations-bar-table {
+.organizations-table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
@@ -21,8 +21,8 @@
   table-layout: auto;
 }
 
-.organizations-bar-table th,
-.organizations-bar-table td {
+.organizations-table th,
+.organizations-table td {
   border: 1px solid #999;
   padding: 0.7em 0.5em;
   text-align: center;
@@ -31,32 +31,32 @@
   line-height: 1.4;
 }
 
-.organizations-bar-table th {
+.organizations-table th {
   background-color: #dfe8f6;
   color: #003366;
   font-weight: bold;
 }
 
-.organizations-bar-table th:nth-child(1),
-.organizations-bar-table td:nth-child(1) {
+.organizations-table th:nth-child(1),
+.organizations-table td:nth-child(1) {
   width: 6%;
 }
-.organizations-bar-table th:nth-child(2),
-.organizations-bar-table td:nth-child(2) {
+.organizations-table th:nth-child(2),
+.organizations-table td:nth-child(2) {
   width: 35%;
   text-align: center;
   padding-left: 1em;
 }
-.organizations-bar-table th:nth-child(3),
-.organizations-bar-table td:nth-child(3) {
+.organizations-table th:nth-child(3),
+.organizations-table td:nth-child(3) {
   width: 20%;
 }
-.organizations-bar-table th:nth-child(4),
-.organizations-bar-table td:nth-child(4) {
+.organizations-table th:nth-child(4),
+.organizations-table td:nth-child(4) {
   width: 20%;
 }
-.organizations-bar-table th:nth-child(5),
-.organizations-bar-table td:nth-child(5) {
+.organizations-table th:nth-child(5),
+.organizations-table td:nth-child(5) {
   width: 19%;
 }
 

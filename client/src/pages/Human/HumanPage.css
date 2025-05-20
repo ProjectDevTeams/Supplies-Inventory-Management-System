@@ -18,13 +18,3 @@
   box-sizing: border-box;
   margin-left: 200px;
 }
-
-.human-content-header {
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f8fc;
-  padding: 1em;
-  align-items: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}

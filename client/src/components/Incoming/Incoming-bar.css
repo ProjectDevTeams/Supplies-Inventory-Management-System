@@ -1,6 +1,6 @@
 /* Container และหัวข้อ */
 .incoming-header {
-  padding: 1em;
+  padding: 0 1em;
   display: flex;
   flex-direction: column;
   gap: 0.8em;

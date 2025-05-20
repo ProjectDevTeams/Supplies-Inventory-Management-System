@@ -33,7 +33,6 @@ function HumanPage() {
       <div className="human-sidebar">
         <Sidebar />
         <main className="human-content">
-          <section className="human-content-header">
             <Humanbar
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
@@ -44,7 +43,6 @@ function HumanPage() {
               data={data}
               fetchData={fetchData}
             />
-          </section>
         </main>
       </div>
     </div>

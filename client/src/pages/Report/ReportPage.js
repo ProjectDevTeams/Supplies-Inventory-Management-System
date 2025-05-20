@@ -11,9 +11,7 @@ function ReportPage() {
       <div className="report-sidebar">
         <Sidebar />
         <main className="report-content">
-          <section className="report-header">
             <ReportContent />
-          </section>
         </main>
       </div>
     </div>

@@ -1,40 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Kanit", Arial, sans-serif;
-}
-
 .report-navbar {
     width: 100%;
     height: 100%;
   }
   
-  .report-sidebar {
-    display: flex;
-    width: 100%;
-    min-height: 100vh;
-  }
+.report-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
   
-  .report-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f8fc;
-    padding: 1em;
-    box-sizing: border-box;
-    margin-left: 200px;
-  }
-  
-  .report-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8em;
-    background-color: #f5f8fc;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
+.report-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f8fc;
+  padding: 1em;
+  box-sizing: border-box;
+  margin-left: 200px;
+}

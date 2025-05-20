@@ -22,17 +22,3 @@
     margin-left: 200px; /* <<< ให้ content ไม่ทับ sidebar */
   }
   
-  .consumable-content-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8em;
-    background-color: #f9f9f9;
-    padding: 1em;
-    align-items: flex-start;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .consumable-table-container{
-    width: 100%;
-  }
