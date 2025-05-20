@@ -1,11 +1,13 @@
-.detail-header {
+/* File: Detail.css */
+
+.detail-stuff-header {
   font-size: 1.6rem;
   font-weight: bold;
   color: #003366;
   margin-bottom: 1rem;
 }
 
-.detail-box {
+.detail-stuff-box {
   background: white;
   padding: 2rem 3rem;
   border-radius: 10px;
@@ -18,16 +20,15 @@
   text-align: center; 
 }
 
-
-.detail-title {
-  font-size: 2rem; /* ✅ เพิ่มขนาด */
+.detail-stuff-title {
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 2rem;
   text-align: center;
   color: #003366;
 }
 
-.detail-grid {
+.detail-stuff-grid {
   display: grid;
   grid-template-columns: auto auto;
   column-gap: 4rem;
@@ -41,52 +42,48 @@
   text-align: left;
 }
 
-.detail-grid p {
+.detail-stuff-grid p {
   margin-bottom: 1rem;
   font-size: 1rem;
   line-height: 1.6;
 }
 
-.detail-subtitle {
+.detail-stuff-subtitle {
   margin-top: 2rem;
   font-size: 1.2rem;
   font-weight: bold;
 }
 
-.detail-table {
+.detail-stuff-table {
   border-collapse: collapse;
   margin-top: 1rem;
-
-  /* เพิ่ม 2 บรรทัดนี้ */
   margin-left: auto;
   margin-right: auto;
-
   font-size: 1rem;
-  width: 85%; /* หรือใส่ max-width: 100% ก็ได้ */
+  width: 85%;
 }
 
-.detail-table th,
-.detail-table td {
+.detail-stuff-table th,
+.detail-stuff-table td {
   border: 1px solid #ccc;
   padding: 0.6rem;
   text-align: center;
 }
 
-.detail-table th {
+.detail-stuff-table th {
   background-color: #e3edf8;
   font-weight: bold;
 }
 
-.detail-status {
+.detail-stuff-status {
   margin-top: 1.5rem;
   font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: ;
 }
 
-.detail-status select {
+.detail-stuff-status select {
   padding: 0.4rem 0.8rem;
   font-size: 1rem;
   border-radius: 6px;
@@ -94,13 +91,13 @@
   width: 220px;
 }
 
-.status-label {
+.status-stuff-label {
   font-weight: bold;
   padding-left: 0.5rem;
   color: #6a20e0;
 }
 
-.btn-back {
+.btn-stuff-back {
   background-color: #f79c05;
   color: white;
   padding: 0.6rem 1.5rem;
@@ -110,7 +107,7 @@
   cursor: pointer;
 }
 
-.btn-save {
+.btn-stuff-save {
   background-color: #4cbb36;
   color: white;
   padding: 0.6rem 1.5rem;
@@ -120,25 +117,23 @@
   cursor: pointer;
 }
 
-.btn-back:hover {
+.btn-stuff-back:hover {
   background-color: #e67c00;
 }
 
-/* สีตัวอักษรของ option ใน dropdown */
-.detail-status select option[value="approved"] {
+.detail-stuff-status select option[value="approved"] {
   color: green;
 }
 
-.detail-status select option[value="rejected"] {
+.detail-stuff-status select option[value="rejected"] {
   color: red;
 }
 
-/* สีตัวอักษรใน select เมื่อเลือก */
-.detail-status select.approved {
+.detail-stuff-status select.approved {
   color: green;
 }
 
-.detail-status select.rejected {
+.detail-stuff-status select.rejected {
   color: red;
 }
 
@@ -163,13 +158,8 @@
   margin-left: 200px; 
 }
 
-@media (max-width: 768px) {
-  .detail-grid {
-    grid-template-columns: 1fr; 
-  }
-}
 
-.detail-button-container {
+.detail-stuff-button-container {
   display: flex;
   justify-content: flex-end; 
   gap: 0.75rem; 
