@@ -133,21 +133,6 @@
   color: red;
 }
 
-img {
-  margin-top: 0.5rem;
-  max-width: 150px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-@media (max-width: 768px) {
-  .detail-purchase-grid {
-    grid-template-columns: 1fr;
-  }
-  .detail-purchase-box {
-    padding: 1.5rem;
-  }
-}
 
 .detail-purchase-approved {
   color: green;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import "./Adjust-add.css";
 
 export default function AdjustAdd({ onSave, onCancel }) {

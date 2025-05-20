@@ -1,10 +1,10 @@
+// File: src/components/Navbar/Navbar.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
-
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleLogout = () => {
@@ -16,13 +16,21 @@ function Navbar() {
     <nav>
       <section id="title">
         <ul>
-          <li><a href="#"><img src="/image/Logo.png" alt="Logo" /></a></li>
+          <li>
+            <a href="/">
+              <img src="/image/Logo.png" alt="Logo" />
+            </a>
+          </li>
         </ul>
       </section>
 
       <section id="account">
         <ul>
-          <li><a href="#"><img src="/image/user_profile.png" alt="Profile" /></a></li>
+          <li>
+            <a href="/">
+              <img src="/image/user_profile.png" alt="Profile" />
+            </a>
+          </li>
           <li>
             <strong>{user ? user.full_name : "Guest"}</strong>
           </li>

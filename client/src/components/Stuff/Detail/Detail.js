@@ -49,10 +49,10 @@ export default function Detail() {
 
   return (
     <main className="stuff-content">
-      <h1 className="detail-header">ใบเบิกวัสดุ</h1>
-      <div className="detail-box">
-        <h2 className="detail-title">ใบเบิกวัสดุ</h2>
-        <div className="detail-grid">
+      <h1 className="detail-stuff-header">ใบเบิกวัสดุ</h1>
+      <div className="detail-stuff-box">
+        <h2 className="detail-stuff-title">ใบเบิกวัสดุ</h2>
+        <div className="detail-stuff-grid">
           <p><b>เลขที่/ปีงบประมาณ</b></p><p>{data.running_code}</p>
           <p><b>วันที่</b></p><p>{data.created_at}</p>
           <p><b>ชื่อ</b></p><p>{data.name}</p>
@@ -62,8 +62,8 @@ export default function Detail() {
           <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
         </div>
 
-        <h3 className="detail-subtitle">รายการวัสดุ</h3>
-        <table className="detail-table">
+        <h3 className="detail-stuff-subtitle">รายการวัสดุ</h3>
+        <table className="detail-stuff-table">
           <thead>
             <tr>
               <th>ลำดับ</th>
@@ -88,12 +88,12 @@ export default function Detail() {
           </tbody>
         </table>
 
-        <div className="detail-status">
+        <div className="detail-stuff-status">
           <label>สถานะการอนุมัติ : </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className={`${status} detail-select`}
+            className={`detail-stuff-select ${status}`}
           >
             <option value="">สถานะ:</option>
             <option value="approved">อนุมัติ</option>
@@ -101,16 +101,16 @@ export default function Detail() {
           </select>
         </div>
 
-        <div className="detail-status">
+        <div className="detail-stuff-status">
           <label>สถานะการรับของ : </label>
-          <span className={`status-label ${data.User_status}`}>
+          <span className={`status-stuff-label ${data.User_status}`}>
             {data.User_status || " "}
           </span>
         </div>
 
-        <div className="detail-button-container">
-          <button className="btn-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
-          <button className="btn-save" onClick={handleSave}>บันทึก</button>
+        <div className="detail-stuff-button-container">
+          <button className="btn-stuff-back" onClick={() => window.history.back()}>ย้อนกลับ</button>
+          <button className="btn-stuff-save" onClick={handleSave}>บันทึก</button>
         </div>
       </div>
     </main>

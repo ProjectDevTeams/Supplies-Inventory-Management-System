@@ -1,22 +1,26 @@
-// File: DetailPurchase.js
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../config';
 import './DetailPurchase.css';
 
 export default function DetailPurchase() {
     const location = useLocation();
+    const navigate = useNavigate();
     const id = location.state?.id;
     const [data, setData] = useState(null);
     const [status, setStatus] = useState("");
+    const [originalStatus, setOriginalStatus] = useState("");
 
     useEffect(() => {
         const fetchDetail = async () => {
             try {
-                const res = await axios.get(`${API_URL}/stuff_material_items/get_stuff_material_items.php?id=${id}`);
+                const res = await axios.get(`${API_URL}/purchase_extras_items/get_purchase_extras_items.php?id=${id}`);
                 if (res.data.status === "success") {
                     setData(res.data.data);
+                    const currentStatus = mapStatusToValue(res.data.data.approval_status);
+                    setStatus(currentStatus);
+                    setOriginalStatus(currentStatus);
                 }
             } catch (error) {
                 console.error("โหลดข้อมูลล้มเหลว:", error);
@@ -26,9 +30,31 @@ export default function DetailPurchase() {
         if (id) fetchDetail();
     }, [id]);
 
-    if (!data) return <div className="detail-purchase-container">กำลังโหลดข้อมูล...</div>;
+    const mapStatusToValue = (status) => {
+        if (status === 'อนุมัติ') return 'approved';
+        if (status === 'ไม่อนุมัติ') return 'rejected';
+        return '';
+    };
 
-    const total = data.items.reduce((sum, i) => sum + parseFloat(i.total_price), 0).toFixed(2);
+    const mapValueToStatus = (value) => {
+        if (value === 'approved') return 'อนุมัติ';
+        if (value === 'rejected') return 'ไม่อนุมัติ';
+        return 'รออนุมัติ';
+    };
+
+    const handleSave = async () => {
+        try {
+            await axios.post(`${API_URL}/purchase_extras/update_purchase_extras.php`, {
+                id,
+                approval_status: mapValueToStatus(status),
+            });
+            navigate(-1); // ย้อนกลับ
+        } catch (error) {
+            console.error("อัปเดตสถานะล้มเหลว:", error);
+        }
+    };
+
+    if (!data) return <div className="detail-purchase-container">กำลังโหลดข้อมูล...</div>;
 
     return (
         <div className="detail-purchase-container">
@@ -36,14 +62,11 @@ export default function DetailPurchase() {
             <div className="detail-purchase-box">
                 <h2 className="detail-purchase-title">รายละเอียดการขอจัดซื้อเพิ่มเติม</h2>
                 <div className="detail-purchase-grid">
-                    <p><b>คลังวัสดุ</b></p><p>{data.stock_type} วัสดุในคลัง</p>
+                    <p><b>คลังวัสดุ</b></p><p>{data.items[0]?.stock_type || 'วัสดุในคลัง'}</p>
                     <p><b>หน่วยงาน</b></p><p>{data.department}</p>
                     <p><b>ชื่อ</b></p><p>{data.name}</p>
-                    <p><b>วัสดุสิ้นเปลือง</b></p><p>{data.items[0]?.name || '-'}</p>
-                    <p><b>จำนวนขอจัดซื้อเพิ่มเติม</b></p><p>{data.items[0]?.quantity || 0}</p>
                     <p><b>หมายเหตุ</b></p><p>{data.reason}</p>
                     <p><b>สถานะ</b></p>
-
                     <div className="detail-Purchase">
                         <select
                             value={status}
@@ -55,15 +78,7 @@ export default function DetailPurchase() {
                             <option value="rejected">ไม่อนุมัติ</option>
                         </select>
                     </div>
-
                     <p><b>รูป</b></p>
-                    <p>
-                        {data.items[0]?.image ? (
-                            <img src={`${API_URL}/uploads/${data.items[0].image}`} alt="item" style={{ maxWidth: '150px' }} />
-                        ) : (
-                            "ไม่มีรูป"
-                        )}
-                    </p>
                 </div>
 
                 <h3 className="detail-track-subtitle">รายการวัสดุ</h3>
@@ -73,28 +88,27 @@ export default function DetailPurchase() {
                             <th>ลำดับ</th>
                             <th>รายการ</th>
                             <th>จำนวน/หน่วยนับ</th>
-                            <th>มูลค่า</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.items.map((row, idx) => (
                             <tr key={idx}>
                                 <td>{idx + 1}</td>
-                                <td>{row.name}</td>
-                                <td>{row.quantity} {row.unit}</td>
-                                <td>{parseFloat(row.total_price).toFixed(2)}</td>
+                                <td>{row.name || row.new_material_name}</td>
+                                <td>{row.quantity} {row.unit || ''}</td>
                             </tr>
                         ))}
-                        <tr>
-                            <td colSpan="3"><b>รวม</b></td>
-                            <td>{total}</td>
-                        </tr>
                     </tbody>
                 </table>
 
                 <div className="detail-purchase-actions">
-                    <button className="btn-back" onClick={() => window.history.back()}>
-                        กลับ
+                    <button className="btn-back" onClick={() => navigate(-1)}>กลับ</button>
+                    <button
+                        className="btn-save"
+                        onClick={handleSave}
+                        disabled={status === originalStatus}
+                    >
+                        บันทึก
                     </button>
                 </div>
             </div>
