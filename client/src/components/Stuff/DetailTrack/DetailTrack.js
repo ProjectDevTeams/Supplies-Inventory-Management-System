@@ -1,3 +1,4 @@
+// File: DetailTrack.js
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -7,7 +8,6 @@ import './DetailTrack.css';
 export default function DetailTrack() {
   const location = useLocation();
   const id = location.state?.id;
-
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ export default function DetailTrack() {
   return (
     <div className="detail-track-container">
       <h1 className="detail-track-header">ใบเบิกวัสดุ</h1>
-
       <div className="detail-track-box">
         <h2 className="detail-track-title">ใบเบิกวัสดุ</h2>
         <div className="detail-track-grid">
@@ -73,7 +72,7 @@ export default function DetailTrack() {
 
         <div className="detail-track-actions">
           <button className="btn-back" onClick={() => window.history.back()}>
-            กลับ
+            ย้อนกลับ
           </button>
         </div>
       </div>

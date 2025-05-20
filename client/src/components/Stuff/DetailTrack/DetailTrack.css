@@ -1,67 +1,84 @@
-/* Container หลัก */
-.detail-track-container {
-  background: white;
-  padding: 2rem;
-  margin: 2rem auto;
-  max-width: 800px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  font-family: 'Prompt', sans-serif;
+/* File: DetailTrack.css */
+
+.detail-track-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 2em;
   box-sizing: border-box;
+  margin-left: 200px;
 }
 
-/* หัวเรื่องใหญ่ */
 .detail-track-header {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #003366;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-/* กล่องรายละเอียด */
-.detail-track-box {
-  text-align: left;
-}
-
-/* ชื่อเรื่องภายในกล่อง */
-.detail-track-title {
   font-size: 1.6rem;
   font-weight: bold;
   color: #003366;
   margin-bottom: 1rem;
-  text-align: center;
+  margin-left: 13rem; 
 }
 
-/* กริดข้อมูลเบื้องต้น */
+.detail-track-box {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  width: 60%;
+  margin: 0 auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Prompt', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  text-align: center; 
+}
+
+.detail-track-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-right: 1.5rem; 
+}
+
+.detail-track-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #003366;
+}
+
 .detail-track-grid {
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  column-gap: 3rem;
-  row-gap: 0.8rem;
-  margin-bottom: 2rem;
+  grid-template-columns: auto auto;
+  column-gap: 4rem;
+  row-gap: 1rem;
+  justify-content: start;
+  font-size: 1rem;
+  margin-top: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
 }
 
-/* ข้อความในกริด */
 .detail-track-grid p {
-  margin: 0.2rem 0;
+  margin-bottom: 1rem;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* ชื่อหัวตารางรายการ */
 .detail-track-subtitle {
+  margin-top: 2rem;
   font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
-/* ตารางรายการวัสดุ */
 .detail-track-table {
-  width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 1rem;
+  width: 85%;
 }
 
 .detail-track-table th,
@@ -76,44 +93,62 @@
   font-weight: bold;
 }
 
-/* สถานะต่างๆ */
 .detail-track-status {
-  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
   font-size: 1rem;
   line-height: 1.6;
+  text-align: left;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.detail-track-status .approved {
+.detail-track-approved {
   color: green;
   font-weight: bold;
 }
 
-.detail-track-status .received {
-  color: #0056d6;
+.detail-track-rejected {
+  color: red;
   font-weight: bold;
 }
 
-/* ปุ่มกลับ */
-.detail-track-actions {
-  text-align: right;
+.detail-track-pending {
+  color: orange;
+  font-weight: bold;
 }
 
-.btn-back {
+.detail-track-waiting {
+  color: #6a1b9a;
+  font-weight: bold;
+}
+
+.detail-track-received {
+  color: #0f9d58;
+  font-weight: bold;
+}
+
+.detail-track-button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.detail-track-btn-back {
   background-color: #f79c05;
   color: white;
-  padding: 0.6rem 1.4rem;
+  padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-.btn-back:hover {
+.detail-track-btn-back:hover {
   background-color: #e67c00;
 }
 
-/* Responsive สำหรับมือถือ */
 @media (max-width: 768px) {
   .detail-track-grid {
     grid-template-columns: 1fr;
