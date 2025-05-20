@@ -96,8 +96,8 @@ export default function Detail() {
             className={`${status} detail-select`}
           >
             <option value="">สถานะ:</option>
-            <option value="อนุมัติ">อนุมัติ</option>
-            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+            <option value="approved">อนุมัติ</option>
+            <option value="rejected">ไม่อนุมัติ</option>
           </select>
         </div>
 
