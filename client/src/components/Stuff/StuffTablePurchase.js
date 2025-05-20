@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './StuffTable.css';
+import { useNavigate } from 'react-router-dom';
 import { FaPrint } from 'react-icons/fa';
 
 const purchaseData = [
@@ -12,6 +13,7 @@ const purchaseData = [
 ];
 
 export default function StuffTablePurchase({ searchTerm = '' }) {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [input, setInput] = useState('');
   const [asc, setAsc] = useState(true);
@@ -72,9 +74,13 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             </tr>
           ) : (
             items.map(i => (
-              <tr key={i.id}>
+              <tr
+                key={i.id}
+                onClick={() => navigate("/stuff/DetailPurchase", { state: { id: i.id } })}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{i.id}</td>
-                <td>{i.code}</td>
+                <td className="stuff-link">{i.code}</td>
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>

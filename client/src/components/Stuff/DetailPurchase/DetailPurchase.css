@@ -1,0 +1,131 @@
+/* File: DetailPurchase.css */
+
+.detail-purchase-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 2em;
+  box-sizing: border-box;
+  margin-left: 200px;
+}
+
+.detail-purchase-header {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.detail-purchase-box {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Prompt', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.detail-purchase-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #003366;
+}
+
+.detail-purchase-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 2rem;
+  row-gap: 1rem;
+  justify-content: start;
+  font-size: 1rem;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail-purchase-grid p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.detail-purchase-subtitle {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.detail-purchase-table {
+  border-collapse: collapse;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+  width: 85%;
+}
+
+.detail-purchase-table th,
+.detail-purchase-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.detail-purchase-table th {
+  background-color: #e3edf8;
+  font-weight: bold;
+}
+
+.detail-purchase-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-right: 1.5rem;
+}
+
+.btn-back {
+  background-color: #f79c05;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background-color: #e67c00;
+}
+
+select {
+  padding: 0.4rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 200px;
+}
+
+img {
+  margin-top: 0.5rem;
+  max-width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .detail-purchase-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-purchase-box {
+    padding: 1.5rem;
+  }
+}

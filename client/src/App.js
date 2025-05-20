@@ -12,6 +12,7 @@ import StuffTrackPage from './pages/Stuff/StuffTrackPage';
 import StuffPurchasePage from './pages/Stuff/StuffPurchasePage';
 import StuffDetailPage from './pages/Stuff/StuffDetailPage';
 import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
+import StuffDetailPurchasePage from './pages/Stuff/StuffDetailPurchasePage';
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
 import HumanPage from "./pages/Human/HumanPage";
@@ -65,6 +66,7 @@ function App() {
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/track" element={<StuffTrackPage />} />
         <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
+        <Route path="/stuff/DetailPurchase" element={<StuffDetailPurchasePage />} />
 
         {/* เมนูอื่นๆ */}
         <Route path="/incoming" element={<IncomingPage />} />

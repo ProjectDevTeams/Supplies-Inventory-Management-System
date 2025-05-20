@@ -1,0 +1,21 @@
+/* File: src/pages/Stuff/StuffDetailPurchase.css */
+.stuff-purchase-navbar {
+  width: 100%;
+  height: 100%;
+}
+
+.stuff-purchase-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.stuff-purchase-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 2em;
+  box-sizing: border-box;
+  margin-left: 200px;
+}
