@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './UserHistoryTable.css';
-import { FaPrint } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'; // เพิ่มบรรทัดนี้ด้านบน
 
 function UserHistoryTable({ searchTerm = "" }) {
@@ -82,7 +81,6 @@ function UserHistoryTable({ searchTerm = "" }) {
             <th>จำนวนรายการ</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
-            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
@@ -116,9 +114,6 @@ function UserHistoryTable({ searchTerm = "" }) {
                 }
               >
                 {row.status}
-              </td>
-              <td className="print-icon">
-                <FaPrint />
               </td>
             </tr>
           ))}
