@@ -31,12 +31,13 @@ import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
 import Balance from "./components/Adjust/Balance/Balance";
 
 
-import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
-
-
+// import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
 
 
 import EmailVerification from "./pages/Email Verification/Email_Verification";
+
+// import UserConfirmHisPage from "./user_pages/UserStuff/UserStuffPage"; 
+import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
 
 
 function App() {

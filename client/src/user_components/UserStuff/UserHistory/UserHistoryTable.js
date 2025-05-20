@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import './UserHistoryTable.css';
 import { FaPrint } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // เพิ่มบรรทัดนี้ด้านบน
 
 function UserHistoryTable({ searchTerm = "" }) {
+
+  const navigate = useNavigate(); // เพิ่มบรรทัดนี้ใน component ก่อน return
+
   const data = [
     {
       id: 1,
@@ -78,25 +82,44 @@ function UserHistoryTable({ searchTerm = "" }) {
             <th>จำนวนรายการ</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
-            <th>ปริ้น</th>            
+            <th>ปริ้น</th>
           </tr>
         </thead>
         <tbody>
           {userhistoryCurrentItems.map((row) => (
             <tr key={row.id}>
               <td>{row.id}</td>
-              <td>{row.number}</td>
+
+              <td>
+                {/* {row.number} */}
+                <span
+                  className="clickable-number"
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    navigate("/user/confirm-history", { state: { item: row } }); // เปลี่ยนเป็น row
+                  }}
+                >
+                  {row.number}
+                </span>
+              </td>
+
               <td>{row.category}</td>
               <td>{row.items}</td>
               <td>{row.date}</td>
-              <td className={
-                row.status === "อนุมัติ" ? "status-approved" :
-                row.status === "รับของเรียบร้อย" ? "status-done" :
-                ""
-              }>
+              <td
+                className={
+                  row.status === "อนุมัติ"
+                    ? "status-approved"
+                    : row.status === "รับของเรียบร้อย"
+                    ? "status-done"
+                    : ""
+                }
+              >
                 {row.status}
               </td>
-              <td className="print-icon"><FaPrint /></td>
+              <td className="print-icon">
+                <FaPrint />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -104,10 +127,16 @@ function UserHistoryTable({ searchTerm = "" }) {
 
       <div className="userhistory-pagination">
         <div className="userhistory-pagination-info">
-          แสดง {userhistoryIndexOfFirstItem + 1} ถึง {Math.min(userhistoryIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {userhistoryIndexOfFirstItem + 1} ถึง{" "}
+          {Math.min(userhistoryIndexOfLastItem, filteredData.length)} จาก{" "}
+          {filteredData.length} แถว
         </div>
         <div className="userhistory-pagination-buttons">
-          <button className="btn" disabled={userhistoryCurrentPage === 1} onClick={handleUserhistoryPrev}>
+          <button
+            className="btn"
+            disabled={userhistoryCurrentPage === 1}
+            onClick={handleUserhistoryPrev}
+          >
             ก่อนหน้า
           </button>
 
@@ -118,12 +147,16 @@ function UserHistoryTable({ searchTerm = "" }) {
             value={userhistoryInputPage}
             min={1}
             max={userhistoryTotalPages}
-            onFocus={() => setUserhistoryInputPage('')}
+            onFocus={() => setUserhistoryInputPage("")}
             onChange={handleUserhistoryChange}
             onKeyDown={handleUserhistoryKeyDown}
           />
 
-          <button className="btn" disabled={userhistoryCurrentPage === userhistoryTotalPages} onClick={handleUserhistoryNext}>
+          <button
+            className="btn"
+            disabled={userhistoryCurrentPage === userhistoryTotalPages}
+            onClick={handleUserhistoryNext}
+          >
             ถัดไป
           </button>
         </div>

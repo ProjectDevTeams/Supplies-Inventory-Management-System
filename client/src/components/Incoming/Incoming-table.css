@@ -1,7 +1,7 @@
 /* ✅ Container */
 .incoming-container {
   width: 100%;
-  padding:  1em;
+  padding: 1em;
   box-sizing: border-box;
 }
 
@@ -18,7 +18,6 @@
   table-layout: auto;
 }
 
-/* ✅ Header */
 .incoming-table th {
   background-color: #dfe8f6;
   font-weight: bold;
@@ -27,14 +26,12 @@
   border: 1px solid #999;
   text-align: center;
   font-size: 14px;
-  cursor: default;
 }
 
 .incoming-sortable-header {
   cursor: pointer;
 }
 
-/* ✅ Body Cells */
 .incoming-table td {
   padding: 12px;
   text-align: center;
@@ -45,7 +42,6 @@
   transition: background-color 0.2s ease;
 }
 
-/* ✅ Hover row */
 .incoming-tr {
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -55,24 +51,11 @@
   background-color: #f0f8ff;
 }
 
-/* ✅ No data row */
 .incoming-no-data {
   text-align: center;
   color: #555;
   padding: 1em;
   font-style: italic;
-}
-
-/* ✅ Link */
-.incoming-link {
-  color: #000;
-  font-weight: normal;
-  text-decoration: none;
-  transition: text-decoration 0.2s ease;
-}
-
-.incoming-link:hover {
-  text-decoration: underline;
 }
 
 /* ✅ Pagination */
@@ -117,7 +100,6 @@
   cursor: not-allowed;
 }
 
-/* ✅ Page Input */
 .incoming-page-input {
   width: 55px;
   text-align: center;
@@ -129,7 +111,6 @@
   color: white;
   font-weight: bold;
   appearance: textfield;
-  -moz-appearance: textfield;
 }
 
 .incoming-page-input::placeholder {
@@ -148,7 +129,25 @@
   margin: 0;
 }
 
-/* ✅ Responsive */
+.incoming-table-status {
+  font-weight: bold;
+  padding: 0.4em 0.8em;
+  border-radius: 4px;
+}
+
+.incoming-table-pending {
+  color: #d48b00;
+}
+
+.incoming-table-approved {
+  color: #0f9d58;
+}
+
+.incoming-table-rejected {
+  color: #dc3545;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .incoming-table th,
   .incoming-table td {

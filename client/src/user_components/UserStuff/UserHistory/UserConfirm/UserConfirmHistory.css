@@ -1,0 +1,195 @@
+.user-confirm-header {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+}
+
+.user-confirm-box {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  width: 60%;
+  margin: 0 auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Prompt', sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.user-confirm-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #003366;
+}
+
+.user-confirm-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 4rem;
+  row-gap: 0.05rem;
+  justify-content: start;
+  font-size: 1rem;
+  margin-top: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.user-confirm-grid p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.user-confirm-subtitle {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.user-confirm-table {
+  border-collapse: collapse;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+  width: 85%;
+}
+
+.user-confirm-table th,
+.user-confirm-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.user-confirm-table th {
+  background-color: #e3edf8;
+  font-weight: bold;
+}
+
+.user-confirm-status {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-confirm-approval-text {
+  color: green;
+  font-weight: bold;
+}
+
+.user-confirm-select-wrapper {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+}
+
+.user-confirm-status-select {
+  appearance: none;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 30px 6px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='10' viewBox='0 0 14 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23000' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  color: #0a58ca;
+}
+
+.user-confirm-status-select.placeholder {
+  color: #888;
+  font-weight: normal;
+}
+
+.user-confirm-status-select:hover,
+.user-confirm-status-select:focus {
+  border-color: #0a58ca;
+  box-shadow: 0 0 0 2px rgba(10, 88, 202, 0.2);
+}
+
+.user-confirm-select {
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 220px;
+}
+
+.user-confirm-status-label {
+  font-weight: bold;
+  padding-left: 0.5rem;
+}
+
+.user-confirm-btn-back {
+  margin-top: 2rem;
+  background-color: #f79c05;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.user-confirm-btn-back:hover {
+  background-color: #e67c00;
+}
+
+.user-confirm-select option[value="approved"] {
+  color: green;
+}
+
+.user-confirm-select option[value="rejected"] {
+  color: red;
+}
+
+.user-confirm-select.inConfirm {
+  color: rgb(18, 0, 220);
+}
+
+.user-confirm-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+/* Navbar/sidebar/content layout */
+.stuff-navbar {
+  width: 100%;
+  height: 100%;
+}
+
+.stuff-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.user-confirm-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 2em;
+  box-sizing: border-box;
+  margin-left: 0px;
+}
+
+@media (max-width: 768px) {
+  .user-confirm-grid {
+    grid-template-columns: 1fr;
+  }
+}
