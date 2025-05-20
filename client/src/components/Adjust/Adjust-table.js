@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../../config";
 import "./Adjust-table.css";
@@ -11,33 +11,34 @@ function AdjustTable({ searchTerm }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
+  const location = useLocation();
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/adjustment_items/get_adjustment_items.php`);
-        const adjustments = res.data?.data || [];
+useEffect(() => {
+  const fetchAll = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/adjustment_items/get_adjustment_items.php`);
+      const adjustments = res.data?.data || [];
 
-        const flatItems = adjustments.flatMap(adj =>
-          (adj.items || []).map(item => ({
-            ...item,
-            full_name: adj.full_name,
-            created_date: adj.created_date,
-            status: adj.status,
-            adjustment_id: adj.id
-          }))
-        );
+      const flatItems = adjustments.flatMap(adj =>
+        (adj.items || []).map(item => ({
+          ...item,
+          full_name: adj.full_name,
+          created_date: adj.created_date,
+          status: adj.status,
+          adjustment_id: adj.id
+        }))
+      );
 
-        setAdjustments(flatItems);
-        setLoading(false);
-      } catch (err) {
-        console.error("โหลดข้อมูลล้มเหลว:", err);
-      }
-    };
+      setAdjustments(flatItems);
+      setLoading(false);
+    } catch (err) {
+      console.error("โหลดข้อมูลล้มเหลว:", err);
+    }
+  };
 
-    fetchAll();
-  }, []);
+  fetchAll();
+}, [location.state?.reload]); // ✅ เพิ่ม dependency นี้
 
   const filteredData = adjustments.filter(item =>
     item.id.toString().includes(searchTerm.toLowerCase()) ||
@@ -114,8 +115,19 @@ function AdjustTable({ searchTerm }) {
                 <td className="adjustment-td">
                   {formatDateWithSubtext(item.created_date, item.full_name)}
                 </td>
-                <td className="adjustment-td" style={{ fontWeight: "bold", color: "green" }}>
-                  {item.status || "อนุมัติ"}
+                <td
+                  className="adjustment-td"
+                  style={{
+                    fontWeight: "bold",
+                    color:
+                      item.status === "อนุมัติ"
+                        ? "#2d7a3e" // เขียว
+                        : item.status === "ไม่อนุมัติ"
+                        ? "#e63946" // แดง
+                        : "#d48b00" // เทา สำหรับกรณีรออนุมัติ
+                  }}
+                >
+                  {item.status || "รออนุมัติ"}
                 </td>
               </tr>
             ))
@@ -156,7 +168,7 @@ function AdjustTable({ searchTerm }) {
         </div>
       </div>
     </div> 
-    
+
   );
 }
 
