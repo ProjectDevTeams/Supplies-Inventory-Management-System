@@ -1,23 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StuffTable.css';
 import { useNavigate } from 'react-router-dom';
 import { FaPrint } from 'react-icons/fa';
-
-const purchaseData = [
-  { id: 1, code: "001-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "5 ม.ค. 68", status: "approved" },
-  { id: 2, code: "002-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "10 ม.ค. 68", status: "pending" },
-  { id: 3, code: "003-01/2568", stock: "วัสดุในคลัง", amount: 3, date: "15 ม.ค. 68", status: "rejected" },
-  { id: 4, code: "004-01/2568", stock: "วัสดุในคลัง", amount: 2, date: "18 ม.ค. 68", status: "approved" },
-  { id: 5, code: "005-01/2568", stock: "วัสดุในคลัง", amount: 5, date: "20 ม.ค. 68", status: "approved" },
-  { id: 6, code: "006-01/2568", stock: "วัสดุในคลัง", amount: 1, date: "25 ม.ค. 68", status: "pending" },
-];
+import axios from 'axios';
+import { API_URL } from "../../config";
 
 export default function StuffTablePurchase({ searchTerm = '' }) {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [input, setInput] = useState('');
   const [asc, setAsc] = useState(true);
   const perPage = 4;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
+        if (res.data.status === "success") {
+          const formatted = res.data.data.map((item) => ({
+            id: parseInt(item.id),
+            code: `PE-${String(item.id).padStart(3, '0')}`,
+            stock: item.items?.[0]?.stock_type || "วัสดุในคลัง",
+            amount: item.items?.length || 0,
+            date: item.created_date,
+            status: item.approval_status === 'อนุมัติ' ? 'approved'
+              : item.approval_status === 'ไม่อนุมัติ' ? 'rejected'
+              : 'pending'
+          }));
+          setData(formatted);
+        }
+      } catch (err) {
+        console.error("โหลดข้อมูลล้มเหลว:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const renderStatus = (st) => ({
     pending: 'รออนุมัติ',
@@ -25,7 +43,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
     rejected: 'ไม่อนุมัติ',
   }[st] || '-');
 
-  const sorted = [...purchaseData].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
+  const sorted = [...data].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
 
   const filtered = sorted.filter(item =>
     item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,7 +110,6 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             ))
           )}
         </tbody>
-
       </table>
 
       <div className="stuff-pagination">
