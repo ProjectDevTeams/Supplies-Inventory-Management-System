@@ -93,3 +93,13 @@
     cursor: not-allowed;
   }
   
+
+.clickable-number {
+  color: #0a58ca;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.clickable-number:hover {
+  color: #084298;
+}
