@@ -57,13 +57,6 @@ export default function DetailPurchase() {
                     </div>
 
                     <p><b>รูป</b></p>
-                    <p>
-                        {data.items[0]?.image ? (
-                            <img src={`${API_URL}/uploads/${data.items[0].image}`} alt="item" style={{ maxWidth: '150px' }} />
-                        ) : (
-                            "ไม่มีรูป"
-                        )}
-                    </p>
                 </div>
 
                 <h3 className="detail-track-subtitle">รายการวัสดุ</h3>
