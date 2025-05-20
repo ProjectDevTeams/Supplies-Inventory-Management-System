@@ -1,4 +1,3 @@
-// File: src/components/Incoming/Incoming-table.js
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -27,10 +26,10 @@ export default function IncomingTable({ searchTerm = "" }) {
   const incomingItemsPerPage = 5;
   const navigate = useNavigate();
 
-  // ฟังก์ชันจัดรูปวันที่จาก 'YYYY-MM-DD' → 'DD-MM-YYYY'
+  // จัดรูปวันที่จาก 'YYYY-MM-DD' → 'DD-MM-YYYY'
   const formatDate = (d) => (d ? d.split("-").reverse().join("-") : "-");
 
-  // fetch data
+  // Fetch data
   useEffect(() => {
     axios
       .get(`${API_URL}/receive_materials/get_receives.php`)
@@ -43,7 +42,7 @@ export default function IncomingTable({ searchTerm = "" }) {
             created_by: item.created_by || "-",
             created_at: formatDate(item.created_at),
             amount: parseFloat(item.total_price) || 0,
-            status: item.status || "-"        // เพิ่มสถานะจาก API
+            status: item.status || "-"  // ดึงสถานะจาก API
           }));
           setData(formatted);
         }
@@ -51,12 +50,12 @@ export default function IncomingTable({ searchTerm = "" }) {
       .catch((err) => console.error("API fetch error:", err));
   }, []);
 
-  // sort
+  // Sort
   const sortedData = [...data].sort((a, b) =>
     incomingAsc ? a.id - b.id : b.id - a.id
   );
 
-  // filter
+  // Filter
   const filteredData = sortedData.filter((item) =>
     [item.company, item.po, item.created_by, item.created_at, item.amount, item.status]
       .some((field) =>
@@ -67,7 +66,7 @@ export default function IncomingTable({ searchTerm = "" }) {
       )
   );
 
-  // pagination
+  // Pagination
   const totalPages = Math.ceil(filteredData.length / incomingItemsPerPage);
   const indexOfLastItem = incomingCurrentPage * incomingItemsPerPage;
   const indexOfFirstItem = indexOfLastItem - incomingItemsPerPage;
@@ -82,6 +81,14 @@ export default function IncomingTable({ searchTerm = "" }) {
     setIncomingCurrentPage((p) => p + 1);
   const handlePrevPage = () =>
     incomingCurrentPage > 1 && setIncomingCurrentPage((p) => p - 1);
+
+  // แปลงสถานะเป็นคลาส
+  const statusClass = (status) => {
+    if (status === "รออนุมัติ") return "stuff-status stuff-pending";
+    if (status === "อนุมัติ") return "stuff-status stuff-approved";
+    if (status === "ไม่อนุมัติ") return "stuff-status stuff-rejected";
+    return "stuff-status";
+  };
 
   return (
     <div className="incoming-container">
@@ -120,7 +127,11 @@ export default function IncomingTable({ searchTerm = "" }) {
                 <td>{item.created_by}</td>
                 <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
-                <td>{item.status}</td>
+                <td>
+                  <span className={statusClass(item.status)}>
+                    {item.status}
+                  </span>
+                </td>
               </tr>
             ))
           )}
