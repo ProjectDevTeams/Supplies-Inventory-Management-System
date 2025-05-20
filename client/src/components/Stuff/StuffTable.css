@@ -178,3 +178,13 @@
 .stuff-tr:hover {
   background-color: #f0f8ff;
 }
+
+.user-status.waiting {
+  color: #4b25b6; /* ม่วงเข้ม */
+  font-weight: bold;
+}
+
+.user-status.received {
+  color: #0f9d58; /* เขียว */
+  font-weight: bold;
+}
