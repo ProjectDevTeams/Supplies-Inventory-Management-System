@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2025 at 05:06 AM
+-- Generation Time: May 20, 2025 at 05:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -149,10 +149,10 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 5, 2, 2, 0, '2025-05-12 17:00:00'),
-(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-06 09:20:18'),
-(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 8, 3, 2, 0, '2025-05-06 09:20:18'),
-(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 6, 6, 2, 0, '2025-05-06 09:20:18'),
+(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 15, 2, 2, 0, '2025-05-12 17:00:00'),
+(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 30, 5, 1, 0, '2025-05-06 09:20:18'),
+(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 3, 3, 2, 0, '2025-05-06 09:20:18'),
+(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 4, 6, 2, 0, '2025-05-06 09:20:18'),
 (5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 3, 2, 1, 0, '2025-05-06 09:20:18'),
 (6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 12, 4, 0, 0, '2025-05-06 09:20:18'),
 (7, '', 'แฟ้มแข็ง', 1, 'เล่ม', 'วัสดุในคลัง', 0, 4, 1, 30.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
@@ -276,17 +276,36 @@ CREATE TABLE `receive_materials` (
   `tax_invoice_number` varchar(100) DEFAULT NULL,
   `purchase_order_number` varchar(100) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
-  `total_price` decimal(10,2) DEFAULT 0.00
+  `total_price` decimal(10,2) DEFAULT 0.00,
+  `approval_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `receive_materials`
 --
 
-INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`) VALUES
-(1, 3, 'วัสดุในคลัง', 6, 'INV-001', 'PO-001', '2025-05-16', 485.00),
-(2, 3, 'วัสดุในคลัง', 7, 'INV-002', 'PO-002', '2025-05-16', 70.00),
-(3, 3, 'วัสดุนอกคลัง', 8, 'INV-003', 'PO-003', '2025-05-16', 220.00);
+INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`, `approval_status`) VALUES
+(1, 3, 'วัสดุในคลัง', 6, 'INV-001', 'PO-001', '2025-05-16', 485.00, 'อนุมัติ'),
+(2, 3, 'วัสดุในคลัง', 7, 'INV-002', 'PO-002', '2025-05-16', 70.00, 'รออนุมัติ'),
+(3, 3, 'วัสดุนอกคลัง', 8, 'INV-003', 'PO-003', '2025-05-16', 220.00, 'อนุมัติ');
+
+--
+-- Triggers `receive_materials`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_receive_approval_add_quantity` AFTER UPDATE ON `receive_materials` FOR EACH ROW BEGIN
+  -- เงื่อนไข: เมื่อสถานะเปลี่ยนเป็น 'อนุมัติ' เท่านั้น
+  IF NEW.approval_status = 'อนุมัติ' AND OLD.approval_status <> 'อนุมัติ' THEN
+    -- เพิ่มปริมาณวัสดุในคลังตามรายการใน receive_material_items
+    UPDATE materials m
+    JOIN receive_material_items rmi ON rmi.material_id = m.id
+    SET m.remaining_quantity = m.remaining_quantity + rmi.quantity
+    WHERE rmi.receive_material_id = NEW.id
+      AND rmi.material_id IS NOT NULL;
+  END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -297,7 +316,7 @@ INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`,
 CREATE TABLE `receive_material_items` (
   `id` int(11) NOT NULL,
   `receive_material_id` int(11) NOT NULL,
-  `material_name` varchar(255) NOT NULL,
+  `material_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT 0,
   `price_per_unit` decimal(10,2) DEFAULT 0.00,
   `total_price` decimal(10,2) DEFAULT 0.00
@@ -307,13 +326,13 @@ CREATE TABLE `receive_material_items` (
 -- Dumping data for table `receive_material_items`
 --
 
-INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_name`, `quantity`, `price_per_unit`, `total_price`) VALUES
-(1, 1, 'เทปกาวสองหน้า', 2, 220.00, 440.00),
-(2, 1, 'แฟ้ม A4 สีฟ้า', 3, 15.00, 45.00),
-(3, 2, 'ดินสอ 2B', 10, 5.00, 50.00),
-(4, 2, 'ปากกาเจลสีดำ', 2, 10.00, 20.00),
-(5, 3, 'กระดาษ A4', 1, 120.00, 120.00),
-(6, 3, 'คลิปหนีบกระดาษ', 4, 25.00, 100.00);
+INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_id`, `quantity`, `price_per_unit`, `total_price`) VALUES
+(1, 1, NULL, 2, 220.00, 440.00),
+(2, 1, NULL, 3, 15.00, 45.00),
+(3, 2, NULL, 10, 5.00, 50.00),
+(4, 2, NULL, 2, 10.00, 20.00),
+(5, 3, 1, 20, 120.00, 120.00),
+(6, 3, 2, 40, 25.00, 100.00);
 
 --
 -- Triggers `receive_material_items`
@@ -377,9 +396,26 @@ CREATE TABLE `stuff_materials` (
 --
 
 INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
-(1, '2568/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานกิจกรรมบริษัท', 485.00, 'รออนุมัติ', 'รอรับของ'),
-(2, 'SM-68/05/002', '2025-05-16', 3, 'เบิกสำหรับจัดอบรมภายใน', 45.00, 'รออนุมัติ', 'รอรับของ'),
+(1, '2568/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
+(2, 'SM-68/05/002', '2025-05-16', 1, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
 (3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
+
+--
+-- Triggers `stuff_materials`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_stuff_user_receive` AFTER UPDATE ON `stuff_materials` FOR EACH ROW BEGIN
+  -- เช็กว่า User_status เปลี่ยนเป็น "รับของเรียบร้อยแล้ว"
+  IF NEW.User_status = 'รับของเรียบร้อยแล้ว' AND OLD.User_status <> 'รับของเรียบร้อยแล้ว' THEN
+    -- หักวัสดุในคลังตามรายการ
+    UPDATE materials m
+    JOIN stuff_material_items smi ON smi.material_id = m.id
+    SET m.remaining_quantity = m.remaining_quantity - smi.quantity
+    WHERE smi.stuff_material_id = NEW.id;
+  END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -400,10 +436,10 @@ CREATE TABLE `stuff_material_items` (
 --
 
 INSERT INTO `stuff_material_items` (`id`, `stuff_material_id`, `material_id`, `quantity`, `total_price`) VALUES
-(1, 1, 1, 2, 440.00),
-(2, 1, 2, 3, 45.00),
-(3, 2, 3, 5, 25.00),
-(4, 2, 4, 2, 20.00),
+(1, 1, 1, 10, 2200.00),
+(2, 1, 2, 20, 300.00),
+(3, 1, 3, 5, 25.00),
+(4, 2, 2, 20, 300.00),
 (5, 3, 5, 1, 120.00),
 (6, 3, 6, 4, 100.00);
 
@@ -571,7 +607,8 @@ ALTER TABLE `receive_materials`
 --
 ALTER TABLE `receive_material_items`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `receive_material_id` (`receive_material_id`);
+  ADD KEY `receive_material_id` (`receive_material_id`),
+  ADD KEY `fk_receive_material_items_material` (`material_id`);
 
 --
 -- Indexes for table `stuff_materials`
@@ -736,7 +773,8 @@ ALTER TABLE `receive_materials`
 -- Constraints for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  ADD CONSTRAINT `fk_receive_material_items` FOREIGN KEY (`receive_material_id`) REFERENCES `receive_materials` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_receive_material_items` FOREIGN KEY (`receive_material_id`) REFERENCES `receive_materials` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_receive_material_items_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `stuff_materials`
