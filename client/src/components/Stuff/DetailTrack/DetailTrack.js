@@ -71,7 +71,7 @@ export default function DetailTrack() {
         </table>
 
         <div className="detail-track-actions">
-          <button className="btn-back" onClick={() => window.history.back()}>
+          <button className="detail-track-btn-back " onClick={() => window.history.back()}>
             ย้อนกลับ
           </button>
         </div>

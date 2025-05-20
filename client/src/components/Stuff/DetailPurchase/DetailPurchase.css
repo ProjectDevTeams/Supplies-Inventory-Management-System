@@ -1,6 +1,4 @@
-/* File: DetailPurchase.css */
-
-.detail-purchase-content {
+.detail-purchase-container {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -31,7 +29,7 @@
   font-family: 'Prompt', sans-serif;
   font-size: 1rem;
   box-sizing: border-box;
-  text-align: center; 
+  text-align: center;
 }
 
 .detail-purchase-title {
@@ -94,9 +92,11 @@
   justify-content: flex-end;
   margin-top: 2rem;
   padding-right: 1.5rem;
+  gap: 1rem;
 }
 
-.btn-back {
+/* ปุ่ม "กลับ" สีส้ม */
+.detail-purchase-btn-back {
   background-color: #f79c05;
   color: white;
   padding: 0.6rem 1.5rem;
@@ -106,8 +106,34 @@
   cursor: pointer;
 }
 
-.btn-back:hover {
+.detail-purchase-btn-back:hover {
   background-color: #e67c00;
+}
+
+/* ปุ่ม "บันทึก" สีเขียว */
+.detail-purchase-btn-save {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.detail-purchase-btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.detail-purchase-btn-save:hover:not(:disabled) {
+  background-color: #3e8e41;
+}
+
+/* select */
+.detail-purchase-select-wrapper {
+  display: flex;
+  align-items: center;
 }
 
 .detail-purchase-select {
@@ -131,15 +157,4 @@
 
 .detail-purchase-select.rejected {
   color: red;
-}
-
-
-.detail-purchase-approved {
-  color: green;
-  font-weight: bold;
-}
-
-.detail-purchase-rejected {
-  color: red;
-  font-weight: bold;
 }
