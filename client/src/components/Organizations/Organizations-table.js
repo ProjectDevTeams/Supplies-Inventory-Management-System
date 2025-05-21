@@ -87,7 +87,7 @@ export default function OrganizationsTable() {
               ลำดับ {sortAsc ? "▲" : "▼"}
             </th>
             <th>บริษัท/ร้านค้า</th>
-            <th>ผู้สร้าง</th>
+            <th>ผู้สร้าง/ผู้แก้ไข</th>
             <th>วันที่สร้าง</th>
             <th>วันที่แก้ไข</th>
           </tr>

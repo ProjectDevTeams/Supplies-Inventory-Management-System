@@ -13,6 +13,10 @@ export default function OrganizationsManagePopup({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  // ดึง user.id จาก localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userId = storedUser?.id || 0;
+
   // update handler
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +29,15 @@ export default function OrganizationsManagePopup({
       setSaving(true);
       const res = await axios.put(
         `${API_URL}/companies/update_company.php`,
-        { id: companyData.id, name: name.trim() }
+        {
+          id: companyData.id,
+          name: name.trim(),
+          created_by: userId    // ส่ง created_by ไปให้ PHP อัปเดต
+        }
       );
       if (res.data.status === "success") {
         onEditCompany(companyData.id, res.data.data.name);
+        onClose();  // ปิด Popup หลังอัปเดตสำเร็จ (ถ้าต้องการ)
       } else {
         alert("อัปเดตไม่สำเร็จ: " + res.data.message);
       }
@@ -43,9 +52,7 @@ export default function OrganizationsManagePopup({
   // delete handler
   const handleDelete = async () => {
     if (
-      !window.confirm(
-        `คุณแน่ใจว่าต้องการลบ "${companyData.name}" หรือไม่?`
-      )
+      !window.confirm(`คุณแน่ใจว่าต้องการลบ "${companyData.name}" หรือไม่?`)
     ) {
       return;
     }
@@ -57,6 +64,7 @@ export default function OrganizationsManagePopup({
       );
       if (res.data.status === "success") {
         onDeleteCompany(companyData.id);
+        onClose();
       } else {
         alert("ลบไม่สำเร็จ: " + res.data.message);
       }
