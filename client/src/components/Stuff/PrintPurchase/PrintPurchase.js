@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../config';
-import './PrintPurchasePage.css';
+import './PrintPurchase.css';
 
 export default function PrintPurchasePage() {
     const location = useLocation();
