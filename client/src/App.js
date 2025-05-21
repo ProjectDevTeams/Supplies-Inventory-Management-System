@@ -53,12 +53,12 @@ function App() {
 
         {/* ✅ ผู้ใช้งานทั่วไป */}
         <Route path="/userstuff" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "แอดมิน", "ผู้ช่วยแอดมิน"]}>
+          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
             <UserStuffPage />
           </ProtectedRoute>
         } />
         <Route path="/user/confirm-history" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "แอดมิน", "ผู้ช่วยแอดมิน"]}>
+          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
             <UserConfirmHisPage />
           </ProtectedRoute>
         } />
