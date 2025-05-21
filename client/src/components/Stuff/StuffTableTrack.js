@@ -1,3 +1,4 @@
+// File: StuffTableTrack.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -43,13 +44,15 @@ export default function StuffTableTrack({ searchTerm = '' }) {
     rejected: 'ไม่อนุมัติ',
   }[st] || '-');
 
-  const filtered = sorted.filter(item =>
-    item.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.stock?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.date?.includes(searchTerm) ||
-    renderStatus(item.status).includes(searchTerm) ||
-    item.user_status?.includes(searchTerm)
-  );
+  const filtered = sorted
+    .filter(i => i.status !== 'pending') // ✅ ตัดสถานะรออนุมัติ
+    .filter(item =>
+      item.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.stock?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.date?.includes(searchTerm) ||
+      renderStatus(item.status).includes(searchTerm) ||
+      item.user_status?.includes(searchTerm)
+    );
 
   const total = Math.ceil(filtered.length / perPage);
   const items = filtered.slice((page - 1) * perPage, page * perPage);

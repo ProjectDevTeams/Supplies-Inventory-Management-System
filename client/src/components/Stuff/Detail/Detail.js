@@ -1,4 +1,3 @@
-// File: src/components/Stuff/Detail/Detail.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -12,7 +11,7 @@ export default function Detail() {
 
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("");
-  const [originalStatus, setOriginalStatus] = useState(""); // ✅ เพิ่มเพื่อใช้เปรียบเทียบ
+  const [originalStatus, setOriginalStatus] = useState("");
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -21,7 +20,7 @@ export default function Detail() {
         if (res.data.status === "success") {
           setData(res.data.data);
           setStatus(res.data.data.Admin_status);
-          setOriginalStatus(res.data.data.Admin_status); // ✅ เก็บสถานะดั้งเดิมไว้เปรียบเทียบ
+          setOriginalStatus(res.data.data.Admin_status);
         }
       } catch (error) {
         console.error("โหลดข้อมูลล้มเหลว:", error);
@@ -37,10 +36,18 @@ export default function Detail() {
 
   const handleSave = async () => {
     try {
-      await axios.post(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
-        id,
-        Admin_status: status
-      });
+      await axios.post(
+        `${API_URL}/stuff_materials/update_stuff_materials.php`,
+        {
+          id,
+          Admin_status: status
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       alert("บันทึกสถานะสำเร็จ");
       navigate("/stuff");
     } catch (err) {
@@ -96,8 +103,8 @@ export default function Detail() {
           className={`detail-stuff-select ${status}`}
         >
           <option value="">สถานะ:</option>
-          <option value="approved">อนุมัติ</option>
-          <option value="rejected">ไม่อนุมัติ</option>
+          <option value="อนุมัติ">อนุมัติ</option>
+          <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
         </select>
       </div>
 
@@ -113,7 +120,7 @@ export default function Detail() {
         <button
           className="detail-stuff-btn-save"
           onClick={handleSave}
-          disabled={status === originalStatus} // ✅ ปิดปุ่มถ้าไม่มีการเปลี่ยนแปลง
+          disabled={status === originalStatus}
         >
           บันทึก
         </button>
