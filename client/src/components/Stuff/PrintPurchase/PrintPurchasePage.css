@@ -1,0 +1,125 @@
+.printpurchase-wrapper {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 2cm 2cm;
+  font-family: 'Prompt', sans-serif;
+  font-size: 16px;
+  color: #000;
+  line-height: 1.6;
+}
+
+.printpurchase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.printpurchase-logo {
+  width: 100px;
+}
+
+.printpurchase-date {
+  font-size: 1rem;
+}
+
+.printpurchase-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 2rem;
+}
+
+.printpurchase-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4rem;
+  row-gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.printpurchase-info-grid div {
+  font-size: 1rem;
+}
+
+.printpurchase-info-grid strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #000;
+}
+
+.printpurchase-subtitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.printpurchase-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  table-layout: fixed;
+}
+
+.printpurchase-table th,
+.printpurchase-table td {
+  border: 1px solid #ccc;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+  word-wrap: break-word;
+}
+
+.printpurchase-table th {
+  background-color: #e6f0ff;
+  color: #003366;
+  font-weight: bold;
+}
+
+/* กำหนดความกว้างเฉพาะแต่ละคอลัมน์ */
+.printpurchase-table col:nth-child(1) {
+  width: 10%;
+}
+.printpurchase-table col:nth-child(2) {
+  width: 65%;
+}
+.printpurchase-table col:nth-child(3) {
+  width: 25%;
+}
+
+.printpurchase-signature {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5rem;
+  padding: 0 1rem;
+}
+
+.printpurchase-sign-box {
+  text-align: center;
+  width: 40%;
+}
+
+@media print {
+  body {
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+
+  header, footer {
+    display: none;
+  }
+
+  .printpurchase-wrapper {
+    padding: 0;
+  }
+}

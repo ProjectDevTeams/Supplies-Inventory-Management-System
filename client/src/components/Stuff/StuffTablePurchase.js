@@ -26,7 +26,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             date: item.created_date,
             status: item.approval_status === 'อนุมัติ' ? 'approved'
               : item.approval_status === 'ไม่อนุมัติ' ? 'rejected'
-              : 'pending'
+                : 'pending'
           }));
           setData(formatted);
         }
@@ -105,7 +105,15 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
                 <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
                   {renderStatus(i.status)}
                 </td>
-                <td className="print-icon"><FaPrint /></td>
+                <td
+                  className="print-icon"
+                  onClick={(e) => {
+                    e.stopPropagation(); // ป้องกันไม่ให้ click ทั้งแถว
+                    navigate("/stuff/print-purchase", { state: { id: i.id } });
+                  }}
+                >
+                  <FaPrint />
+                </td>
               </tr>
             ))
           )}
