@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './StuffBasket_Popup.css';
 
 const StuffBasket_Popup = ({ basketItems = [], onClose, onConfirm, onCancel }) => {
   const totalQty = basketItems.reduce((sum, i) => sum + i.quantity, 0);
+
+  const [purpose, setPurpose] = useState('');
+  const [supervisor, setSupervisor] = useState('');
 
   return (
     <div className="stuff-basket-popup-overlay">
@@ -34,44 +37,56 @@ const StuffBasket_Popup = ({ basketItems = [], onClose, onConfirm, onCancel }) =
             </div>
             <div>
               <label>เพื่อใช้ในงาน/กิจกรรม</label>
-              <input type="text" readOnly />
+              <input
+                type="text"
+                value={purpose}
+                onChange={(e) => setPurpose(e.target.value)}
+                placeholder="ระบุงานหรือกิจกรรม"
+                autoComplete="off"
+              />
             </div>
             <div>
               <label>หัวหน้างาน</label>
-              <select disabled>
-                <option>หัวหน้างาน</option>
-              </select>
+              <input
+                type="text"
+                value={supervisor}
+                onChange={(e) => setSupervisor(e.target.value)}
+                placeholder="ชื่อหัวหน้างาน"
+                autoComplete="off"
+              />
             </div>
           </div>
 
           <div className="stuff-basket-popup-table-section">
-            <h3>รายการวัสดุ</h3>
-            <table className="stuff-basket-popup-material-table">
-              <thead>
-                <tr>
-                  <th>ลำดับ</th>
-                  <th>รายการ</th>
-                  <th>จำนวน/หน่วยนับ</th>
-                  <th>มูลค่า</th>
-                </tr>
-              </thead>
-              <tbody>
-                {basketItems.map((item, index) => (
-                  <tr key={item.code}>
-                    <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.quantity} กล่อง</td>
-                    <td>-</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td colSpan="2">รวม</td>
-                  <td>{totalQty} กล่อง</td>
-                  <td>-</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              <h3>รายการวัสดุ</h3>
+              <div className="stuff-basket-popup-table-scroll">
+                <table className="stuff-basket-popup-material-table">
+                  <thead>
+                    <tr>
+                      <th>ลำดับ</th>
+                      <th>รายการ</th>
+                      <th>จำนวน/หน่วยนับ</th>
+                      <th>มูลค่า</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {basketItems.map((item, index) => (
+                      <tr key={item.code}>
+                        <td>{index + 1}</td>
+                        <td>{item.name}</td>
+                        <td>{item.quantity} กล่อง</td>
+                        <td>-</td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td colSpan="2">รวม</td>
+                      <td>{totalQty} กล่อง</td>
+                      <td>-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
         </div>
 
         <div className="stuff-basket-popup-footer">
@@ -79,12 +94,15 @@ const StuffBasket_Popup = ({ basketItems = [], onClose, onConfirm, onCancel }) =
             ยกเลิก
           </button>
 
-          <button className="stuff-basket-popup-confirm-btn" onClick={onConfirm}>
+          <button
+            className="stuff-basket-popup-confirm-btn"
+            onClick={() => onConfirm({ basketItems, purpose, supervisor })}
+          >
             ยืนยัน
           </button>
         </div>
-      </div>
-    </div>
+      </div> 
+    </div> 
   );
 };
 

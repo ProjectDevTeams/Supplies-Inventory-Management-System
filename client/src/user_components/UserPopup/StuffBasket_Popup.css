@@ -48,7 +48,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
-  row-gap: 16px;
+  row-gap: 10px;
   margin-bottom: 24px;
 }
 
@@ -129,4 +129,21 @@
 
 .stuff-basket-popup-cancel-btn:hover {
   background-color: #999;
+}
+
+
+
+.stuff-basket-popup-table-scroll {
+  max-height: 180px; /* หรือปรับเป็น 30vh ถ้าต้องการ responsive */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* ให้หัวตารางอยู่กับที่เวลาเลื่อน */
+.stuff-basket-popup-material-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+  z-index: 1;
 }
