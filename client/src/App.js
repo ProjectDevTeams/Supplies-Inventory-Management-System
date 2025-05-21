@@ -34,14 +34,10 @@ import SettingPage from "./pages/Setting/SettingPage";
 import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
 
-// Route protection
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         {/* ✅ Public Pages */}
         <Route index element={<LoginPage />} />
         <Route path="/homepage" element={<HomePage />} />
@@ -51,119 +47,29 @@ function App() {
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/verification" element={<EmailVerification />} />
 
-        {/* ✅ ผู้ใช้งานทั่วไป */}
-        <Route path="/userstuff" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
-            <UserStuffPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/user/confirm-history" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
-            <UserConfirmHisPage />
-          </ProtectedRoute>
-        } />
-
-        {/* ✅ Admin & Assistant only */}
-        <Route path="/consumable" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <ConsumablePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/consumable/categorize" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <CategorizePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff/detail" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffDetailPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff/DetailTrack" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffDetailTrackPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff/track" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffTrackPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff/purchase" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffPurchasePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/stuff/DetailPurchase" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <StuffDetailPurchasePage />
-          </ProtectedRoute>
-        } />
-         <Route path="/stuff/print-purchase" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-          <PrintPurchasePage />
-          </ProtectedRoute>
-          } />
-        <Route path="/incoming" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <IncomingPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/incoming/detail/:id" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <IncomingDetailPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/incoming/add" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <IncomingAddPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/adjust" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <AdjustPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/adjust/add" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <AdjustAddPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/adjust/balance" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <BalancePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/adjust/balance/:id" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <Balance />
-          </ProtectedRoute>
-        } />
-        <Route path="/human" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <HumanPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/organizations" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <OrganizationsPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/report" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <ReportPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/setting" element={
-          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
-            <SettingPage />
-          </ProtectedRoute>
-        } />
+        {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์ */}
+        <Route path="/userstuff" element={<UserStuffPage />} />
+        <Route path="/user/confirm-history" element={<UserConfirmHisPage />} />
+        <Route path="/consumable" element={<ConsumablePage />} />
+        <Route path="/consumable/categorize" element={<CategorizePage />} />
+        <Route path="/stuff" element={<StuffPage />} />
+        <Route path="/stuff/detail" element={<StuffDetailPage />} />
+        <Route path="/stuff/DetailTrack" element={<StuffDetailTrackPage />} />
+        <Route path="/stuff/track" element={<StuffTrackPage />} />
+        <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
+        <Route path="/stuff/DetailPurchase" element={<StuffDetailPurchasePage />} />
+        <Route path="/stuff/print-purchase" element={<PrintPurchasePage />} />
+        <Route path="/incoming" element={<IncomingPage />} />
+        <Route path="/incoming/detail/:id" element={<IncomingDetailPage />} />
+        <Route path="/incoming/add" element={<IncomingAddPage />} />
+        <Route path="/adjust" element={<AdjustPage />} />
+        <Route path="/adjust/add" element={<AdjustAddPage />} />
+        <Route path="/adjust/balance" element={<BalancePage />} />
+        <Route path="/adjust/balance/:id" element={<Balance />} />
+        <Route path="/human" element={<HumanPage />} />
+        <Route path="/organizations" element={<OrganizationsPage />} />
+        <Route path="/report" element={<ReportPage />} />
+        <Route path="/setting" element={<SettingPage />} />
       </Routes>
     </BrowserRouter>
   );
