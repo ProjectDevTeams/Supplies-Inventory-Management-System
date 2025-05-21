@@ -7,6 +7,9 @@ import "./Incoming-add.css";
 
 export default function IncomingAdd() {
   const navigate = useNavigate();
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userId = storedUser?.id || null;
+
   const [materials, setMaterials] = useState([]);
   const [companies, setCompanies] = useState([]);
 
@@ -14,7 +17,7 @@ export default function IncomingAdd() {
   const [materialSuggestions, setMaterialSuggestions] = useState([]);
 
   const [form, setForm] = useState({
-    created_by: 3,
+    created_by: userId,
     stock_type: "",
     company_id: "",
     company_name: "",
@@ -44,9 +47,9 @@ export default function IncomingAdd() {
 
   const setIn = (path, val) =>
     setForm(f => {
-      const o = { ...f },
-        keys = path.split("."),
-        last = keys.pop();
+      const o = { ...f };
+      const keys = path.split(".");
+      const last = keys.pop();
       let cur = o;
       keys.forEach(k => (cur = cur[k]));
       cur[last] = val;
@@ -79,7 +82,6 @@ export default function IncomingAdd() {
     setMsg({ error: "", success: "" });
     setLoading(true);
     try {
-      // *** ตรงนี้เปลี่ยนเป็นเอา material_id มาใช้ ***
       const items = form.items.map(
         ({ material_id, quantity, price_per_unit }) => ({
           material_id: +material_id,
@@ -91,6 +93,7 @@ export default function IncomingAdd() {
 
       const payload = {
         ...form,
+        created_by: userId,
         company_id: +form.company_id || null,
         items
       };

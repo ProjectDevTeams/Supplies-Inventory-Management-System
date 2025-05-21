@@ -15,10 +15,19 @@ export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
     }
     try {
       setLoading(true);
+      // ดึง userId จาก localStorage
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const userId = storedUser?.id;
+
       const res = await axios.post(
         `${API_URL}/companies/add_company.php`,
-        { name }
+        {
+          name,
+          created_by: userId
+        },
+        { headers: { "Content-Type": "application/json" } }
       );
+
       if (res.data.status === "success") {
         onAddCompany(res.data.data);
         onClose();
@@ -37,7 +46,9 @@ export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
       <div className="add-popup-box">
         <div className="add-popup-header">
           <span>เพิ่มร้านค้าใหม่</span>
-          <button className="add-close-btn" onClick={onClose} disabled={loading}>✕</button>
+          <button className="add-close-btn" onClick={onClose} disabled={loading}>
+            ✕
+          </button>
         </div>
         <div className="add-popup-body">
           <form onSubmit={handleSubmit}>

@@ -12,16 +12,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     $body = json_decode(file_get_contents('php://input'), true);
-    $name = trim($body['name'] ?? '');
-    if ($name === '') throw new Exception("Name is required");
+    $name       = trim($body['name']         ?? '');
+    $createdBy  = intval($body['created_by'] ?? 0);
 
-    // Insert แค่ชื่อบริษัท (created_by default NULL, updated_at ไม่สนใจ)
-    $ins = $conn->prepare("INSERT INTO companies (name) VALUES (:name)");
-    $ins->bindValue(':name', $name, PDO::PARAM_STR);
+    if ($name === '') {
+        throw new Exception("Name is required");
+    }
+    if ($createdBy <= 0) {
+        throw new Exception("created_by is required");
+    }
+
+    // แทรกข้อมูล พร้อมเก็บผู้สร้าง
+    $ins = $conn->prepare("
+      INSERT INTO companies (name, created_by)
+      VALUES (:name, :created_by)
+    ");
+    $ins->bindValue(':name',       $name,      PDO::PARAM_STR);
+    $ins->bindValue(':created_by', $createdBy, PDO::PARAM_INT);
     $ins->execute();
     $newId = $conn->lastInsertId();
 
-    // ดึงข้อมูลแถวใหม่กลับมา (ไม่เอา updated_at)
+    // ดึงข้อมูลแถวใหม่กลับมา รวมชื่อผู้สร้าง
     $sel = $conn->prepare("
       SELECT
         c.id,

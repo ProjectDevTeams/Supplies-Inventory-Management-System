@@ -39,14 +39,23 @@ export default function OrganizationsTable() {
     fetchData();
   }, []);
 
-  const fmt = (d) => (d ? d.split("-").reverse().join("-") : "--");
+  // ฟังก์ชันแปลง 'YYYY-MM-DD' -> 'D MMM YYY' (ไทย)
+  const fmtThai = (isoDate) => {
+    if (!isoDate) return "—";
+    const d = new Date(isoDate);
+    return d.toLocaleDateString('th-TH', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
 
   const { items, total } = useMemo(() => {
     let arr = data.filter((c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       (c.created_by || "").toString().includes(search) ||
-      fmt(c.created_at).includes(search) ||
-      fmt(c.updated_at).includes(search)
+      fmtThai(c.created_at).includes(search) ||
+      fmtThai(c.updated_at).includes(search)
     );
     arr.sort((a, b) => (sortAsc ? a.id - b.id : b.id - a.id));
     const total = arr.length;
@@ -71,7 +80,10 @@ export default function OrganizationsTable() {
       <table className="organizations-table">
         <thead>
           <tr>
-            <th onClick={() => setSortAsc((a) => !a)} style={{ cursor: "pointer" }}>
+            <th
+              onClick={() => setSortAsc((a) => !a)}
+              style={{ cursor: "pointer" }}
+            >
               ลำดับ {sortAsc ? "▲" : "▼"}
             </th>
             <th>บริษัท/ร้านค้า</th>
@@ -87,12 +99,16 @@ export default function OrganizationsTable() {
             </tr>
           ) : (
             items.map((c) => (
-              <tr key={c.id} className="org-clickable-row" onClick={() => setManageId(c.id)}>
+              <tr
+                key={c.id}
+                className="org-clickable-row"
+                onClick={() => setManageId(c.id)}
+              >
                 <td>{c.id}</td>
                 <td>{c.name}</td>
                 <td>{c.created_by || "—"}</td>
-                <td>{fmt(c.created_at)}</td>
-                <td>{c.updated_at ? fmt(c.updated_at) : "—"}</td>
+                <td>{fmtThai(c.created_at)}</td>
+                <td>{c.updated_at ? fmtThai(c.updated_at) : "—"}</td>
               </tr>
             ))
           )}
@@ -101,10 +117,16 @@ export default function OrganizationsTable() {
 
       <div className="organizations-pagination-wrapper">
         <div className="organizations-pagination-info">
-          แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, total)} จาก {total} แถว
+          แสดง {(page - 1) * perPage + 1} ถึง{" "}
+          {Math.min(page * perPage, total)} จาก {total} แถว
         </div>
         <div className="organizations-pagination-buttons">
-          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>ก่อนหน้า</button>
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            ก่อนหน้า
+          </button>
           <input
             type="number"
             className="organizations-page-input"
@@ -120,7 +142,12 @@ export default function OrganizationsTable() {
               }
             }}
           />
-          <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}>ถัดไป</button>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
 
@@ -128,17 +155,26 @@ export default function OrganizationsTable() {
         <OrganizationsManagePopup
           onClose={() => setManageId(undefined)}
           companyData={data.find((c) => c.id === manageId)}
-          onDeleteCompany={() => { fetchData(); setManageId(undefined); }}
-          onEditCompany={() => { fetchData(); setManageId(undefined); }}
+          onDeleteCompany={() => {
+            fetchData();
+            setManageId(undefined);
+          }}
+          onEditCompany={() => {
+            fetchData();
+            setManageId(undefined);
+          }}
         />
       )}
 
       {adding && (
         <OrganizationsAddPopup
           onClose={() => setAdding(false)}
-          onAddCompany={() => { fetchData(); setAdding(false); }}
+          onAddCompany={() => {
+            fetchData();
+            setAdding(false);
+          }}
         />
       )}
     </div>
-);
+  );
 }
