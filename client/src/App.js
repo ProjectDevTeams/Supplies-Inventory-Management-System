@@ -104,6 +104,11 @@ function App() {
             <StuffDetailPurchasePage />
           </ProtectedRoute>
         } />
+         <Route path="/stuff/print-purchase" element={
+          <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
+          <PrintPurchasePage />
+          </ProtectedRoute>
+          } />
         <Route path="/incoming" element={
           <ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}>
             <IncomingPage />
