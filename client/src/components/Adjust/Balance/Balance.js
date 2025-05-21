@@ -14,7 +14,9 @@ function Balance() {
   useEffect(() => {
     const fetchAdjustment = async () => {
       try {
-        const res = await axios.get(`${API_URL}/adjustment_items/get_adjustment_items.php?adjustment_id=${id}`);
+        const res = await axios.get(
+          `${API_URL}/adjustment_items/get_adjustment_items.php?adjustment_id=${id}`
+        );
         if (res.data.status === "success") {
           const data = res.data.data;
           setStatus(data.status || "");
@@ -67,7 +69,7 @@ function Balance() {
             </div>
             <div className="balance-row">
               <strong>จากจำนวน:</strong>
-              <span>{item.remaining_quantity ?? "-"}</span>
+              <span>{item.old_quantity ?? "-"}</span>
             </div>
             <div className="balance-row">
               <strong>เป็นจำนวน:</strong>
@@ -78,26 +80,26 @@ function Balance() {
       </div>
 
       <div className="balance-actions">
-  <div className="balance-status-wrapper">
-    <strong>สถานะ:</strong>
-    <select
-      value={status}
-      onChange={(e) => setStatus(e.target.value)}
-      className="balance-select"
-    >
-      <option value="">-- เลือกสถานะ --</option>
-      <option value="อนุมัติ">อนุมัติ</option>
-      <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
-    </select>
-  </div>
+        <div className="balance-status-wrapper">
+          <strong>สถานะ:</strong>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="balance-select"
+          >
+            <option value="">-- เลือกสถานะ --</option>
+            <option value="อนุมัติ">อนุมัติ</option>
+            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+          </select>
+        </div>
 
-  <button className="balance-back-button-orange" onClick={() => navigate(-1)}>
-    กลับ
-  </button>
-  <button className="balance-back-button" onClick={handleSave}>
-    บันทึก
-  </button>
-</div>
+        <button className="balance-back-button-orange" onClick={() => navigate(-1)}>
+          กลับ
+        </button>
+        <button className="balance-back-button" onClick={handleSave}>
+          บันทึก
+        </button>
+      </div>
     </div>
   );
 }

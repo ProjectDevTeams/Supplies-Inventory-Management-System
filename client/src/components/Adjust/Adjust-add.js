@@ -70,7 +70,6 @@ export default function AdjustAdd({ onSave, onCancel }) {
         return;
       }
 
-      // 1. POST ไปยัง add_adjustment.php
       const res1 = await axios.post(`${API_URL}/adjustments/add_adjustment.php`, {
         created_by: userId,
       });
@@ -78,14 +77,13 @@ export default function AdjustAdd({ onSave, onCancel }) {
       if (res1.data.status === "success") {
         const adjustment_id = res1.data.adjustment_id;
 
-        // 2. เตรียมรายการวัสดุ
         const items = rows.map((r) => ({
           stock_type: r.warehouse,
           material_id: Number(r.supply),
           quantity: Number(r.next),
+          old_quantity: Number(r.current),
         }));
 
-        // 3. POST ไปยัง add_adjustment_items.php
         const res2 = await axios.post(`${API_URL}/adjustment_items/add_adjustment_items.php`, {
           adjustment_id,
           items,
@@ -162,14 +160,17 @@ export default function AdjustAdd({ onSave, onCancel }) {
             type="number"
             placeholder="ปัจจุบัน"
             value={r.current}
-            onChange={(e) => updateRow(r.id, "current", e.target.value)}
+            readOnly
+            style={{ backgroundColor: "#f0f0f0", cursor: "not-allowed" }}
           />
+
           <input
             type="number"
             placeholder="เปลี่ยนเป็น"
             value={r.next}
             onChange={(e) => updateRow(r.id, "next", e.target.value)}
           />
+
           <button
             className="adjust-add-remove-btn"
             onClick={() => removeRow(r.id)}
