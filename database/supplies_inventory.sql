@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2025 at 05:12 AM
+-- Generation Time: May 21, 2025 at 06:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,9 @@ CREATE TABLE `adjustments` (
 INSERT INTO `adjustments` (`id`, `created_by`, `created_date`, `updated_date`, `status`) VALUES
 (6, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
 (7, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
-(8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ');
+(8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
+(12, 1, '2025-05-21', '2025-05-21', 'อนุมัติ'),
+(13, 1, '2025-05-21', '2025-05-21', 'อนุมัติ');
 
 --
 -- Triggers `adjustments`
@@ -77,20 +79,23 @@ CREATE TABLE `adjustment_items` (
   `adjustment_id` int(11) NOT NULL,
   `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
   `material_id` int(11) NOT NULL,
-  `quantity` int(11) DEFAULT 0 COMMENT 'จำนวนที่ปรับ'
+  `quantity` int(11) DEFAULT 0 COMMENT 'จำนวนที่ปรับ',
+  `old_quantity` int(11) DEFAULT 0 COMMENT 'จำนวนก่อนการปรับ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `adjustment_items`
 --
 
-INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`) VALUES
-(1, 6, 'วัสดุในคลัง', 1, 5),
-(2, 6, 'วัสดุในคลัง', 2, 10),
-(3, 7, 'วัสดุนอกคลัง', 3, 8),
-(4, 7, 'วัสดุในคลัง', 4, 6),
-(5, 8, 'วัสดุในคลัง', 5, 3),
-(6, 8, 'วัสดุนอกคลัง', 6, 12);
+INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`, `old_quantity`) VALUES
+(1, 6, 'วัสดุในคลัง', 1, 5, 0),
+(2, 6, 'วัสดุในคลัง', 2, 10, 0),
+(3, 7, 'วัสดุนอกคลัง', 3, 8, 0),
+(4, 7, 'วัสดุในคลัง', 4, 6, 0),
+(5, 8, 'วัสดุในคลัง', 5, 3, 0),
+(6, 8, 'วัสดุนอกคลัง', 6, 12, 0),
+(12, 12, 'วัสดุนอกคลัง', 1, 10, 2),
+(13, 13, 'วัสดุในคลัง', 1, 50, 10);
 
 -- --------------------------------------------------------
 
@@ -149,15 +154,15 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 15, 2, 2, 0, '2025-05-12 17:00:00'),
-(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 30, 5, 1, 0, '2025-05-06 09:20:18'),
+(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 50, 2, 2, 0, '2025-05-12 17:00:00'),
+(2, '', 'แฟ้ม A4 สีฟ้า', 1, 'ชิ้น', 'วัสดุในคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-06 09:20:18'),
 (3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 3, 3, 2, 0, '2025-05-06 09:20:18'),
-(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 4, 6, 2, 0, '2025-05-06 09:20:18'),
+(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 10, 6, 2, 0, '2025-05-06 09:20:18'),
 (5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 3, 2, 1, 0, '2025-05-06 09:20:18'),
 (6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 12, 4, 0, 0, '2025-05-06 09:20:18'),
 (7, '', 'แฟ้มแข็ง', 1, 'เล่ม', 'วัสดุในคลัง', 0, 4, 1, 30.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
 (8, '', 'สมุดปกแข็ง', 1, 'เล่ม', 'วัสดุนอกคลัง', 1, 3, 1, 35.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
-(9, '', 'กระดาษโน้ต', 1, 'ชุด', 'วัสดุในคลัง', 0, 6, 2, 12.00, 3, 5, 2, 0, '2025-05-06 09:20:18'),
+(9, '', 'กระดาษโน้ต', 1, 'ชุด', 'วัสดุในคลัง', 0, 6, 2, 12.00, 10, 5, 2, 0, '2025-05-06 09:20:18'),
 (10, '', 'เทปใส', 1, 'ม้วน', 'วัสดุในคลัง', 1, 3, 1, 8.00, 0, 1, 1, 0, '2025-05-06 09:20:18'),
 (11, '', 'สติ๊กเกอร์ A4', 1, 'แผ่น', 'วัสดุนอกคลัง', 2, 5, 2, 5.00, 3, 3, 0, 0, '2025-05-06 09:20:18'),
 (12, '', 'แฟ้มซองพลาสติก', 1, 'ซอง', 'วัสดุในคลัง', 1, 6, 2, 7.00, 3, 4, 1, 0, '2025-05-06 09:20:18'),
@@ -209,9 +214,9 @@ CREATE TABLE `purchase_extras` (
 --
 
 INSERT INTO `purchase_extras` (`id`, `created_by`, `created_date`, `reason`, `approval_status`) VALUES
-(1, 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'รออนุมัติ'),
-(2, 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'รออนุมัติ'),
-(3, 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'รออนุมัติ');
+(1, 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'อนุมัติ'),
+(2, 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'อนุมัติ'),
+(3, 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'อนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -287,7 +292,9 @@ CREATE TABLE `receive_materials` (
 INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`, `approval_status`) VALUES
 (1, 3, 'วัสดุในคลัง', 6, 'INV-001', 'PO-001', '2025-05-16', 485.00, 'อนุมัติ'),
 (2, 3, 'วัสดุในคลัง', 7, 'INV-002', 'PO-002', '2025-05-16', 70.00, 'รออนุมัติ'),
-(3, 3, 'วัสดุนอกคลัง', 8, 'INV-003', 'PO-003', '2025-05-16', 220.00, 'อนุมัติ');
+(3, 3, 'วัสดุนอกคลัง', 8, 'INV-003', 'PO-003', '2025-05-16', 220.00, 'อนุมัติ'),
+(4, 3, 'วัสดุในคลัง', 6, '11111', '11111', '2025-05-20', 1500.00, 'อนุมัติ'),
+(5, 3, 'วัสดุในคลัง', 7, '11111', '1111', '2025-04-30', 1500.00, 'อนุมัติ');
 
 --
 -- Triggers `receive_materials`
@@ -327,12 +334,15 @@ CREATE TABLE `receive_material_items` (
 --
 
 INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_id`, `quantity`, `price_per_unit`, `total_price`) VALUES
-(1, 1, NULL, 2, 220.00, 440.00),
+(1, 1, NULL, 2, 300.00, 440.00),
 (2, 1, NULL, 3, 15.00, 45.00),
-(3, 2, NULL, 10, 5.00, 50.00),
+(3, 2, NULL, 10, 10.00, 50.00),
 (4, 2, NULL, 2, 10.00, 20.00),
 (5, 3, 1, 20, 120.00, 120.00),
-(6, 3, 2, 40, 25.00, 100.00);
+(6, 3, 2, 40, 25.00, 100.00),
+(11, 4, 1, 20, 30.00, 600.00),
+(12, 4, 4, 30, 30.00, 900.00),
+(13, 5, 1, 50, 30.00, 1500.00);
 
 --
 -- Triggers `receive_material_items`
@@ -396,7 +406,7 @@ CREATE TABLE `stuff_materials` (
 --
 
 INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
-(1, '2568/05/001', '2025-05-16', 3, 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
+(1, '2568/05/001', '2025-05-16', 11, 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
 (2, 'SM-68/05/002', '2025-05-16', 1, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
 (3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
 
@@ -528,9 +538,9 @@ INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `ema
 (4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'รออนุมัติ'),
 (6, 'user123', '$2y$10$OtEWucdWjiBec9zRpE/54eXqvOmQ11bEOBV6ZUkIUBdbj/m4uO83q', 'สมศรี พนักงาน', 'เจ้าหน้าที่', 'user123@example.com', '0891234567', 'ผู้ใช้งาน', 'อนุมัติ'),
 (8, 'user789', '$2y$10$5aren321Auyl6Ry4e8kJyuuSCoux9OjbJMYnGuv/GYU5db6Nj8HOW', 'วราภรณ์ ผู้ใช้ (แก้ไข)', 'เจ้าหน้าที่พัสดุ', 'user1_new@example.com', '0899999999', 'ผู้ใช้งาน', 'อนุมัติ'),
-(9, 'Test00', '$2y$10$0qn.bVPRHj34TmQpGAPpg.g4b8q/xP0x32qyKMYOvlogMGujr5f3K', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(9, 'Test00', '$2y$10$0qn.bVPRHj34TmQpGAPpg.g4b8q/xP0x32qyKMYOvlogMGujr5f3K', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ'),
 (10, 'yindee', '$2y$10$1DpPL8AojeVFYYj2sNjfd.sJQrOiL7Ql4z2tiSf6ZPEh5rzZ6mYUi', 'phoorin', 'เจ้าหน้าที่', '123phoorin@gmail.com', '0961243799', 'ผู้ใช้งาน', 'อนุมัติ'),
-(11, 'nick', '$2y$10$ozbXD6q.2dUNUpDp1h64OeYFNZm.w/SFqlGayORS0meuGmTFLs.Eu', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(11, 'nick', '$2y$10$DQRTP5QyayCcpfHjBN3TGu/dfcXxtLDt8yiUCo8i4./0/oKvQ21Gm', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'อนุมัติ'),
 (12, 'testadmin', '$2y$10$ZuiDFq96JhTJKKWlJ6/z6eHD87QfWAOS3bRzdUgDinEnl5Dc4bi9G', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ');
 
 --
@@ -641,13 +651,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `adjustment_items`
 --
 ALTER TABLE `adjustment_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -689,13 +699,13 @@ ALTER TABLE `purchase_requests`
 -- AUTO_INCREMENT for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `stuff_materials`

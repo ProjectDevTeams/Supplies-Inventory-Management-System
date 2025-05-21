@@ -25,7 +25,6 @@ $adjustment_id = $_GET['adjustment_id'] ?? null;
 try {
     $materialsMap = getAllMaterials($conn);
 
-    // 🔍 ดึงรายการตาม material_id → ใช้ใน version เก่า
     if ($material_id) {
         $stmt = $conn->prepare("
             SELECT 
@@ -56,7 +55,6 @@ try {
             ]);
         }
 
-    // ✅ ดึง adjustment เดียวตาม id หรือ adjustment_id (ใช้กับ Balance)
     } elseif ($id || $adjustment_id) {
         $targetId = $id ?? $adjustment_id;
 
@@ -79,6 +77,7 @@ try {
                 $item['material_name'] = $materialsMap[$materialId]['name'] ?? null;
                 $item['material_stock_type'] = $materialsMap[$materialId]['stock_type'] ?? null;
                 $item['remaining_quantity'] = $materialsMap[$materialId]['remaining_quantity'] ?? null;
+                // old_quantity ถูกรวมอยู่แล้วในการดึงข้อมูล
             }
 
             echo json_encode([
@@ -100,7 +99,6 @@ try {
             ]);
         }
 
-    // ✅ ดึง adjustment ทั้งหมดแบบรวม
     } else {
         $stmt = $conn->prepare("
             SELECT a.*, u.full_name 
@@ -123,6 +121,7 @@ try {
                 $item['material_name'] = $materialsMap[$materialId]['name'] ?? null;
                 $item['material_stock_type'] = $materialsMap[$materialId]['stock_type'] ?? null;
                 $item['remaining_quantity'] = $materialsMap[$materialId]['remaining_quantity'] ?? null;
+                // old_quantity มีใน $item อยู่แล้ว
             }
 
             $result[] = [
