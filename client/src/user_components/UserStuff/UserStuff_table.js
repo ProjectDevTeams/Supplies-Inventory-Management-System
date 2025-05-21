@@ -1,56 +1,62 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./UserStuff_table.css";
 import StuffItemPopup from "../UserPopup/StuffItem_Popup";
+import { API_URL } from "../../config";
 
-const mockData = [
-  {code:"OF001",image:"https://via.placeholder.com/60",name:"แฟ้ม A4 สีฟ้า",category:"แฟ้มเอกสาร",remain:12},
-  {code:"OF002",image:"https://via.placeholder.com/60",name:"ดินสอ 2B HB",category:"เครื่องเขียน",remain:30},
-  {code:"OF003",image:"https://via.placeholder.com/60",name:"ยางลบขนาดเล็ก",category:"เครื่องเขียน",remain:18},
-  {code:"OF004",image:"https://via.placeholder.com/60",name:"ปากกาเจลสีน้ำเงิน",category:"เครื่องเขียน",remain:25},
-  {code:"OF005",image:"https://via.placeholder.com/60",name:"Pentax ไบด์คัตเตอร์ขนาดใหญ่ L150",category:"วัสดุสำนักงาน",remain:5},
-  {code:"OF006",image:"https://via.placeholder.com/60",name:"กล่องใส่เอกสารพลาสติก",category:"แฟ้มเอกสาร",remain:10},
-  {code:"OF007",image:"https://via.placeholder.com/60",name:"คลิปหนีบกระดาษ 33 มม.",category:"เครื่องเขียน",remain:50},
-  {code:"OF008",image:"https://via.placeholder.com/60",name:"เครื่องเจาะกระดาษ 2 รู",category:"เครื่องใช้สำนักงาน",remain:7},
-  {code:"OF009",image:"https://via.placeholder.com/60",name:"Scotch เทปกาว 2 หน้า 1.6 มม.กว้าง 21 มม. ยาว 5 ม.",category:"วัสดุสำนักงาน",remain:10},
-  {code:"OF010",image:"https://via.placeholder.com/60",name:'Scotch เทปเยื่อกาว 2 หน้า 18 มม.x20 หลา (3/4" 3M)',category:"วัสดุสำนักงาน",remain:8},
-  {code:"OF011",image:"https://via.placeholder.com/60",name:"Scotch เทปเยื่อกาว 2 หน้า 24 มม.x10 หลา",category:"วัสดุสำนักงาน",remain:7},
-  {code:"OF012",image:"https://via.placeholder.com/60",name:"ถุงซิปล็อกใส 5x7 นิ้ว",category:"วัสดุสำนักงาน",remain:60},
-  {code:"OF013",image:"https://via.placeholder.com/60",name:"Unitape 1/2 IN x 36 YDS. สลิตถนอมใส (ม้วนเล็ก)",category:"วัสดุสำนักงาน",remain:31},
-  {code:"OF014",image:"https://via.placeholder.com/60",name:"Unitape 3/4 IN x 36 YDS. สลิตถนอมใส (ใหญ่)",category:"วัสดุสำนักงาน",remain:20},
-  {code:"OF015",image:"https://via.placeholder.com/60",name:"Whiteboard Monomi สีดำ",category:"วัสดุสำนักงาน",remain:10},
-  {code:"OF016",image:"https://via.placeholder.com/60",name:"แผ่นรองตัด A3",category:"เครื่องใช้สำนักงาน",remain:4},
-  {code:"OF017",image:"https://via.placeholder.com/60",name:"กล่องเอกสาร 3 ช่อง",category:"แฟ้มเอกสาร",remain:6},
-  {code:"OF018",image:"https://via.placeholder.com/60",name:"กรรไกร ขนาด 8 นิ้ว",category:"วัสดุสำนักงาน",remain:4},
-  {code:"OF019",image:"https://via.placeholder.com/60",name:"กระดาษโน้ตสี 3x3 นิ้ว",category:"กระดาษ",remain:35},
-  {code:"OF020",image:"https://via.placeholder.com/60",name:"กระดาษ A3 Double A",category:"วัสดุสำนักงาน",remain:7}
-];
-
+// จำนวนรายการต่อหน้า
 const itemsPerPage = 5;
 
-function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
-
-  
-
+function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
+  // เก็บรายการวัสดุจาก API
+  const [materials, setMaterials] = useState([]);
+  // เก็บหน้าปัจจุบัน
   const [currentPage, setCurrentPage] = useState(1);
+  // สำหรับเก็บค่าที่กรอกในกล่อง input หน้า
   const [inputPage, setInputPage] = useState("");
+  // วัสดุที่ถูกเลือก (ใช้เปิด popup)
   const [selectedItem, setSelectedItem] = useState(null);
-  
+  // สำหรับโหลดสถานะข้อมูล
+  const [loading, setLoading] = useState(true);
 
-  const filteredData = mockData.filter(item =>
+  // ดึงข้อมูลวัสดุเมื่อโหลด component
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+        if (res.data.status === "success") {
+          setMaterials(res.data.data); // เซ็ตข้อมูลที่ได้จาก API
+        }
+      } catch (error) {
+        console.error("เกิดข้อผิดพลาดในการโหลดวัสดุ:", error);
+      } finally {
+        setLoading(false); // ปิดสถานะโหลด
+      }
+    };
+    fetchMaterials();
+  }, []);
+
+  // กรองข้อมูลตามคำค้นหาจากชื่อ, id, หมวดหมู่ หรือจำนวนคงเหลือ
+  const filteredData = materials.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.id.toString().includes(searchTerm) ||
     item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.remain.toString().includes(searchTerm) // ✅ เพิ่มตรงนี้เพื่อค้นจากตัวเลขในตาราง
+    item.remain.toString().includes(searchTerm)
   );
-  
 
+  // คำนวณจำนวนหน้า
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  // คำนวณตำแหน่งของข้อมูลที่จะเอาไปแสดงในหน้านี้
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
+  // แสดงข้อความขณะโหลดข้อมูล
+  if (loading) return <div className="userstuff-loading">กำลังโหลดข้อมูล...</div>;
+
   return (
     <div className="userstuff-table-container">
+      {/* ตารางแสดงรายการวัสดุ */}
       <table className="userstuff-table">
         <thead>
           <tr>
@@ -64,9 +70,10 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
         <tbody>
           {currentItems.map((item, index) => (
             <tr key={index}>
-              <td>{item.code}</td>
+              <td>{item.id}</td>
               <td>
-                <img src={item.image} alt={item.name} className="stuff-image" />
+                {/* โหลดรูปจาก path image ที่ได้จาก API */}
+                <img src={`${API_URL}/${item.image}`} alt={item.name} className="stuff-image" />
               </td>
               <td>
                 <b>ชื่อ :</b> <span className="item-name">{item.name}</span>
@@ -77,6 +84,7 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
               </td>
               <td>{item.remain}</td>
               <td>
+                {/* ปุ่มเลือกวัสดุเพื่อเปิด popup */}
                 <button
                   className="userstuff-select-btn"
                   onClick={() => setSelectedItem(item)}
@@ -89,6 +97,7 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
         </tbody>
       </table>
 
+      {/* แสดงข้อมูลแบ่งหน้า */}
       <div className="userstuff-pagination-wrapper">
         <div className="userstuff-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง{" "}
@@ -96,12 +105,15 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
           {filteredData.length} แถว
         </div>
         <div className="userstuff-pagination-buttons">
+          {/* ปุ่มย้อนกลับหน้า */}
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
           >
             ก่อนหน้า
           </button>
+
+          {/* กล่องกรอกเลขหน้า */}
           <input
             type="number"
             className="userstuff-page-input"
@@ -119,6 +131,8 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
               }
             }}
           />
+
+          {/* ปุ่มไปหน้าถัดไป */}
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
@@ -128,28 +142,29 @@ function UserStuff_Table({ searchTerm = "" , basketItems, setBasketItems }) {
         </div>
       </div>
 
+      {/* แสดง popup เมื่อเลือกวัสดุ */}
       {selectedItem && (
-
         <StuffItemPopup
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
           onConfirm={(item, quantity) => {
-            const existing = basketItems.find((i) => i.code === item.code);
+            // ถ้าวัสดุนี้อยู่ในตะกร้าแล้ว → เพิ่มจำนวน
+            const existing = basketItems.find((i) => i.id === item.id);
             if (existing) {
               setBasketItems((prev) =>
                 prev.map((i) =>
-                  i.code === item.code
+                  i.id === item.id
                     ? { ...i, quantity: i.quantity + quantity }
                     : i
                 )
               );
             } else {
+              // ถ้ายังไม่มี → เพิ่มใหม่
               setBasketItems((prev) => [...prev, { ...item, quantity }]);
             }
-            setSelectedItem(null); // ปิด popup หลังเลือกเสร็จ
+            setSelectedItem(null); // ปิด popup หลังทำรายการ
           }}
         />
-
       )}
     </div>
   );
