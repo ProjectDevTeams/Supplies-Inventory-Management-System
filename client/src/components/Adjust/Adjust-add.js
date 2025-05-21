@@ -1,4 +1,6 @@
-import  { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
 import "./Adjust-add.css";
 
 export default function AdjustAdd({ onSave, onCancel }) {
@@ -6,25 +8,41 @@ export default function AdjustAdd({ onSave, onCancel }) {
     { value: "วัสดุในคลัง", label: "วัสดุในคลัง" },
     { value: "วัสดุนอกคลัง", label: "วัสดุนอกคลัง" },
   ];
-  const supplyOptions = [
-    { value: "3m_scotch", label: "3M Scotch เทปกาวสองหน้า..." },
-    { value: "elfen", label: "Elfen ลิ้นแฟ้มโลหะสีทอง" },
-  ];
+
+  const [supplyOptions, setSupplyOptions] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/materials/get_materials.php`)
+      .then((res) => {
+        if (res.data.status === "success") {
+          const options = res.data.data.map((mat) => ({
+            value: mat.id,
+            label: mat.name,
+            quantity: Number(mat.remain),
+          }));
+          setSupplyOptions(options);
+        }
+      })
+      .catch((err) => console.error("โหลดข้อมูลวัสดุล้มเหลว", err));
+  }, []);
 
   const [rows, setRows] = useState([
     { id: Date.now(), warehouse: "", supply: "", current: "", next: "" },
   ]);
 
   const addRow = () =>
-    setRows(r => [
+    setRows((r) => [
       ...r,
       { id: Date.now(), warehouse: "", supply: "", current: "", next: "" },
     ]);
-  const removeRow = id =>
-    setRows(r => (r.length > 1 ? r.filter(x => x.id !== id) : r));
+
+  const removeRow = (id) =>
+    setRows((r) => (r.length > 1 ? r.filter((x) => x.id !== id) : r));
+
   const updateRow = (id, field, value) =>
-    setRows(r =>
-      r.map(x =>
+    setRows((r) =>
+      r.map((x) =>
         x.id === id
           ? {
               ...x,
@@ -35,14 +53,57 @@ export default function AdjustAdd({ onSave, onCancel }) {
       )
     );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     for (let x of rows) {
       if (!x.warehouse || !x.supply || x.next === "") {
         alert("กรุณากรอกข้อมูลให้ครบทุกแถว");
         return;
       }
     }
-    onSave(rows);
+
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?.id;
+
+      if (!userId) {
+        alert("ไม่พบข้อมูลผู้ใช้งานในระบบ กรุณาเข้าสู่ระบบใหม่");
+        return;
+      }
+
+      // 1. POST ไปยัง add_adjustment.php
+      const res1 = await axios.post(`${API_URL}/adjustments/add_adjustment.php`, {
+        created_by: userId,
+      });
+
+      if (res1.data.status === "success") {
+        const adjustment_id = res1.data.adjustment_id;
+
+        // 2. เตรียมรายการวัสดุ
+        const items = rows.map((r) => ({
+          stock_type: r.warehouse,
+          material_id: Number(r.supply),
+          quantity: Number(r.next),
+        }));
+
+        // 3. POST ไปยัง add_adjustment_items.php
+        const res2 = await axios.post(`${API_URL}/adjustment_items/add_adjustment_items.php`, {
+          adjustment_id,
+          items,
+        });
+
+        if (res2.data.status === "success") {
+          alert("บันทึกเรียบร้อยแล้ว");
+          onSave(rows);
+        } else {
+          alert("เกิดข้อผิดพลาดในการเพิ่มรายการวัสดุ");
+        }
+      } else {
+        alert("เกิดข้อผิดพลาดในการสร้างใบปรับยอด");
+      }
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด:", err);
+      alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+    }
   };
 
   return (
@@ -56,41 +117,58 @@ export default function AdjustAdd({ onSave, onCancel }) {
         </div>
       </div>
 
-      {rows.map(r => (
+      {rows.map((r) => (
         <div key={r.id} className="adjust-add-row">
           <select
             value={r.warehouse}
-            onChange={e => updateRow(r.id, "warehouse", e.target.value)}
+            onChange={(e) => updateRow(r.id, "warehouse", e.target.value)}
           >
             <option value="">– เลือกคลัง –</option>
-            {warehouseOptions.map(o => (
+            {warehouseOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
             ))}
           </select>
+
           <select
             value={r.supply}
-            onChange={e => updateRow(r.id, "supply", e.target.value)}
+            onChange={(e) => {
+              const selected = supplyOptions.find(
+                (opt) => opt.value === Number(e.target.value)
+              );
+              setRows((prev) =>
+                prev.map((x) =>
+                  x.id === r.id
+                    ? {
+                        ...x,
+                        supply: selected ? selected.value : "",
+                        current: selected ? selected.quantity : "",
+                      }
+                    : x
+                )
+              );
+            }}
           >
             <option value="">– เลือกวัสดุ –</option>
-            {supplyOptions.map(o => (
+            {supplyOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
             ))}
           </select>
+
           <input
             type="number"
             placeholder="ปัจจุบัน"
             value={r.current}
-            onChange={e => updateRow(r.id, "current", e.target.value)}
+            onChange={(e) => updateRow(r.id, "current", e.target.value)}
           />
           <input
             type="number"
             placeholder="เปลี่ยนเป็น"
             value={r.next}
-            onChange={e => updateRow(r.id, "next", e.target.value)}
+            onChange={(e) => updateRow(r.id, "next", e.target.value)}
           />
           <button
             className="adjust-add-remove-btn"
