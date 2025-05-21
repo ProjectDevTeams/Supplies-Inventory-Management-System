@@ -44,7 +44,7 @@ function App() {
 
         {/* ✅ Public Pages */}
         <Route index element={<LoginPage />} />
-        <Route path="/HomePage" element={<HomePage />} />
+        <Route path="/homepage" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forget" element={<ForgetPassword />} />

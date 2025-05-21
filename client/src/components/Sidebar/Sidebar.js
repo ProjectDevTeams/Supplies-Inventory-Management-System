@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const menuItems = [
-  { icon: faHouse, label: "หน้าหลัก", to: "/" },
+  { icon: faHouse, label: "หน้าหลัก", to: "/home" },
   { icon: faBoxesPacking, label: "วัสดุสิ้นเปลือง", to: "/consumable" },
   { icon: faFileAlt, label: "เบิกวัสดุ", to: "/stuff" },
   { icon: faDownload, label: "รับเข้าวัสดุ", to: "/incoming" },
