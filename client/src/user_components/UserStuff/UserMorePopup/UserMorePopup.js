@@ -1,23 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CreatableSelect from 'react-select/creatable';
-
+import { API_URL } from "../../../config"; // ปรับตามโครงสร้างโปรเจกต์ของคุณ
 import './UserMorePopup.css';
 
 function UserMorePopup({ onClose }) {
-  const [item, setItem] = useState(null);
-  const [quantity, setQuantity] = useState("");
-  const [note, setNote] = useState("");
-  const [options, setOptions] = useState([]);
+  const [item, setItem] = useState(null); // วัสดุที่เลือก
+  const [quantity, setQuantity] = useState(""); // จำนวน
+  const [note, setNote] = useState(""); // หมายเหตุ
+  const [options, setOptions] = useState([]); // รายการวัสดุคงเหลือ 0
 
   useEffect(() => {
-    // จำลองวัสดุที่หมด
-    const mockMaterials = [
-      { label: "เทปกาว", value: "เทปกาว" },
-      { label: "กระดาษ A4", value: "กระดาษ A4" },
-      { label: "หมึกเครื่องพิมพ์", value: "หมึกเครื่องพิมพ์" }
-    ];
-    setOptions(mockMaterials);
-  }, []);
+  const fetchOutOfStockMaterials = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+      console.log("API ตอบกลับ:", res.data);
+      if (res.data.status === "success") {
+        const filtered = res.data.data
+          .filter(m => parseInt(m.remain) === 0)
+          .map(m => ({
+            label: m.name,
+            value: m.name
+          }));
+        console.log("วัสดุคงเหลือ 0:", filtered);
+        setOptions(filtered);
+      }
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+    }
+  };
+
+  fetchOutOfStockMaterials();
+}, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,7 +39,7 @@ function UserMorePopup({ onClose }) {
     console.log("วัสดุ:", materialName);
     console.log("จำนวน:", quantity);
     console.log("หมายเหตุ:", note);
-    onClose();
+    onClose(); // ปิด popup หลังยืนยัน
   };
 
   return (
@@ -39,6 +53,8 @@ function UserMorePopup({ onClose }) {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="usermorepopup-body">
+
+            {/* วัสดุสิ้นเปลือง */}
             <div className="usermorepopup-row">
               <label>วัสดุสิ้นเปลือง</label>
               <CreatableSelect
@@ -49,10 +65,11 @@ function UserMorePopup({ onClose }) {
                 isSearchable
                 placeholder="เลือกหรือพิมพ์ชื่อวัสดุ..."
                 className="custom-select"
-                 formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`} 
+                formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
               />
             </div>
 
+            {/* จำนวน */}
             <div className="usermorepopup-row">
               <label>จำนวนขอจัดซื้อเพิ่มเติม</label>
               <input
@@ -66,6 +83,7 @@ function UserMorePopup({ onClose }) {
               />
             </div>
 
+            {/* หมายเหตุ */}
             <div className="usermorepopup-row">
               <label>หมายเหตุ</label>
               <input
