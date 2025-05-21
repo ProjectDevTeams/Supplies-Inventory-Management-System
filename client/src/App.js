@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // Public Pages
@@ -18,7 +17,7 @@ import StuffPurchasePage from './pages/Stuff/StuffPurchasePage';
 import StuffDetailPage from './pages/Stuff/StuffDetailPage';
 import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
 import StuffDetailPurchasePage from './pages/Stuff/StuffDetailPurchasePage';
-import PrintPurchasePage from './pages/Stuff/PrintPurchasePage';
+import PrintPurchasePage from "./components/Stuff/PrintPurchase/PrintPurchase";
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
 import IncomingAddPage from "./pages/Incoming/IncomingAddPage";
@@ -44,60 +43,22 @@ function App() {
       <Routes>
 
         {/* ✅ Public Pages */}
-        <Route index element={<HomePage />} />
+        <Route index element={<LoginPage />} />
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
-
-
-        {/* เมนูจัดการวัสดุสิ้นเปลือง */}
-        <Route path="/consumable" element={<ConsumablePage />} />
-        <Route path="/consumable/categorize" element={<CategorizePage />} />
-
-        {/* เมนูใบเบิก */}
-        <Route path="/stuff" element={<StuffPage />} />
-        <Route path="/stuff/detail" element={<StuffDetailPage />} />
-        <Route path="/stuff/DetailTrack" element={<StuffDetailTrackPage />} />
-        <Route path="/stuff" element={<StuffPage />} />
-        <Route path="/stuff/track" element={<StuffTrackPage />} />
-        <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
-        <Route path="/stuff/DetailPurchase" element={<StuffDetailPurchasePage />} />
-        <Route path="/stuff/print-purchase" element={<PrintPurchasePage />} />
-
-
-        {/* เมนูอื่นๆ */}
-        <Route path="/incoming" element={<IncomingPage />} />
-        <Route path="/incoming/detail/:id" element={<IncomingDetailPage />} />
-        <Route path="/incoming/add" element={<IncomingAddPage />} />
-        <Route path="/adjust" element={<AdjustPage />} />
-        <Route path="/adjust/add" element={<AdjustAddPage />} />
-        <Route path="/adjust/balance" element={<BalancePage />} />
-        <Route path="/human" element={<HumanPage />} />
-        <Route path="/organizations" element={<OrganizationsPage />} />
-        <Route path="/report" element={<ReportPage />} />
-
-        {/* การตั้งค่า */}
-        <Route path="/setting" element={<SettingPage />} />
-
-        {/* หน้าผู้ใช้งานทั่วไป */}
-        <Route path="/userstuff" element={<UserStuffPage />} />
-
-
-        <Route path="/forget" element={<ForgetPassword />} />
-        <Route path="/reset" element={<ResetPassword />} />
-
         <Route path="/verification" element={<EmailVerification />} />
 
         {/* ✅ ผู้ใช้งานทั่วไป */}
         <Route path="/userstuff" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
+          <ProtectedRoute allow={["ผู้ใช้งาน", "แอดมิน", "ผู้ช่วยแอดมิน"]}>
             <UserStuffPage />
           </ProtectedRoute>
         } />
         <Route path="/user/confirm-history" element={
-          <ProtectedRoute allow={["ผู้ใช้งาน", "ผู้ช่วยแอดมิน"]}>
+          <ProtectedRoute allow={["ผู้ใช้งาน", "แอดมิน", "ผู้ช่วยแอดมิน"]}>
             <UserConfirmHisPage />
           </ProtectedRoute>
         } />
