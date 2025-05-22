@@ -57,7 +57,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
 .human-pagination-info {
