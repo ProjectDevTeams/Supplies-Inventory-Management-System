@@ -24,7 +24,10 @@ export default function IncomingTable({ searchTerm = "" }) {
       <table className="incoming-table">
         <thead>
           <tr>
-            <th className="incoming-sortable-header" onClick={() => setAsc((a) => !a)}>
+            <th
+              className="incoming-sortable-header"
+              onClick={() => setAsc((a) => !a)}
+            >
               ลำดับ {asc ? "▲" : "▼"}
             </th>
             {[
@@ -60,7 +63,9 @@ export default function IncomingTable({ searchTerm = "" }) {
                 <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
                 <td>
-                  <span className={statusClass(item.status)}>{item.status}</span>
+                  <span className={statusClass(item.status)}>
+                    {item.status}
+                  </span>
                 </td>
               </tr>
             ))
@@ -74,7 +79,11 @@ export default function IncomingTable({ searchTerm = "" }) {
           {Math.min(currentPage * 5, totalPages * 5)} จาก {totalPages * 5} แถว
         </div>
         <div className="incoming-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>
+          <button
+            className="incoming-btn"
+            disabled={currentPage === 1}
+            onClick={() => goToPage(currentPage - 1)}
+          >
             ก่อนหน้า
           </button>
           <input
@@ -89,6 +98,7 @@ export default function IncomingTable({ searchTerm = "" }) {
             }}
           />
           <button
+            className="incoming-btn"
             disabled={currentPage === totalPages}
             onClick={() => goToPage(currentPage + 1)}
           >
