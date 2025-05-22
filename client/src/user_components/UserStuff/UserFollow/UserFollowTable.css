@@ -150,3 +150,12 @@
 .userfollow-row:hover {
   background-color: #e6f0ff;
 }
+
+.userfollow-no-data {
+  text-align: center;
+  font-size: 15px;
+  color: black;
+  font-style: italic;
+  font-weight: normal;
+  padding: 1em;
+}

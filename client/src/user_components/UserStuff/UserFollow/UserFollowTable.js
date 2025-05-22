@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './UserFollowTable.css';
 import { FaPrint } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 function UserFollowTable({ searchTerm = "" }) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const initialData = [
     {
@@ -86,43 +86,52 @@ function UserFollowTable({ searchTerm = "" }) {
           </tr>
         </thead>
         <tbody>
-          {userfollowCurrentItems.map((row) => (
-            <tr
-              key={row.id}
-              className="userfollow-row"
-              onClick={() => navigate("/user/confirm-status")} // ✅ กดทั้งแถวเพื่อเปลี่ยนหน้า
-            >
-              <td>{row.id}</td>
-              <td>{row.number}</td>
-              <td>{row.category}</td>
-              <td>{row.items}</td>
-              <td>{row.date}</td>
-              <td className={
-                row.status === "อนุมัติแล้ว" ? "status-approved" :
-                  row.status === "รออนุมัติ" ? "status-pending" :
-                    row.status === "รอดำเนินการ" ? "status-processing" :
-                      row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
-              }>
-                {row.status}
+          {userfollowCurrentItems.length === 0 ? (
+            <tr>
+              <td colSpan="8" className="userfollow-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
-              <td>
-                <select
-                  value={row.status_user}
-                  onClick={(e) => e.stopPropagation()} // ✅ ไม่ให้คลิก select ไปกดแถว
-                  onChange={(e) => handleStatusUserChange(row.id, e.target.value)}
-                  className={
-                    row.status_user === "รอรับของ" ? "status-pending-items" :
-                      row.status_user === "รับของเรียบร้อย" ? "status-receive-items" : ""
-                  }
-                >
-                  <option className="select-option1" value="รอรับของ">รอรับของ</option>
-                  <option className="select-option2" value="รับของเรียบร้อย">รับของเรียบร้อย</option>
-                </select>
-              </td>
-              <td className="print-icon" onClick={(e) => e.stopPropagation()}><FaPrint /></td>
             </tr>
-          ))}
+          ) : (
+            userfollowCurrentItems.map((row) => (
+              <tr
+                key={row.id}
+                className="userfollow-row"
+                onClick={() => navigate("/user/confirm-status")}
+              >
+                <td>{row.id}</td>
+                <td>{row.number}</td>
+                <td>{row.category}</td>
+                <td>{row.items}</td>
+                <td>{row.date}</td>
+                <td className={
+                  row.status === "อนุมัติแล้ว" ? "status-approved" :
+                    row.status === "รออนุมัติ" ? "status-pending" :
+                      row.status === "รอดำเนินการ" ? "status-processing" :
+                        row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
+                }>
+                  {row.status}
+                </td>
+                <td>
+                  <select
+                    value={row.status_user}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => handleStatusUserChange(row.id, e.target.value)}
+                    className={
+                      row.status_user === "รอรับของ" ? "status-pending-items" :
+                        row.status_user === "รับของเรียบร้อย" ? "status-receive-items" : ""
+                    }
+                  >
+                    <option className="select-option1" value="รอรับของ">รอรับของ</option>
+                    <option className="select-option2" value="รับของเรียบร้อย">รับของเรียบร้อย</option>
+                  </select>
+                </td>
+                <td className="print-icon" onClick={(e) => e.stopPropagation()}><FaPrint /></td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="userfollow-pagination">
