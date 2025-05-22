@@ -2,24 +2,62 @@ import React, { useState, useEffect } from "react";
 import "./Report-Issue.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import axios from "axios";
+import { API_URL } from "../../config";
 
-function ReportIssue() {
-  const data = [
-    ["25 เม.ย. 67", "005-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 168.0],
-    ["22 เม.ย. 67", "004-04/2567", "นางสาวปวิตา", "พวงเพ็ชร์", "18 รายการ", 3743.93],
-    ["18 เม.ย. 67", "003-04/2567", "นางสาวจุลธิดา", "ยงอรุณกุล", "1 รายการ", 22.0],
-    ["18 เม.ย. 67", "002-04/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 1990.0],
-    ["4 เม.ย. 67", "001-04/2567", "นางสาวปวิตา", "พวงเพ็ชร์", "20 รายการ", 3643.35],
-    ["29 มี.ค. 67", "019-03/2567", "นายเคนศต", "บุญรัตน์", "1 รายการ", 600.0],
-    ["28 มี.ค. 67", "018-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "1 รายการ", 300.0],
-    ["28 มี.ค. 67", "017-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "36 รายการ", 4098.0],
-    ["28 มี.ค. 67", "016-03/2567", "นางสาวภัทรกร", "ศรีมนต์", "3 รายการ", 935.0],
-    ["25 มี.ค. 67", "015-03/2567", "นายเคนศต", "บุญรัตน์", "2 รายการ", 80.0],
-  ];
-
-  const itemsPerPage = 10;
+function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
+  const itemsPerPage = 10;
+
+  const monthNameToNumber = (name) => {
+    const months = [
+      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+    return months.indexOf(name) + 1;
+  };
+
+  const formatToThaiDate = (dateStr) => {
+    const d = new Date(dateStr);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear() + 543;
+    return `${day}/${month}/${year}`;
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/stuff_materials/get_stuff_materials.php`)
+      .then((res) => {
+        if (res.data.status === "success" && Array.isArray(res.data.data)) {
+          const fromDate = fromMonth && fromYear
+            ? new Date(`${parseInt(fromYear) - 543}-${monthNameToNumber(fromMonth)}-01`)
+            : null;
+
+          const toDate = toMonth && toYear
+            ? new Date(`${parseInt(toYear) - 543}-${monthNameToNumber(toMonth)}-31`)
+            : null;
+
+          const filtered = res.data.data.filter((item) => {
+            const createdAt = new Date(item.created_at);
+            const matchWarehouse = warehouse === "ทั้งหมด" || item.stock_type === warehouse;
+            const matchFrom = !fromDate || createdAt >= fromDate;
+            const matchTo = !toDate || createdAt <= toDate;
+            return matchWarehouse && matchFrom && matchTo;
+          });
+
+          setData(filtered);
+        } else {
+          console.error("รูปแบบข้อมูลผิด:", res.data);
+        }
+      })
+      .catch((err) => {
+        console.error("โหลดข้อมูลล้มเหลว:", err);
+      });
+  }, [warehouse, fromMonth, fromYear, toMonth, toYear]);
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -30,14 +68,13 @@ function ReportIssue() {
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["วันที่", "เลขที่", "ชื่อ", "สกุล", "จำนวนรายการ", "มูลค่า"]];
-    const rows = data.map((row) => [
-      row[0],
-      row[1],
-      row[2],
-      row[3],
-      row[4],
-      Math.round(row[5]) // ✅ ไม่มีทศนิยม
+    const header = [["วันที่", "เลขที่", "ชื่อผู้ขอเบิก", "จำนวนรายการ", "มูลค่า"]];
+    const rows = data.map((item) => [
+      formatToThaiDate(item.created_at),
+      item.running_code,
+      item.full_name,
+      item.items?.length || 0,
+      Math.round(item.total_amount)
     ]);
     const wsData = [...header, ...rows];
 
@@ -53,7 +90,7 @@ function ReportIssue() {
   return (
     <div className="report-issue-container">
       <div className="report-issue-export-wrapper">
-        <button onClick={exportToExcel} className="report-issue-export-btn" title="Export Excel">
+        <button onClick={exportToExcel} className="report-issue-export-btn">
           <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
           <span>Export Excel</span>
         </button>
@@ -64,19 +101,19 @@ function ReportIssue() {
           <tr>
             <th>วันที่</th>
             <th>เลขที่</th>
-            <th>ชื่อ-สกุล</th>
-            <th>รายการ</th>
+            <th>ชื่อผู้ขอเบิก</th>
+            <th>จำนวนรายการ</th>
             <th>มูลค่า</th>
           </tr>
         </thead>
         <tbody>
-          {displayedData.map((row, index) => (
+          {displayedData.map((item, index) => (
             <tr key={index}>
-              <td>{row[0]}</td>
-              <td>{row[1]}</td>
-              <td>{row[2]} {row[3]}</td>
-              <td>{row[4]}</td>
-              <td>{Math.round(row[5]).toLocaleString()}</td> {/* ✅ ไม่มีทศนิยม */}
+              <td>{formatToThaiDate(item.created_at)}</td>
+              <td>{item.running_code}</td>
+              <td>{item.full_name}</td>
+              <td>{item.items?.length || 0}</td>
+              <td>{Math.round(item.total_amount).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
@@ -87,10 +124,7 @@ function ReportIssue() {
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
         <div className="report-issue-pagination-buttons">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-            ก่อนหน้า
-          </button>
-
+          <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>ก่อนหน้า</button>
           <input
             type="number"
             className="report-issue-page-input"
@@ -105,15 +139,11 @@ function ReportIssue() {
                 if (!isNaN(val) && val >= 1 && val <= totalPages) {
                   setCurrentPage(val);
                 }
-                e.target.blur();
               }
             }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
-
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
-            ถัดไป
-          </button>
+          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>ถัดไป</button>
         </div>
       </div>
     </div>
