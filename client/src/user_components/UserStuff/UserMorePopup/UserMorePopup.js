@@ -1,105 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import CreatableSelect from 'react-select/creatable';
-import { API_URL } from "../../../config"; // ปรับตามโครงสร้างโปรเจกต์ของคุณ
-import './UserMorePopup.css';
+import React, { useEffect, useState } from "react";
+import CreatableSelect from "react-select/creatable";
+import axios from "axios";
+import { API_URL } from "../../../config";
+import "./UserMorePopup.css";
 
-function UserMorePopup({ onClose }) {
-  const [item, setItem] = useState(null); // วัสดุที่เลือก
-  const [quantity, setQuantity] = useState(""); // จำนวน
-  const [note, setNote] = useState(""); // หมายเหตุ
-  const [options, setOptions] = useState([]); // รายการวัสดุคงเหลือ 0
+function UserMorePopup() {
+  const [options, setOptions] = useState([]);
+  const [rows, setRows] = useState([
+    { id: Date.now(), item: null, quantity: 1, note: "" },
+  ]);
 
   useEffect(() => {
-  const fetchOutOfStockMaterials = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/materials/get_materials.php`);
-      console.log("API ตอบกลับ:", res.data);
-      if (res.data.status === "success") {
-        const filtered = res.data.data
-          .filter(m => parseInt(m.remain) === 0)
-          .map(m => ({
-            label: m.name,
-            value: m.name
-          }));
-        console.log("วัสดุคงเหลือ 0:", filtered);
-        setOptions(filtered);
+    const fetchMaterials = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+        if (res.data.status === "success") {
+          const filtered = res.data.data
+            .filter((m) => parseInt(m.remain) === 0)
+            .map((m) => ({
+              label: m.name,
+              value: m.name,
+            }));
+          setOptions(filtered);
+        }
+      } catch (err) {
+        console.error("เกิดข้อผิดพลาด:", err);
       }
-    } catch (error) {
-      console.error("เกิดข้อผิดพลาด:", error);
+    };
+
+    fetchMaterials();
+  }, []);
+
+  const addRow = () => {
+    setRows((prev) => [
+      ...prev,
+      { id: Date.now(), item: null, quantity: 1, note: "" },
+    ]);
+  };
+
+  const removeRow = (id) => {
+    if (rows.length > 1) {
+      setRows((prev) => prev.filter((r) => r.id !== id));
     }
   };
 
-  fetchOutOfStockMaterials();
-}, []);
+  const updateRow = (id, field, value) => {
+    setRows((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
+    );
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const materialName = item?.value || "";
-    console.log("วัสดุ:", materialName);
-    console.log("จำนวน:", quantity);
-    console.log("หมายเหตุ:", note);
-    onClose(); // ปิด popup หลังยืนยัน
+  const handleSave = () => {
+    console.log("✅ ส่งข้อมูล:", rows);
+    alert("บันทึกสำเร็จ (mock)");
   };
 
   return (
-    <div className="usermorepopup-overlay">
-      <div className="usermorepopup-container">
-        <div className="usermorepopup-header">
-          <span>รายการขอจัดซื้อเพิ่มเติม</span>
-          <button className="usermorepopup-close" onClick={onClose}>
-            ✕
+    <div className="usermorepopup-container">
+      <div className="usermorepopup-header">
+        <h2>รายการขอจัดซื้อเพิ่มเติม</h2>
+        <button className="usermorepopup-add-btn" onClick={addRow}>
+          ＋ เพิ่มแถว
+        </button>
+      </div>
+
+      {rows.map((row) => (
+        <div key={row.id} className="usermorepopup-row">
+          <CreatableSelect
+            options={options}
+            value={row.item}
+            onChange={(val) => updateRow(row.id, "item", val)}
+            isClearable
+            placeholder="เลือก/เพิ่มชื่อวัสดุ..."
+            className="usermorepopup-select"
+          />
+
+          <input
+            type="number"
+            min="1"
+            value={row.quantity}
+            onChange={(e) =>
+              updateRow(row.id, "quantity", Math.max(1, +e.target.value || 1))
+            }
+            placeholder="จำนวน"
+            className="usermorepopup-input"
+          />
+
+          <input
+            type="text"
+            value={row.note}
+            onChange={(e) => updateRow(row.id, "note", e.target.value)}
+            placeholder="หมายเหตุ"
+            className="usermorepopup-input"
+          />
+
+          <button
+            className="usermorepopup-remove-btn"
+            onClick={() => removeRow(row.id)}
+          >
+            −
           </button>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="usermorepopup-body">
+      ))}
 
-            {/* วัสดุสิ้นเปลือง */}
-            <div className="usermorepopup-row">
-              <label>วัสดุสิ้นเปลือง</label>
-              <CreatableSelect
-                options={options}
-                value={item}
-                onChange={setItem}
-                isClearable
-                isSearchable
-                placeholder="เลือกหรือพิมพ์ชื่อวัสดุ..."
-                className="custom-select"
-                formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
-              />
-            </div>
-
-            {/* จำนวน */}
-            <div className="usermorepopup-row">
-              <label>จำนวนขอจัดซื้อเพิ่มเติม</label>
-              <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => {
-                  const value = Math.max(1, parseInt(e.target.value) || 1);
-                  setQuantity(value);
-                }}
-              />
-            </div>
-
-            {/* หมายเหตุ */}
-            <div className="usermorepopup-row">
-              <label>หมายเหตุ</label>
-              <input
-                type="text"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="usermorepopup-footer">
-            <button type="submit" className="usermorepopup-confirm">
-              ยืนยัน
-            </button>
-          </div>
-        </form>
+      <div className="usermorepopup-footer">
+        <button className="usermorepopup-save-btn" onClick={handleSave}>
+          บันทึก
+        </button>
       </div>
     </div>
   );

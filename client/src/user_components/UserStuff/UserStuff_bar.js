@@ -26,11 +26,12 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
       case "สถานะการเบิกวัสดุ ":
         navigate("/userstuff/follow"); // path ไปยัง UserFollowTablePage.js
         break;
-      case "ประวัติการทำรายการ":
-        navigate("/userstuff/history"); // path ไปยัง UserHistoryTablePage.js
-        break;
+      // case "ประวัติการทำรายการ":
+      //   navigate("/userstuff/history"); // path ไปยัง UserHistoryTablePage.js
+      //   break;
       case "รายการขอจัดซื้อเพิ่มเติม":
-        setShowMorePopup(true);
+        navigate("/userstuff/more"); // path ไปยัง UserMoreTablePage.js 
+        // setShowMorePopup(true);
         break;
       default:
         break;
@@ -43,8 +44,10 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
         return "เบิกวัสดุ";
       case "/userstuff/follow":
         return "สถานะการเบิกวัสดุ ";
-      case "/userstuff/history":
-        return "ประวัติการทำรายการ";
+      // case "/userstuff/history":
+      //   return "ประวัติการทำรายการ";
+      case "/userstuff/more":
+        return "รายการขอจัดซื้อเพิ่มเติม";
       default:
         return "";
     }
@@ -79,7 +82,7 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
           {[
             "เบิกวัสดุ",
             "สถานะการเบิกวัสดุ ",
-            "ประวัติการทำรายการ",
+            // "ประวัติการทำรายการ",
             "รายการขอจัดซื้อเพิ่มเติม",
           ].map((tab) => (
             <button
@@ -93,19 +96,21 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
         </div>
 
         <div className="userstuff-right">
-          <div className="userstuff-search-box">
-            <FontAwesomeIcon
-              icon={faSearch}
-              className="userstuff-search-icon"
-            />
-            <input
-              type="text"
-              placeholder="ค้นหา"
-              className="userstuff-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          {["เบิกวัสดุ", "สถานะการเบิกวัสดุ "].includes(currentTab) && (
+            <div className="userstuff-search-box">
+              <FontAwesomeIcon
+                icon={faSearch}
+                className="userstuff-search-icon"
+              />
+              <input
+                type="text"
+                placeholder="ค้นหา"
+                className="userstuff-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          )}
 
           {isStuffPage && (
             <div className="userstuff-bag-icon-wrapper">
