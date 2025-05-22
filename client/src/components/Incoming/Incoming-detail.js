@@ -1,7 +1,8 @@
+// File: src/components/IncomingDetail/IncomingDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Autosuggest from "react-autosuggest";
+import Select from "react-select";
 import { API_URL } from "../../config";
 import "./Incoming-detail.css";
 
@@ -13,9 +14,9 @@ export default function IncomingDetail() {
     id: null,
     created_by: null,
     warehouse: "",
-    company: null,       // allow null
-    companyName: null,   // allow null
-    projectName: null,   // allow null
+    company: null,
+    companyName: null,
+    projectName: null,
     taxNumber: "",
     orderNumber: "",
     date: "",
@@ -26,13 +27,6 @@ export default function IncomingDetail() {
 
   const [materials, setMaterials] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [companySuggestions, setCompanySuggestions] = useState([]);
-  const [materialSuggestions, setMaterialSuggestions] = useState([]);
-
-  const getSuggestions = (list, value) => {
-    const input = value.trim().toLowerCase();
-    return list.filter(x => x.name.toLowerCase().includes(input));
-  };
 
   useEffect(() => {
     axios
@@ -84,38 +78,23 @@ export default function IncomingDetail() {
   const handleHeaderChange = field => e =>
     setHeader(h => ({ ...h, [field]: e.target.value }));
 
-  const handleItemChange = (i, field) => e => {
-    const raw = e.target.value;
-    const val =
-      field === "quantity" || field === "price_per_unit"
-        ? Number(raw)
-        : raw;
-    setItems(prev =>
-      prev.map((row, idx) => (idx === i ? { ...row, [field]: val } : row))
-    );
-  };
-
-  const lineTotal = it => (it.quantity * it.price_per_unit).toFixed(2);
-  const grandTotal = () =>
-    items.reduce((sum, it) => sum + it.quantity * it.price_per_unit, 0).toFixed(2);
-
   const handleSave = () => {
     const payload = {
       id: header.id,
       created_by: header.created_by,
       stock_type: header.warehouse,
-      company_id: header.company,               // send null or number
-      project_name: header.projectName,         // send null or string
+      company_id: header.company,
+      project_name: header.projectName,
       tax_invoice_number: header.taxNumber,
       purchase_order_number: header.orderNumber,
       created_at: header.date,
       approval_status: header.approvalStatus,
       items: items.map(it => ({
-        material_name: it.material_name,
         material_id: it.material_id,
+        material_name: it.material_name,
         quantity: it.quantity,
         price_per_unit: it.price_per_unit,
-        total_price: parseFloat(lineTotal(it))
+        total_price: (it.quantity * it.price_per_unit).toFixed(2)
       }))
     };
 
@@ -134,6 +113,11 @@ export default function IncomingDetail() {
   if (loading) {
     return <div className="incoming-detail-container">กำลังโหลด...</div>;
   }
+
+  const companyOptions = companies.map(c => ({ value: c.id, label: c.name }));
+  const materialOptions = materials
+    .filter(m => m.location === header.warehouse)
+    .map(m => ({ value: m.id, label: m.name }));
 
   return (
     <div className="incoming-detail-container">
@@ -154,29 +138,24 @@ export default function IncomingDetail() {
 
       <div className="incoming-detail-row">
         <label>บริษัท/ร้านค้า</label>
-        <Autosuggest
-          suggestions={companySuggestions}
-          onSuggestionsFetchRequested={({ value }) =>
-            setCompanySuggestions(getSuggestions(companies, value))
+        <Select
+          classNamePrefix="incoming-select"
+          options={companyOptions}
+          isClearable
+          placeholder="เลือกบริษัท..."
+          onChange={opt =>
+            setHeader(h => ({
+              ...h,
+              company: opt ? opt.value : null,
+              companyName: opt ? opt.label : null
+            }))
           }
-          onSuggestionsClearRequested={() =>
-            setCompanySuggestions([])
+          value={
+            header.company
+              ? { value: header.company, label: header.companyName }
+              : null
           }
-          getSuggestionValue={sug => sug.name}
-          renderSuggestion={sug => <span>{sug.name}</span>}
-          inputProps={{
-            className: "incoming-detail-select",
-            placeholder: "-- เลือกบริษัท --",
-            value: header.companyName ?? "",
-            onChange: (_, { newValue }) => {
-              const c = companies.find(x => x.name === newValue);
-              setHeader(h => ({
-                ...h,
-                companyName: newValue,
-                company: c ? c.id : null
-              }));
-            }
-          }}
+          isDisabled={loading}
         />
       </div>
 
@@ -187,7 +166,7 @@ export default function IncomingDetail() {
             type="text"
             className="incoming-detail-input"
             placeholder="พิมพ์ชื่อโครงการ..."
-            value={header.projectName ?? ""}
+            value={header.projectName || ""}
             onChange={handleHeaderChange("projectName")}
           />
         </div>
@@ -240,6 +219,7 @@ export default function IncomingDetail() {
       <hr className="incoming-detail-divider" />
 
       <h3 className="incoming-detail-subtitle">รายการวัสดุ</h3>
+
       <table className="incoming-detail-items-table">
         <thead>
           <tr>
@@ -253,26 +233,32 @@ export default function IncomingDetail() {
           {items.map((it, idx) => (
             <tr key={idx}>
               <td>
-                <Autosuggest
-                  suggestions={materialSuggestions}
-                  onSuggestionsFetchRequested={({ value }) =>
-                    setMaterialSuggestions(getSuggestions(materials, value))
-                  }
-                  onSuggestionsClearRequested={() =>
-                    setMaterialSuggestions([])
-                  }
-                  getSuggestionValue={sug => sug.name}
-                  renderSuggestion={sug => <span>{sug.name}</span>}
-                  inputProps={{
-                    className: "incoming-detail-select",
-                    placeholder: "-- เลือกวัสดุ --",
-                    value: it.material_name,
-                    onChange: (_, { newValue }) => {
-                      const m = materials.find(x => x.name === newValue);
-                      handleItemChange(idx, "material_name")({ target: { value: newValue } });
-                      handleItemChange(idx, "material_id")({ target: { value: m ? m.id : "" } });
-                    }
+                <Select
+                  classNamePrefix="incoming-select"
+                  options={materialOptions}
+                  isClearable
+                  placeholder="เลือกวัสดุ..."
+                  onChange={opt => {
+                    const val = opt ? opt.value : "";
+                    const label = opt ? opt.label : "";
+                    setItems(prev =>
+                      prev.map((row, i) =>
+                        i === idx
+                          ? {
+                              ...row,
+                              material_id: val,
+                              material_name: label
+                            }
+                          : row
+                      )
+                    );
                   }}
+                  value={
+                    it.material_id
+                      ? { value: it.material_id, label: it.material_name }
+                      : null
+                  }
+                  isDisabled={!header.warehouse || loading}
                 />
               </td>
               <td>
@@ -280,7 +266,15 @@ export default function IncomingDetail() {
                   type="number"
                   className="incoming-detail-input"
                   value={it.quantity}
-                  onChange={handleItemChange(idx, "quantity")}
+                  onChange={e =>
+                    setItems(prev =>
+                      prev.map((row, i) =>
+                        i === idx
+                          ? { ...row, quantity: Number(e.target.value) }
+                          : row
+                      )
+                    )
+                  }
                 />
               </td>
               <td>
@@ -289,17 +283,28 @@ export default function IncomingDetail() {
                   step="0.01"
                   className="incoming-detail-input"
                   value={it.price_per_unit}
-                  onChange={handleItemChange(idx, "price_per_unit")}
+                  onChange={e =>
+                    setItems(prev =>
+                      prev.map((row, i) =>
+                        i === idx
+                          ? { ...row, price_per_unit: Number(e.target.value) }
+                          : row
+                      )
+                    )
+                  }
                 />
               </td>
-              <td>{lineTotal(it)}</td>
+              <td>{(it.quantity * it.price_per_unit).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <div className="incoming-detail-summary">
-        <strong>ราคารวมทั้งบิล:</strong> {grandTotal()}
+        <strong>ราคารวมทั้งบิล:</strong>{" "}
+        {items
+          .reduce((sum, it) => sum + it.quantity * it.price_per_unit, 0)
+          .toFixed(2)}
       </div>
 
       <div className="incoming-detail-actions">

@@ -1,6 +1,7 @@
+// File: src/components/IncomingAdd/IncomingAdd.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Autosuggest from "react-autosuggest";
+import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 import "./Incoming-add.css";
@@ -12,9 +13,6 @@ export default function IncomingAdd() {
 
   const [materials, setMaterials] = useState([]);
   const [companies, setCompanies] = useState([]);
-
-  const [companySuggestions, setCompanySuggestions] = useState([]);
-  const [materialSuggestions, setMaterialSuggestions] = useState([]);
 
   const [form, setForm] = useState({
     created_by: userId,
@@ -58,28 +56,24 @@ export default function IncomingAdd() {
     });
 
   const addItem = () =>
-    setForm(f => ({ ...f, items: [...f.items, { material_id: "", material_name: "", quantity: "", price_per_unit: "" }] }));
+    setForm(f => ({
+      ...f,
+      items: [...f.items, { material_id: "", material_name: "", quantity: "", price_per_unit: "" }]
+    }));
 
   const removeItem = i =>
     setForm(f =>
       f.items.length > 1 ? { ...f, items: f.items.filter((_, idx) => idx !== i) } : f
     );
 
-  const getSuggestions = (list, value) => {
-    const input = value.trim().toLowerCase();
-    return list.filter(x => x.name.toLowerCase().includes(input));
-  };
-
-  const getCompanySuggestions = value =>
-    form.stock_type === "วัสดุในคลัง" ? getSuggestions(companies, value) : [];
-
-  const getMaterialSuggestions = value => {
+  const getMaterialOptions = () => {
     if (!form.stock_type) return [];
-    const filtered = materials.filter(m => m.location === form.stock_type);
-    return getSuggestions(filtered, value);
+    return materials
+      .filter(m => m.location === form.stock_type)
+      .map(m => ({ value: m.id, label: m.name }));
   };
 
-  const renderSuggestion = sug => <span>{sug.name}</span>;
+  const companyOptions = companies.map(c => ({ value: c.id, label: c.name }));
 
   const submit = async () => {
     setMsg({ error: "", success: "" });
@@ -139,24 +133,21 @@ export default function IncomingAdd() {
       {form.stock_type === "วัสดุในคลัง" ? (
         <div className="incoming-add-row">
           <label>ชื่อบริษัท</label>
-          <Autosuggest
-            suggestions={companySuggestions}
-            onSuggestionsFetchRequested={({ value }) => setCompanySuggestions(getCompanySuggestions(value))}
-            onSuggestionsClearRequested={() => setCompanySuggestions([])}
-            getSuggestionValue={s => s.name}
-            renderSuggestion={renderSuggestion}
-            inputProps={{
-              className: "incoming-add-input",
-              placeholder: "พิมพ์เพื่อค้นหาบริษัท...",
-              value: form.company_name,
-              disabled: loading,
-              onFocus: () => setCompanySuggestions(companies),
-              onChange: (_, { newValue }) => {
-                setIn("company_name", newValue);
-                const c = companies.find(x => x.name === newValue);
-                setIn("company_id", c ? `${c.id}` : "");
-              }
+          <Select
+            classNamePrefix="incoming-select"
+            options={companyOptions}
+            isClearable
+            placeholder="เลือกบริษัท..."
+            onChange={opt => {
+              setIn("company_id", opt ? `${opt.value}` : "");
+              setIn("company_name", opt ? opt.label : "");
             }}
+            value={
+              form.company_id
+                ? { value: +form.company_id, label: form.company_name }
+                : null
+            }
+            isDisabled={loading}
           />
         </div>
       ) : form.stock_type === "วัสดุนอกคลัง" ? (
@@ -173,15 +164,15 @@ export default function IncomingAdd() {
         </div>
       ) : null}
 
-      {['tax_invoice_number', 'purchase_order_number'].map((field, idx) => (
+      {["tax_invoice_number", "purchase_order_number"].map((field, idx) => (
         <div className="incoming-add-row" key={field}>
-          <label>{idx === 0 ? 'เลขที่กำกับภาษี' : 'เลขที่ มอ. จัดซื้อ'}</label>
+          <label>{idx === 0 ? "เลขที่กำกับภาษี" : "เลขที่ มอ. จัดซื้อ"}</label>
           <input
             type="text"
             className="incoming-add-input"
             value={form[field]}
             onChange={e => setIn(field, e.target.value)}
-            placeholder={idx === 0 ? 'INV-XXX' : 'PO-XXX'}
+            placeholder={idx === 0 ? "INV-XXX" : "PO-XXX"}
             disabled={loading}
           />
         </div>
@@ -204,59 +195,79 @@ export default function IncomingAdd() {
         <div className="incoming-add-item-row" key={idx}>
           <div className="incoming-add-row">
             <label>ชื่อวัสดุ</label>
-            <Autosuggest
-              suggestions={materialSuggestions}
-              onSuggestionsFetchRequested={({ value }) => setMaterialSuggestions(getMaterialSuggestions(value))}
-              onSuggestionsClearRequested={() => setMaterialSuggestions([])}
-              getSuggestionValue={s => s.name}
-              renderSuggestion={renderSuggestion}
-              inputProps={{
-                className: "incoming-add-input",
-                placeholder: "พิมพ์เพื่อค้นหา...",
-                value: it.material_name,
-                disabled: loading,
-                onFocus: () => setMaterialSuggestions(materials.filter(m => m.location === form.stock_type)),
-                onChange: (_, { newValue }) => {
-                  setIn(`items.${idx}.material_name`, newValue);
-                  const m = materials.find(x => x.name === newValue && x.location === form.stock_type);
-                  setIn(`items.${idx}.material_id`, m ? `${m.id}` : "");
-                }
+            <Select
+              classNamePrefix="incoming-select"
+              options={getMaterialOptions()}
+              isClearable
+              placeholder="เลือกวัสดุ..."
+              onChange={opt => {
+                setIn(`items.${idx}.material_id`, opt ? `${opt.value}` : "");
+                setIn(`items.${idx}.material_name`, opt ? opt.label : "");
               }}
+              value={
+                it.material_id
+                  ? { value: +it.material_id, label: it.material_name }
+                  : null
+              }
+              isDisabled={!form.stock_type || loading}
             />
           </div>
 
-          {['quantity','price_per_unit'].map((field,j)=>(
+          {["quantity", "price_per_unit"].map((field, j) => (
             <div className="incoming-add-row" key={field}>
-              <label>{j===0?'จำนวน':'ราคาต่อหน่วย'}</label>
+              <label>{j === 0 ? "จำนวน" : "ราคาต่อหน่วย"}</label>
               <input
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 className="incoming-add-input"
                 value={it[field]}
-                onChange={e=>setIn(`items.${idx}.${field}`,e.target.value.replace(/\D/,""))}
+                onChange={e =>
+                  setIn(
+                    `items.${idx}.${field}`,
+                    e.target.value.replace(/\D/, "")
+                  )
+                }
                 placeholder="0"
                 disabled={loading}
               />
             </div>
           ))}
 
-          <button className="incoming-add-remove-row" onClick={()=>removeItem(idx)} disabled={loading}>
+          <button
+            className="incoming-add-remove-row"
+            onClick={() => removeItem(idx)}
+            disabled={loading}
+          >
             ลบรายการ
           </button>
         </div>
       ))}
 
-      <button className="incoming-add-add-row" onClick={addItem} disabled={loading}>
+      <button
+        className="incoming-add-add-row"
+        onClick={addItem}
+        disabled={loading}
+      >
         + เพิ่มรายการ
       </button>
 
       <div className="incoming-add-actions">
-        <button type="button" className="incoming-add-cancel" onClick={()=>navigate("/incoming")} disabled={loading}>
+        <button
+          type="button"
+          className="incoming-add-cancel"
+          onClick={() => navigate("/incoming")}
+          disabled={loading}
+        >
           ยกเลิก
         </button>
-        <button type="button" className="incoming-add-save" onClick={submit} disabled={loading}>
-          {loading?"กำลังบันทึก...":"บันทึก"}
+        <button
+          type="button"
+          className="incoming-add-save"
+          onClick={submit}
+          disabled={loading}
+        >
+          {loading ? "กำลังบันทึก..." : "บันทึก"}
         </button>
       </div>
     </div>
