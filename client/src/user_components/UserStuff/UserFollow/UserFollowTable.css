@@ -1,114 +1,143 @@
 .userfollow-table-container {
-    margin-top: 1rem;
-    font-size: 16px;
-  }
-  
-  .user-follow-table {
-    width: 100%;
-    height: 100vh;
-    border-collapse: collapse;
-    background-color: white;
-  }
-  
-  /* Header background */
-  .user-follow-table thead tr {
-    background-color: #dfe8f6; /* สี back */
-  }
-  
-  .user-follow-table th,
-  .user-follow-table td {
-    border: 1px solid #ccc;
-    padding: 0.6em 1em;
-    text-align: center;
-  }
-  
-  /* Row background */
-  .user-follow-table tbody tr {
-    background-color: #f9f9f9; /* สี back */
-  }
-  
-  /* ไอคอนปริ้น */
-  .print-icon svg {
-    color: #000;
-    cursor: pointer;
-    font-size: 30px;
-  }
-  
-  /* ปุ่มสถานะ */
-  .status-pending {
-   
-    color: rgb(255, 183, 0);
-    font-weight: bold;
-    padding: 0.3em 0.8em;
-    border-radius: 4px;
-    
-  }
-  
-  .status-approved {
+  margin-top: 1rem;
+  font-size: 15px; /* ลดขนาด font นิดนึง */
+}
 
-    color: rgb(0, 146, 68);
-    padding: 0.3em 0.8em;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  
-  .status-processing {
-    
-    color: rgb(79, 48, 190);
-    padding: 0.3em 0.8em;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  
-  .status-cancelled {
-   
-    color: rgb(242, 0, 0);
-    padding: 0.3em 0.8em;
-    border-radius: 4px;
-    font-weight: bold;
-  }
-  
-  /* Pagination */
-  .userfollow-pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: 14px;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-  
-  .userfollow-pagination-info {
-    color: #333;
-    flex: 1;
-  }
-  
-  .userfollow-pagination-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .org-page-input {
-    width: 60px;
-    text-align: center;
-    padding: 0.3em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .btn {
-    padding: 0.4em 0.8em;
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
+.user-follow-table {
+  width: 100%;
+  height: auto; /* ไม่ fix 100vh */
+  border-collapse: collapse;
+  background-color: white;
+}
+
+/* Header background */
+.user-follow-table thead tr {
+  background-color: #dfe8f6;
+}
+
+.user-follow-table th,
+.user-follow-table td {
+  border: 1px solid #ccc;
+  padding: 0.4em 0.6em; /* ลด padding */
+  text-align: center;
+}
+
+/* Row background */
+.user-follow-table tbody tr {
+  background-color: #f9f9f9;
+}
+
+/* ไอคอนปริ้น */
+.print-icon svg {
+  color: #000;
+  cursor: pointer;
+  font-size: 24px; /* ลดขนาดไอคอน */
+}
+
+/* ปุ่มสถานะ */
+.status-pending,
+.status-approved,
+.status-processing,
+.status-cancelled {
+  padding: 0.2em 0.6em; /* ลดขนาดปุ่ม */
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.status-pending {
+  color: rgb(255, 183, 0);
+}
+
+.status-approved {
+  color: rgb(0, 146, 68);
+}
+
+.status-processing {
+  color: rgb(79, 48, 190);
+}
+
+.status-cancelled {
+  color: rgb(242, 0, 0);
+}
+
+/* สีสถานะรอรับของ */
+.status-pending-items,
+.status-receive-items {
+  font-size: 14px;
+  font-weight: bold;
+  outline: none;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.3em 0.6em;
+}
+/* สีสถานะรอรับของ */
+.status-pending-items {
+  color: #4b25b6;
+}
+/* สีสถานะรับของเเล้ว */
+.status-receive-items {
+  color: rgb(0, 146, 68);
+}
+
+.select-option1 {
+  color: #4b25b6;
+   font-size: 14px;
+  font-weight: bold;
+}
+
+.select-option2 {
+  color: rgb(0, 146, 68);
+   font-size: 14px;
+  font-weight: bold;
+}
+
+/* Pagination */
+.userfollow-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 13px; /* ลด font */
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.userfollow-pagination-info {
+  color: #333;
+  flex: 1;
+}
+
+.userfollow-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.org-page-input {
+  width: 50px; /* ลดขนาด input */
+  text-align: center;
+  padding: 0.2em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn {
+  padding: 0.3em 0.6em; /* ลดปุ่ม */
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

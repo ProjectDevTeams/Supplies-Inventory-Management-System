@@ -1,6 +1,4 @@
 // สำหรับ route path
-
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import UserStuffbar from "../../user_components/UserStuff/UserStuff_bar";

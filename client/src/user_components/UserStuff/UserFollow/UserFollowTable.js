@@ -3,74 +3,27 @@ import './UserFollowTable.css';
 import { FaPrint } from 'react-icons/fa';
 
 function UserFollowTable({ searchTerm = "" }) {
-  const data = [
+  const initialData = [
     {
-      id: 1,
-      number: "003-02/2568",
-      category: "เบิกวัสดุ",
-      items: 1,
-      date: "12 ก.พ. 68",
-      status: "รออนุมัติ"
+      id: 1, number: "003-02/2568", category: "เบิกวัสดุ", items: 1, date: "12 ก.พ. 68",
+      status: "รออนุมัติ", status_user: "รอรับของ"
     },
     {
-      id: 2,
-      number: "004-02/2568",
-      category: "เบิกวัสดุ",
-      items: 3,
-      date: "13 ก.พ. 68",
-      status: "รออนุมัติ"
+      id: 2, number: "004-02/2568", category: "เบิกวัสดุ", items: 3, date: "13 ก.พ. 68",
+      status: "รออนุมัติ", status_user: "รอรับของ"
     },
-    {
-      id: 3,
-      number: "005-02/2568",
-      category: "เบิกวัสดุ",
-      items: 2,
-      date: "14 ก.พ. 68",
-      status: "รออนุมัติ"
-    },
-    {
-      id: 4,
-      number: "006-02/2568",
-      category: "เบิกวัสดุ",
-      items: 5,
-      date: "15 ก.พ. 68",
-      status: "รออนุมัติ"
-    },
-    {
-      id: 5,
-      number: "007-02/2568",
-      category: "เบิกวัสดุ",
-      items: 4,
-      date: "16 ก.พ. 68",
-      status: "รออนุมัติ"
-    },
-    {
-      id: 6,
-      number: "008-02/2568",
-      category: "เบิกวัสดุ",
-      items: 1,
-      date: "17 ก.พ. 68",
-      status: "รออนุมัติ"
-    },
-    {
-      id: 7,
-      number: "007-02/2568",
-      category: "เบิกวัสดุ",
-      items: 2,
-      date: "3 ก.พ. 68",
-      status: "รออนุมัติ"
-    },
-    {
-      id: 8,
-      number: "008-02/2568",
-      category: "เบิกวัสดุ",
-      items: 1,
-      date: "7 ก.พ. 68",
-      status: "รออนุมัติ"
-    }
+    // ... (อื่นๆ)
   ];
 
-  // ✅ กรองข้อมูลจากทุกช่อง
+  const [data, setData] = useState(initialData);
+
+  const handleStatusUserChange = (id, newStatus) => {
+    const updatedData = data.map(item =>
+      item.id === id ? { ...item, status_user: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
   const filteredData = data.filter((row) =>
     row.id.toString().includes(searchTerm) ||
     row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -126,6 +79,7 @@ function UserFollowTable({ searchTerm = "" }) {
             <th>จำนวนรายการ</th>
             <th>วันที่สร้าง</th>
             <th>สถานะ</th>
+            <th>สถานะผู้ใช้</th>
             <th>ปริ้น</th>
           </tr>
         </thead>
@@ -144,6 +98,19 @@ function UserFollowTable({ searchTerm = "" }) {
                       row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
               }>
                 {row.status}
+              </td>
+              <td>
+                <select
+                  value={row.status_user}
+                  onChange={(e) => handleStatusUserChange(row.id, e.target.value)}
+                  className={
+                    row.status_user === "รอรับของ" ? "status-pending-items" :
+                      row.status_user === "รับของเรียบร้อย" ? "status-receive-items" : ""
+                  }
+                >
+                  <option className="select-option1" value="รอรับของ">รอรับของ</option>
+                  <option className="select-option2" value="รับของเรียบร้อย">รับของเรียบร้อย</option>
+                </select>
               </td>
               <td className="print-icon"><FaPrint /></td>
             </tr>
