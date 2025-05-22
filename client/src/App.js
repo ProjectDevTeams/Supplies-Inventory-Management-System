@@ -31,8 +31,18 @@ import ReportPage from "./pages/Report/ReportPage";
 import SettingPage from "./pages/Setting/SettingPage";
 
 // ผู้ใช้งานทั่วไป
-import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
+// import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
+
+/////////////////////////
+
+import UserStuffTablePage from "./user_pages/UserStuff/UserStuffTablePage";
+import UserFollowTablePage from "./user_pages/UserStuff/UserFollowTablePage";
+import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
+
+// import UserHistoryTablePage from "./user_pages/UserStuff/UserHistory/UserHistoryTable";
+
+/////////////////////////
 
 function App() {
   return (
@@ -47,8 +57,8 @@ function App() {
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/verification" element={<EmailVerification />} />
 
-        {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์ */}
-        <Route path="/userstuff" element={<UserStuffPage />} />
+        {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์
+        <Route path="/userstuff" element={<UserStuffPage />} /> */}
         <Route path="/user/confirm-history" element={<UserConfirmHisPage />} />
         <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
@@ -70,6 +80,15 @@ function App() {
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/setting" element={<SettingPage />} />
+
+        {/* <Route path="/userstuffpage" element={<UserStuffTablePage />} />
+        <Route path="/userfollowpage" element={<UserFollowTablePage />} />
+        <Route path="/userhistorypage" element={<UserHistoryTablePage />} /> */}
+
+        <Route path="/userstuff/stuff" element={<UserStuffTablePage />} />
+        <Route path="/userstuff/follow" element={<UserFollowTablePage />} />
+        <Route path="/userstuff/history" element={<UserHistoryTablePage />} />
+
       </Routes>
     </BrowserRouter>
   );

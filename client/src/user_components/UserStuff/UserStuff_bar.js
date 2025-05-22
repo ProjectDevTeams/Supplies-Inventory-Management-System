@@ -1,41 +1,54 @@
 import React, { useState } from "react";
 import "./UserStuff_bar.css";
+import { useNavigate , useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-import UserStuffTable from "../../user_components/UserStuff/UserStuff_table";
-import UserFollowTable from "../../user_components/UserStuff/UserFollow/UserFollowTable";
-import UserHistoryTable from "../../user_components/UserStuff/UserHistory/UserHistoryTable";
 import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup";
 import UserStuffBasketPopup from "../../user_components/UserPopup/StuffBasket_Popup";
 
-function UserStuffbar() {
-  const [activeTab, setActiveTab] = useState("เบิกวัสดุ");
-  const [searchTerm, setSearchTerm] = useState("");
+
+
+function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketItems = () => {} })  {
   const [showMorePopup, setShowMorePopup] = useState(false);
   const [showBasketPopup, setShowBasketPopup] = useState(false);
+  const navigate = useNavigate();
 
-  const [basketItems, setBasketItems] = useState([]);
+  const location = useLocation();
+  const isStuffPage = location.pathname === "/userstuff/stuff";
+
 
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    if (tab === "รายการขอจัดซื้อเพิ่มเติม") {
-      setShowMorePopup(true);
-    }
-  }; 
-
-  const renderTable = () => {
-    switch (activeTab) {
+    switch (tab) {
       case "เบิกวัสดุ":
-        return <UserStuffTable searchTerm={searchTerm} basketItems={basketItems} setBasketItems={setBasketItems} />;
+        navigate("/userstuff/stuff"); // path ไปยัง UserStuffTablePage.js
+        break;
       case "สถานะการเบิกวัสดุ ":
-        return <UserFollowTable searchTerm={searchTerm} />;
+        navigate("/userstuff/follow"); // path ไปยัง UserFollowTablePage.js
+        break;
       case "ประวัติการทำรายการ":
-        return <UserHistoryTable searchTerm={searchTerm} />;
+        navigate("/userstuff/history"); // path ไปยัง UserHistoryTablePage.js
+        break;
+      case "รายการขอจัดซื้อเพิ่มเติม":
+        setShowMorePopup(true);
+        break;
       default:
-        return null;
+        break;
     }
   };
+
+  const currentTab = (() => {
+    switch (location.pathname) {
+      case "/userstuff/stuff":
+        return "เบิกวัสดุ";
+      case "/userstuff/follow":
+        return "สถานะการเบิกวัสดุ ";
+      case "/userstuff/history":
+        return "ประวัติการทำรายการ";
+      default:
+        return "";
+    }
+  })();
 
   const handleConfirmRequest = async () => {
     try {
@@ -49,12 +62,9 @@ function UserStuffbar() {
         })),
       };
 
-      // ตัวอย่างการเรียก POST (mock)
-      // await axios.post(`${API_URL}/request/create_request.php`, payload);
-
       console.log("📦 ส่งข้อมูลสำเร็จ", payload);
-      setBasketItems([]); // ล้างตะกร้า
-      setShowBasketPopup(false); // ปิด popup
+      setBasketItems([]);
+      setShowBasketPopup(false);
     } catch (err) {
       console.error("❌ ส่งข้อมูลล้มเหลว", err);
     }
@@ -74,7 +84,7 @@ function UserStuffbar() {
           ].map((tab) => (
             <button
               key={tab}
-              className={`userstuff-tab ${activeTab === tab ? "active" : ""}`}
+              className={`userstuff-tab ${currentTab === tab ? "active" : ""}`}
               onClick={() => handleTabClick(tab)}
             >
               {tab}
@@ -97,7 +107,7 @@ function UserStuffbar() {
             />
           </div>
 
-          {activeTab === "เบิกวัสดุ" && (
+          {isStuffPage && (
             <div className="userstuff-bag-icon-wrapper">
               <div
                 className="userstuff-bag-icon"
@@ -111,8 +121,6 @@ function UserStuffbar() {
             </div>
           )}
         </div>
-
-        <div className="userstuff-table-content">{renderTable()}</div>
       </div>
 
       {showMorePopup && (
@@ -123,10 +131,10 @@ function UserStuffbar() {
         <UserStuffBasketPopup
           basketItems={basketItems}
           onClose={() => setShowBasketPopup(false)}
-          onConfirm={handleConfirmRequest} // ✅ ใช้ฟังก์ชันนี้จริง
+          onConfirm={handleConfirmRequest}
           onCancel={() => {
-            setBasketItems([]); // ✅ ล้างรายการ
-            setShowBasketPopup(false); // ✅ ปิด popup
+            setBasketItems([]);
+            setShowBasketPopup(false);
           }}
         />
       )}

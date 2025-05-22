@@ -19,6 +19,13 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
   // สำหรับโหลดสถานะข้อมูล
   const [loading, setLoading] = useState(true);
 
+  // เวลาผู้ใช้เลือกวัสดุใน popup:
+  const handleAddToBasket = (item, quantity) => {
+    const updated = [...basketItems, { ...item, quantity }];
+    setBasketItems(updated);
+  };
+
+
   // ดึงข้อมูลวัสดุเมื่อโหลด component
   useEffect(() => {
     const fetchMaterials = async () => {
