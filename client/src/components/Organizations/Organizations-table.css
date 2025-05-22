@@ -155,9 +155,19 @@
 }
 
 .organizations-no-data-message {
-  text-align: center;
-  color: #000;
-  font-style: normal;
-  font-weight: normal;
-  padding: 1rem;
+    text-align: center;
+    font-size: medium;
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+    padding: 1em;
+}
+
+.organizations-no-data {
+    text-align: center;
+    font-size: medium;
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+    padding: 1em;
 }

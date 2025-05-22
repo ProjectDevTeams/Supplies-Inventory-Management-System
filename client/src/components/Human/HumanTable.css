@@ -131,11 +131,13 @@
 }
 
 .human-no-data-message {
-  text-align: center;
-  color: black;
-  font-weight: normal;
-  padding: 1em;
-}
+    text-align: center;
+    font-size: medium;
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+    padding: 1em;
+  }
 
 .human-clickable-row {
   cursor: pointer;

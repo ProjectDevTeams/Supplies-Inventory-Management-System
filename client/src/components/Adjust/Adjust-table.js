@@ -137,7 +137,7 @@ function AdjustTable({ searchTerm }) {
             ))
           ) : (
             <tr>
-              <td className="adjustment-td" colSpan="4">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td className="adjust-no-data" colSpan="4">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           )}
         </tbody>

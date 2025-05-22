@@ -95,7 +95,7 @@ export default function OrganizationsTable() {
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="5">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td className="organizations-no-data" colSpan="6"> ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             items.map((c) => (

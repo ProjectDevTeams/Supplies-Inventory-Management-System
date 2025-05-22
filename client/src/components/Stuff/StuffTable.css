@@ -69,11 +69,13 @@
 
 /* ✅ No data */
 .stuff-no-data {
-  text-align: center;
-  color: #555;
-  padding: 1em;
-  font-style: italic;
-}
+    text-align: center;
+    font-size: medium;
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+    padding: 1em;
+  }
 
 /* ✅ Link */
 .stuff-link {
