@@ -73,6 +73,7 @@ function UserMorePopup() {
             isClearable
             placeholder="เลือก/เพิ่มชื่อวัสดุ..."
             className="usermorepopup-select"
+            formatCreateLabel={(inputValue) => `สร้าง "${inputValue}"`} // ✅ เปลี่ยนคำว่า Create เป็น สร้าง
           />
 
           <input
