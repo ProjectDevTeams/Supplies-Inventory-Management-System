@@ -27,21 +27,25 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
 
 
   // ดึงข้อมูลวัสดุเมื่อโหลด component
-  useEffect(() => {
-    const fetchMaterials = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
-        if (res.data.status === "success") {
-          setMaterials(res.data.data); // เซ็ตข้อมูลที่ได้จาก API
-        }
-      } catch (error) {
-        console.error("เกิดข้อผิดพลาดในการโหลดวัสดุ:", error);
-      } finally {
-        setLoading(false); // ปิดสถานะโหลด
+useEffect(() => {
+  const fetchMaterials = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+      if (res.data.status === "success") {
+        // กรองเฉพาะวัสดุในคลัง
+        const inStockItems = res.data.data.filter(
+          (item) => item.location === "วัสดุในคลัง"
+        );
+        setMaterials(inStockItems);
       }
-    };
-    fetchMaterials();
-  }, []);
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการโหลดวัสดุ:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchMaterials();
+}, []);
 
   // กรองข้อมูลตามคำค้นหาจากชื่อ, id, หมวดหมู่ หรือจำนวนคงเหลือ
   const filteredData = materials.filter((item) =>
