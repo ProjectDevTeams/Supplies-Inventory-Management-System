@@ -142,34 +142,7 @@ function UserFollowTable({ searchTerm = "" }) {
     }),
   };
 
-  const handleSelectChange = (id, selectedOption) => {
-    const item = data.find((d) => d.id === id);
-    if (!item) return;
-
-    if (item.status_user === "รับของเรียบร้อย") {
-      alert("ไม่สามารถเปลี่ยนสถานะกลับได้");
-      return;
-    }
-
-    if (selectedOption.value === "รับของเรียบร้อย") {
-      const confirmChange = window.confirm(
-        "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนสถานะเป็น 'รับของเรียบร้อย'? ยืนยันแล้วจะเปลี่ยนกลับไม่ได้อีก"
-      );
-      if (confirmChange) {
-        setData((prev) =>
-          prev.map((row) =>
-            row.id === id ? { ...row, status_user: selectedOption.value } : row
-          )
-        );
-      }
-    } else {
-      setData((prev) =>
-        prev.map((row) =>
-          row.id === id ? { ...row, status_user: selectedOption.value } : row
-        )
-      );
-    }
-  };
+  
 
   return (
     <div className="userfollow-table-container">
@@ -215,7 +188,7 @@ function UserFollowTable({ searchTerm = "" }) {
                     (opt) => opt.value === row.status_user
                   )}
                   onChange={(selectedOption) =>
-                    handleSelectChange(row.id, selectedOption)
+                    handleStatusUserChange(row.id, selectedOption.value)
                   }
                   options={statusOptions}
                   styles={colourStyles}
