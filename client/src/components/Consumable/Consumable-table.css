@@ -181,7 +181,9 @@
   
   .consumable-no-data {
     text-align: center;
+    font-size: medium;
     color: black;
     font-weight: normal;
+    font-style: italic;
     padding: 1em;
   }
