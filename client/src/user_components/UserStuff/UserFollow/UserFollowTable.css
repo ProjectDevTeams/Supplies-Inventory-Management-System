@@ -54,7 +54,7 @@
 }
 
 .status-processing {
-  color: rgb(79, 48, 190);
+  color: #1e398d;
 }
 
 .status-cancelled {
@@ -77,7 +77,7 @@
   padding: 0.3em 0.6em;
 }
 .status-pending-items {
-  color: #4b25b6; /* ม่วง */
+  color: #1e398d; /* น้ำเงิน */
   font-weight: bold;
 }
 
@@ -163,5 +163,10 @@
   padding: 2em 1em;
   height: 50px; /* ความสูงของแถว */
   vertical-align: middle; /* จัดข้อความให้อยู่ตรงกลางแนวตั้ง */
+}
+
+.status-cancelled-user {
+  color: #dc3545;
+  font-weight: bold;
 }
 
