@@ -77,20 +77,6 @@ export default function UserConfirmHistory() {
             </span>
           </div>
 
-          <div className="user-confirm-status">
-            <label>สถานะการรับของ : </label>
-            <div className="user-confirm-select-wrapper">
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className={`user-confirm-status-select ${!status ? "placeholder" : ""}`}
-              >
-                <option value="" disabled hidden>สถานะ</option>
-                <option value="inConfirm">รับของแล้ว</option>
-              </select>
-            </div>
-          </div>
-
           <div className="user-confirm-button-container">
             <button className="user-confirm-btn-back" onClick={() => window.history.back()}>
               กลับ

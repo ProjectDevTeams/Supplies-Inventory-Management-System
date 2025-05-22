@@ -93,8 +93,8 @@ function UserHistoryTable({ searchTerm = "" }) {
                 <span
                   className="clickable-number"
                   onClick={(e) => {
-                    e.stopPropagation(); 
-                    navigate("/user/confirm-history", { state: { item: row } }); // เปลี่ยนเป็น row
+                    e.stopPropagation();
+                    <Route path="/user/confirm-status" element={<UserConfirmHisPage />} />
                   }}
                 >
                   {row.number}
@@ -109,8 +109,8 @@ function UserHistoryTable({ searchTerm = "" }) {
                   row.status === "อนุมัติ"
                     ? "status-approved"
                     : row.status === "รับของเรียบร้อย"
-                    ? "status-done"
-                    : ""
+                      ? "status-done"
+                      : ""
                 }
               >
                 {row.status}

@@ -26,47 +26,46 @@ export default function IncomingTable({ searchTerm = "" }) {
   const incomingItemsPerPage = 5;
   const navigate = useNavigate();
 
-  // จัดรูปวันที่จาก 'YYYY-MM-DD' → 'DD-MM-YYYY'
   const formatDate = (d) => (d ? d.split("-").reverse().join("-") : "-");
 
-  // Fetch data
   useEffect(() => {
     axios
       .get(`${API_URL}/receive_materials/get_receives.php`)
       .then((res) => {
         if (res.data.status === "success") {
-          const formatted = res.data.data.map((item) => ({
-            id: item.id,
-            company: item.company_name || "-",
-            po: item.purchase_order_number || "-",
-            created_by: item.created_by || "-",
-            created_at: formatDate(item.created_at),
-            amount: parseFloat(item.total_price) || 0,
-            status: item.status || "-"  // ดึงสถานะจาก API
-          }));
+          const formatted = res.data.data.map((item) => {
+            const companyOrProject = item.company_name
+              ? item.company_name
+              : item.project_name
+                ? item.project_name
+                : "-";
+            return {
+              id: item.id,
+              company: companyOrProject,
+              po: item.purchase_order_number || "-",
+              created_by: item.created_by || "-",
+              created_at: formatDate(item.created_at),
+              amount: parseFloat(item.total_price) || 0,
+              status: item.status || "-"
+            };
+          });
           setData(formatted);
         }
       })
       .catch((err) => console.error("API fetch error:", err));
   }, []);
 
-  // Sort
   const sortedData = [...data].sort((a, b) =>
     incomingAsc ? a.id - b.id : b.id - a.id
   );
 
-  // Filter
   const filteredData = sortedData.filter((item) =>
     [item.company, item.po, item.created_by, item.created_at, item.amount, item.status]
       .some((field) =>
-        field
-          .toString()
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
+        field.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
 
-  // Pagination
   const totalPages = Math.ceil(filteredData.length / incomingItemsPerPage);
   const indexOfLastItem = incomingCurrentPage * incomingItemsPerPage;
   const indexOfFirstItem = indexOfLastItem - incomingItemsPerPage;
@@ -82,7 +81,6 @@ export default function IncomingTable({ searchTerm = "" }) {
   const handlePrevPage = () =>
     incomingCurrentPage > 1 && setIncomingCurrentPage((p) => p - 1);
 
-  // แปลงสถานะเป็นคลาส
   const statusClass = (status) => {
     if (status === "รออนุมัติ") return "incoming-table-status incoming-table-pending";
     if (status === "อนุมัติ") return "incoming-table-status incoming-table-approved";
@@ -99,7 +97,7 @@ export default function IncomingTable({ searchTerm = "" }) {
             <th className="incoming-sortable-header" onClick={toggleSort}>
               ลำดับ {incomingAsc ? "▲" : "▼"}
             </th>
-            <th>บริษัท/ร้านค้า</th>
+            <th>บริษัท/โครงการ</th>
             <th>เลขที่ มอ.</th>
             <th>ผู้สร้าง</th>
             <th>วันที่สร้าง</th>

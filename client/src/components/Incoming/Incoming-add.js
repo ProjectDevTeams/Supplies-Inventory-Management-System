@@ -21,12 +21,11 @@ export default function IncomingAdd() {
     stock_type: "",
     company_id: "",
     company_name: "",
+    project_name: "",
     tax_invoice_number: "",
     purchase_order_number: "",
     created_at: "",
-    items: [
-      { material_id: "", material_name: "", quantity: "", price_per_unit: "" }
-    ]
+    items: [{ material_id: "", material_name: "", quantity: "", price_per_unit: "" }]
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,7 +40,9 @@ export default function IncomingAdd() {
         ]);
         setMaterials(mRes.data.data || []);
         setCompanies(cRes.data.data || []);
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, []);
 
@@ -57,44 +58,48 @@ export default function IncomingAdd() {
     });
 
   const addItem = () =>
-    setForm(f => ({
-      ...f,
-      items: [
-        ...f.items,
-        { material_id: "", material_name: "", quantity: "", price_per_unit: "" }
-      ]
-    }));
+    setForm(f => ({ ...f, items: [...f.items, { material_id: "", material_name: "", quantity: "", price_per_unit: "" }] }));
 
   const removeItem = i =>
     setForm(f =>
-      f.items.length > 1
-        ? { ...f, items: f.items.filter((_, idx) => idx !== i) }
-        : f
+      f.items.length > 1 ? { ...f, items: f.items.filter((_, idx) => idx !== i) } : f
     );
 
   const getSuggestions = (list, value) => {
     const input = value.trim().toLowerCase();
     return list.filter(x => x.name.toLowerCase().includes(input));
   };
+
+  const getCompanySuggestions = value =>
+    form.stock_type === "วัสดุในคลัง" ? getSuggestions(companies, value) : [];
+
+  const getMaterialSuggestions = value => {
+    if (!form.stock_type) return [];
+    const filtered = materials.filter(m => m.location === form.stock_type);
+    return getSuggestions(filtered, value);
+  };
+
   const renderSuggestion = sug => <span>{sug.name}</span>;
 
   const submit = async () => {
     setMsg({ error: "", success: "" });
     setLoading(true);
     try {
-      const items = form.items.map(
-        ({ material_id, quantity, price_per_unit }) => ({
-          material_id: +material_id,
-          quantity: +quantity,
-          price_per_unit: +price_per_unit,
-          total_price: +quantity * +price_per_unit
-        })
-      );
+      const items = form.items.map(({ material_id, quantity, price_per_unit }) => ({
+        material_id: +material_id,
+        quantity: +quantity,
+        price_per_unit: +price_per_unit,
+        total_price: +quantity * +price_per_unit
+      }));
 
       const payload = {
-        ...form,
         created_by: userId,
-        company_id: +form.company_id || null,
+        stock_type: form.stock_type,
+        company_id: form.company_id === "" ? "" : +form.company_id,
+        project_name: form.project_name === "" ? null : form.project_name,
+        tax_invoice_number: form.tax_invoice_number,
+        purchase_order_number: form.purchase_order_number,
+        created_at: form.created_at,
         items
       };
 
@@ -103,11 +108,8 @@ export default function IncomingAdd() {
         payload,
         { headers: { "Content-Type": "application/json" } }
       );
-      if (data.status === "success") {
-        navigate("/incoming/");
-      } else {
-        throw new Error(data.message || "Unknown error");
-      }
+      if (data.status === "success") navigate("/incoming/");
+      else throw new Error(data.message || "Unknown error");
     } catch (e) {
       setMsg({ error: e.message || "เกิดข้อผิดพลาด", success: "" });
     } finally {
@@ -134,43 +136,52 @@ export default function IncomingAdd() {
         </select>
       </div>
 
-      <div className="incoming-add-row">
-        <label>ชื่อบริษัท</label>
-        <Autosuggest
-          suggestions={companySuggestions}
-          onSuggestionsFetchRequested={({ value }) =>
-            setCompanySuggestions(getSuggestions(companies, value))
-          }
-          onSuggestionsClearRequested={() =>
-            setCompanySuggestions([])
-          }
-          getSuggestionValue={s => s.name}
-          renderSuggestion={renderSuggestion}
-          inputProps={{
-            className: "incoming-add-input",
-            placeholder: "พิมพ์เพื่อค้นหา...",
-            value: form.company_name,
-            disabled: loading,
-            onChange: (_, { newValue }) => {
-              setIn("company_name", newValue);
-              const c = companies.find(x => x.name === newValue);
-              setIn("company_id", c ? c.id : "");
-            }
-          }}
-        />
-      </div>
-
-      {["tax_invoice_number", "purchase_order_number"].map((f, i) => (
-        <div className="incoming-add-row" key={f}>
-          <label>
-            {i === 0 ? "เลขที่กำกับภาษี" : "เลขที่ มอ. จัดซื้อ"}
-          </label>
+      {form.stock_type === "วัสดุในคลัง" ? (
+        <div className="incoming-add-row">
+          <label>ชื่อบริษัท</label>
+          <Autosuggest
+            suggestions={companySuggestions}
+            onSuggestionsFetchRequested={({ value }) => setCompanySuggestions(getCompanySuggestions(value))}
+            onSuggestionsClearRequested={() => setCompanySuggestions([])}
+            getSuggestionValue={s => s.name}
+            renderSuggestion={renderSuggestion}
+            inputProps={{
+              className: "incoming-add-input",
+              placeholder: "พิมพ์เพื่อค้นหาบริษัท...",
+              value: form.company_name,
+              disabled: loading,
+              onFocus: () => setCompanySuggestions(companies),
+              onChange: (_, { newValue }) => {
+                setIn("company_name", newValue);
+                const c = companies.find(x => x.name === newValue);
+                setIn("company_id", c ? `${c.id}` : "");
+              }
+            }}
+          />
+        </div>
+      ) : form.stock_type === "วัสดุนอกคลัง" ? (
+        <div className="incoming-add-row">
+          <label>ชื่อโครงการ</label>
           <input
             type="text"
             className="incoming-add-input"
-            value={form[f]}
-            onChange={e => setIn(f, e.target.value)}
-            placeholder={i === 0 ? "INV-XXX" : "PO-XXX"}
+            placeholder="พิมพ์ชื่อโครงการ..."
+            value={form.project_name}
+            disabled={loading}
+            onChange={e => setIn("project_name", e.target.value)}
+          />
+        </div>
+      ) : null}
+
+      {['tax_invoice_number', 'purchase_order_number'].map((field, idx) => (
+        <div className="incoming-add-row" key={field}>
+          <label>{idx === 0 ? 'เลขที่กำกับภาษี' : 'เลขที่ มอ. จัดซื้อ'}</label>
+          <input
+            type="text"
+            className="incoming-add-input"
+            value={form[field]}
+            onChange={e => setIn(field, e.target.value)}
+            placeholder={idx === 0 ? 'INV-XXX' : 'PO-XXX'}
             disabled={loading}
           />
         </div>
@@ -195,12 +206,8 @@ export default function IncomingAdd() {
             <label>ชื่อวัสดุ</label>
             <Autosuggest
               suggestions={materialSuggestions}
-              onSuggestionsFetchRequested={({ value }) =>
-                setMaterialSuggestions(getSuggestions(materials, value))
-              }
-              onSuggestionsClearRequested={() =>
-                setMaterialSuggestions([])
-              }
+              onSuggestionsFetchRequested={({ value }) => setMaterialSuggestions(getMaterialSuggestions(value))}
+              onSuggestionsClearRequested={() => setMaterialSuggestions([])}
               getSuggestionValue={s => s.name}
               renderSuggestion={renderSuggestion}
               inputProps={{
@@ -208,67 +215,48 @@ export default function IncomingAdd() {
                 placeholder: "พิมพ์เพื่อค้นหา...",
                 value: it.material_name,
                 disabled: loading,
+                onFocus: () => setMaterialSuggestions(materials.filter(m => m.location === form.stock_type)),
                 onChange: (_, { newValue }) => {
                   setIn(`items.${idx}.material_name`, newValue);
-                  const m = materials.find(x => x.name === newValue);
-                  setIn(`items.${idx}.material_id`, m ? m.id : "");
+                  const m = materials.find(x => x.name === newValue && x.location === form.stock_type);
+                  setIn(`items.${idx}.material_id`, m ? `${m.id}` : "");
                 }
               }}
             />
           </div>
 
-          {["quantity", "price_per_unit"].map((field, j) => (
+          {['quantity','price_per_unit'].map((field,j)=>(
             <div className="incoming-add-row" key={field}>
-              <label>{j === 0 ? "จำนวน" : "ราคาต่อหน่วย"}</label>
+              <label>{j===0?'จำนวน':'ราคาต่อหน่วย'}</label>
               <input
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 className="incoming-add-input"
                 value={it[field]}
-                onChange={e =>
-                  setIn(`items.${idx}.${field}`, e.target.value.replace(/\D/, ""))
-                }
+                onChange={e=>setIn(`items.${idx}.${field}`,e.target.value.replace(/\D/,""))}
                 placeholder="0"
                 disabled={loading}
               />
             </div>
           ))}
 
-          <button
-            className="incoming-add-remove-row"
-            onClick={() => removeItem(idx)}
-            disabled={loading}
-          >
+          <button className="incoming-add-remove-row" onClick={()=>removeItem(idx)} disabled={loading}>
             ลบรายการ
           </button>
         </div>
       ))}
 
-      <button
-        className="incoming-add-add-row"
-        onClick={addItem}
-        disabled={loading}
-      >
+      <button className="incoming-add-add-row" onClick={addItem} disabled={loading}>
         + เพิ่มรายการ
       </button>
 
       <div className="incoming-add-actions">
-        <button
-          type="button"
-          className="incoming-add-cancel"
-          onClick={() => navigate("/incoming")}
-          disabled={loading}
-        >
+        <button type="button" className="incoming-add-cancel" onClick={()=>navigate("/incoming")} disabled={loading}>
           ยกเลิก
         </button>
-        <button
-          type="button"
-          className="incoming-add-save"
-          onClick={submit}
-          disabled={loading}
-        >
-          {loading ? "กำลังบันทึก..." : "บันทึก"}
+        <button type="button" className="incoming-add-save" onClick={submit} disabled={loading}>
+          {loading?"กำลังบันทึก...":"บันทึก"}
         </button>
       </div>
     </div>

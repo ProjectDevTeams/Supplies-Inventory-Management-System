@@ -32,12 +32,16 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
       try {
         const res = await axios.get(`${API_URL}/materials/get_materials.php`);
         if (res.data.status === "success") {
-          setMaterials(res.data.data); // เซ็ตข้อมูลที่ได้จาก API
+          // กรองเฉพาะวัสดุในคลัง
+          const inStockItems = res.data.data.filter(
+            (item) => item.location === "วัสดุในคลัง"
+          );
+          setMaterials(inStockItems);
         }
       } catch (error) {
         console.error("เกิดข้อผิดพลาดในการโหลดวัสดุ:", error);
       } finally {
-        setLoading(false); // ปิดสถานะโหลด
+        setLoading(false);
       }
     };
     fetchMaterials();
@@ -75,33 +79,40 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item, index) => (
-            <tr key={index}>
-              <td>{item.id}</td>
-              <td>
-                {/* โหลดรูปจาก path image ที่ได้จาก API */}
-                <img src={`${API_URL}/${item.image}`} alt={item.name} className="stuff-image" />
-              </td>
-              <td>
-                <b>ชื่อ :</b> <span className="item-name">{item.name}</span>
-                <br />
-                <span className="userstuff-category">
-                  หมวดหมู่ : {item.category}
-                </span>
-              </td>
-              <td>{item.remain}</td>
-              <td>
-                {/* ปุ่มเลือกวัสดุเพื่อเปิด popup */}
-                <button
-                  className="userstuff-select-btn"
-                  onClick={() => setSelectedItem(item)}
-                >
-                  เลือก
-                </button>
+          {currentItems.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="userstuff-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
-          ))}
+          ) : (
+            currentItems.map((item, index) => (
+              <tr key={index}>
+                <td>{item.id}</td>
+                <td>
+                  <img src={`${API_URL}/${item.image}`} alt={item.name} className="stuff-image" />
+                </td>
+                <td>
+                  <b>ชื่อ :</b> <span className="item-name">{item.name}</span>
+                  <br />
+                  <span className="userstuff-category">
+                    หมวดหมู่ : {item.category}
+                  </span>
+                </td>
+                <td>{item.remain}</td>
+                <td>
+                  <button
+                    className="userstuff-select-btn"
+                    onClick={() => setSelectedItem(item)}
+                  >
+                    เลือก
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       {/* แสดงข้อมูลแบ่งหน้า */}

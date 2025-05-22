@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import Select from "react-select";
 import "./UserFollowTable.css";
@@ -6,6 +7,15 @@ import Swal from "sweetalert2";
 
 function UserFollowTable({ searchTerm = "" }) {
   
+=======
+import React, { useState } from 'react';
+import './UserFollowTable.css';
+import { FaPrint } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+function UserFollowTable({ searchTerm = "" }) {
+  const navigate = useNavigate();
+>>>>>>> 8e1b67dd19da68e883ebca02f05036e15262c06e
 
   const initialData = [
     {
@@ -26,7 +36,6 @@ function UserFollowTable({ searchTerm = "" }) {
       status: "รออนุมัติ",
       status_user: "รอรับของ",
     },
-    // ... (อื่นๆ)
   ];
 
   const [data, setData] = useState(initialData);
@@ -159,6 +168,7 @@ function UserFollowTable({ searchTerm = "" }) {
           </tr>
         </thead>
         <tbody>
+<<<<<<< HEAD
           {userfollowCurrentItems.map((row) => (
             <tr key={row.id}>
               <td>{row.id}</td>
@@ -198,9 +208,54 @@ function UserFollowTable({ searchTerm = "" }) {
               <td className="print-icon">
                 <FaPrint />
               </td>
+=======
+          {userfollowCurrentItems.length === 0 ? (
+            <tr>
+              <td colSpan="8" className="userfollow-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
+              </td>
+>>>>>>> 8e1b67dd19da68e883ebca02f05036e15262c06e
             </tr>
-          ))}
+          ) : (
+            userfollowCurrentItems.map((row) => (
+              <tr
+                key={row.id}
+                className="userfollow-row"
+                onClick={() => navigate("/user/confirm-status")}
+              >
+                <td>{row.id}</td>
+                <td>{row.number}</td>
+                <td>{row.category}</td>
+                <td>{row.items}</td>
+                <td>{row.date}</td>
+                <td className={
+                  row.status === "อนุมัติแล้ว" ? "status-approved" :
+                    row.status === "รออนุมัติ" ? "status-pending" :
+                      row.status === "รอดำเนินการ" ? "status-processing" :
+                        row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
+                }>
+                  {row.status}
+                </td>
+                <td>
+                  <select
+                    value={row.status_user}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => handleStatusUserChange(row.id, e.target.value)}
+                    className={
+                      row.status_user === "รอรับของ" ? "status-pending-items" :
+                        row.status_user === "รับของเรียบร้อย" ? "status-receive-items" : ""
+                    }
+                  >
+                    <option className="select-option1" value="รอรับของ">รอรับของ</option>
+                    <option className="select-option2" value="รับของเรียบร้อย">รับของเรียบร้อย</option>
+                  </select>
+                </td>
+                <td className="print-icon" onClick={(e) => e.stopPropagation()}><FaPrint /></td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
 
       <div className="userfollow-pagination">
@@ -217,7 +272,6 @@ function UserFollowTable({ searchTerm = "" }) {
           >
             ก่อนหน้า
           </button>
-
           <input
             type="number"
             className="org-page-input"
@@ -229,12 +283,16 @@ function UserFollowTable({ searchTerm = "" }) {
             onChange={handleUserfollowChange}
             onKeyDown={handleUserfollowKeyDown}
           />
+<<<<<<< HEAD
 
           <button
             className="btn"
             disabled={userfollowCurrentPage === userfollowTotalPages}
             onClick={handleUserfollowNext}
           >
+=======
+          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>
+>>>>>>> 8e1b67dd19da68e883ebca02f05036e15262c06e
             ถัดไป
           </button>
         </div>
