@@ -38,7 +38,7 @@ import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
 
 import UserStuffTablePage from "./user_pages/UserStuff/UserStuffTablePage";
 import UserFollowTablePage from "./user_pages/UserStuff/UserFollowTablePage";
-import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
+// import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
 import UserMoreTablePage from "./user_pages/UserStuff/UserMoreTablePage";
 
 /////////////////////////
@@ -82,7 +82,7 @@ function App() {
 
         <Route path="/userstuff/stuff" element={<UserStuffTablePage />} />
         <Route path="/userstuff/follow" element={<UserFollowTablePage />} />
-        <Route path="/userstuff/history" element={<UserHistoryTablePage />} />
+        {/* <Route path="/userstuff/history" element={<UserHistoryTablePage />} /> */}
         <Route path="/userstuff/more" element={<UserMoreTablePage />} />
 
       </Routes>
