@@ -40,8 +40,6 @@ import UserStuffTablePage from "./user_pages/UserStuff/UserStuffTablePage";
 import UserFollowTablePage from "./user_pages/UserStuff/UserFollowTablePage";
 import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
 
-// import UserHistoryTablePage from "./user_pages/UserStuff/UserHistory/UserHistoryTable";
-
 /////////////////////////
 
 function App() {
@@ -80,10 +78,6 @@ function App() {
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/setting" element={<SettingPage />} />
-
-        {/* <Route path="/userstuffpage" element={<UserStuffTablePage />} />
-        <Route path="/userfollowpage" element={<UserFollowTablePage />} />
-        <Route path="/userhistorypage" element={<UserHistoryTablePage />} /> */}
 
         <Route path="/userstuff/stuff" element={<UserStuffTablePage />} />
         <Route path="/userstuff/follow" element={<UserFollowTablePage />} />
