@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
+import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../../config";
 import "./UserMorePopup.css";
@@ -98,9 +99,11 @@ function UserMorePopup() {
           <button
             className="usermorepopup-remove-btn"
             onClick={() => removeRow(row.id)}
+            title="ลบแถว"
           >
-            −
+            <FaTrash />
           </button>
+
         </div>
       ))}
 
