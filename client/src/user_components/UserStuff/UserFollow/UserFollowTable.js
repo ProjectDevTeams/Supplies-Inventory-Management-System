@@ -160,47 +160,55 @@ function UserFollowTable({ searchTerm = "" }) {
           </tr>
         </thead>
         <tbody>
-          {userfollowCurrentItems.map((row) => (
-            <tr key={row.id}>
-              <td>{row.id}</td>
-              <td>{row.number}</td>
-              <td>{row.category}</td>
-              <td>{row.items}</td>
-              <td>{row.date}</td>
-              <td
-                className={
-                  row.status === "อนุมัติแล้ว"
-                    ? "status-approved"
-                    : row.status === "รออนุมัติ"
-                    ? "status-pending"
-                    : row.status === "รอดำเนินการ"
-                    ? "status-processing"
-                    : row.status === "ไม่อนุมัติ"
-                    ? "status-cancelled"
-                    : ""
-                }
-              >
-                {row.status}
-              </td>
-              <td>
-                <Select
-                  value={statusOptions.find(
-                    (opt) => opt.value === row.status_user
-                  )}
-                  onChange={(selectedOption) =>
-                    handleStatusUserChange(row.id, selectedOption.value)
-                  }
-                  options={statusOptions}
-                  styles={colourStyles}
-                  isDisabled={row.status_user === "รับของเรียบร้อย"}
-                  className="custom-status-dropdown"
-                />
-              </td>
-              <td className="print-icon">
-                <FaPrint />
+          {userfollowCurrentItems.length === 0 ? (
+            <tr>
+              <td colSpan="8" className="userfollow-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
               </td>
             </tr>
-          ))}
+          ) : (
+            userfollowCurrentItems.map((row) => (
+              <tr key={row.id}>
+                <td>{row.id}</td>
+                <td>{row.number}</td>
+                <td>{row.category}</td>
+                <td>{row.items}</td>
+                <td>{row.date}</td>
+                <td
+                  className={
+                    row.status === "อนุมัติแล้ว"
+                      ? "status-approved"
+                      : row.status === "รออนุมัติ"
+                      ? "status-pending"
+                      : row.status === "รอดำเนินการ"
+                      ? "status-processing"
+                      : row.status === "ไม่อนุมัติ"
+                      ? "status-cancelled"
+                      : ""
+                  }
+                >
+                  {row.status}
+                </td>
+                <td>
+                  <Select
+                    value={statusOptions.find(
+                      (opt) => opt.value === row.status_user
+                    )}
+                    onChange={(selectedOption) =>
+                      handleStatusUserChange(row.id, selectedOption.value)
+                    }
+                    options={statusOptions}
+                    styles={colourStyles}
+                    isDisabled={row.status_user === "รับของเรียบร้อย"}
+                    className="custom-status-dropdown"
+                  />
+                </td>
+                <td className="print-icon">
+                  <FaPrint />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
