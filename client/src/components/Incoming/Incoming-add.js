@@ -1,115 +1,23 @@
-// File: src/components/IncomingAdd/IncomingAdd.jsx
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../../config";
+import { useIncomingAdd } from "./useIncomingAdd";
 import "./Incoming-add.css";
 
 export default function IncomingAdd() {
   const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const userId = storedUser?.id || null;
-
-  const [materials, setMaterials] = useState([]);
-  const [companies, setCompanies] = useState([]);
-
-  const [form, setForm] = useState({
-    created_by: userId,
-    stock_type: "",
-    company_id: "",
-    company_name: "",
-    project_name: "",
-    tax_invoice_number: "",
-    purchase_order_number: "",
-    created_at: "",
-    items: [{ material_id: "", material_name: "", quantity: "", price_per_unit: "" }]
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState({ error: "", success: "" });
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const [mRes, cRes] = await Promise.all([
-          axios.get(`${API_URL}/materials/get_materials.php`),
-          axios.get(`${API_URL}/companies/get_companies.php`)
-        ]);
-        setMaterials(mRes.data.data || []);
-        setCompanies(cRes.data.data || []);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-
-  const setIn = (path, val) =>
-    setForm(f => {
-      const o = { ...f };
-      const keys = path.split(".");
-      const last = keys.pop();
-      let cur = o;
-      keys.forEach(k => (cur = cur[k]));
-      cur[last] = val;
-      return o;
-    });
-
-  const addItem = () =>
-    setForm(f => ({
-      ...f,
-      items: [...f.items, { material_id: "", material_name: "", quantity: "", price_per_unit: "" }]
-    }));
-
-  const removeItem = i =>
-    setForm(f =>
-      f.items.length > 1 ? { ...f, items: f.items.filter((_, idx) => idx !== i) } : f
-    );
-
-  const getMaterialOptions = () => {
-    if (!form.stock_type) return [];
-    return materials
-      .filter(m => m.location === form.stock_type)
-      .map(m => ({ value: m.id, label: m.name }));
-  };
-
-  const companyOptions = companies.map(c => ({ value: c.id, label: c.name }));
-
-  const submit = async () => {
-    setMsg({ error: "", success: "" });
-    setLoading(true);
-    try {
-      const items = form.items.map(({ material_id, quantity, price_per_unit }) => ({
-        material_id: +material_id,
-        quantity: +quantity,
-        price_per_unit: +price_per_unit,
-        total_price: +quantity * +price_per_unit
-      }));
-
-      const payload = {
-        created_by: userId,
-        stock_type: form.stock_type,
-        company_id: form.company_id === "" ? "" : +form.company_id,
-        project_name: form.project_name === "" ? null : form.project_name,
-        tax_invoice_number: form.tax_invoice_number,
-        purchase_order_number: form.purchase_order_number,
-        created_at: form.created_at,
-        items
-      };
-
-      const { data } = await axios.post(
-        `${API_URL}/receive_materials/add_receive.php`,
-        payload,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      if (data.status === "success") navigate("/incoming/");
-      else throw new Error(data.message || "Unknown error");
-    } catch (e) {
-      setMsg({ error: e.message || "เกิดข้อผิดพลาด", success: "" });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    form,
+    setIn,
+    addItem,
+    removeItem,
+    getMaterialOptions,
+    companyOptions,
+    stockOptions,
+    submit,
+    loading,
+    msg,
+  } = useIncomingAdd(navigate);
 
   return (
     <div className="incoming-add-container">
@@ -118,16 +26,19 @@ export default function IncomingAdd() {
 
       <div className="incoming-add-row">
         <label>คลังวัสดุ</label>
-        <select
-          className="incoming-add-input"
-          value={form.stock_type}
-          onChange={e => setIn("stock_type", e.target.value)}
-          disabled={loading}
-        >
-          <option value="">เลือกคลังวัสดุ</option>
-          <option value="วัสดุในคลัง">วัสดุในคลัง</option>
-          <option value="วัสดุนอกคลัง">วัสดุนอกคลัง</option>
-        </select>
+        <Select
+          classNamePrefix="incoming-select"
+          options={stockOptions}
+          placeholder="เลือกคลังวัสดุ..."
+          isClearable
+          onChange={(opt) => setIn("stock_type", opt?.value || "")}
+          value={
+            form.stock_type
+              ? { value: form.stock_type, label: form.stock_type }
+              : null
+          }
+          isDisabled={loading}
+        />
       </div>
 
       {form.stock_type === "วัสดุในคลัง" ? (
@@ -138,9 +49,9 @@ export default function IncomingAdd() {
             options={companyOptions}
             isClearable
             placeholder="เลือกบริษัท..."
-            onChange={opt => {
-              setIn("company_id", opt ? `${opt.value}` : "");
-              setIn("company_name", opt ? opt.label : "");
+            onChange={(opt) => {
+              setIn("company_id", opt?.value.toString() || "");
+              setIn("company_name", opt?.label || "");
             }}
             value={
               form.company_id
@@ -159,7 +70,7 @@ export default function IncomingAdd() {
             placeholder="พิมพ์ชื่อโครงการ..."
             value={form.project_name}
             disabled={loading}
-            onChange={e => setIn("project_name", e.target.value)}
+            onChange={(e) => setIn("project_name", e.target.value)}
           />
         </div>
       ) : null}
@@ -171,7 +82,7 @@ export default function IncomingAdd() {
             type="text"
             className="incoming-add-input"
             value={form[field]}
-            onChange={e => setIn(field, e.target.value)}
+            onChange={(e) => setIn(field, e.target.value)}
             placeholder={idx === 0 ? "INV-XXX" : "PO-XXX"}
             disabled={loading}
           />
@@ -184,7 +95,7 @@ export default function IncomingAdd() {
           type="date"
           className="incoming-add-input"
           value={form.created_at}
-          onChange={e => setIn("created_at", e.target.value)}
+          onChange={(e) => setIn("created_at", e.target.value)}
           disabled={loading}
         />
       </div>
@@ -200,9 +111,9 @@ export default function IncomingAdd() {
               options={getMaterialOptions()}
               isClearable
               placeholder="เลือกวัสดุ..."
-              onChange={opt => {
-                setIn(`items.${idx}.material_id`, opt ? `${opt.value}` : "");
-                setIn(`items.${idx}.material_name`, opt ? opt.label : "");
+              onChange={(opt) => {
+                setIn(`items.${idx}.material_id`, opt?.value.toString() || "");
+                setIn(`items.${idx}.material_name`, opt?.label || "");
               }}
               value={
                 it.material_id
@@ -222,7 +133,7 @@ export default function IncomingAdd() {
                 pattern="[0-9]*"
                 className="incoming-add-input"
                 value={it[field]}
-                onChange={e =>
+                onChange={(e) =>
                   setIn(
                     `items.${idx}.${field}`,
                     e.target.value.replace(/\D/, "")

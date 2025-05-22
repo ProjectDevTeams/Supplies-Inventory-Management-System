@@ -1,108 +1,42 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_URL } from "../../config";
+import { useIncomingTable } from "./useIncomingTable";
 import "./Incoming-table.css";
 
-const thaiMonths = [
-  "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.",
-  "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.",
-  "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
-];
-
-function formatThaiDateDMY(dmy) {
-  const [dd, mm, yyyy] = dmy.split("-");
-  const day = dd.padStart(2, "0");
-  const month = thaiMonths[parseInt(mm, 10) - 1];
-  const year = (parseInt(yyyy, 10) + 543).toString();
-  return `${day} ${month} ${year}`;
-}
-
 export default function IncomingTable({ searchTerm = "" }) {
-  const [data, setData] = useState([]);
-  const [incomingCurrentPage, setIncomingCurrentPage] = useState(1);
-  const [incomingInputPage, setIncomingInputPage] = useState("");
-  const [incomingAsc, setIncomingAsc] = useState(true);
-  const incomingItemsPerPage = 5;
   const navigate = useNavigate();
-
-  const formatDate = (d) => (d ? d.split("-").reverse().join("-") : "-");
-
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/receive_materials/get_receives.php`)
-      .then((res) => {
-        if (res.data.status === "success") {
-          const formatted = res.data.data.map((item) => {
-            const companyOrProject = item.company_name
-              ? item.company_name
-              : item.project_name
-                ? item.project_name
-                : "-";
-            return {
-              id: item.id,
-              company: companyOrProject,
-              po: item.purchase_order_number || "-",
-              created_by: item.created_by || "-",
-              created_at: formatDate(item.created_at),
-              amount: parseFloat(item.total_price) || 0,
-              status: item.status || "-"
-            };
-          });
-          setData(formatted);
-        }
-      })
-      .catch((err) => console.error("API fetch error:", err));
-  }, []);
-
-  const sortedData = [...data].sort((a, b) =>
-    incomingAsc ? a.id - b.id : b.id - a.id
-  );
-
-  const filteredData = sortedData.filter((item) =>
-    [item.company, item.po, item.created_by, item.created_at, item.amount, item.status]
-      .some((field) =>
-        field.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
-
-  const totalPages = Math.ceil(filteredData.length / incomingItemsPerPage);
-  const indexOfLastItem = incomingCurrentPage * incomingItemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - incomingItemsPerPage;
-  const currentItems = filteredData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
-  const toggleSort = () => setIncomingAsc((prev) => !prev);
-  const handleNextPage = () =>
-    incomingCurrentPage < totalPages &&
-    setIncomingCurrentPage((p) => p + 1);
-  const handlePrevPage = () =>
-    incomingCurrentPage > 1 && setIncomingCurrentPage((p) => p - 1);
-
-  const statusClass = (status) => {
-    if (status === "รออนุมัติ") return "incoming-table-status incoming-table-pending";
-    if (status === "อนุมัติ") return "incoming-table-status incoming-table-approved";
-    if (status === "ไม่อนุมัติ") return "incoming-table-status incoming-table-rejected";
-    return "incoming-table-status";
-  };
+  const {
+    currentItems,
+    totalPages,
+    currentPage,
+    inputPage,
+    asc,
+    formatThaiDateDMY,
+    statusClass,
+    setInputPage,
+    setAsc,
+    goToPage,
+  } = useIncomingTable(searchTerm, 5);
 
   return (
     <div className="incoming-container">
       <div className="incoming-description">ตารางการรับเข้าวัสดุ</div>
+
       <table className="incoming-table">
         <thead>
           <tr>
-            <th className="incoming-sortable-header" onClick={toggleSort}>
-              ลำดับ {incomingAsc ? "▲" : "▼"}
+            <th className="incoming-sortable-header" onClick={() => setAsc((a) => !a)}>
+              ลำดับ {asc ? "▲" : "▼"}
             </th>
-            <th>บริษัท/โครงการ</th>
-            <th>เลขที่ มอ.</th>
-            <th>ผู้สร้าง</th>
-            <th>วันที่สร้าง</th>
-            <th>ยอดซื้อรวม</th>
-            <th>สถานะ</th>
+            {[
+              "บริษัท/โครงการ",
+              "เลขที่ มอ.",
+              "ผู้สร้าง",
+              "วันที่สร้าง",
+              "ยอดซื้อรวม",
+              "สถานะ",
+            ].map((h, i) => (
+              <th key={i}>{h}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -126,9 +60,7 @@ export default function IncomingTable({ searchTerm = "" }) {
                 <td>{formatThaiDateDMY(item.created_at)}</td>
                 <td>{item.amount.toLocaleString()}</td>
                 <td>
-                  <span className={statusClass(item.status)}>
-                    {item.status}
-                  </span>
+                  <span className={statusClass(item.status)}>{item.status}</span>
                 </td>
               </tr>
             ))
@@ -138,44 +70,27 @@ export default function IncomingTable({ searchTerm = "" }) {
 
       <div className="incoming-pagination-wrapper">
         <div className="incoming-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง{" "}
-          {Math.min(indexOfLastItem, filteredData.length)} จาก{" "}
-          {filteredData.length} แถว
+          แสดง {(currentPage - 1) * 5 + 1} ถึง{" "}
+          {Math.min(currentPage * 5, totalPages * 5)} จาก {totalPages * 5} แถว
         </div>
         <div className="incoming-pagination-buttons">
-          <button
-            className="incoming-btn"
-            disabled={incomingCurrentPage === 1}
-            onClick={handlePrevPage}
-          >
+          <button disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>
             ก่อนหน้า
           </button>
           <input
             type="text"
             className="incoming-page-input"
-            placeholder={
-              incomingInputPage === ""
-                ? `${incomingCurrentPage} / ${totalPages}`
-                : ""
-            }
-            value={incomingInputPage}
-            onFocus={() => setIncomingInputPage("")}
-            onChange={(e) => setIncomingInputPage(e.target.value)}
+            placeholder={`${currentPage} / ${totalPages}`}
+            value={inputPage}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const p = parseInt(incomingInputPage, 10);
-                if (!isNaN(p) && p >= 1 && p <= totalPages) {
-                  setIncomingCurrentPage(p);
-                }
-                setIncomingInputPage("");
-                e.target.blur();
-              }
+              if (e.key === "Enter") goToPage(parseInt(inputPage, 10));
             }}
           />
           <button
-            className="incoming-btn"
-            disabled={incomingCurrentPage === totalPages}
-            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            onClick={() => goToPage(currentPage + 1)}
           >
             ถัดไป
           </button>
