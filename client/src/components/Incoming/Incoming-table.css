@@ -1,4 +1,4 @@
-/* ✅ Container */
+/* Container */
 .incoming-container {
   width: 100%;
   padding: 1em;
@@ -9,7 +9,7 @@
   margin-bottom: 0.5em;
 }
 
-/* ✅ Table */
+/* Table */
 .incoming-table {
   width: 100%;
   border-collapse: collapse;
@@ -58,7 +58,7 @@
   font-style: italic;
 }
 
-/* ✅ Pagination */
+/* Pagination */
 .incoming-pagination-wrapper {
   margin-top: 1em;
   display: flex;
@@ -100,6 +100,7 @@
   cursor: not-allowed;
 }
 
+/* Page input */
 .incoming-page-input {
   width: 55px;
   text-align: center;
@@ -129,6 +130,7 @@
   margin: 0;
 }
 
+/* Status badges */
 .incoming-table-status {
   font-weight: bold;
   padding: 0.4em 0.8em;
