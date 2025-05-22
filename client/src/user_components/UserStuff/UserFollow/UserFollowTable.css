@@ -141,3 +141,12 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.userfollow-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.userfollow-row:hover {
+  background-color: #e6f0ff;
+}

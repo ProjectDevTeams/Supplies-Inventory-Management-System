@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './UserFollowTable.css';
 import { FaPrint } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; 
 
 function UserFollowTable({ searchTerm = "" }) {
+  const navigate = useNavigate(); 
+
   const initialData = [
     {
       id: 1, number: "003-02/2568", category: "เบิกวัสดุ", items: 1, date: "12 ก.พ. 68",
@@ -12,7 +15,6 @@ function UserFollowTable({ searchTerm = "" }) {
       id: 2, number: "004-02/2568", category: "เบิกวัสดุ", items: 3, date: "13 ก.พ. 68",
       status: "รออนุมัติ", status_user: "รอรับของ"
     },
-    // ... (อื่นๆ)
   ];
 
   const [data, setData] = useState(initialData);
@@ -85,7 +87,11 @@ function UserFollowTable({ searchTerm = "" }) {
         </thead>
         <tbody>
           {userfollowCurrentItems.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              className="userfollow-row"
+              onClick={() => navigate("/user/confirm-status")} // ✅ กดทั้งแถวเพื่อเปลี่ยนหน้า
+            >
               <td>{row.id}</td>
               <td>{row.number}</td>
               <td>{row.category}</td>
@@ -102,6 +108,7 @@ function UserFollowTable({ searchTerm = "" }) {
               <td>
                 <select
                   value={row.status_user}
+                  onClick={(e) => e.stopPropagation()} // ✅ ไม่ให้คลิก select ไปกดแถว
                   onChange={(e) => handleStatusUserChange(row.id, e.target.value)}
                   className={
                     row.status_user === "รอรับของ" ? "status-pending-items" :
@@ -112,7 +119,7 @@ function UserFollowTable({ searchTerm = "" }) {
                   <option className="select-option2" value="รับของเรียบร้อย">รับของเรียบร้อย</option>
                 </select>
               </td>
-              <td className="print-icon"><FaPrint /></td>
+              <td className="print-icon" onClick={(e) => e.stopPropagation()}><FaPrint /></td>
             </tr>
           ))}
         </tbody>
@@ -126,7 +133,6 @@ function UserFollowTable({ searchTerm = "" }) {
           <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>
             ก่อนหน้า
           </button>
-
           <input
             type="number"
             className="org-page-input"
@@ -138,7 +144,6 @@ function UserFollowTable({ searchTerm = "" }) {
             onChange={handleUserfollowChange}
             onKeyDown={handleUserfollowKeyDown}
           />
-
           <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>
             ถัดไป
           </button>

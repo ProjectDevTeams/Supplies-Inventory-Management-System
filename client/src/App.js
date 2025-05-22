@@ -33,7 +33,6 @@ import SettingPage from "./pages/Setting/SettingPage";
 // ผู้ใช้งานทั่วไป
 // import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
-
 /////////////////////////
 
 import UserStuffTablePage from "./user_pages/UserStuff/UserStuffTablePage";
@@ -58,8 +57,7 @@ function App() {
 
         {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์
         <Route path="/userstuff" element={<UserStuffPage />} /> */}
-        <Route path="/user/confirm-history" element={<UserConfirmHisPage />} />
-        <Route path="/consumable" element={<ConsumablePage />} />
+        <Route path="/user/confirm-status" element={<UserConfirmHisPage />} />        <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/detail" element={<StuffDetailPage />} />
