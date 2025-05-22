@@ -132,7 +132,7 @@ function UserFollowTable({ searchTerm = "" }) {
       ...styles,
       color: data.color,
       backgroundColor: isFocused ? "#f0f0f0" : "white",
-      fontWeight: isSelected ? "bold" : "normal",
+      fontWeight: isSelected ? "bold" : "bold",
       cursor: "pointer",
     }),
     singleValue: (styles, { data }) => ({
