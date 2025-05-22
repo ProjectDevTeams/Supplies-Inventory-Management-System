@@ -57,7 +57,8 @@ function App() {
 
         {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์
         <Route path="/userstuff" element={<UserStuffPage />} /> */}
-        <Route path="/user/confirm-status" element={<UserConfirmHisPage />} />        <Route path="/consumable" element={<ConsumablePage />} />
+        <Route path="/user/confirm-status" element={<UserConfirmHisPage />} />        
+        <Route path="/consumable" element={<ConsumablePage />} />
         <Route path="/consumable/categorize" element={<CategorizePage />} />
         <Route path="/stuff" element={<StuffPage />} />
         <Route path="/stuff/detail" element={<StuffDetailPage />} />

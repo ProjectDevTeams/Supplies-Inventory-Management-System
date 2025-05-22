@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Select from "react-select";
 import "./UserFollowTable.css";
 import { FaPrint } from "react-icons/fa";
@@ -6,6 +8,7 @@ import Swal from "sweetalert2";
 
 function UserFollowTable({ searchTerm = "" }) {
   
+  const navigate = useNavigate();
 
   const initialData = [
     {
@@ -168,7 +171,11 @@ function UserFollowTable({ searchTerm = "" }) {
             </tr>
           ) : (
             userfollowCurrentItems.map((row) => (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                className="userfollow-row"
+                onClick={() => navigate("/user/confirm-status")}
+              >
                 <td>{row.id}</td>
                 <td>{row.number}</td>
                 <td>{row.category}</td>
