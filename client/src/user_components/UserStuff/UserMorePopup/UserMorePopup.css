@@ -63,6 +63,11 @@
   transition: border-color 0.2s ease;
 }
 
+.usermorepopup-input[type="number"] {
+  width: 250px;          /* ✅ กำหนดความกว้างเฉพาะ */
+  flex: 0 0 auto;       /* ✅ ไม่ให้ยืดหรือหดตามพื้นที่ */
+}
+
 .usermorepopup-input:focus {
   outline: none;
   border-color: #007bff;
@@ -115,4 +120,41 @@
 
 .usermorepopup-save-btn:hover {
   background-color: #1e7e34;
+}
+
+
+.usermorepopup-select {
+  flex: 1;
+  min-width: 250px;
+}
+
+.usermorepopup-select .css-1s2u09g-control {
+  border-radius: 6px;
+}
+
+.usermorepopup-select .css-qc6sy-singleValue {
+  display: flex;
+  flex-direction: column;
+}
+
+.usermorepopup-select .css-qc6sy-singleValue div:last-child {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.usermorepopup-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usermorepopup-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.usermorepopup-amount {
+  font-size: 0.8rem;
+  color: #999;
+  font-style: italic;
 }

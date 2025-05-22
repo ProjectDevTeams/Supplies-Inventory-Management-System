@@ -7,22 +7,27 @@ import "./UserMorePopup.css";
 
 function UserMorePopup() {
   const [options, setOptions] = useState([]);
+  const [allOptions, setAllOptions] = useState([]);
   const [rows, setRows] = useState([
     { id: Date.now(), item: null, quantity: 1, note: "" },
   ]);
+
+  const [inputText, setInputText] = useState("");
 
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
         const res = await axios.get(`${API_URL}/materials/get_materials.php`);
         if (res.data.status === "success") {
-          const filtered = res.data.data
-            .filter((m) => parseInt(m.remain) === 0)
-            .map((m) => ({
-              label: m.name,
-              value: m.name,
-            }));
-          setOptions(filtered);
+          const all = res.data.data.map((m) => ({
+            label: `${m.name} (จำนวนคงเหลือ: ${m.remain})`,
+            value: m.name,
+            remain: m.remain,
+            rawLabel: m.name,
+          }));
+
+          setAllOptions(all);
+          setOptions(all.filter((m) => parseInt(m.remain) === 0)); // เริ่มต้น = เหลือ 0 เท่านั้น
         }
       } catch (err) {
         console.error("เกิดข้อผิดพลาด:", err);
@@ -74,7 +79,40 @@ function UserMorePopup() {
             isClearable
             placeholder="เลือก/เพิ่มชื่อวัสดุ..."
             className="usermorepopup-select"
-            formatCreateLabel={(inputValue) => `สร้าง "${inputValue}"`} // ✅ เปลี่ยนคำว่า Create เป็น สร้าง
+            filterOption={null}
+            formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
+            isValidNewOption={(inputValue, _, selectOptions) => {
+              if (!inputValue) return false;
+              return !selectOptions.some(
+                (opt) => opt.value.toLowerCase() === inputValue.toLowerCase()
+              );
+            }}
+            getOptionLabel={(e) =>
+              e.__isNew__ ? (
+                e.label
+              ) : (
+                <div className="usermorepopup-option">
+                  <span className="usermorepopup-name">{e.rawLabel}</span>
+                  <span className="usermorepopup-amount">
+                    จำนวนคงเหลือ: {e.remain}
+                  </span>
+                </div>
+              )
+            }
+            onInputChange={(input) => {
+              setInputText(input);
+              if (input.trim() === "") {
+                setOptions(allOptions.filter((m) => parseInt(m.remain) === 0));
+              } else {
+                setOptions(
+                  allOptions.filter((m) =>
+                    (m.rawLabel || "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  )
+                );
+              }
+            }}
           />
 
           <input
@@ -103,7 +141,6 @@ function UserMorePopup() {
           >
             <FaTrash />
           </button>
-
         </div>
       ))}
 
