@@ -1,88 +1,94 @@
+// ReportLowStock.js
 import React, { useState, useEffect } from "react";
-import "./Report-LowStock.css";
+import "./Report-Receive.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import axios from "axios";
+import { API_URL } from "../../config";
 
-function ReportLowStock() {
-  const allData = [
-    ["3M Scotch เทปกาวสองหน้า แรงยึดสูงชนิดใส 19 มม.*4ม.", "ม้วน", 1, 1, 220.0],
-    ["Elfen ลิ้นแฟ้มโลหะสีทอง", "กล่อง", 2, 2, 132.0],
-    ["One Whiteboard Marker สีน้ำเงิน", "ด้าม", 1, 1, 17.5],
-    ["Pentel ชุดปากกาลบคำผิด", "ชุด", 1, 1, 55.0],
-    ["POST-IT กระดาษโน้ต ขนาด 3*3 นิ้ว", "ก้อน", 5, 5, 150.0],
-    ["Quantum ยางลบ", "อัน", 2, 2, 44.0],
-    ["Scotch กระดาษกาวย่น แกน 3นิ้ว 36มม.x20หลา สีครีม", "ม้วน", 5, 5, 200.0],
-    ["Tape Cassette เทปสำหรับเครื่องพิมพ์ฉลาก", "อัน", 2, 2, 900.0],
-    ["Whiteboard Monomi สีแดง", "ด้าม", 1, 1, 17.5],
-    ["Whiteboard Monomi สีน้ำเงิน", "ด้าม", 1, 1, 17.5],
-  ];
-
-  const itemsPerPage = 10;
+function ReportLowStock({ warehouse }) {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredData = allData.filter((row) =>
-    row[0].toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
 
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/materials/get_materials.php`)
+      .then((res) => {
+        if (res.data.status === "success") {
+          let filtered = res.data.data;
+
+          if (warehouse === "ทั้งหมด") {
+            filtered = filtered.filter(item => item.status === "วัสดุใกล้หมดสต็อก");
+          } else {
+            filtered = filtered.filter(
+              item =>
+                item.status === "วัสดุใกล้หมดสต็อก" &&
+                item.location === warehouse
+            );
+          }
+
+          const transformed = filtered.map((item) => [
+            item.name,
+            item.unit,
+            Number(item.price),
+            Number(item.remain),
+            Number(item.remain * item.price),
+          ]);
+          setData(transformed);
+        }
+      })
+      .catch((err) => {
+        console.error("เกิดข้อผิดพลาด:", err);
+      });
+  }, [warehouse]);
+
   const exportToExcel = () => {
-    const header = [["ชื่อวัสดุ", "หน่วย", "ยอดต่ำสุด", "ยอดคงเหลือ", "มูลค่ารวม"]];
-    const rows = filteredData.map((row) => [
+    const header = [["ชื่อวัสดุ", "หน่วย", "ราคาต่อหน่วย", "คงเหลือ", "มูลค่ารวม"]];
+    const rows = data.map((row) => [
       row[0],
       row[1],
-      row[2],
-      row[3],
-      Math.round(row[4]) // ✅ ไม่มีทศนิยม
+      Math.round(row[2]),
+      Math.round(row[3]),
+      Math.round(row[4]),
     ]);
     const wsData = [...header, ...rows];
 
     const worksheet = XLSX.utils.aoa_to_sheet(wsData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานวัสดุคงเหลือต่ำ");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "วัสดุใกล้หมดสต็อก");
 
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
     const file = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(file, "รายงานวัสดุคงเหลือต่ำ.xlsx");
+    saveAs(file, "รายงานวัสดุใกล้หมดสต็อก.xlsx");
   };
 
   return (
-    <div className="report-lowstock-container">
-      <div className="report-lowstock-controls">
-        <div className="report-lowstock-search-group">
-          <label>ค้นหา</label>
-          <input
-            type="text"
-            placeholder="🔍 ค้นหา"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <div className="report-lowstock-export-wrapper">
-          <button onClick={exportToExcel} className="report-lowstock-export-btn" title="Export Excel">
-            <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
-            <span>Export Excel</span>
-          </button>
-        </div>
+    <div className="report-receive-container">
+      <div className="report-receive-export-wrapper">
+        <button onClick={exportToExcel} className="report-receive-export-btn" title="Export Excel">
+          <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
+          <span>Export Excel</span>
+        </button>
       </div>
 
-      <table className="report-lowstock-table">
+      <table className="report-receive-table">
         <thead>
           <tr>
             <th>ชื่อวัสดุ</th>
             <th>หน่วย</th>
-            <th>ยอดต่ำสุด</th>
-            <th>ยอดคงเหลือ</th>
+            <th>ราคาต่อหน่วย</th>
+            <th>คงเหลือ</th>
             <th>มูลค่ารวม</th>
           </tr>
         </thead>
@@ -92,7 +98,7 @@ function ReportLowStock() {
               {row.map((cell, i) => (
                 <td key={i}>
                   {typeof cell === "number"
-                    ? Math.round(cell).toLocaleString() // ✅ ไม่มีทศนิยมบนหน้าจอ
+                    ? cell.toLocaleString(undefined, { maximumFractionDigits: 0 })
                     : cell}
                 </td>
               ))}
@@ -101,11 +107,11 @@ function ReportLowStock() {
         </tbody>
       </table>
 
-      <div className="report-lowstock-pagination-wrapper">
-        <div className="report-lowstock-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+      <div className="report-pagination-wrapper">
+        <div className="report-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} รายการ
         </div>
-        <div className="report-lowstock-pagination-buttons">
+        <div className="report-pagination-buttons">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
@@ -115,7 +121,7 @@ function ReportLowStock() {
 
           <input
             type="number"
-            className="report-lowstock-page-input"
+            className="report-page-input"
             value={inputPage}
             min={1}
             max={totalPages}

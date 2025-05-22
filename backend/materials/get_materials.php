@@ -7,7 +7,7 @@ header("Content-Type: application/json");
 require_once '../db.php';
 
 try {
-    // ดึงข้อมูลวัสดุ
+    // ดึงข้อมูลวัสดุ (เพิ่ม created_at)
     $stmt = $conn->prepare("
         SELECT 
             m.id,
@@ -23,7 +23,8 @@ try {
             m.remaining_quantity AS remain,
             m.min_quantity AS low,
             m.max_quantity AS high,
-            m.received_quantity AS brought
+            m.received_quantity AS brought,
+            m.created_at                                -- ✅ เพิ่มตรงนี้
         FROM materials m
         LEFT JOIN material_categories mc ON m.category_id = mc.id
     ");
@@ -34,13 +35,11 @@ try {
     $dir = __DIR__ . '/picture/';
     $basePath = 'materials/picture/';
 
-    // ดึง path image ที่มีในตาราง materials
     $usedPaths = array_column($materials, 'image');
     $usedFiles = array_map(function($path) use ($basePath) {
         return str_replace($basePath, '', $path);
     }, $usedPaths);
 
-    // อ่านไฟล์ทั้งหมดในโฟลเดอร์
     $files = scandir($dir);
     foreach ($files as $file) {
         if ($file === '.' || $file === '..') continue;
@@ -48,7 +47,6 @@ try {
             @unlink($dir . $file);
         }
     }
-    // =========================================================
 
     echo json_encode([
         "status" => "success",
