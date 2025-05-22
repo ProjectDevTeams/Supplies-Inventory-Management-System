@@ -9,13 +9,13 @@ export default function IncomingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // State สำหรับ header, items, lookups และ suggestions
   const [header, setHeader] = useState({
     id: null,
     created_by: null,
     warehouse: "",
-    company: "",
-    companyName: "",   // ใช้เก็บชื่อบริษัทสำหรับ Autosuggest
+    company: null,       // allow null
+    companyName: null,   // allow null
+    projectName: null,   // allow null
     taxNumber: "",
     orderNumber: "",
     date: "",
@@ -29,13 +29,11 @@ export default function IncomingDetail() {
   const [companySuggestions, setCompanySuggestions] = useState([]);
   const [materialSuggestions, setMaterialSuggestions] = useState([]);
 
-  // ฟังก์ชันกรองคำค้น
   const getSuggestions = (list, value) => {
     const input = value.trim().toLowerCase();
     return list.filter(x => x.name.toLowerCase().includes(input));
   };
 
-  // โหลดข้อมูลบิล + รายการ
   useEffect(() => {
     axios
       .get(`${API_URL}/receive_materials/update_receive.php?id=${id}`)
@@ -47,8 +45,9 @@ export default function IncomingDetail() {
             id: bill.id,
             created_by: bill.created_by,
             warehouse: bill.stock_type,
-            company: bill.company_id,
-            companyName: bill.company_name || "",
+            company: bill.company_id ?? null,
+            companyName: bill.company_name ?? null,
+            projectName: bill.project_name ?? null,
             taxNumber: bill.tax_invoice_number,
             orderNumber: bill.purchase_order_number,
             date: bill.created_at,
@@ -63,18 +62,13 @@ export default function IncomingDetail() {
             }))
           );
         } else {
-          alert("ไม่พบข้อมูลบิล");
           navigate(-1);
         }
       })
-      .catch(() => {
-        alert("เกิดข้อผิดพลาดในการโหลดข้อมูล");
-        navigate(-1);
-      })
+      .catch(() => navigate(-1))
       .finally(() => setLoading(false));
   }, [id, navigate]);
 
-  // โหลดรายการ lookup
   useEffect(() => {
     Promise.all([
       axios.get(`${API_URL}/materials/get_materials.php`),
@@ -87,7 +81,6 @@ export default function IncomingDetail() {
       .catch(console.error);
   }, []);
 
-  // Handlers
   const handleHeaderChange = field => e =>
     setHeader(h => ({ ...h, [field]: e.target.value }));
 
@@ -111,7 +104,8 @@ export default function IncomingDetail() {
       id: header.id,
       created_by: header.created_by,
       stock_type: header.warehouse,
-      company_id: header.company,
+      company_id: header.company,               // send null or number
+      project_name: header.projectName,         // send null or string
       tax_invoice_number: header.taxNumber,
       purchase_order_number: header.orderNumber,
       created_at: header.date,
@@ -129,13 +123,12 @@ export default function IncomingDetail() {
       .put(`${API_URL}/receive_materials/update_receive.php`, payload)
       .then(res => {
         if (res.data.status === "success") {
-          alert("บันทึกข้อมูลเรียบร้อยแล้ว");
           navigate(-1);
-        } else {
-          alert("บันทึกไม่สำเร็จ: " + res.data.message);
         }
       })
-      .catch(() => alert("เกิดข้อผิดพลาดขณะบันทึก"));
+      .catch(() => {
+        // handle error
+      });
   };
 
   if (loading) {
@@ -174,18 +167,31 @@ export default function IncomingDetail() {
           inputProps={{
             className: "incoming-detail-select",
             placeholder: "-- เลือกบริษัท --",
-            value: header.companyName,
+            value: header.companyName ?? "",
             onChange: (_, { newValue }) => {
               const c = companies.find(x => x.name === newValue);
               setHeader(h => ({
                 ...h,
                 companyName: newValue,
-                company: c ? c.id : ""
+                company: c ? c.id : null
               }));
             }
           }}
         />
       </div>
+
+      {header.warehouse === "วัสดุนอกคลัง" && (
+        <div className="incoming-detail-row">
+          <label>ชื่อโครงการ</label>
+          <input
+            type="text"
+            className="incoming-detail-input"
+            placeholder="พิมพ์ชื่อโครงการ..."
+            value={header.projectName ?? ""}
+            onChange={handleHeaderChange("projectName")}
+          />
+        </div>
+      )}
 
       <div className="incoming-detail-row">
         <label>เลขที่กำกับภาษี</label>

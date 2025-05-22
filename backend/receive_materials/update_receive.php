@@ -1,6 +1,4 @@
 <?php
-// File: backend/receive_materials/update_receive.php
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -20,7 +18,6 @@ if ($method === 'POST' || $method === 'PUT') {
     $data = json_decode($raw, true);
 }
 
-// ----------------- GET: ดึงบิล + รายการ -----------------
 if ($method === 'GET') {
     if (!isset($_GET['id'])) {
         http_response_code(400);
@@ -29,14 +26,14 @@ if ($method === 'GET') {
     }
     $billId = (int)$_GET['id'];
 
-    // ดึง header พร้อมชื่อบริษัท และสถานะอนุมัติ
     $stmt = $conn->prepare("
         SELECT 
           i.id,
           i.created_by,
           i.stock_type,
           i.company_id,
-          c.name             AS company_name,
+          c.name                 AS company_name,
+          i.project_name,
           i.tax_invoice_number,
           i.purchase_order_number,
           i.created_at,
@@ -54,7 +51,6 @@ if ($method === 'GET') {
         exit;
     }
 
-    // ดึงรายการย่อย พร้อมชื่อวัสดุ
     $stmt2 = $conn->prepare("
         SELECT
           rmi.material_id,
@@ -79,13 +75,11 @@ if ($method === 'GET') {
     exit;
 }
 
-// ----------------- POST: สร้างบิลใหม่ -----------------
 if ($method === 'POST') {
     if (
         !isset(
             $data['created_by'],
             $data['stock_type'],
-            $data['company_id'],
             $data['tax_invoice_number'],
             $data['purchase_order_number'],
             $data['created_at'],
@@ -102,12 +96,10 @@ if ($method === 'POST') {
     try {
         $conn->beginTransaction();
 
-        // หา id ใหม่
         $row   = $conn->query("SELECT COALESCE(MAX(id),0) AS maxid FROM receive_materials")
                       ->fetch(PDO::FETCH_ASSOC);
         $newId = $row['maxid'] + 1;
 
-        // คำนวณยอดรวม
         $total = 0;
         foreach ($data['items'] as $it) {
             if (
@@ -123,14 +115,13 @@ if ($method === 'POST') {
             $total += floatval($it['total_price']);
         }
 
-        // INSERT header
         $stmtIns = $conn->prepare("
             INSERT INTO receive_materials
-              (id, created_by, stock_type, company_id,
+              (id, created_by, stock_type, company_id, project_name,
                tax_invoice_number, purchase_order_number,
                created_at, total_price, approval_status)
             VALUES
-              (:id, :created_by, :stock_type, :company_id,
+              (:id, :created_by, :stock_type, :company_id, :project_name,
                :tax_invoice_number, :purchase_order_number,
                :created_at, :total_price, 'รออนุมัติ')
         ");
@@ -138,14 +129,14 @@ if ($method === 'POST') {
             ':id'                    => $newId,
             ':created_by'            => $data['created_by'],
             ':stock_type'            => $data['stock_type'],
-            ':company_id'            => $data['company_id'],
+            ':company_id'            => $data['company_id'] ?? null,
+            ':project_name'          => $data['project_name'] ?? null,
             ':tax_invoice_number'    => $data['tax_invoice_number'],
             ':purchase_order_number' => $data['purchase_order_number'],
             ':created_at'            => $data['created_at'],
             ':total_price'           => $total
         ]);
 
-        // INSERT รายการย่อย
         $stmtItem = $conn->prepare("
             INSERT INTO receive_material_items
               (receive_material_id, material_id, quantity, price_per_unit, total_price)
@@ -172,14 +163,12 @@ if ($method === 'POST') {
     exit;
 }
 
-// ----------------- PUT: อัพเดตบิล -----------------
 if ($method === 'PUT') {
     if (
         !isset(
             $data['id'],
             $data['created_by'],
             $data['stock_type'],
-            $data['company_id'],
             $data['tax_invoice_number'],
             $data['purchase_order_number'],
             $data['created_at'],
@@ -197,7 +186,6 @@ if ($method === 'PUT') {
         $billId = (int)$data['id'];
         $conn->beginTransaction();
 
-        // คำนวณยอดรวมใหม่
         $total = 0;
         foreach ($data['items'] as $it) {
             if (
@@ -212,13 +200,13 @@ if ($method === 'PUT') {
             $total += floatval($it['total_price']);
         }
 
-        // UPDATE header
         $stmtUpd = $conn->prepare("
             UPDATE receive_materials
             SET
               created_by            = :created_by,
               stock_type            = :stock_type,
               company_id            = :company_id,
+              project_name          = :project_name,
               tax_invoice_number    = :tax_invoice_number,
               purchase_order_number = :purchase_order_number,
               created_at            = :created_at,
@@ -230,7 +218,8 @@ if ($method === 'PUT') {
             ':id'                    => $billId,
             ':created_by'            => $data['created_by'],
             ':stock_type'            => $data['stock_type'],
-            ':company_id'            => $data['company_id'],
+            ':company_id'            => $data['company_id'] ?? null,
+            ':project_name'          => $data['project_name'] ?? null,
             ':tax_invoice_number'    => $data['tax_invoice_number'],
             ':purchase_order_number' => $data['purchase_order_number'],
             ':created_at'            => $data['created_at'],
@@ -238,13 +227,11 @@ if ($method === 'PUT') {
             ':approval_status'       => $data['approval_status']
         ]);
 
-        // ลบรายการเก่า
         $conn->prepare("
             DELETE FROM receive_material_items
             WHERE receive_material_id = :id
         ")->execute([':id' => $billId]);
 
-        // เตรียม lookup name→id กรณีไม่มี material_id
         $stmtFindMat = $conn->prepare("SELECT id FROM materials WHERE name = :name LIMIT 1");
         $stmtItem    = $conn->prepare("
             INSERT INTO receive_material_items
@@ -253,17 +240,16 @@ if ($method === 'PUT') {
               (:bill, :mat_id, :qty, :ppu, :tp)
         ");
         foreach ($data['items'] as $it) {
-            // ถ้ามี material_id ก็ใช้เลย, ถ้าไม่มีก็ lookup จากชื่อ
             if (!empty($it['material_id'])) {
                 $mid = $it['material_id'];
             } else {
                 $stmtFindMat->execute([':name' => $it['material_name']]);
-                $mid = $stmtFindMat->fetchColumn();
+                $mid = $stmtFindMat->fetchColumn() ?: null;
             }
 
             $stmtItem->execute([
                 ':bill'   => $billId,
-                ':mat_id' => $mid !== false ? $mid : null,
+                ':mat_id' => $mid,
                 ':qty'    => $it['quantity'],
                 ':ppu'    => $it['price_per_unit'],
                 ':tp'     => $it['total_price']
@@ -280,6 +266,5 @@ if ($method === 'PUT') {
     exit;
 }
 
-// method อื่นไม่รองรับ
 http_response_code(405);
 echo json_encode(['status'=>'error','message'=>'Method Not Allowed']);
