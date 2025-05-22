@@ -5,27 +5,74 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { API_URL } from "../../config";
 
-function ReportAdjust() {
+function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 10;
 
-  // ✅ โหลดข้อมูลจาก API
+  const monthNameToNumber = (name) => {
+    const months = [
+      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+    return months.indexOf(name) + 1;
+  };
+
+  const formatToThaiDate = (dateStr) => {
+    const d = new Date(dateStr);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear() + 543;
+    return `${day}/${month}/${year}`;
+  };
+
   useEffect(() => {
     axios
-      .get(`${API_URL}/adjustments/get_adjustments.php`)
+      .get(`${API_URL}/adjustment_items/get_adjustment_items.php`)
       .then((res) => {
-        if (Array.isArray(res.data)) {
-          setData(res.data);
+        if (res.data.status === "success" && Array.isArray(res.data.data)) {
+          let flattened = [];
+
+          const fromDate = fromMonth && fromYear
+            ? new Date(`${parseInt(fromYear) - 543}-${monthNameToNumber(fromMonth)}-01`)
+            : null;
+
+          const toDate = toMonth && toYear
+            ? new Date(`${parseInt(toYear) - 543}-${monthNameToNumber(toMonth)}-31`)
+            : null;
+
+          res.data.data.forEach((adjustment) => {
+            const adjustDate = new Date(adjustment.created_date);
+
+            if (
+              (!fromDate || adjustDate >= fromDate) &&
+              (!toDate || adjustDate <= toDate)
+            ) {
+              adjustment.items.forEach((item) => {
+                if (warehouse === "ทั้งหมด" || item.stock_type === warehouse) {
+                  flattened.push({
+                    stock_type: item.stock_type,
+                    material_name: item.material_name,
+                    quantity: item.quantity,
+                    old_quantity: item.old_quantity,
+                    date: formatToThaiDate(adjustment.created_date),
+                    full_name: adjustment.full_name,
+                  });
+                }
+              });
+            }
+          });
+
+          setData(flattened);
         } else {
-          console.error("ข้อมูลไม่ใช่อาเรย์:", res.data);
+          console.error("ข้อมูลผิดรูปแบบ:", res.data);
         }
       })
       .catch((err) => {
         console.error("เกิดข้อผิดพลาดในการโหลดข้อมูล:", err);
       });
-  }, []);
+  }, [warehouse, fromMonth, fromYear, toMonth, toYear]);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -37,13 +84,15 @@ function ReportAdjust() {
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ลำดับ", "จากคลัง", "รหัสวัสดุ", "จำนวนที่ปรับ", "วันที่"]];
-    const rows = data.map((item) => [
-      item.id,
+    const header = [["ลำดับ", "จากคลัง", "ชื่อวัสดุ", "จำนวนเดิม", "จำนวนที่ปรับ", "วันที่", "ผู้รับผิดชอบ"]];
+    const rows = data.map((item, index) => [
+      index + 1, // ลำดับอัตโนมัติ
       item.stock_type,
-      item.material_id,
-      item.adjust_quantity,
-      item.created_at.split(" ")[0]
+      item.material_name,
+      item.old_quantity,
+      item.quantity,
+      item.date,
+      item.full_name,
     ]);
     const wsData = [...header, ...rows];
 
@@ -70,19 +119,23 @@ function ReportAdjust() {
           <tr>
             <th>ลำดับ</th>
             <th>จากคลัง</th>
-            <th>รหัสวัสดุ</th>
-            <th>ผู้รับผิดชอบ</th>
+            <th>ชื่อวัสดุ</th>
+            <th>จำนวนเดิม</th>
+            <th>จำนวนที่ปรับ</th>
             <th>วันที่</th>
+            <th>ผู้รับผิดชอบ</th>
           </tr>
         </thead>
         <tbody>
-          {displayedData.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
+          {displayedData.map((item, index) => (
+            <tr key={index}>
+              <td>{indexOfFirstItem + index + 1}</td> {/* ลำดับเรียงเอง */}
               <td>{item.stock_type}</td>
-              <td>{item.material_id}</td>
-              <td>{item.adjust_quantity}</td>
-              <td>{item.created_at.split(" ")[0]}</td>
+              <td>{item.material_name}</td>
+              <td>{item.old_quantity}</td>
+              <td>{item.quantity}</td>
+              <td>{item.date}</td>
+              <td>{item.full_name}</td>
             </tr>
           ))}
         </tbody>

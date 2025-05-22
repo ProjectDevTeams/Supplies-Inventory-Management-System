@@ -1,42 +1,103 @@
 import React, { useState, useEffect } from "react";
 import "./Report-MaterialRemain.css";
-import { materials } from "../../mockdata/Data-Report-MaterialRemain"; // Importing data
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import axios from "axios";
+import { API_URL } from "../../config";
 
-function ReportMaterialRemain() {
-  const itemsPerPage = 10;
+function ReportMaterialRemain({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
-  const totalPages = Math.ceil(materials.length / itemsPerPage);
+  const itemsPerPage = 10;
+
+  const monthNameToNumber = (name) => {
+    const months = [
+      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+    return months.indexOf(name) + 1;
+  };
+
+  const formatToThaiDate = (dateStr) => {
+    const d = new Date(dateStr);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear() + 543;
+    return `${day}/${month}/${year}`;
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/materials/get_materials.php`)
+      .then((res) => {
+        if (res.data.status === "success" && Array.isArray(res.data.data)) {
+          let filtered = [];
+
+          const fromDate = fromMonth && fromYear
+            ? new Date(`${parseInt(fromYear) - 543}-${monthNameToNumber(fromMonth)}-01`)
+            : null;
+
+          const toDate = toMonth && toYear
+            ? new Date(`${parseInt(toYear) - 543}-${monthNameToNumber(toMonth)}-31`)
+            : null;
+
+          res.data.data.forEach((item) => {
+            const createdAt = new Date(item.created_at);
+
+            if (
+              (!fromDate || createdAt >= fromDate) &&
+              (!toDate || createdAt <= toDate)
+            ) {
+              if (warehouse === "ทั้งหมด" || item.location === warehouse) {
+                filtered.push({
+                  name: item.name,
+                  unit: item.unit,
+                  carry: item.carry_over_quantity,
+                  brought: item.brought,
+                  issued: item.issued_quantity,
+                  remain: item.remain,
+                  value: Math.round(parseFloat(item.price || 0) * item.remain),
+                  date: formatToThaiDate(item.created_at)
+                });
+              }
+            }
+          });
+
+          setData(filtered);
+        } else {
+          console.error("ข้อมูลผิดรูปแบบ:", res.data);
+        }
+      })
+      .catch((err) => {
+        console.error("โหลดข้อมูลล้มเหลว:", err);
+      });
+  }, [warehouse, fromMonth, fromYear, toMonth, toYear]);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedData = materials.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [
-      ["", "รายงานยอดคงเหลือวัสดุ"],
-      ["", "วันที่ 1 ก.พ. 67 ถึง 31 มี.ค. 67"],
-      ["รหัส", "สินค้า", "หน่วย", "ยอดยกมา", "ยอดซื้อ", "ยอดเบิก", "คงเหลือ", "มูลค่า"]
-    ];
-
-    // Removed "created" date column from export data
-    const dataWithCode = materials.map((row, index) => [
-      `001-${String(index + 1).padStart(3, "0")}`,
-      row[0],  // สินค้า
-      row[1],  // หน่วย
-      row[2],  // ยอดยกมา
-      row[3],  // ยอดซื้อ
-      row[4],  // ยอดเบิก
-      row[5],  // ยอดคงเหลือ
-      Math.round(row[6]) // ✅ ไม่มีจุดทศนิยม
+    const header = [["ลำดับ", "ชื่อวัสดุ", "หน่วย", "ยอดยกมา", "ยอดซื้อ", "ยอดเบิก", "คงเหลือ", "มูลค่า", "วันที่"]];
+    const rows = data.map((item, index) => [
+      index + 1,
+      item.name,
+      item.unit,
+      item.carry,
+      item.brought,
+      item.issued,
+      item.remain,
+      item.value,
+      item.date
     ]);
+    const wsData = [...header, ...rows];
 
-    const wsData = [...header, ...dataWithCode];
     const worksheet = XLSX.utils.aoa_to_sheet(wsData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานยอดคงเหลือวัสดุ");
@@ -47,52 +108,57 @@ function ReportMaterialRemain() {
   };
 
   return (
-    <div className="report-remain-container">
-      <div className="report-export-wrapper">
-        <button onClick={exportToExcel} className="report-export-btn" title="Export Excel">
+    <div className="report-adjust-container">
+      <div className="report-adjust-export-wrapper">
+        <button onClick={exportToExcel} className="report-adjust-export-btn" title="Export Excel">
           <img src="/image/excel-icon.png" alt="Export" className="excel-icon" />
           <span>Export Excel</span>
         </button>
       </div>
 
-      <table className="report-remain-table">
+      <table className="report-adjust-table">
         <thead>
           <tr>
+            <th>ลำดับ</th>
             <th>ชื่อวัสดุ</th>
             <th>หน่วย</th>
-            <th>รวมยอดยกมา</th>
-            <th>รวมยอดซื้อ</th>
-            <th>รวมยอดเบิก</th>
-            <th>ยอดคงเหลือ</th>
-            <th>มูลค่ารวม</th>
+            <th>ยอดยกมา</th>
+            <th>ยอดซื้อ</th>
+            <th>ยอดเบิก</th>
+            <th>คงเหลือ</th>
+            <th>มูลค่า</th>
+            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
-          {displayedData.map((row, index) => (
+          {displayedData.map((item, index) => (
             <tr key={index}>
-              {row.slice(0, 7).map((cell, i) => (  // Removed created column here too
-                <td key={i}>
-                  {typeof cell === "number"
-                    ? cell.toLocaleString(undefined, { maximumFractionDigits: 0 })
-                    : cell}
-                </td>
-              ))}
+              <td>{indexOfFirstItem + index + 1}</td>
+              <td>{item.name}</td>
+              <td>{item.unit}</td>
+              <td>{item.carry}</td>
+              <td>{item.brought}</td>
+              <td>{item.issued}</td>
+              <td>{item.remain}</td>
+              <td>{item.value}</td>
+              <td>{item.date}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="report-pagination-wrapper">
-        <div className="report-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, materials.length)} จาก {materials.length} รายการ
+      <div className="report-adjust-pagination-wrapper">
+        <div className="report-adjust-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
         </div>
-        <div className="report-pagination-buttons">
+        <div className="report-adjust-pagination-buttons">
           <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
             ก่อนหน้า
           </button>
+
           <input
             type="number"
-            className="report-page-input"
+            className="report-adjust-page-input"
             value={inputPage}
             min={1}
             max={totalPages}
@@ -109,6 +175,7 @@ function ReportMaterialRemain() {
             }}
             placeholder={`${currentPage} / ${totalPages}`}
           />
+
           <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
             ถัดไป
           </button>
