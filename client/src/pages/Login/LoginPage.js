@@ -44,7 +44,7 @@ export default function LoginPage() {
 
         // นำทางตามสิทธิ์
         if (user.permission === "ผู้ใช้งาน") {
-          navigate("/userstuff");
+          navigate("/userstuff/stuff");
         } else if (user.permission === "แอดมิน" || user.permission === "ผู้ช่วยแอดมิน") {
           navigate("/HomePage");
         } else {
