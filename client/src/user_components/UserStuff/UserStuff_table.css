@@ -152,3 +152,12 @@
     gap: 0.5em;
   }
 }
+
+.userstuff-no-data {
+  text-align: center;
+  font-size: 15px;
+  color: black;
+  font-style: italic;
+  font-weight: normal;
+  padding: 1em;
+}
