@@ -1,3 +1,5 @@
+/* File: src/components/IncomingAdd/Incoming-add.css */
+
 .incoming-add-container {
   background: #fff;
   border-radius: 10px;
@@ -6,7 +8,6 @@
   max-width: 900px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   display: grid;
-  grid-template-columns: 1fr;
   row-gap: 1.5rem;
   font-family: "Prompt", sans-serif;
 }
@@ -40,21 +41,6 @@
 }
 
 .incoming-add-input:focus {
-  outline: none;
-  border-color: #0056cc;
-  box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
-}
-
-.incoming-company-list[list],
-.incoming-material-list[list] {
-  appearance: none;
-  background-image: none !important;
-  padding-right: 1rem;
-  cursor: text;
-}
-
-.incoming-company-list:focus,
-.incoming-material-list:focus {
   outline: none;
   border-color: #0056cc;
   box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
@@ -151,45 +137,19 @@
   }
 }
 
-/* Autosuggest dropdown styling */
-.react-autosuggest__container {
-  position: relative;
-}
-
-.react-autosuggest__input {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Styles for react-select */
+.incoming-select__control {
   background: #fafafa;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.react-autosuggest__input:focus {
-  outline: none;
-  border-color: #0056cc;
-  box-shadow: 0 0 0 3px rgba(0,86,204,0.2);
-}
-
-.react-autosuggest__suggestions-container {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-color: #ccc;
   border-radius: 4px;
+  padding: 0.1rem;
+}
+
+.incoming-select__control--is-focused {
+  border-color: #0056cc;
+  box-shadow: 0 0 0 3px rgba(0, 86, 204, 0.2);
+}
+
+.incoming-select__menu {
   z-index: 1000;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.react-autosuggest__suggestion {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-.react-autosuggest__suggestion--highlighted {
-  background-color: #e6f7ff;
 }
