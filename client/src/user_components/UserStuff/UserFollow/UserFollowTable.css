@@ -76,15 +76,18 @@
   border: 1px solid #ccc;
   padding: 0.3em 0.6em;
 }
-/* สีสถานะรอรับของ */
 .status-pending-items {
-  color: #4b25b6;
-}
-/* สีสถานะรับของเเล้ว */
-.status-receive-items {
-  color: rgb(0, 146, 68);
+  color: #4b25b6; /* ม่วง */
+  font-weight: bold;
 }
 
+.status-receive-items {
+  color: rgb(0, 146, 68); /* เขียว */
+  font-weight: bold;
+}
+
+
+/* 
 .select-option1 {
   color: #4b25b6;
    font-size: 14px;
@@ -95,7 +98,7 @@
   color: rgb(0, 146, 68);
    font-size: 14px;
   font-weight: bold;
-}
+} */
 
 /* Pagination */
 .userfollow-pagination {
