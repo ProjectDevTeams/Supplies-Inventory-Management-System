@@ -24,7 +24,7 @@ function UserFollowTable({ searchTerm = "" }) {
             items: item.items.length,
             date: formatDateThai(item.created_at),
             status: item.Admin_status,
-            status_user: item.User_status,
+            status_user: item.User_status, // ใช้สำหรับ dropdown
           }));
           setData(mapped);
         }
@@ -39,7 +39,10 @@ function UserFollowTable({ searchTerm = "" }) {
 
   const formatDateThai = (dateStr) => {
     const date = new Date(dateStr);
-    const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+    const monthNames = [
+      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+    ];
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear().toString().slice(-2)}`;
   };
 
@@ -67,7 +70,7 @@ function UserFollowTable({ searchTerm = "" }) {
       return;
     }
 
-    if (item.status_user === "รับของเรียบร้อย") {
+    if (item.status_user === "รับของเรียบร้อยแล้ว") {
       Swal.fire({
         icon: "warning",
         title: "ไม่สามารถเปลี่ยนสถานะกลับได้",
@@ -76,10 +79,10 @@ function UserFollowTable({ searchTerm = "" }) {
       return;
     }
 
-    if (newStatus === "รับของเรียบร้อย") {
+    if (newStatus === "รับของเรียบร้อยแล้ว") {
       const result = await Swal.fire({
         title: "ยืนยันการเปลี่ยนสถานะ",
-        text: "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนเป็น 'รับของเรียบร้อย'? หากยืนยันแล้วจะไม่สามารถย้อนกลับได้",
+        text: "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนเป็น 'รับของเรียบร้อยแล้ว'?",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "ยืนยัน",
@@ -88,9 +91,9 @@ function UserFollowTable({ searchTerm = "" }) {
       if (!result.isConfirmed) return;
     }
 
-    await axios.put(`${API_URL}/stuff_material_items/update_stuff_material_items.php`, {
+    await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
       id,
-      status_user: newStatus,
+      User_status: newStatus, // ต้องตรงกับฝั่ง PHP
     });
 
     setData((prev) =>
@@ -102,7 +105,7 @@ function UserFollowTable({ searchTerm = "" }) {
 
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
-    { value: "รับของเรียบร้อย", label: "รับของเรียบร้อย", color: "#009244" },
+    { value: "รับของเรียบร้อยแล้ว", label: "รับของเรียบร้อยแล้ว", color: "#009244" },
   ];
 
   const colourStyles = {
@@ -110,7 +113,7 @@ function UserFollowTable({ searchTerm = "" }) {
       ...styles,
       color: data.color,
       backgroundColor: isFocused ? "#f0f0f0" : "white",
-      fontWeight: isSelected ? "bold" : "bold",
+      fontWeight: "bold",
       cursor: "pointer",
     }),
     singleValue: (styles, { data }) => ({
@@ -134,10 +137,15 @@ function UserFollowTable({ searchTerm = "" }) {
       row.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const userfollowTotalPages = Math.ceil(filteredData.length / userfollowItemsPerPage);
+  const userfollowTotalPages = Math.ceil(
+    filteredData.length / userfollowItemsPerPage
+  );
   const userfollowIndexOfLastItem = userfollowCurrentPage * userfollowItemsPerPage;
   const userfollowIndexOfFirstItem = userfollowIndexOfLastItem - userfollowItemsPerPage;
-  const userfollowCurrentItems = filteredData.slice(userfollowIndexOfFirstItem, userfollowIndexOfLastItem);
+  const userfollowCurrentItems = filteredData.slice(
+    userfollowIndexOfFirstItem,
+    userfollowIndexOfLastItem
+  );
 
   const handleUserfollowPrev = () => {
     if (userfollowCurrentPage > 1) {
@@ -153,7 +161,9 @@ function UserFollowTable({ searchTerm = "" }) {
     }
   };
 
-  const handleUserfollowChange = (e) => setUserfollowInputPage(e.target.value);
+  const handleUserfollowChange = (e) => {
+    setUserfollowInputPage(e.target.value);
+  };
 
   const handleUserfollowKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -163,7 +173,8 @@ function UserFollowTable({ searchTerm = "" }) {
     }
   };
 
-  if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
+  if (loading)
+    return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
     <div className="userfollow-table-container">
@@ -187,42 +198,44 @@ function UserFollowTable({ searchTerm = "" }) {
             </tr>
           ) : (
             userfollowCurrentItems.map((row) => (
-              <tr key={row.id} className="userfollow-row" onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>
+              <tr key={row.id}>
                 <td>{row.id}</td>
                 <td>{row.number}</td>
                 <td>{row.category}</td>
                 <td>{row.items}</td>
                 <td>{row.date}</td>
                 <td className={
-                  row.status === "อนุมัติ" ? "status-approved" :
-                  row.status === "รออนุมัติ" ? "status-pending" :
-                  row.status === "รอดำเนินการ" ? "status-processing" :
-                  row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
-                }>
+                    row.status === "อนุมัติ" ? "status-approved" :
+                    row.status === "รออนุมัติ" ? "status-pending" :
+                    row.status === "รอดำเนินการ" ? "status-processing" :
+                    row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
+                  }>
                   {row.status}
                 </td>
-                <td onClick={(e) => e.stopPropagation()}>
+                <td>
                   <Select
                     value={
                       row.status === "ไม่อนุมัติ"
                         ? { value: "ยกเลิก", label: "ยกเลิก", color: "#dc3545" }
                         : row.status === "รออนุมัติ"
                         ? { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" }
-                        : statusOptions.find((opt) => opt.value === row.status_user)
+                        : statusOptions.find(opt => opt.value === row.status_user)
                     }
-                    onChange={(selectedOption) => handleStatusUserChange(row.id, selectedOption.value)}
+                    onChange={(selectedOption) =>
+                      handleStatusUserChange(row.id, selectedOption.value)
+                    }
                     options={statusOptions}
                     styles={colourStyles}
                     isDisabled={
                       row.status === "ไม่อนุมัติ" ||
                       row.status === "รออนุมัติ" ||
-                      row.status_user === "รับของเรียบร้อย"
+                      row.status_user === "รับของเรียบร้อยแล้ว"
                     }
                     className="custom-status-dropdown"
                   />
                 </td>
-                <td className="print-icon" onClick={(e) => e.stopPropagation()}>
-                  <FaPrint onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })} />
+                <td className="print-icon" onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>
+                  <FaPrint />
                 </td>
               </tr>
             ))
@@ -232,10 +245,14 @@ function UserFollowTable({ searchTerm = "" }) {
 
       <div className="userfollow-pagination">
         <div className="userfollow-pagination-info">
-          แสดง {userfollowIndexOfFirstItem + 1} ถึง {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {userfollowIndexOfFirstItem + 1} ถึง{" "}
+          {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก{" "}
+          {filteredData.length} แถว
         </div>
         <div className="userfollow-pagination-buttons">
-          <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>ก่อนหน้า</button>
+          <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>
+            ก่อนหน้า
+          </button>
           <input
             type="number"
             className="org-page-input"
@@ -245,7 +262,9 @@ function UserFollowTable({ searchTerm = "" }) {
             onChange={handleUserfollowChange}
             onKeyDown={handleUserfollowKeyDown}
           />
-          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>ถัดไป</button>
+          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>
