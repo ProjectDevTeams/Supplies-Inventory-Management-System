@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import "./Editpeople-popup.css";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "./Editpeople-popup.css";
+import {
+  ComponentConfirmDeleteAlert,
+  ComponentDeleteSuccessAlert,
+  ComponentUpdateSuccessAlert
+} from "../SweetAlert/ComponentSweetAlert";
 
 function EditpeoplePopup({ person, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -11,7 +16,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
     position: "",
     email: "",
     phone: "",
-    permission: "", 
+    permission: "",
     approval_status: ""
   });
 
@@ -20,7 +25,7 @@ function EditpeoplePopup({ person, onClose, onSave }) {
       setFormData({
         ...person,
         phone: person.phone || "",
-        permission: person.permission || "", 
+        permission: person.permission || "",
         approval_status: person.approval_status || ""
       });
     }
@@ -28,35 +33,36 @@ function EditpeoplePopup({ person, onClose, onSave }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/users/update_user.php`, formData);
-      if (onSave) onSave();
-      if (onClose) onClose();
-    } catch (err) {
-      console.error("API error:", err);
-      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+      const res = await axios.post(`${API_URL}/users/update_user.php`, formData);
+      if (res.data.status === "success") {
+        ComponentUpdateSuccessAlert();
+        onSave?.();
+        onClose?.();
+      }
+    } catch {
+      // silently ignore
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?")) return;
-
+    const result = await ComponentConfirmDeleteAlert();
+    if (!result.isConfirmed) return;
     try {
-      await axios.post(`${API_URL}/users/delete_user.php`, { id: formData.id });
-      if (onSave) onSave();
-      if (onClose) onClose();
-    } catch (err) {
-      console.error("Delete API error:", err);
-      alert("เกิดข้อผิดพลาดในการลบข้อมูล");
+      const res = await axios.post(`${API_URL}/users/delete_user.php`, { id: formData.id });
+      if (res.data.status === "success") {
+        ComponentDeleteSuccessAlert();
+        onSave?.();
+      }
+    } catch {
+      // silently ignore
     }
+    onClose?.();
   };
 
   return (
@@ -66,7 +72,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
           <span>แก้ไขข้อมูลบุคลากร</span>
           <button className="editpeople-close-btn" onClick={onClose}>✕</button>
         </div>
-
         <div className="editpeople-popup-body">
           <form onSubmit={handleSubmit}>
             <div className="editpeople-form-grid">
@@ -117,7 +122,11 @@ function EditpeoplePopup({ person, onClose, onSave }) {
               </div>
               <div className="editpeople-form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select name="permission" value={formData.permission} onChange={handleChange}>
+                <select
+                  name="permission"
+                  value={formData.permission}
+                  onChange={handleChange}
+                >
                   <option value="">เลือกสิทธิการใช้งาน</option>
                   <option value="ผู้ใช้งาน">ผู้ใช้งาน</option>
                   <option value="แอดมิน">แอดมิน</option>
@@ -137,7 +146,6 @@ function EditpeoplePopup({ person, onClose, onSave }) {
                 </select>
               </div>
             </div>
-
             <div className="editpeople-form-footer space-between">
               <button
                 type="button"
