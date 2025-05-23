@@ -1,16 +1,14 @@
 .userfollow-table-container {
   margin-top: 1rem;
-  font-size: 15px; /* ลดขนาด font นิดนึง */
+  font-size: 15px;
 }
 
 .user-follow-table {
   width: 100%;
-  height: auto; /* ไม่ fix 100vh */
   border-collapse: collapse;
   background-color: white;
 }
 
-/* Header background */
 .user-follow-table thead tr {
   background-color: #dfe8f6;
 }
@@ -18,31 +16,31 @@
 .user-follow-table th,
 .user-follow-table td {
   border: 1px solid #ccc;
-  padding: 0.4em 0.6em; /* ลด padding */
+  padding: 0.6em;
   text-align: center;
+  font-size: 14px;
 }
 
-/* Row background */
 .user-follow-table tbody tr {
   background-color: #f9f9f9;
 }
 
-/* ไอคอนปริ้น */
-.print-icon svg {
-  color: #000;
+.userfollow-row {
   cursor: pointer;
-  font-size: 24px; /* ลดขนาดไอคอน */
+  transition: background-color 0.2s ease;
 }
 
-/* ปุ่มสถานะ */
-.status-pending,
-.status-approved,
-.status-processing,
-.status-cancelled {
-  padding: 0.2em 0.6em; /* ลดขนาดปุ่ม */
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 4px;
+.userfollow-row:hover {
+  background-color: #e6f0ff;
+}
+
+.userfollow-no-data {
+  text-align: center;
+  font-size: 15px;
+  color: black;
+  font-style: italic;
+  font-weight: normal;
+  padding: 1em;
 }
 
 .status-pending {
@@ -54,14 +52,13 @@
 }
 
 .status-processing {
-  color: #1e398d;
+  color: rgb(79, 48, 190);
 }
 
 .status-cancelled {
   color: rgb(242, 0, 0);
 }
 
-/* สีสถานะรอรับของ */
 .status-pending-items,
 .status-receive-items {
   font-size: 14px;
@@ -76,37 +73,39 @@
   border: 1px solid #ccc;
   padding: 0.3em 0.6em;
 }
+
 .status-pending-items {
-  color: #1e398d; /* น้ำเงิน */
-  font-weight: bold;
+  color: #4b25b6;
 }
 
 .status-receive-items {
-  color: rgb(0, 146, 68); /* เขียว */
-  font-weight: bold;
+  color: rgb(0, 146, 68);
 }
 
-
-/* 
 .select-option1 {
   color: #4b25b6;
-   font-size: 14px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .select-option2 {
   color: rgb(0, 146, 68);
-   font-size: 14px;
+  font-size: 14px;
   font-weight: bold;
-} */
+}
 
-/* Pagination */
+.print-icon svg {
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+}
+
 .userfollow-pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  font-size: 13px; /* ลด font */
+  font-size: 13px;
   gap: 0.5rem;
   margin-top: 1rem;
 }
@@ -123,15 +122,16 @@
 }
 
 .org-page-input {
-  width: 50px; /* ลดขนาด input */
+  width: 55px;
   text-align: center;
-  padding: 0.2em;
+  padding: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 14px;
 }
 
 .btn {
-  padding: 0.3em 0.6em; /* ลดปุ่ม */
+  padding: 0.4em 1em;
   background-color: #0066cc;
   color: white;
   border: none;
@@ -144,29 +144,3 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
-
-.userfollow-row {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.userfollow-row:hover {
-  background-color: #e0f3ff; /* สีฟ้าอ่อน */
-}
-
-.userfollow-no-data {
-  text-align: center;
-  font-size: 15px;
-  color: black;
-  font-style: italic;
-  font-weight: normal;
-  padding: 2em 1em;
-  height: 50px; /* ความสูงของแถว */
-  vertical-align: middle; /* จัดข้อความให้อยู่ตรงกลางแนวตั้ง */
-}
-
-.status-cancelled-user {
-  color: #dc3545;
-  font-weight: bold;
-}
-

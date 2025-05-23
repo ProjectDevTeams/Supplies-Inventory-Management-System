@@ -43,10 +43,10 @@ function ReportContent() {
   };
 
   const reportNames = {
-    remain:   "รายงานยอดคงเหลือวัสดุ",
-    receive:  "รายงานการรับเข้าวัสดุ",
-    issue:    "รายงานการเบิกวัสดุ",
-    adjust:   "รายงานการปรับยอด",
+    remain: "รายงานยอดคงเหลือวัสดุ",
+    receive: "รายงานการรับเข้าวัสดุ",
+    issue: "รายงานการเบิกวัสดุ",
+    adjust: "รายงานการปรับยอด",
     lowstock: "รายงานวัสดุใกล้หมดสต็อก"
   };
 
@@ -58,34 +58,19 @@ function ReportContent() {
         </div>
 
         <div className="report-controls">
-          <button
-            className="report-btn report-blue"
-            onClick={() => handleReportClick("remain")}
-          >
+          <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>
             รายงานยอดคงเหลือวัสดุ
           </button>
-          <button
-            className="report-btn report-yellow"
-            onClick={() => handleReportClick("issue")}
-          >
+          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>
             รายงานการเบิกวัสดุ
           </button>
-          <button
-            className="report-btn report-purple"
-            onClick={() => handleReportClick("receive")}
-          >
+          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>
             รายงานการรับเข้าวัสดุ
           </button>
-          <button
-            className="report-btn report-green"
-            onClick={() => handleReportClick("adjust")}
-          >
+          <button className="report-btn report-green" onClick={() => handleReportClick("adjust")}>
             รายงานการปรับยอด
           </button>
-          <button
-            className="report-btn report-red"
-            onClick={() => handleReportClick("lowstock")}
-          >
+          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>
             รายงานวัสดุใกล้หมดสต็อก
           </button>
         </div>
@@ -155,8 +140,27 @@ function ReportContent() {
             onSearchHandled={() => setTriggerSearch(false)}
           />
         )}
-        {showResult && currentReport === "receive" && <ReportReceive />}
-        {showResult && currentReport === "issue" && <ReportIssue />}
+
+        {showResult && currentReport === "receive" && (
+          <ReportReceive
+            warehouse={warehouse}
+            fromMonth={fromMonth}
+            fromYear={fromYear}
+            toMonth={toMonth}
+            toYear={toYear}
+          />
+        )}
+
+        {showResult && currentReport === "issue" && (
+          <ReportIssue
+            warehouse={warehouse}
+            fromMonth={fromMonth}
+            fromYear={fromYear}
+            toMonth={toMonth}
+            toYear={toYear}
+          />
+        )}
+
         {showResult && currentReport === "adjust" && (
           <ReportAdjust
             warehouse={warehouse}
@@ -166,11 +170,13 @@ function ReportContent() {
             toYear={toYear}
           />
         )}
-        {showResult && currentReport === "lowstock" && <ReportLowStock warehouse={warehouse} />}
+
+        {showResult && currentReport === "lowstock" && (
+          <ReportLowStock warehouse={warehouse} />
+        )}
       </div>
     </div>
-);
-
+  );
 }
 
 export default ReportContent;

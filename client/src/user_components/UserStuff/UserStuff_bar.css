@@ -3,145 +3,199 @@
     flex-direction: column;
     background-color: #f9f9f9;
     padding: 0.1em 0.5em;
-  }
-  
-  .userstuff-menu {
+}
+
+.userstuff-menu {
     display: flex;
     gap: 1em;
     margin-bottom: 1em;
     font-size: larger;
-  }
-  
-  .userstuff-tab {
+}
+
+.userstuff-tab {
     padding: 0.8em 2em;
     font-size: 1.1rem;
     border: none;
-    background-color: white;
+    background: linear-gradient(to right, #d7e9ff, #b3d6f5);
     color: #003366;
     font-weight: bold;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-  }
-  
-  .userstuff-tab.active {
-    background-color: #0066ff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+
+.userstuff-tab:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.userstuff-tab.active {
+    background: linear-gradient(to right, #2a78db, #5997ef);
     color: white;
-  }
-  
-  .userstuff-right {
+}
+
+.userstuff-right {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .userstuff-search-box {
+}
+
+.userstuff-search-box {
     position: relative;
-    width: 250px;
-  }
-  
-  .userstuff-search-icon {
+    width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.userstuff-search-box:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.userstuff-search-icon {
     position: absolute;
     top: 50%;
-    left: 0.5em;
+    left: 0.75em;
     transform: translateY(-50%);
-    color: #999;
+    color: #555;
+    font-size: 1rem;
     pointer-events: none;
-  }
-  
-  .userstuff-input {
+}
+
+.userstuff-input {
     width: 100%;
-    padding: 0.6em 0.6em 0.6em 2em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .userstuff-bag-icon img {
+    padding: 0.8em 1em 0.8em 2.5em;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: transparent;
+    color: #333;
+}
+
+.userstuff-input::placeholder {
+    color: #bbb;
+    font-weight: 300;
+}
+
+.userstuff-bag-icon img {
     width: 40px;
     height: 40px;
-    border-radius: 50%;      /* วงกลม */
-    object-fit: cover;       /* เติมภาพให้เต็ม */
-    cursor: pointer;         /* แสดงว่าคลิกได้ */
-    border: none;            /* ❌ ลบกรอบสี่เหลี่ยม */
-    padding: 0;              /* ❌ ลบช่องว่าง */
-    background-color: transparent; /* ❌ ไม่มีพื้นหลังขาว */
-    box-shadow: none;        /* ❌ ไม่มีเงา */
-  }
-  
-  .userstuff-bag-icon {
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.userstuff-bag-icon {
     width: 60px;
     height: 60px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  
     background-color: #D1E7FF;
     border: none;
-    border-radius: 50%; /* ✅ วงกลมแท้ */
+    border-radius: 50%;
     padding: 0;
     cursor: pointer;
-  }
+    
+}
 
-  /* ///////////////////////////////////////////////////////////////// */
-  .userstuff-bag-icon-wrapper {
-  position: relative;
-  display: inline-block;
+.userstuff-bag-icon-wrapper {
+    position: relative;
+    display: inline-block;
 }
 
 .basket-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: red;
-  color: white;
-  font-weight: bold;
-  font-size: 0.8rem;
-  border-radius: 50%;
-  padding: 0.2em 0.5em;
-  line-height: 1;
-  z-index: 1;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    padding: 0.2em 0.5em;
+    line-height: 1;
+    z-index: 1;
 }
-  /* ///////////////////////////////////////////////////////////////// */
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .userstuff-bar {
-      padding: 0.5em;
+        padding: 0.5em;
     }
-  
+
     .userstuff-right {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.8em;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8em;
     }
-  
+
     .userstuff-menu {
-      flex-wrap: wrap;
-      gap: 0.5em;
-      font-size: 1rem;
-      justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        font-size: 1rem;
+        justify-content: flex-start;
     }
-  
+
     .userstuff-tab {
-      padding: 0.6em 1.2em;
-      font-size: 1rem;
-      width: 100%;
+        padding: 0.6em 1.2em;
+        font-size: 1rem;
+        width: 100%;
     }
-  
+
     .userstuff-search-box {
-      width: 100%;
+        width: 100%;
     }
-  
+
     .userstuff-input {
-      width: 100%;
-      font-size: 1rem;
+        width: 100%;
+        font-size: 1rem;
     }
-  
+
     .userstuff-bag-icon {
-      width: 50px;
-      height: 50px;
+        width: 50px;
+        height: 50px;
     }
-  
+
     .userstuff-bag-icon img {
-      width: 30px;
-      height: 30px;
+        width: 30px;
+        height: 30px;
     }
-  }
+}
+
+.userstuff-bag-icon:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.basket-badge {
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.basket-badge.animate {
+  animation: shake 0.3s ease;
+}
+
+.userstuff-bag-icon {
+  background: linear-gradient(to right, #e0f2ff, #bcdcff);
+}
