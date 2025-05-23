@@ -12,30 +12,38 @@ function UserFollowTable({ searchTerm = "" }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
-        if (res.data.status === "success") {
-          const mapped = res.data.data.map((item) => ({
-            id: item.id,
-            number: item.running_code,
-            category: "เบิกวัสดุ",
-            items: item.items.length,
-            date: formatDateThai(item.created_at),
-            status: item.Admin_status,
-            status_user: item.User_status, // ใช้สำหรับ dropdown
-          }));
-          setData(mapped);
-        }
-      } catch (err) {
-        console.error("โหลดข้อมูลผิดพลาด:", err);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+      if (res.data.status === "success") {
+        const mapped = res.data.data.map((item) => ({
+          id: item.id,
+          number: item.running_code,
+          category: "เบิกวัสดุ",
+          items: item.items.length,
+          date: formatDateThai(item.created_at),
+          status: item.Admin_status,
+          status_user: item.User_status,
+        }));
+        setData(mapped);
       }
-    };
-    fetchData();
+    } catch (err) {
+      console.error("โหลดข้อมูลผิดพลาด:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // โหลดครั้งแรก
+
+    const interval = setInterval(() => {
+      fetchData(); // โหลดซ้ำทุก 10 วิ
+    }, 10000);
+
+    return () => clearInterval(interval); // เคลียร์ทุกครั้งที่ component ถูกรื้อ
   }, []);
+
 
   const formatDateThai = (dateStr) => {
     const date = new Date(dateStr);

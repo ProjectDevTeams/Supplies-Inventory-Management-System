@@ -12,18 +12,27 @@ export default function StuffTable({ searchTerm }) {
   const itemsPerPage = 4;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
-        if (res.data.status === "success") {
-          setData(res.data.data);
-        }
-      } catch (error) {
-        console.error("โหลดข้อมูลไม่สำเร็จ:", error);
+  // ✅ ย้ายออกนอก useEffect
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+      if (res.data.status === "success") {
+        setData(res.data.data);
       }
-    };
-    fetchData();
+    } catch (error) {
+      console.error("โหลดข้อมูลไม่สำเร็จ:", error);
+    }
+  };
+
+  // ✅ ดึงข้อมูล + auto refresh ทุก 10 วินาที (ไม่ซ้อน)
+  useEffect(() => {
+    fetchData(); // load ครั้งแรก
+
+    const interval = setInterval(() => {
+      fetchData(); // reload ทุก 10 วิ
+    }, 10000);
+
+    return () => clearInterval(interval); // เคลียร์ interval ตอน component ถูกถอด
   }, []);
 
   const renderStatus = (status) => {
@@ -93,7 +102,6 @@ export default function StuffTable({ searchTerm }) {
                   }`}>
                   {renderStatus(item.Admin_status)}
                 </td>
-
               </tr>
             ))
           )}
