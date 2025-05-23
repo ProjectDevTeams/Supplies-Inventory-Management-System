@@ -135,6 +135,7 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
       {showBasketPopup && (
         <UserStuffBasketPopup
           basketItems={basketItems}
+          setBasketItems={setBasketItems} // ✅ เพิ่มตรงนี้
           onClose={() => setShowBasketPopup(false)}
           onConfirm={handleConfirmRequest}
           onCancel={() => {

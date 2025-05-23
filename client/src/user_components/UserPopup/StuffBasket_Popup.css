@@ -8,23 +8,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 1000; /* ✅ แก้จาก 9999 เพื่อให้ SweetAlert อยู่ด้านบน */
   font-family: "Prompt", sans-serif;
 }
 
 .stuff-basket-popup {
-  background: white;
+  background: #fff;
   width: 900px;
-  border: 1px solid #0066cc;
-  border-radius: 5px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
 .stuff-basket-popup-header {
-  background-color: #0052cc;
+  background: linear-gradient(to right, #4a90e2, #0052cc);
   color: white;
-  padding: 10px 16px;
+  padding: 16px 24px;
   font-size: 20px;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,111 +40,109 @@
 }
 
 .stuff-basket-popup-body {
-  padding: 20px 32px;
-  display: block;
-  text-align: left;
+  padding: 24px 32px;
 }
 
 .stuff-basket-popup-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
-  row-gap: 10px;
-  margin-bottom: 24px;
+  row-gap: 16px;
+  margin-bottom: 32px;
 }
 
 .stuff-basket-popup-info-grid label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 4px;
-  color: #000;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222;
 }
 
 .stuff-basket-popup-info-grid input,
 .stuff-basket-popup-info-grid select {
   width: 100%;
-  padding: 6px 10px;
-  border: 1px solid #999;
-  border-radius: 3px;
-  font-size: 14px;
-  background-color: #fff;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #fdfdfd;
+  transition: box-shadow 0.2s ease;
+}
+
+.stuff-basket-popup-info-grid input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 82, 204, 0.3);
+  border-color: #80bdff;
 }
 
 .stuff-basket-popup-table-section h3 {
   font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  text-align: left;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.stuff-basket-popup-table-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
 
 .stuff-basket-popup-material-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-  background: white;
-  margin-top: 10px;
+  font-size: 15px;
 }
 
 .stuff-basket-popup-material-table th,
 .stuff-basket-popup-material-table td {
-  border: 1px solid #999;
-  padding: 8px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
   text-align: center;
 }
 
-.stuff-basket-popup-material-table th {
-  background-color: #eaeaea;
+.stuff-basket-popup-material-table thead th {
+  background: linear-gradient(to right, #eef3fa, #dbe9ff);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .stuff-basket-popup-footer {
-  padding: 16px 32px;
+  padding: 20px 32px;
   display: flex;
   justify-content: flex-end;
-  background: white;
-  margin-top: 15px;
+  gap: 16px;
+  background-color: #f8f8f8;
+}
+
+.stuff-basket-popup-confirm-btn,
+.stuff-basket-popup-cancel-btn {
+  padding: 12px 36px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .stuff-basket-popup-confirm-btn {
-  background-color: #0f9d58;
+  background: linear-gradient(to right, #4caf50, #2e7d32);
   color: white;
-  border: none;
-  padding: 10px 30px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.stuff-basket-popup-confirm-btn:hover {
+  transform: scale(1.03);
 }
 
 .stuff-basket-popup-cancel-btn {
-  background-color: #ee0000;
+  background: linear-gradient(to right, #e53935, #b71c1c);
   color: white;
-  border: none;
-  padding: 10px 30px;
-  font-size: 16px;
-  border-radius: 5px;
-  margin-right: 1em;
-  font-weight: bold;
-  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .stuff-basket-popup-cancel-btn:hover {
-  background-color: #999;
-}
-
-
-
-.stuff-basket-popup-table-scroll {
-  max-height: 180px; /* หรือปรับเป็น 30vh ถ้าต้องการ responsive */
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* ให้หัวตารางอยู่กับที่เวลาเลื่อน */
-.stuff-basket-popup-material-table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #f2f2f2;
-  z-index: 1;
+  transform: scale(1.03);
 }
