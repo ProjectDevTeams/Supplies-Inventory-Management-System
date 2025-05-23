@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
+import {
+  ComponentConfirmDeleteAlert,
+  ComponentDeleteSuccessAlert,
+  ComponentUpdateSuccessAlert
+} from "../SweetAlert/ComponentSweetAlert";
 import "./Organizations-Manage-Popup.css";
 
 export default function OrganizationsManagePopup({
@@ -13,15 +18,13 @@ export default function OrganizationsManagePopup({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // ดึง user.id จาก localStorage
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const userId = storedUser?.id || 0;
 
-  // update handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert("กรุณากรอกชื่อบริษัท");
+      ComponentConfirmDeleteAlert(); // You may swap to incomplete alert if needed
       return;
     }
 
@@ -32,30 +35,24 @@ export default function OrganizationsManagePopup({
         {
           id: companyData.id,
           name: name.trim(),
-          created_by: userId    // ส่ง created_by ไปให้ PHP อัปเดต
+          created_by: userId
         }
       );
       if (res.data.status === "success") {
+        ComponentUpdateSuccessAlert();
         onEditCompany(companyData.id, res.data.data.name);
-        onClose();  // ปิด Popup หลังอัปเดตสำเร็จ (ถ้าต้องการ)
-      } else {
-        alert("อัปเดตไม่สำเร็จ: " + res.data.message);
+        onClose();
       }
-    } catch (err) {
-      console.error(err);
-      alert("เกิดข้อผิดพลาดขณะอัปเดต");
+    } catch {
+      // silently ignore
     } finally {
       setSaving(false);
     }
   };
 
-  // delete handler
   const handleDelete = async () => {
-    if (
-      !window.confirm(`คุณแน่ใจว่าต้องการลบ "${companyData.name}" หรือไม่?`)
-    ) {
-      return;
-    }
+    const result = await ComponentConfirmDeleteAlert();
+    if (!result.isConfirmed) return;
     try {
       setDeleting(true);
       const res = await axios.delete(
@@ -63,14 +60,12 @@ export default function OrganizationsManagePopup({
         { data: { id: companyData.id } }
       );
       if (res.data.status === "success") {
+        ComponentDeleteSuccessAlert();
         onDeleteCompany(companyData.id);
         onClose();
-      } else {
-        alert("ลบไม่สำเร็จ: " + res.data.message);
       }
-    } catch (err) {
-      console.error(err);
-      alert("เกิดข้อผิดพลาดขณะลบ");
+    } catch {
+      // silently ignore
     } finally {
       setDeleting(false);
     }

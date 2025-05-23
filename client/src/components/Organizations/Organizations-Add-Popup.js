@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
+import {
+  ComponentIncompleteAlert,
+  ComponentAddSuccessAlert
+} from "../SweetAlert/ComponentSweetAlert";
 import "./Organizations-Add-Popup.css";
 
 export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
@@ -10,12 +14,11 @@ export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert("กรุณากรอกชื่อร้านค้าใหม่");
+      ComponentIncompleteAlert();
       return;
     }
     try {
       setLoading(true);
-      // ดึง userId จาก localStorage
       const storedUser = JSON.parse(localStorage.getItem("user"));
       const userId = storedUser?.id;
 
@@ -31,11 +34,12 @@ export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
       if (res.data.status === "success") {
         onAddCompany(res.data.data);
         onClose();
+        ComponentAddSuccessAlert();
       } else {
-        alert("เกิดข้อผิดพลาด: " + res.data.message);
+        ComponentIncompleteAlert();
       }
     } catch {
-      alert("ไม่สามารถบันทึกได้ กรุณาลองใหม่อีกครั้ง");
+      ComponentIncompleteAlert();
     } finally {
       setLoading(false);
     }
