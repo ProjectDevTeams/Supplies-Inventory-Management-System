@@ -46,7 +46,7 @@ export default function LoginPage() {
         if (user.permission === "ผู้ใช้งาน") {
           navigate("/userstuff/stuff");
         } else if (user.permission === "แอดมิน" || user.permission === "ผู้ช่วยแอดมิน") {
-          navigate("/HomePage");
+          navigate("/Home");
         } else {
           // ถ้าสิทธิ์ไม่ตรงคาด
           await showLoginError("สิทธิการใช้งานไม่ถูกต้อง");
