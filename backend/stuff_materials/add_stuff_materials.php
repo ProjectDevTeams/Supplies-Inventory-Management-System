@@ -6,10 +6,8 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 include '../db.php';
 
-// รับข้อมูล JSON จาก React หรือ frontend
 $data = json_decode(file_get_contents("php://input"), true);
 
-// ตรวจสอบค่าว่างที่จำเป็น (ไม่ต้องมี running_code แล้ว)
 if (
     !isset($data['created_by']) ||
     !isset($data['reason']) ||
@@ -26,12 +24,10 @@ if (
 }
 
 try {
-    // เริ่ม transaction
     $conn->beginTransaction();
 
-    // สร้าง running_code อัตโนมัติ
     $month = date("m");
-    $year = date("Y") + 543; // ปี พ.ศ.
+    $year = date("Y") + 543;
     $prefix = "SM-$year/$month";
 
     $stmtCode = $conn->prepare("
@@ -53,11 +49,11 @@ try {
 
     $running_code = "$prefix/$nextNumber";
 
-    // เพิ่มใบเบิก
+    // ✅ INSERT พร้อม supervisor_name
     $stmt = $conn->prepare("
         INSERT INTO stuff_materials 
-        (running_code, created_at, created_by, reason, total_amount, Admin_status, User_status) 
-        VALUES (?, NOW(), ?, ?, ?, ?, ?)
+        (running_code, created_at, created_by, reason, total_amount, Admin_status, User_status, supervisor_name) 
+        VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([
         $running_code,
@@ -65,12 +61,12 @@ try {
         $data['reason'],
         $data['total_amount'],
         $data['Admin_status'],
-        $data['User_status']
+        $data['User_status'],
+        $data['supervisor_name'] ?? null
     ]);
 
     $stuff_material_id = $conn->lastInsertId();
 
-    // เพิ่มวัสดุในใบเบิก
     $stmtItem = $conn->prepare("
         INSERT INTO stuff_material_items 
         (stuff_material_id, material_id, quantity, total_price) 

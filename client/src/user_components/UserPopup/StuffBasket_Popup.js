@@ -85,18 +85,19 @@ useEffect(() => {
 
     setIsSubmitting(true); // 🔒 ล็อกไว้ไม่ให้ส่งซ้ำ
 
-    const payload = {
-      created_by: userId,
-      reason: purpose,
-      total_amount: parseFloat(totalPrice.toFixed(2)),
-      Admin_status: "รออนุมัติ",
-      User_status: "รอรับของ",
-      items: basketItems.map((item) => ({
-        material_id: item.id,
-        quantity: item.quantity,
-        total_price: parseFloat((item.quantity * item.price).toFixed(2)),
-      })),
-    };
+ const payload = {
+  created_by: userId,
+  reason: purpose,
+  total_amount: parseFloat(totalPrice.toFixed(2)),
+  Admin_status: "รออนุมัติ",
+  User_status: "รอรับของ",
+  supervisor_name: supervisor,  // ✅ เพิ่ม
+  items: basketItems.map((item) => ({
+    material_id: item.id,
+    quantity: item.quantity,
+    total_price: parseFloat((item.quantity * item.price).toFixed(2)),
+  })),
+};
 
     try {
       const res = await axios.post(
