@@ -114,12 +114,14 @@ function ReportContent() {
             )}
 
             <div className="report-search-row">
-              <div className="report-search-group">
-                <label>คลังวัสดุ</label>
-                <select value={warehouse} onChange={e => setWarehouse(e.target.value)}>
-                  {warehouses.map(w => <option key={w}>{w}</option>)}
-                </select>
-              </div>
+              {currentReport !== "issue" && (
+                <div className="report-search-group">
+                  <label>คลังวัสดุ</label>
+                  <select value={warehouse} onChange={e => setWarehouse(e.target.value)}>
+                    {warehouses.map(w => <option key={w}>{w}</option>)}
+                  </select>
+                </div>
+              )}
               <div className="report-search-button">
                 <button className="report-btn-search" onClick={handleSearch}>
                   ค้นหา

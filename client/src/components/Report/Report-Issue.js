@@ -35,7 +35,6 @@ function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
           const fromDate = fromMonth && fromYear
             ? new Date(`${parseInt(fromYear) - 543}-${monthNameToNumber(fromMonth)}-01`)
             : null;
-
           const toDate = toMonth && toYear
             ? new Date(`${parseInt(toYear) - 543}-${monthNameToNumber(toMonth)}-31`)
             : null;
@@ -58,23 +57,34 @@ function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
       });
   }, [warehouse, fromMonth, fromYear, toMonth, toYear]);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const flattenedItems = data.flatMap((item) =>
+    item.items?.map((mat) => ({
+      code: item.running_code,
+      created_by: item.created_by, // ✅ ใช้ created_by เป็นชื่อผู้ขอเบิก
+      name: mat.name,
+      quantity: mat.quantity,
+      price: mat.total_price
+    })) || []
+  );
+
+  const totalPages = Math.ceil(flattenedItems.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const displayedData = data.slice(indexOfFirstItem, indexOfLastItem);
+  const displayedData = flattenedItems.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     setInputPage("");
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["วันที่", "เลขที่", "ชื่อผู้ขอเบิก", "จำนวนรายการ", "มูลค่า"]];
-    const rows = data.map((item) => [
-      formatToThaiDate(item.created_at),
-      item.running_code,
-      item.full_name,
-      item.items?.length || 0,
-      Math.round(item.total_amount)
+    const header = [["ลำดับ", "เลขที่", "ชื่อผู้ขอเบิก", "ชื่อวัสดุ", "จำนวน", "มูลค่า"]];
+    const rows = flattenedItems.map((item, index) => [
+      index + 1,
+      item.code,
+      item.created_by, // ✅ export ชื่อผู้เบิกจาก created_by
+      item.name,
+      item.quantity,
+      Math.round(item.price)
     ]);
     const wsData = [...header, ...rows];
 
@@ -99,21 +109,23 @@ function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
       <table className="report-issue-table">
         <thead>
           <tr>
-            <th>วันที่</th>
+            <th>ลำดับ</th>
             <th>เลขที่</th>
             <th>ชื่อผู้ขอเบิก</th>
-            <th>จำนวนรายการ</th>
+            <th>ชื่อวัสดุ</th>
+            <th>จำนวน</th>
             <th>มูลค่า</th>
           </tr>
         </thead>
         <tbody>
           {displayedData.map((item, index) => (
             <tr key={index}>
-              <td>{formatToThaiDate(item.created_at)}</td>
-              <td>{item.running_code}</td>
-              <td>{item.full_name}</td>
-              <td>{item.items?.length || 0}</td>
-              <td>{Math.round(item.total_amount).toLocaleString()}</td>
+              <td>{indexOfFirstItem + index + 1}</td>
+              <td>{item.code}</td>
+              <td>{item.created_by}</td> {/* ✅ แสดงชื่อผู้ขอเบิกจาก created_by */}
+              <td>{item.name}</td>
+              <td>{item.quantity}</td>
+              <td>{parseFloat(item.price).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
@@ -121,7 +133,7 @@ function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
 
       <div className="report-issue-pagination-wrapper">
         <div className="report-issue-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, flattenedItems.length)} จาก {flattenedItems.length} แถว
         </div>
         <div className="report-issue-pagination-buttons">
           <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>ก่อนหน้า</button>
