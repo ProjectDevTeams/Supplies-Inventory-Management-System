@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2025 at 06:31 AM
+-- Generation Time: May 23, 2025 at 06:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,11 +40,11 @@ CREATE TABLE `adjustments` (
 --
 
 INSERT INTO `adjustments` (`id`, `created_by`, `created_date`, `updated_date`, `status`) VALUES
-(6, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
+(6, 3, '2025-05-16', '2025-05-22', 'อนุมัติ'),
 (7, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
 (8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
 (12, 1, '2025-05-21', '2025-05-21', 'อนุมัติ'),
-(13, 1, '2025-05-21', '2025-05-21', 'อนุมัติ');
+(13, 1, '2025-07-31', '2025-05-22', 'อนุมัติ');
 
 --
 -- Triggers `adjustments`
@@ -173,7 +173,7 @@ INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_ty
 (17, '', 'น้ำยาล้างบอร์ด', 1, 'ขวด', 'วัสดุในคลัง', 1, 2, 1, 30.00, 0, 1, 1, 0, '2025-05-06 09:20:18'),
 (18, '', 'สก็อตเทป', 1, 'ม้วน', 'วัสดุในคลัง', 0, 4, 1, 6.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
 (19, '', 'กล่องเอกสาร', 1, 'กล่อง', 'วัสดุในคลัง', 2, 6, 2, 55.00, 4, 4, 0, 0, '2025-05-06 09:20:18'),
-(20, '', 'แผ่นพลาสติกใส', 1, 'แผ่น', 'วัสดุนอกคลัง', 1, 4, 1, 3.00, 1, 2, 1, 0, '2025-05-06 09:20:18');
+(20, '', 'แผ่นพลาสติกใส', 1, 'แผ่น', 'วัสดุนอกคลัง', 1, 4, 1, 3.00, 1, 2, 1, 0, '2025-07-31 09:20:18');
 
 -- --------------------------------------------------------
 
@@ -241,31 +241,6 @@ INSERT INTO `purchase_extra_items` (`id`, `image`, `purchase_extra_id`, `materia
 (1, 'materials/picture/tape.jpg', 1, 1, NULL, 5),
 (2, NULL, 2, NULL, 'พัดลมตั้งโต๊ะ 16 นิ้ว', 2),
 (3, NULL, 3, 2, NULL, 10);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `purchase_requests`
---
-
-CREATE TABLE `purchase_requests` (
-  `id` int(11) NOT NULL,
-  `material_id` int(11) NOT NULL,
-  `requested_quantity` int(11) NOT NULL,
-  `reason` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `purchase_requests`
---
-
-INSERT INTO `purchase_requests` (`id`, `material_id`, `requested_quantity`, `reason`, `created_at`) VALUES
-(1, 1, 50, 'จัดซื้อเพื่อเติมสต็อกประจำไตรมาส', '2025-05-14 08:08:54'),
-(2, 2, 20, 'เตรียมใช้ในงานซ่อมแซมระบบ', '2025-05-14 08:08:54'),
-(3, 3, 15, 'วัสดุหมด ต้องจัดซื้อเพิ่ม', '2025-05-14 08:08:54'),
-(4, 4, 30, 'คำขอจากฝ่ายผลิต', '2025-05-14 08:08:54'),
-(5, 5, 100, 'สำรองเพื่อรองรับโครงการใหม่', '2025-05-14 08:08:54');
 
 -- --------------------------------------------------------
 
@@ -420,7 +395,7 @@ CREATE TABLE `stuff_materials` (
 INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
 (1, '2568/05/001', '2025-05-16', 11, 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
 (2, 'SM-68/05/002', '2025-05-16', 1, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
-(3, 'SM-68/05/003', '2025-05-16', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
+(3, 'SM-68/05/003', '2025-07-31', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
 
 --
 -- Triggers `stuff_materials`
@@ -544,7 +519,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission`, `approval_status`) VALUES
-(1, 'admin1', 'admin1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'แอดมิน', 'อนุมัติ'),
+(1, 'admin1', '1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'แอดมิน', 'อนุมัติ'),
 (2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'ผู้ช่วยแอดมิน', 'อนุมัติ'),
 (3, 'user1', '$2y$10$hR79d9RbIo8FlhJivkGkSOCrb3PIKJEXhfDzFFlpXYTQ1WE4YPDpq', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'ผู้ใช้งาน', 'อนุมัติ'),
 (4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'รออนุมัติ'),
@@ -608,13 +583,6 @@ ALTER TABLE `purchase_extras`
 ALTER TABLE `purchase_extra_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_purchase_extra_material` (`material_id`);
-
---
--- Indexes for table `purchase_requests`
---
-ALTER TABLE `purchase_requests`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `material_id` (`material_id`);
 
 --
 -- Indexes for table `receive_materials`
@@ -702,12 +670,6 @@ ALTER TABLE `purchase_extra_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `purchase_requests`
---
-ALTER TABLE `purchase_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
@@ -777,12 +739,6 @@ ALTER TABLE `purchase_extras`
 --
 ALTER TABLE `purchase_extra_items`
   ADD CONSTRAINT `fk_purchase_extra_material` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`) ON UPDATE CASCADE;
-
---
--- Constraints for table `purchase_requests`
---
-ALTER TABLE `purchase_requests`
-  ADD CONSTRAINT `purchase_requests_ibfk_1` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`);
 
 --
 -- Constraints for table `receive_materials`
