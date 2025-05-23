@@ -7,6 +7,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMorePopup";
 import UserStuffBasketPopup from "../../user_components/UserPopup/StuffBasket_Popup";
 
+import Swal from "sweetalert2";
 
 
 function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketItems = () => {} })  {
@@ -116,7 +117,18 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
             <div className="userstuff-bag-icon-wrapper">
               <div
                 className="userstuff-bag-icon"
-                onClick={() => setShowBasketPopup(true)}
+                onClick={() => {
+                  if (totalQuantity > 0) {
+                    setShowBasketPopup(true);
+                  } else {
+                    Swal.fire({
+                      icon: "info",
+                      title: "ไม่มีรายการที่เลือก",
+                      text: "กรุณาเลือกวัสดุก่อนเปิดตะกร้า",
+                      confirmButtonText: "ตกลง",
+                    });
+                  }
+                }}
               >
                 <img src="/image/bagicon.png" alt="Bag" />
                 {totalQuantity > 0 && (
