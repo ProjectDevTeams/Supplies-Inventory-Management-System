@@ -1,6 +1,8 @@
 .usermorepopup-container {
   padding: 2rem;
-  background-color: #f5f8fc;
+  margin-left: 0.5rem;
+  background: #f9fbfd;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   max-width: 100%;
   box-sizing: border-box;
@@ -22,18 +24,25 @@
 
 .usermorepopup-add-btn {
   padding: 0.5rem 2rem;
-  background-color: #007bff;
+  background: linear-gradient(to right, #3b82f6, #2563eb);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.15s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
 }
 
 .usermorepopup-add-btn:hover {
-  background-color: #0056b3;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.usermorepopup-add-btn:active {
+  transform: scale(0.97); /* 👈 จมลงเล็กน้อย */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .usermorepopup-row {
@@ -45,7 +54,13 @@
   background-color: white;
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* เปลี่ยนจาก 0.05 เป็น 0.08 และเพิ่ม spread */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.usermorepopup-row:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .usermorepopup-select {
@@ -55,6 +70,8 @@
 
 .usermorepopup-input {
   flex: 1;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -108,7 +125,7 @@
 
 .usermorepopup-save-btn {
   padding: 0.5rem 2rem;
-  background-color: #28a745;
+  background: linear-gradient(to right, #22c55e, #16a34a);
   color: white;
   border: none;
   border-radius: 6px;

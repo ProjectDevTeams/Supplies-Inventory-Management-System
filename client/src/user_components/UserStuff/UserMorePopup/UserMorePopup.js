@@ -4,6 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../../config";
 import "./UserMorePopup.css";
+import Swal from "sweetalert2";
 
 function UserMorePopup() {
   const [options, setOptions] = useState([]);
@@ -56,9 +57,34 @@ function UserMorePopup() {
     );
   };
 
-  const handleSave = () => {
-    console.log("✅ ส่งข้อมูล:", rows);
-    alert("บันทึกสำเร็จ (mock)");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSave = async () => {
+    if (isSubmitting) return; // 👈 ถ้ากำลังส่งข้อมูลอยู่ ไม่ต้องทำอะไร
+
+    setIsSubmitting(true); // ✅ ปิดการกดปุ่มชั่วคราว
+
+    try {
+      // สมมุติว่าเราส่ง rows ไปยัง backend
+      await axios.post(`${API_URL}/your_endpoint.php`, { rows });
+
+      Swal.fire({
+        icon: "success",
+        title: "บันทึกสำเร็จ",
+        text: "รายการถูกบันทึกเรียบร้อยแล้ว!",
+        confirmButtonColor: "#28a745",
+      });
+    } catch (error) {
+      console.error("❌ บันทกล้มเหลว:", error);
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่",
+        confirmButtonColor: "#dc3545",
+      });
+    } finally {
+      setIsSubmitting(false); // ✅ เปิดปุ่มกลับหลังจากเสร็จ
+    }
   };
 
   return (
@@ -79,6 +105,10 @@ function UserMorePopup() {
             isClearable
             placeholder="เลือก/เพิ่มชื่อวัสดุ..."
             className="usermorepopup-select"
+            menuPortalTarget={document.body} // 👈 ให้ dropdown popup ไปอยู่นอก DOM ปกติ
+            styles={{
+              menuPortal: (base) => ({ ...base, zIndex: 9999 }), // 👈 ให้ซ้อนอยู่บนสุด
+            }}
             filterOption={null}
             formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
             isValidNewOption={(inputValue, _, selectOptions) => {
@@ -145,8 +175,16 @@ function UserMorePopup() {
       ))}
 
       <div className="usermorepopup-footer">
-        <button className="usermorepopup-save-btn" onClick={handleSave}>
-          บันทึก
+        <button
+          className="usermorepopup-save-btn"
+          onClick={handleSave}
+          disabled={isSubmitting}
+          style={{
+            opacity: isSubmitting ? 0.6 : 1,
+            pointerEvents: isSubmitting ? "none" : "auto",
+          }}
+        >
+          {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
         </button>
       </div>
     </div>
