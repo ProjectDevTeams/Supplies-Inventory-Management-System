@@ -1,162 +1,152 @@
-.table-container-userstuff {
-  padding: 1em;
-  background-color: #f9f9f9;
+/* UserStuff_table.css: Minimal Elegant (เปลี่ยน class เป็น user-stuff-table-) */
+.user-stuff-table-container {
+  margin-top: 1rem;
+  margin-left: 0.5rem;
+  padding: 1rem;
+  background: #ffffff;
+  font-family: 'Prompt', sans-serif;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
-.userstuff-table {
+.user-stuff-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  background: white;
 }
 
-.userstuff-table th,
-.userstuff-table td {
-  border: 1px solid #ccc;
-  padding: 1em;
+.user-stuff-table th {
+  background: linear-gradient(to right, #eef3fa, #dbe9ff);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.8rem;
   text-align: center;
-  vertical-align: middle;
+  color: #222;
+  border-bottom: 1px solid #cccccc;
 }
 
-.userstuff-table th {
-  background-color: #dfe8f6;
-  font-weight: bold;
-}
-
-.userstuff-table td:nth-child(3) {
-  text-align: left;
-}
-
-.stuff-image {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
-
-/* ✅ ปุ่มเลือก - ปรับใหม่ให้ตรงภาพ */
-.userstuff-select-btn {
-  background-color: #007bff;       /* พื้นหลังน้ำเงิน */
-  color: white;                    /* ตัวอักษรขาว */
-  border: none;
-  padding: 0.6em 1.5em;            /* ปรับขนาด */
-  font-weight: bold;
+.user-stuff-table td {
   font-size: 0.95rem;
-  border-radius: 6px;              /* ขอบมน */
-  cursor: pointer;
+  padding: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #e6e6e6;
+  color: #333;
+  border-right: 1px solid #e0e0e0;
+}
+
+.user-stuff-table td:last-child,
+.user-stuff-table th:last-child {
+  border-right: none;
+}
+
+.user-stuff-table-row:hover td {
+  background-color: #f8f9fb;
   transition: background-color 0.2s ease;
 }
 
-.select-btn:hover {
-  background-color: #0056b3;       /* Hover เข้มขึ้น */
+.user-stuff-table-name {
+  font-weight: 600;
+  color: #1c1c1c;
+  font-size: 1.05rem;
 }
 
-.item-name {
-  color: #0066cc; /* ✅ สีฟ้าน้ำเงินตามตัวอย่าง */
-  font-weight: bold;
+.user-stuff-table-category {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.user-stuff-table td:nth-child(2) {
+  text-align: center;
+  vertical-align: middle;
+  
+}
+
+.user-stuff-table-image-wrapper {
+  width: 70px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.user-stuff-table-image {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+}
+
+
+.user-stuff-table-button {
+  background: linear-gradient(to right, #d7e9ff, #bddefa);
+  color: #003366;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.user-stuff-table-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 165, 245, 0.5);
+}
 
-/* ✅ Pagination */
-.userstuff-pagination-wrapper {
-  width: 98%;
-  margin: 0 auto;
+.user-stuff-table-pagination {
+  margin-top: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1em;
+  flex-wrap: wrap;
 }
 
-.userstuff-pagination-info {
-  color: #333;
-  font-size: 14px;
+.user-stuff-table-info {
+  font-size: 0.9rem;
+  color: #444;
 }
 
-.userstuff-pagination-buttons {
+.user-stuff-table-controls {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
+  align-items: center;
 }
 
-.userstuff-pagination-buttons button {
-  padding: 0.5rem 1.2rem;
-  background-color: #ffffff;
+.user-stuff-table-controls button {
+  padding: 0.4rem 0.9rem;
+  background: #ffffff;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
   cursor: pointer;
+  font-weight: 500;
 }
 
-.userstuff-pagination-buttons button:hover {
-  background-color: #e6f0ff;
+.user-stuff-table-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-.userstuff-pagination-buttons button:disabled {
-  background-color: #eeeeee;
-  color: #aaa;
-  pointer-events: none;
-}
-
-.userstuff-pagination-buttons .active {
-  background-color: #2176bd;
-  color: white;
-}
-
-.userstuff-page-input {
+.user-stuff-table-input {
   width: 55px;
   text-align: center;
-  padding: 0.4rem 0.6rem;
-  border: 2px solid rgba(0, 123, 255, 0.3);
+  padding: 0.3rem;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
+  background-color: #fff;
+  color: #333;
   font-weight: bold;
-  appearance: textfield;
-  -moz-appearance: textfield;
 }
 
-.userstuff-page-input::placeholder {
-  color: white;
-  opacity: 1;
-}
-
-.userstuff-page-input:focus {
-  outline: none;
-  border-color: rgba(0, 123, 255, 0.7);
-}
-
-.userstuff-page-input:focus::placeholder {
-  color: transparent;
-}
-
-.userstuff-page-input::-webkit-inner-spin-button,
-.userstuff-page-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* ✅ Responsive */
-@media (max-width: 768px) {
-  .userstuff-table th,
-  .userstuff-table td {
-    font-size: 0.85em;
-    padding: 0.5em;
-  }
-
-  .userstuff-pagination-wrapper {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5em;
-  }
-}
-
-.userstuff-no-data {
-  text-align: center;
-  font-size: 15px;
-  color: black;
+.user-stuff-table-no-data {
   font-style: italic;
-  font-weight: normal;
-  padding: 1em;
+  color: #999;
+  font-size: 0.95rem;
+  padding: 1rem;
 }
