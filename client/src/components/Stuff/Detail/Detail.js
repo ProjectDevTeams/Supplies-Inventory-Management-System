@@ -1,7 +1,9 @@
+// src/components/Stuff/Detail.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../config';
+import { StuffDetailSweetAlert } from './StuffDetailSweetAlert';
 import './Detail.css';
 
 export default function Detail() {
@@ -48,7 +50,7 @@ export default function Detail() {
           }
         }
       );
-      alert("บันทึกสถานะสำเร็จ");
+      StuffDetailSweetAlert();
       navigate("/stuff");
     } catch (err) {
       console.error("อัปเดตสถานะล้มเหลว:", err);

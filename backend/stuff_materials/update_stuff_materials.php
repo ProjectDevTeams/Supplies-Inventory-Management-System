@@ -14,9 +14,6 @@ include '../db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-// DEBUG: บันทึก log หากต้อง trace
-// file_put_contents("debug_update_status.log", json_encode($data));
-
 if (!$data || !isset($data['id'])) {
     echo json_encode([
         "status" => "error",
@@ -25,16 +22,8 @@ if (!$data || !isset($data['id'])) {
     exit;
 }
 
-// 🔒 ตรวจสอบสถานะว่าต้องเป็น "รับของเรียบร้อยแล้ว"
-if (isset($data['User_status']) && trim($data['User_status']) !== 'รับของเรียบร้อยแล้ว') {
-    echo json_encode([
-        "status" => "error",
-        "message" => "User_status must be 'รับของเรียบร้อยแล้ว' เท่านั้น"
-    ]);
-    exit;
-}
-
 try {
+    // เตรียมรายการฟิลด์ที่สามารถอัปเดตได้
     $updatableFields = [
         'running_code',
         'created_at',
@@ -55,6 +44,7 @@ try {
         }
     }
 
+    // ถ้าไม่มีฟิลด์ให้แก้เลยนอกจาก id
     if (count($setParts) === 0) {
         echo json_encode([
             "status" => "error",
@@ -79,3 +69,4 @@ try {
         "message" => "เกิดข้อผิดพลาดในการอัปเดต: " . $e->getMessage()
     ]);
 }
+?>

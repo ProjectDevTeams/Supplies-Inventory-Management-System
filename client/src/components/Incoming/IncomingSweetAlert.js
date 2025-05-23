@@ -32,7 +32,7 @@ export function IncomingAddSweetAlert(form) {
   Swal.fire({
     icon: 'success',
     title: 'ตรวจสอบแล้ว',
-    text: 'ข้อมูลครบถ้วน สามารถบันทึกได้',
+    text: 'เพิ่มข้อมูลรับเข้าวัสดุเสร็จสิ้น',
     confirmButtonText: 'ตกลง',
   });
 

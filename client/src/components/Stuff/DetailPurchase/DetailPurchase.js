@@ -1,8 +1,9 @@
-// File: DetailPurchase.js
+// src/components/Stuff/DetailPurchase.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../config';
+import { StuffDetailSweetAlert } from '../Detail/StuffDetailSweetAlert';
 import './DetailPurchase.css';
 
 export default function DetailPurchase() {
@@ -49,7 +50,8 @@ export default function DetailPurchase() {
         id,
         approval_status: mapValueToStatus(status),
       });
-      navigate(-1); // ย้อนกลับ
+      StuffDetailSweetAlert();
+      navigate(-1);
     } catch (error) {
       console.error("อัปเดตสถานะล้มเหลว:", error);
     }
