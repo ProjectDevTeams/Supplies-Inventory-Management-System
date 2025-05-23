@@ -31,7 +31,6 @@ export default function DetailTrack() {
 
   return (
     <div className="detail-track-container">
-      <h1 className="detail-track-header">ใบเบิกวัสดุ</h1>
       <div className="detail-track-box">
         <h2 className="detail-track-title">ใบเบิกวัสดุ</h2>
         <div className="detail-track-grid">

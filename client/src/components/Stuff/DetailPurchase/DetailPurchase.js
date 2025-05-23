@@ -60,7 +60,6 @@ export default function DetailPurchase() {
 
   return (
     <div className="detail-purchase-container">
-      <h1 className="detail-purchase-header">ใบขอจัดซื้อวัสดุ</h1>
       <div className="detail-purchase-box">
         <h2 className="detail-purchase-title">รายละเอียดการขอจัดซื้อเพิ่มเติม</h2>
         <div className="detail-purchase-grid">
@@ -102,6 +101,7 @@ export default function DetailPurchase() {
                       src={`${API_URL}/${row.image}`}
                       alt={row.name|| row.new_material_name}
                       style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                      className="detail-item-image"
                     />
                   ) : (
                     <span>ไม่มีรูป</span>

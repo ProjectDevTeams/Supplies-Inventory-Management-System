@@ -8,17 +8,6 @@
   margin-left: 200px;
 }
 
-.detail-purchase-header {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #003366;
-  margin-bottom: 1rem;
-  text-align: left;
-  margin-left: 20rem;
-  padding-top: 2.2rem;
-  padding-bottom: 1.5rem;
-}
-
 .detail-purchase-box {
   background: white;
   padding: 2rem 3rem;
@@ -95,7 +84,6 @@
   gap: 1rem;
 }
 
-/* ปุ่ม "กลับ" สีส้ม */
 .detail-purchase-btn-back {
   background-color: #f79c05;
   color: white;
@@ -110,7 +98,6 @@
   background-color: #e67c00;
 }
 
-/* ปุ่ม "บันทึก" สีเขียว */
 .detail-purchase-btn-save {
   background-color: #4CAF50;
   color: white;
@@ -130,7 +117,6 @@
   background-color: #3e8e41;
 }
 
-/* select */
 .detail-purchase-select-wrapper {
   display: flex;
   align-items: center;
@@ -157,4 +143,12 @@
 
 .detail-purchase-select.rejected {
   color: red;
+}
+
+/* New image styling */
+.detail-item-image {
+  width: 150px !important;
+  height: 150px !important;
+  object-fit: cover !important;
+  border-radius: 0;
 }
