@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2025 at 06:10 AM
+-- Generation Time: May 23, 2025 at 09:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -118,7 +118,7 @@ CREATE TABLE `companies` (
 INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
 (6, 'บริษัท เอเทค คอร์ปอเรชั่น', '2025-05-14 08:01:30', NULL, NULL),
 (7, 'ห้างหุ้นส่วน ซีเอ็น เทรดดิ้ง', '2025-05-14 08:01:30', NULL, NULL),
-(8, 'บริษัท โกลบอล ซัพพลาย', '2025-05-14 08:01:30', NULL, NULL),
+(8, 'บริษัท โกลบอล ซัพพลาย', '2025-05-14 08:01:30', 1, '2025-05-23 04:13:21'),
 (9, 'อัพเดต1', '2025-05-14 08:01:30', 2, '2025-05-21 08:12:53'),
 (10, 'อัพเดต2', '2025-05-14 08:01:30', 2, '2025-05-21 08:12:08'),
 (11, 'test', '2025-05-14 08:53:46', NULL, NULL),
@@ -154,7 +154,7 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 51, 2, 2, 0, '2025-05-12 17:00:00'),
+(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 56, 10, 5, 0, '2025-05-12 17:00:00'),
 (2, '', 'เทปกาวสองหน้า', 1, 'ชิ้น', 'วัสดุนอกคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-05 17:00:00'),
 (3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 3, 3, 2, 0, '2025-05-06 09:20:18'),
 (4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 10, 6, 2, 0, '2025-05-06 09:20:18'),
@@ -266,7 +266,7 @@ CREATE TABLE `receive_materials` (
 --
 
 INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `project_name`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`, `approval_status`) VALUES
-(1, 3, 'วัสดุในคลัง', 6, NULL, 'INV-001', 'PO-001', '2025-05-16', 485.00, 'อนุมัติ'),
+(1, 3, 'วัสดุในคลัง', 6, NULL, 'INV-001', 'PO-001', '2025-05-16', 645.00, 'ไม่อนุมัติ'),
 (2, 3, 'วัสดุในคลัง', 7, NULL, 'INV-002', 'PO-002', '2025-05-16', 70.00, 'รออนุมัติ'),
 (3, 3, 'วัสดุนอกคลัง', 8, NULL, 'INV-003', 'PO-003', '2025-05-16', 220.00, 'อนุมัติ'),
 (4, 3, 'วัสดุในคลัง', 6, NULL, 'INV-004', 'PO-004', '2025-05-20', 1500.00, 'อนุมัติ'),
@@ -275,7 +275,8 @@ INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`,
 (7, 1, 'วัสดุนอกคลัง', 6, NULL, '111111', '018', '2025-05-22', 22.00, 'อนุมัติ'),
 (8, 1, 'วัสดุในคลัง', NULL, 'โครงการ ABC', 'INV-123', 'PO-456', '2025-05-22', 305.00, 'รออนุมัติ'),
 (9, 1, 'วัสดุในคลัง', 6, NULL, '111', '111', '2025-05-23', 1.00, 'รออนุมัติ'),
-(10, 1, 'วัสดุนอกคลัง', 6, '', 'กกก', 'กกก', '2025-05-23', 1.00, 'รออนุมัติ');
+(10, 1, 'วัสดุนอกคลัง', 6, '', 'กกก', 'กกก', '2025-05-23', 1.00, 'รออนุมัติ'),
+(11, 3, 'วัสดุในคลัง', 6, NULL, '888888888888', '88888888888888', '2025-05-23', 100.00, 'อนุมัติ');
 
 --
 -- Triggers `receive_materials`
@@ -290,6 +291,21 @@ CREATE TRIGGER `trg_receive_approval_add_quantity` AFTER UPDATE ON `receive_mate
     SET m.remaining_quantity = m.remaining_quantity + rmi.quantity
     WHERE rmi.receive_material_id = NEW.id
       AND rmi.material_id IS NOT NULL;
+  END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_set_received_quantity_after_approval` AFTER UPDATE ON `receive_materials` FOR EACH ROW BEGIN
+  -- ตรวจสอบว่ามีการเปลี่ยนสถานะเป็น 'อนุมัติ'
+  IF NEW.approval_status = 'อนุมัติ' AND OLD.approval_status <> 'อนุมัติ' THEN
+
+    -- ตั้งค่า received_quantity ให้เท่ากับ quantity ของรายการรับวัสดุ
+    UPDATE materials m
+    JOIN receive_material_items rmi ON rmi.material_id = m.id
+    SET m.received_quantity = rmi.quantity
+    WHERE rmi.receive_material_id = NEW.id;
+
   END IF;
 END
 $$
@@ -315,8 +331,6 @@ CREATE TABLE `receive_material_items` (
 --
 
 INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_id`, `quantity`, `price_per_unit`, `total_price`) VALUES
-(1, 1, NULL, 2, 300.00, 440.00),
-(2, 1, NULL, 3, 15.00, 45.00),
 (3, 2, NULL, 10, 10.00, 50.00),
 (4, 2, NULL, 2, 10.00, 20.00),
 (5, 3, 1, 20, 120.00, 120.00),
@@ -329,7 +343,10 @@ INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_id`
 (26, 8, 5, 10, 15.50, 155.00),
 (27, 8, 7, 3, 50.00, 150.00),
 (28, 9, 1, 1, 1.00, 1.00),
-(34, 10, 11, 1, 1.00, 1.00);
+(34, 10, 11, 1, 1.00, 1.00),
+(35, 1, NULL, 2, 300.00, 600.00),
+(36, 1, NULL, 3, 15.00, 45.00),
+(38, 11, 1, 10, 10.00, 100.00);
 
 --
 -- Triggers `receive_material_items`
@@ -382,6 +399,7 @@ CREATE TABLE `stuff_materials` (
   `running_code` varchar(20) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
+  `supervisor_name` varchar(100) DEFAULT NULL,
   `reason` text DEFAULT NULL,
   `total_amount` decimal(10,2) DEFAULT 0.00,
   `Admin_status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ',
@@ -392,14 +410,30 @@ CREATE TABLE `stuff_materials` (
 -- Dumping data for table `stuff_materials`
 --
 
-INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
-(1, '2568/05/001', '2025-05-16', 11, 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
-(2, 'SM-68/05/002', '2025-05-16', 1, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
-(3, 'SM-68/05/003', '2025-07-31', 3, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'รออนุมัติ', 'รอรับของ');
+INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `supervisor_name`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
+(1, '2568/05/001', '2025-05-16', 11, 'นายประเสริฐ ใจดี', 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'รออนุมัติ', 'รับของเรียบร้อยแล้ว'),
+(2, 'SM-68/05/002', '2025-05-16', 1, NULL, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
+(3, 'SM-68/05/003', '2025-07-31', 3, NULL, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'อนุมัติ', 'รอรับของ'),
+(4, 'SM-2568/05/001', '2025-05-23', 3, NULL, '', 1100.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว');
 
 --
 -- Triggers `stuff_materials`
 --
+DELIMITER $$
+CREATE TRIGGER `trg_set_issued_quantity_after_receive` AFTER UPDATE ON `stuff_materials` FOR EACH ROW BEGIN
+  -- เงื่อนไข: เมื่อ User_status เปลี่ยนเป็น "รับของเรียบร้อยแล้ว"
+  IF NEW.User_status = 'รับของเรียบร้อยแล้ว' AND OLD.User_status <> 'รับของเรียบร้อยแล้ว' THEN
+
+    -- ตั้งค่า issued_quantity ให้เท่ากับ quantity ในใบเบิกนั้น ๆ
+    UPDATE materials m
+    JOIN stuff_material_items smi ON smi.material_id = m.id
+    SET m.issued_quantity = smi.quantity
+    WHERE smi.stuff_material_id = NEW.id;
+
+  END IF;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `trg_stuff_user_receive` AFTER UPDATE ON `stuff_materials` FOR EACH ROW BEGIN
   -- เช็กว่า User_status เปลี่ยนเป็น "รับของเรียบร้อยแล้ว"
@@ -438,7 +472,8 @@ INSERT INTO `stuff_material_items` (`id`, `stuff_material_id`, `material_id`, `q
 (3, 1, 3, 5, 25.00),
 (4, 2, 2, 20, 300.00),
 (5, 3, 5, 1, 120.00),
-(6, 3, 6, 4, 100.00);
+(6, 3, 6, 4, 100.00),
+(7, 4, 1, 5, 1100.00);
 
 --
 -- Triggers `stuff_material_items`
@@ -528,7 +563,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `ema
 (9, 'Test00', '$2y$10$0qn.bVPRHj34TmQpGAPpg.g4b8q/xP0x32qyKMYOvlogMGujr5f3K', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ'),
 (10, 'yindee', '$2y$10$1DpPL8AojeVFYYj2sNjfd.sJQrOiL7Ql4z2tiSf6ZPEh5rzZ6mYUi', 'phoorin', 'เจ้าหน้าที่', '123phoorin@gmail.com', '0961243799', 'ผู้ใช้งาน', 'อนุมัติ'),
 (11, 'nick', '$2y$10$DQRTP5QyayCcpfHjBN3TGu/dfcXxtLDt8yiUCo8i4./0/oKvQ21Gm', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'ผู้ใช้งาน', 'อนุมัติ'),
-(12, 'testadmin', '$2y$10$ZuiDFq96JhTJKKWlJ6/z6eHD87QfWAOS3bRzdUgDinEnl5Dc4bi9G', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ');
+(12, 'testadmin', '$2y$10$ZuiDFq96JhTJKKWlJ6/z6eHD87QfWAOS3bRzdUgDinEnl5Dc4bi9G', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'อนุมัติ');
 
 --
 -- Indexes for dumped tables
@@ -673,25 +708,25 @@ ALTER TABLE `purchase_extra_items`
 -- AUTO_INCREMENT for table `receive_materials`
 --
 ALTER TABLE `receive_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `stuff_materials`
 --
 ALTER TABLE `stuff_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `stuff_material_items`
 --
 ALTER TABLE `stuff_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`

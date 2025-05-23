@@ -30,6 +30,7 @@ foreach ($materials as $mat) {
         "running_code" => $mat['running_code'],
         "created_at" => $mat['created_at'],
         "created_by" => $mat['created_by_name'],
+        "supervisor_name" => $mat['supervisor_name'], // ✅ เพิ่มบรรทัดนี้
         "Admin_status" => $mat['Admin_status'],
         "User_status" => $mat['User_status'],
         "items" => $items

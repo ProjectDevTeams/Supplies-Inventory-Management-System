@@ -67,7 +67,6 @@ export default function Detail() {
         <p><b>ชื่อ</b></p><p>{data.name}</p>
         <p><b>สังกัด</b></p><p>{data.department}</p>
         <p><b>เบิกจำนวน</b></p><p>{data.items.length} รายการ</p>
-        <p><b>คลัง</b></p><p>{data.stock_type}</p>
         <p><b>เพื่อใช้ในงาน/กิจกรรม</b></p><p>{data.reason}</p>
       </div>
 
