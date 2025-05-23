@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../../config";
-import "./Balance.css";
+import { API_URL } from "../../config";
+import "./Adjust-Balance.css";
 
-function Balance() {
+function AdjustBalance() {
   const { id } = useParams(); // 📌 id คือ adjustment_id
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -104,4 +104,4 @@ function Balance() {
   );
 }
 
-export default Balance;
+export default AdjustBalance;

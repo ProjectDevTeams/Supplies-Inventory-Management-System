@@ -1,4 +1,4 @@
-.balance-page {
+.adjust-balance-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -6,29 +6,28 @@
   font-family: "Prompt", sans-serif;
 }
 
-.adjust-navbar {
+.adjust-balance-navbar {
   display: flex;
   flex-direction: column;
 }
 
-.adjust-sidebar {
+.adjust-balance-sidebar {
   display: flex;
   flex-direction: row;
   flex: 1;
 }
 
-/* ✅ sidebar fix width */
-.sidebar-container {
+.adjust-balance-sidebar-container {
   width: 200px;
   flex-shrink: 0;
 }
 
-.balance-content {
+.adjust-balance-content {
   flex: 1;
   display: flex;
-  justify-content: flex-start; /* ✅ ให้เริ่มจากซ้าย (ติดกับ Sidebar) */
+  justify-content: flex-start;
   align-items: flex-start;
-  padding: 2rem 3rem 2rem 2rem; /* ✅ เพิ่ม padding ขวาให้พอดี */
+  padding: 2rem 3rem 2rem 2rem;
   background-color: #f0f6ff;
   min-height: 100vh;
   box-sizing: border-box;
