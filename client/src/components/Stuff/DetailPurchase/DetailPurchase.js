@@ -1,4 +1,3 @@
-// src/components/Stuff/DetailPurchase.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -81,7 +80,6 @@ export default function DetailPurchase() {
               <option value="rejected">ไม่อนุมัติ</option>
             </select>
           </div>
-          <p><b>รูป</b></p>
         </div>
 
         <h3 className="detail-purchase-subtitle">รายการวัสดุ</h3>
@@ -89,6 +87,7 @@ export default function DetailPurchase() {
           <thead>
             <tr>
               <th>ลำดับ</th>
+              <th>รูปภาพ</th>
               <th>รายการ</th>
               <th>จำนวน/หน่วยนับ</th>
             </tr>
@@ -97,6 +96,17 @@ export default function DetailPurchase() {
             {data.items.map((row, idx) => (
               <tr key={idx}>
                 <td>{idx + 1}</td>
+                <td>
+                  {row.image ? (
+                    <img
+                      src={`${API_URL}/${row.image}`}
+                      alt={row.name|| row.new_material_name}
+                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <span>ไม่มีรูป</span>
+                  )}
+                </td>
                 <td>{row.name || row.new_material_name}</td>
                 <td>{row.quantity} {row.unit || ''}</td>
               </tr>
