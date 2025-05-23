@@ -108,9 +108,11 @@
   display: inline-block;
   background-color: #222;
   color: white;
-  padding: 8px 25px;
+  padding: 8px 1rem;
   font-size: 17px;
   border-radius: 25px;
   cursor: pointer;
   margin-top: 5px;
+  width: 200px;
+  text-align: center;
 }

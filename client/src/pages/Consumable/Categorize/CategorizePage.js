@@ -1,4 +1,3 @@
-import React from 'react';
 import Navbar from '../../../components/Navbar/Navbar';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import Categorize_table from '../../../components/Consumable/Categorize/Categorize_table';

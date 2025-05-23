@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./consumable-edit-popup.css";
 import { API_URL } from "../../config";
 import axios from "axios";
+import { ComponentUpdateSuccessAlert } from "../SweetAlert/ComponentSweetAlert";
 
 function ConsumableEditPopup({ onClose, item, refreshData }) {
   const [formData, setFormData] = useState({
@@ -75,6 +76,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
         refreshData?.();
         onClose();
         setFile(null);
+        ComponentUpdateSuccessAlert();
       } else {
         alert(res.data.message);
       }
@@ -185,7 +187,7 @@ function ConsumableEditPopup({ onClose, item, refreshData }) {
                   id="fileUpload"
                   className="consumable-edit-file-hidden"
                   accept="image/*"
-                  onChange={e => setFile(e.target.files[0]||null)}
+                  onChange={e => setFile(e.target.files[0] || null)}
                 />
                 <label htmlFor="fileUpload" className="consumable-edit-custom-file-btn">
                   {file ? "เปลี่ยนไฟล์" : "เลือกไฟล์"}
