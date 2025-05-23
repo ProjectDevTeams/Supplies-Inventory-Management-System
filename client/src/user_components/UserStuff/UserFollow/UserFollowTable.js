@@ -108,7 +108,7 @@ function UserFollowTable({ searchTerm = "" }) {
       if (!result.isConfirmed) return;
     }
 
-    await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
+    await axios.put(`${API_URL}/stuff_material_items/update_stuff_material_items.php`, {
       id,
       status_user: newStatus,
     });
