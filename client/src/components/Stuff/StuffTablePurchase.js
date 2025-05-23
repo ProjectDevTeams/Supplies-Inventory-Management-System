@@ -13,28 +13,37 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
   const [asc, setAsc] = useState(true);
   const perPage = 4;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
-        if (res.data.status === "success") {
-          const formatted = res.data.data.map((item) => ({
-            id: parseInt(item.id),
-            code: `PE-${String(item.id).padStart(3, '0')}`,
-            stock: item.items?.[0]?.stock_type || "วัสดุในคลัง",
-            amount: item.items?.length || 0,
-            date: item.created_date,
-            status: item.approval_status === 'อนุมัติ' ? 'approved'
-              : item.approval_status === 'ไม่อนุมัติ' ? 'rejected'
-                : 'pending'
-          }));
-          setData(formatted);
-        }
-      } catch (err) {
-        console.error("โหลดข้อมูลล้มเหลว:", err);
+  // ✅ ย้าย fetchData ออกมา เพื่อใช้ซ้ำใน setInterval ได้
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
+      if (res.data.status === "success") {
+        const formatted = res.data.data.map((item) => ({
+          id: parseInt(item.id),
+          code: `PE-${String(item.id).padStart(3, '0')}`,
+          stock: item.items?.[0]?.stock_type || "วัสดุในคลัง",
+          amount: item.items?.length || 0,
+          date: item.created_date,
+          status: item.approval_status === 'อนุมัติ' ? 'approved'
+            : item.approval_status === 'ไม่อนุมัติ' ? 'rejected'
+              : 'pending'
+        }));
+        setData(formatted);
       }
-    };
-    fetchData();
+    } catch (err) {
+      console.error("โหลดข้อมูลล้มเหลว:", err);
+    }
+  };
+
+  // ✅ Auto refresh ทุก 10 วินาที
+  useEffect(() => {
+    fetchData(); // โหลดครั้งแรก
+
+    const interval = setInterval(() => {
+      fetchData(); // โหลดซ้ำ
+    }, 10000);
+
+    return () => clearInterval(interval); // cleanup
   }, []);
 
   const renderStatus = (st) => ({
@@ -68,9 +77,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
 
   return (
     <div className="stuff-container">
-      <div className="stuff-description">
-        ตารางขอจัดซื้อเพิ่มเติม
-      </div>
+      <div className="stuff-description">ตารางขอจัดซื้อเพิ่มเติม</div>
       <table className="stuff-table">
         <thead>
           <tr>
@@ -88,7 +95,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td colSpan="7" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             items.map(i => (

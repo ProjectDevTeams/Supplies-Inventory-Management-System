@@ -1,4 +1,3 @@
-// File: StuffTableTrack.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,27 +12,35 @@ export default function StuffTableTrack({ searchTerm = '' }) {
   const [trackData, setTrackData] = useState([]);
   const perPage = 3;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
-        if (res.data.status === 'success') {
-          const transformed = res.data.data.map((item) => ({
-            id: item.id,
-            code: item.running_code,
-            stock: item.stock_type || 'วัสดุในคลัง',
-            amount: item.items?.length || 0,
-            date: item.created_at || '',
-            status: item.Admin_status === 'อนุมัติ' ? 'approved' : item.Admin_status === 'ไม่อนุมัติ' ? 'rejected' : 'pending',
-            user_status: item.User_status || '',
-          }));
-          setTrackData(transformed);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  // ✅ ย้ายออกมาเพื่อใช้ซ้ำได้ใน setInterval
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+      if (res.data.status === 'success') {
+        const transformed = res.data.data.map((item) => ({
+          id: item.id,
+          code: item.running_code,
+          stock: item.stock_type || 'วัสดุในคลัง',
+          amount: item.items?.length || 0,
+          date: item.created_at || '',
+          status: item.Admin_status === 'อนุมัติ' ? 'approved' : item.Admin_status === 'ไม่อนุมัติ' ? 'rejected' : 'pending',
+          user_status: item.User_status || '',
+        }));
+        setTrackData(transformed);
       }
-    };
-    fetchData();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // โหลดครั้งแรก
+
+    const interval = setInterval(() => {
+      fetchData(); // โหลดซ้ำทุก 10 วินาที
+    }, 10000);
+
+    return () => clearInterval(interval); // เคลียร์เมื่อ component ถูกถอด
   }, []);
 
   const sorted = [...trackData].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
@@ -45,7 +52,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
   }[st] || '-');
 
   const filtered = sorted
-    .filter(i => i.status !== 'pending') // ✅ ตัดสถานะรออนุมัติ
+    .filter(i => i.status !== 'pending')
     .filter(item =>
       item.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.stock?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -70,9 +77,7 @@ export default function StuffTableTrack({ searchTerm = '' }) {
 
   return (
     <div className="stuff-container">
-      <div className="stuff-description">
-        ตารางติดตามสถานะการเบิก
-      </div>
+      <div className="stuff-description">ตารางติดตามสถานะการเบิก</div>
       <table className="stuff-table">
         <thead>
           <tr>
