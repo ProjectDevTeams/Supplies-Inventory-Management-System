@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { useIncomingDetail } from "./useIncomingDetail";
+import { IncomingDetailSweetAlertUpdate } from "./IncomingSweetAlert";
 import "./Incoming-detail.css";
 
 export default function IncomingDetail() {
@@ -235,7 +236,12 @@ export default function IncomingDetail() {
           ย้อนกลับ
         </button>
         <button
-          onClick={() => save().then(() => navigate(-1))}
+          onClick={() =>
+            save().then(() => {
+              IncomingDetailSweetAlertUpdate();
+              navigate(-1);
+            })
+          }
           className="incoming-detail-save-button"
         >
           บันทึกการอัพเดต

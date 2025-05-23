@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-export function validateIncomingAddForm(form) {
+export function IncomingAddSweetAlert(form) {
   let isValid = true;
 
   if (!form.stock_type) isValid = false;
@@ -29,7 +29,6 @@ export function validateIncomingAddForm(form) {
     return false;
   }
 
-  // ถ้า validation ผ่าน ให้แสดง success alert
   Swal.fire({
     icon: 'success',
     title: 'ตรวจสอบแล้ว',
@@ -38,4 +37,14 @@ export function validateIncomingAddForm(form) {
   });
 
   return true;
+}
+
+export function IncomingDetailSweetAlertUpdate() {
+  Swal.fire({
+    icon: 'success',
+    title: 'อัพเดตรับเข้าวัสดุสำเร็จ',
+    position: 'center',
+    showConfirmButton: false,
+    timer: 1500
+  });
 }

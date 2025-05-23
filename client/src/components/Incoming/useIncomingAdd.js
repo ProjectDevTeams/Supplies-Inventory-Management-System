@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { validateIncomingAddForm } from "./IncomingSweetAlert";
+import { IncomingAddSweetAlert } from "./IncomingSweetAlert";
 
 export function useIncomingAdd(navigate) {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -74,7 +74,7 @@ export function useIncomingAdd(navigate) {
   ];
 
   const submit = async () => {
-    if (!validateIncomingAddForm(form)) return;
+    if (!IncomingAddSweetAlert(form)) return;
 
     setMsg({ error: "", success: "" });
     setLoading(true);
