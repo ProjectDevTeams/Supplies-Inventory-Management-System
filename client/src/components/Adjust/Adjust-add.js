@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
+import {
+  ComponentIncompleteAlert,
+  ComponentAddSuccessAlert
+} from "../SweetAlert/ComponentSweetAlert";
 import "./Adjust-add.css";
 
 export default function AdjustAdd({ onSave, onCancel }) {
@@ -20,6 +24,7 @@ export default function AdjustAdd({ onSave, onCancel }) {
             value: mat.id,
             label: mat.name,
             quantity: Number(mat.remain),
+            location: mat.location
           }));
           setSupplyOptions(options);
         }
@@ -47,60 +52,54 @@ export default function AdjustAdd({ onSave, onCancel }) {
           ? {
               ...x,
               [field]: value,
-              ...(field === "warehouse" ? { current: "" } : {}),
+              ...(field === "warehouse" ? { current: "", supply: "" } : {}),
             }
           : x
       )
     );
 
   const handleSave = async () => {
-    for (let x of rows) {
-      if (!x.warehouse || !x.supply || x.next === "") {
-        alert("กรุณากรอกข้อมูลให้ครบทุกแถว");
-        return;
-      }
+    const incomplete = rows.some((x) => !x.warehouse || !x.supply || x.next === "");
+    if (incomplete) {
+      ComponentIncompleteAlert();
+      return;
     }
 
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?.id;
-
       if (!userId) {
-        alert("ไม่พบข้อมูลผู้ใช้งานในระบบ กรุณาเข้าสู่ระบบใหม่");
+        ComponentIncompleteAlert();
         return;
       }
 
       const res1 = await axios.post(`${API_URL}/adjustments/add_adjustment.php`, {
         created_by: userId,
       });
-
       if (res1.data.status === "success") {
         const adjustment_id = res1.data.adjustment_id;
-
         const items = rows.map((r) => ({
           stock_type: r.warehouse,
           material_id: Number(r.supply),
           quantity: Number(r.next),
           old_quantity: Number(r.current),
         }));
-
-        const res2 = await axios.post(`${API_URL}/adjustment_items/add_adjustment_items.php`, {
-          adjustment_id,
-          items,
-        });
-
+        const res2 = await axios.post(
+          `${API_URL}/adjustment_items/add_adjustment_items.php`,
+          { adjustment_id, items }
+        );
         if (res2.data.status === "success") {
-          alert("บันทึกเรียบร้อยแล้ว");
+          ComponentAddSuccessAlert();
           onSave(rows);
         } else {
-          alert("เกิดข้อผิดพลาดในการเพิ่มรายการวัสดุ");
+          ComponentIncompleteAlert();
         }
       } else {
-        alert("เกิดข้อผิดพลาดในการสร้างใบปรับยอด");
+        ComponentIncompleteAlert();
       }
     } catch (err) {
       console.error("เกิดข้อผิดพลาด:", err);
-      alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+      ComponentIncompleteAlert();
     }
   };
 
@@ -135,25 +134,18 @@ export default function AdjustAdd({ onSave, onCancel }) {
               const selected = supplyOptions.find(
                 (opt) => opt.value === Number(e.target.value)
               );
-              setRows((prev) =>
-                prev.map((x) =>
-                  x.id === r.id
-                    ? {
-                        ...x,
-                        supply: selected ? selected.value : "",
-                        current: selected ? selected.quantity : "",
-                      }
-                    : x
-                )
-              );
+              updateRow(r.id, "supply", selected ? selected.value : "");
+              updateRow(r.id, "current", selected ? selected.quantity : "");
             }}
           >
             <option value="">– เลือกวัสดุ –</option>
-            {supplyOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
+            {supplyOptions
+              .filter((opt) => opt.location === r.warehouse)
+              .map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
           </select>
 
           <input

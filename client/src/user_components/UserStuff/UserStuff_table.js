@@ -33,11 +33,12 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
     fetchMaterials();
   }, []);
 
-  const filteredData = materials.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.id.toString().includes(searchTerm) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.remain.toString().includes(searchTerm)
+  const filteredData = materials.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.id.toString().includes(searchTerm) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.remain.toString().includes(searchTerm)
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -45,7 +46,8 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  if (loading) return <div className="user-stuff-table-loading">กำลังโหลดข้อมูล...</div>;
+  if (loading)
+    return <div className="user-stuff-table-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
     <div className="user-stuff-table-container">
@@ -72,12 +74,18 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
                 <td>{item.id}</td>
                 <td>
                   <div className="user-stuff-table-image-wrapper">
-                    <img src={`${API_URL}/${item.image}`} alt={item.name} className="user-stuff-table-image" />
+                    <img
+                      src={`${API_URL}/${item.image}`}
+                      alt={item.name}
+                      className="user-stuff-table-image"
+                    />
                   </div>
                 </td>
                 <td>
                   <span className="user-stuff-table-name">{item.name}</span>
-                  <div className="user-stuff-table-category">หมวดหมู่: {item.category}</div>
+                  <div className="user-stuff-table-category">
+                    หมวดหมู่: {item.category}
+                  </div>
                 </td>
                 <td>{item.remain}</td>
                 <td>
@@ -96,30 +104,56 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
 
       <div className="user-stuff-table-pagination">
         <div className="user-stuff-table-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง{" "}
+          {Math.min(indexOfLastItem, filteredData.length)} จาก{" "}
+          {filteredData.length} แถว
         </div>
         <div className="user-stuff-table-controls">
-          <button disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}>
+          <button
+            className="user-stuff-table-btn"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          >
             ก่อนหน้า
           </button>
           <input
             type="number"
             className="user-stuff-table-input"
             value={inputPage}
+            min={1}
+            max={totalPages} // ✅ ป้องกันเกินหน้าสุดท้าย
             placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              // รับเฉพาะเลขจำนวนเต็มไม่ติดลบ
+              if (/^\d*$/.test(val)) {
+                const num = parseInt(val, 10);
+                if (num <= totalPages || isNaN(num)) {
+                  setInputPage(val);
+                }
+              }
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
+                if (!isNaN(val)) {
+                  const safePage = Math.min(Math.max(val, 1), totalPages);
+                  setCurrentPage(safePage);
+                  setInputPage(""); // reset
                 }
                 e.target.blur();
               }
             }}
           />
-          <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)}>
+
+          <button
+            className="user-stuff-table-btn"
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+          >
             ถัดไป
           </button>
         </div>
@@ -134,7 +168,9 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
             if (existing) {
               setBasketItems((prev) =>
                 prev.map((i) =>
-                  i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
+                  i.id === item.id
+                    ? { ...i, quantity: i.quantity + quantity }
+                    : i
                 )
               );
             } else {

@@ -5,28 +5,20 @@ import EditCatagorizePopup from "./EditCategorize_popup";
 import Categorizebar from "./Categorize_bar";
 import axios from "axios";
 import { API_URL } from "../../../config";
+import { ComponentConfirmDeleteAlert, ComponentDeleteSuccessAlert } from "../../SweetAlert/ComponentSweetAlert";
 
 function Categorize_table() {
-  // 🟢 State สำหรับควบคุมการเปิดปิด Popup เพิ่มข้อมูล
   const [showAddPopup, setShowAddPopup] = useState(false);
-
-  // 🟢 เก็บ id ที่ต้องการแก้ไข (ใช้เปิด popup edit)
   const [editId, setEditId] = useState(null);
-
-  // 🟢 ข้อมูลหมวดหมู่ทั้งหมดจากฐานข้อมูล
   const [data, setData] = useState([]);
-
-  // 🟢 Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 5;
 
-  // 🔄 โหลดข้อมูลหมวดหมู่เมื่อ component ถูก mount
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  // 📦 ดึงข้อมูลหมวดหมู่จาก API
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${API_URL}/material_categories/get_material_categories.php`);
@@ -34,27 +26,26 @@ function Categorize_table() {
         setData(res.data.data);
       }
     } catch (err) {
-      console.error("โหลดข้อมูลหมวดหมู่ล้มเหลว:", err);
+      console.error(err);
     }
   };
 
-  // ❌ ลบหมวดหมู่ตาม id และโหลดข้อมูลใหม่
   const handleDelete = async (id) => {
-    if (!window.confirm("คุณแน่ใจว่าต้องการลบหมวดหมู่นี้หรือไม่?")) return;
+    const result = await ComponentConfirmDeleteAlert();
+    if (!result.isConfirmed) return;
     try {
       await axios.post(`${API_URL}/material_categories/delete_material_categories.php`, { id });
-      fetchCategories(); // โหลดใหม่หลังลบ
+      ComponentDeleteSuccessAlert();
+      fetchCategories();
     } catch (err) {
-      console.error("เกิดข้อผิดพลาดในการลบหมวดหมู่:", err);
+      console.error(err);
     }
   };
 
-  // 🔤 เรียงตามชื่อภาษาไทย
   const sortedCategories = [...data].sort((a, b) =>
     a.name.localeCompare(b.name, "th")
   );
 
-  // 📄 Pagination Logic
   const totalPages = Math.ceil(sortedCategories.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -62,20 +53,17 @@ function Categorize_table() {
 
   return (
     <div className="categorize-table-container">
-      {/* 🔘 ปุ่มเพิ่มหมวดหมู่ */}
       <Categorizebar onAddClick={() => setShowAddPopup(true)} />
 
-      {/* 🔼 Popup เพิ่มข้อมูล */}
       {showAddPopup && (
         <AddCatagorizePopup
           onClose={() => {
             setShowAddPopup(false);
-            fetchCategories(); // โหลดใหม่หลังเพิ่ม
+            fetchCategories();
           }}
         />
       )}
 
-      {/* 🔼 Popup แก้ไขข้อมูล */}
       {editId !== null && (
         <EditCatagorizePopup
           category={data.find((d) => d.id === editId)}
@@ -84,7 +72,6 @@ function Categorize_table() {
         />
       )}
 
-      {/* 🧾 ตารางแสดงหมวดหมู่ */}
       <table className="categorize-table">
         <thead>
           <tr>
@@ -99,7 +86,6 @@ function Categorize_table() {
               <td className="categorize-td">
                 {item.name}
                 <div className="categorize-actions">
-                  {/* ✏️ ปุ่มแก้ไข */}
                   <button
                     className="categorize-edit-btn"
                     onClick={() => setEditId(item.id)}
@@ -110,7 +96,6 @@ function Categorize_table() {
                       alt="edit"
                     />
                   </button>
-                  {/* 🗑️ ปุ่มลบ */}
                   <button
                     className="categorize-delete-btn"
                     onClick={() => handleDelete(item.id)}
@@ -128,7 +113,6 @@ function Categorize_table() {
         </tbody>
       </table>
 
-      {/* 📟 Pagination Control */}
       <div className="categorize-pagination-wrapper">
         <div className="categorize-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, sortedCategories.length)} จาก {sortedCategories.length} แถว

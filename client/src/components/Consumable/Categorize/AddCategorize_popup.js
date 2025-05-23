@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../../config";
+import { ComponentAddSuccessAlert, ComponentIncompleteAlert } from "../../SweetAlert/ComponentSweetAlert";
 import "./AddCategorize_popup.css";
 
 function AddCatagorizePopup({ onClose, onAdd }) {
@@ -10,7 +11,7 @@ function AddCatagorizePopup({ onClose, onAdd }) {
     e.preventDefault();
 
     if (!categoryName.trim()) {
-      alert("กรุณากรอกชื่อหมวดหมู่");
+      ComponentIncompleteAlert();
       return;
     }
 
@@ -20,14 +21,15 @@ function AddCatagorizePopup({ onClose, onAdd }) {
       });
 
       if (res.data.status === "success") {
-        if (onAdd) onAdd();     // แจ้ง parent ให้ refresh
-        if (onClose) onClose(); // ปิด popup
+        ComponentAddSuccessAlert();
+        onAdd?.();
+        onClose?.();
       } else {
-        alert(res.data.message || "เกิดข้อผิดพลาด");
+        ComponentIncompleteAlert();
       }
     } catch (err) {
       console.error("เพิ่มหมวดหมู่ล้มเหลว:", err);
-      alert("ไม่สามารถเชื่อมต่อ API");
+      ComponentIncompleteAlert();
     }
   };
 

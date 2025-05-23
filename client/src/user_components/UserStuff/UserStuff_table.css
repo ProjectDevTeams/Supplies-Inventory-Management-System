@@ -100,25 +100,29 @@
 }
 
 .user-stuff-table-pagination {
-  margin-top: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  font-size: 13px;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .user-stuff-table-info {
-  font-size: 0.9rem;
-  color: #444;
+  color: #333;
+  flex: 1;
 }
+
 
 .user-stuff-table-controls {
   display: flex;
-  gap: 0.5rem;
   align-items: center;
+  gap: 0.5rem;
 }
 
-.user-stuff-table-controls button {
+.user-stuff-table-controls button:not(.user-stuff-table-btn) {
+
   padding: 0.4rem 0.9rem;
   background: #ffffff;
   color: #333;
@@ -134,14 +138,35 @@
 }
 
 .user-stuff-table-input {
-  width: 55px;
+  width: 60px;
   text-align: center;
   padding: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #fff;
-  color: #333;
+  background-color: #ffffff; /* เปลี่ยนจากสีเทาอ่อน */
+  color: #333333;            /* เปลี่ยนจากสีเทาอ่อนเป็นสีเข้ม */
   font-weight: bold;
+}
+
+.user-stuff-table-input::placeholder {
+  color: #555;
+  font-weight: normal;
+  opacity: 1; /* ให้แสดงเข้ม */
+}
+
+.user-stuff-table-btn {
+  padding: 0.4em 1em;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.user-stuff-table-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .user-stuff-table-no-data {
