@@ -175,3 +175,100 @@
   font-size: 0.95rem;
   padding: 1rem;
 }
+/* ✅ Pagination ที่เหมือน consumable-table */
+.user-stuff-table-pagination {
+  width: 98%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.user-stuff-table-info {
+  color: #333;
+  font-size: 14px;
+}
+
+.user-stuff-table-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ปุ่มก่อนหน้า/ถัดไป */
+.user-stuff-table-btn {
+  padding: 0.5rem 1.2rem;
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.user-stuff-table-btn:hover {
+  background-color: #e6f0ff;
+}
+
+.user-stuff-table-btn:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+/* กล่อง input "1 / 4" */
+.user-stuff-table-page-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.user-stuff-table-page-box {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.user-stuff-table-page-box:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.user-stuff-table-page-box::placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.user-stuff-table-page-box:focus::placeholder {
+  color: transparent;
+}
+
+.user-stuff-table-page-box::-webkit-inner-spin-button,
+.user-stuff-table-page-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.user-stuff-table-page-total {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .user-stuff-table-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+}

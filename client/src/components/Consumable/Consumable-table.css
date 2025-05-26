@@ -163,6 +163,8 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+   /* ✅ Pagination แบบใหม่ */
   
   /* ✅ Responsive */
   @media (max-width: 768px) {

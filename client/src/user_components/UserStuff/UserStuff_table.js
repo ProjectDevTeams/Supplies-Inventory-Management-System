@@ -1,4 +1,4 @@
-// UserStuff_table.js (ใช้ className: user-stuff-table-)
+// UserStuff_Table.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./UserStuff_table.css";
@@ -32,6 +32,10 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
     };
     fetchMaterials();
   }, []);
+
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
 
   const filteredData = materials.filter(
     (item) =>
@@ -102,6 +106,7 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
         </tbody>
       </table>
 
+      {/* ✅ Pagination รูปแบบเดียวกับ Consumable_Table */}
       <div className="user-stuff-table-pagination">
         <div className="user-stuff-table-info">
           แสดง {indexOfFirstItem + 1} ถึง{" "}
@@ -116,32 +121,20 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
           >
             ก่อนหน้า
           </button>
+
           <input
             type="number"
-            className="user-stuff-table-input"
-            value={inputPage}
+            className="user-stuff-table-page-box"
             min={1}
-            max={totalPages} // ✅ ป้องกันเกินหน้าสุดท้าย
+            max={totalPages}
+            value={inputPage}
             placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
-            onChange={(e) => {
-              const val = e.target.value;
-              // รับเฉพาะเลขจำนวนเต็มไม่ติดลบ
-              if (/^\d*$/.test(val)) {
-                const num = parseInt(val, 10);
-                if (num <= totalPages || isNaN(num)) {
-                  setInputPage(val);
-                }
-              }
-            }}
+            onChange={(e) => setInputPage(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
+               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val)) {
-                  const safePage = Math.min(Math.max(val, 1), totalPages);
-                  setCurrentPage(safePage);
-                  setInputPage(""); // reset
-                }
+                if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
                 e.target.blur();
               }
             }}
