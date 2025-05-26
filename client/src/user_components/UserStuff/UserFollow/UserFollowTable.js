@@ -14,7 +14,9 @@ function UserFollowTable({ searchTerm = "" }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
+      const res = await axios.get(
+        `${API_URL}/stuff_materials/get_stuff_materials.php`
+      );
       if (res.data.status === "success") {
         const mapped = res.data.data.map((item) => ({
           id: item.id,
@@ -44,14 +46,26 @@ function UserFollowTable({ searchTerm = "" }) {
     return () => clearInterval(interval); // เคลียร์ทุกครั้งที่ component ถูกรื้อ
   }, []);
 
-
   const formatDateThai = (dateStr) => {
     const date = new Date(dateStr);
     const monthNames = [
-      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+      "ม.ค.",
+      "ก.พ.",
+      "มี.ค.",
+      "เม.ย.",
+      "พ.ค.",
+      "มิ.ย.",
+      "ก.ค.",
+      "ส.ค.",
+      "ก.ย.",
+      "ต.ค.",
+      "พ.ย.",
+      "ธ.ค.",
     ];
-    return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear().toString().slice(-2)}`;
+    return `${date.getDate()} ${monthNames[date.getMonth()]} ${date
+      .getFullYear()
+      .toString()
+      .slice(-2)}`;
   };
 
   const handleStatusUserChange = async (id, newStatus) => {
@@ -113,7 +127,11 @@ function UserFollowTable({ searchTerm = "" }) {
 
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
-    { value: "รับของเรียบร้อยแล้ว", label: "รับของเรียบร้อยแล้ว", color: "#009244" },
+    {
+      value: "รับของเรียบร้อยแล้ว",
+      label: "รับของเรียบร้อยแล้ว",
+      color: "#009244",
+    },
   ];
 
   const colourStyles = {
@@ -148,36 +166,46 @@ function UserFollowTable({ searchTerm = "" }) {
   const userfollowTotalPages = Math.ceil(
     filteredData.length / userfollowItemsPerPage
   );
-  const userfollowIndexOfLastItem = userfollowCurrentPage * userfollowItemsPerPage;
-  const userfollowIndexOfFirstItem = userfollowIndexOfLastItem - userfollowItemsPerPage;
+  const userfollowIndexOfLastItem =
+    userfollowCurrentPage * userfollowItemsPerPage;
+  const userfollowIndexOfFirstItem =
+    userfollowIndexOfLastItem - userfollowItemsPerPage;
   const userfollowCurrentItems = filteredData.slice(
     userfollowIndexOfFirstItem,
     userfollowIndexOfLastItem
   );
 
   const handleUserfollowPrev = () => {
-    if (userfollowCurrentPage > 1) {
-      setUserfollowCurrentPage(userfollowCurrentPage - 1);
-      setUserfollowInputPage(userfollowCurrentPage - 1);
-    }
+    setUserfollowCurrentPage((prev) => Math.max(prev - 1, 1));
+    setUserfollowInputPage((prev) => Math.max(prev - 1, 1));
   };
 
   const handleUserfollowNext = () => {
-    if (userfollowCurrentPage < userfollowTotalPages) {
-      setUserfollowCurrentPage(userfollowCurrentPage + 1);
-      setUserfollowInputPage(userfollowCurrentPage + 1);
-    }
+    setUserfollowCurrentPage((prev) =>
+      Math.min(prev + 1, userfollowTotalPages)
+    );
+    setUserfollowInputPage((prev) => Math.min(prev + 1, userfollowTotalPages));
   };
 
   const handleUserfollowChange = (e) => {
-    setUserfollowInputPage(e.target.value);
+    const val = e.target.value;
+    if (/^\d*$/.test(val)) {
+      const num = parseInt(val, 10);
+      if (num <= userfollowTotalPages || isNaN(num)) {
+        setUserfollowInputPage(val);
+      }
+    }
   };
 
   const handleUserfollowKeyDown = (e) => {
     if (e.key === "Enter") {
-      const page = Math.max(1, Math.min(userfollowTotalPages, Number(userfollowInputPage)));
-      setUserfollowCurrentPage(page);
-      setUserfollowInputPage(page);
+      const val = parseInt(userfollowInputPage.toString().trim(), 10);
+      if (!isNaN(val)) {
+        const safePage = Math.min(Math.max(val, 1), userfollowTotalPages);
+        setUserfollowCurrentPage(safePage);
+        setUserfollowInputPage(""); // reset
+      }
+      e.target.blur();
     }
   };
 
@@ -202,7 +230,9 @@ function UserFollowTable({ searchTerm = "" }) {
         <tbody>
           {userfollowCurrentItems.length === 0 ? (
             <tr>
-              <td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td colSpan="8" className="userfollow-no-data">
+                ไม่มีข้อมูลที่ตรงกับคำค้นหา
+              </td>
             </tr>
           ) : (
             userfollowCurrentItems.map((row) => (
@@ -212,12 +242,19 @@ function UserFollowTable({ searchTerm = "" }) {
                 <td>{row.category}</td>
                 <td>{row.items}</td>
                 <td>{row.date}</td>
-                <td className={
-                    row.status === "อนุมัติ" ? "status-approved" :
-                    row.status === "รออนุมัติ" ? "status-pending" :
-                    row.status === "รอดำเนินการ" ? "status-processing" :
-                    row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
-                  }>
+                <td
+                  className={
+                    row.status === "อนุมัติ"
+                      ? "status-approved"
+                      : row.status === "รออนุมัติ"
+                      ? "status-pending"
+                      : row.status === "รอดำเนินการ"
+                      ? "status-processing"
+                      : row.status === "ไม่อนุมัติ"
+                      ? "status-cancelled"
+                      : ""
+                  }
+                >
                   {row.status}
                 </td>
                 <td>
@@ -226,8 +263,14 @@ function UserFollowTable({ searchTerm = "" }) {
                       row.status === "ไม่อนุมัติ"
                         ? { value: "ยกเลิก", label: "ยกเลิก", color: "#dc3545" }
                         : row.status === "รออนุมัติ"
-                        ? { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" }
-                        : statusOptions.find(opt => opt.value === row.status_user)
+                        ? {
+                            value: "รอรับของ",
+                            label: "รอรับของ",
+                            color: "#1e398d",
+                          }
+                        : statusOptions.find(
+                            (opt) => opt.value === row.status_user
+                          )
                     }
                     onChange={(selectedOption) =>
                       handleStatusUserChange(row.id, selectedOption.value)
@@ -242,7 +285,12 @@ function UserFollowTable({ searchTerm = "" }) {
                     className="custom-status-dropdown"
                   />
                 </td>
-                <td className="print-icon" onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>
+                <td
+                  className="print-icon"
+                  onClick={() =>
+                    navigate("/user/confirm-status", { state: { id: row.id } })
+                  }
+                >
                   <FaPrint />
                 </td>
               </tr>
@@ -258,19 +306,30 @@ function UserFollowTable({ searchTerm = "" }) {
           {filteredData.length} แถว
         </div>
         <div className="userfollow-pagination-buttons">
-          <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>
+          <button
+            className="btn"
+            disabled={userfollowCurrentPage === 1}
+            onClick={handleUserfollowPrev}
+          >
             ก่อนหน้า
           </button>
           <input
             type="number"
             className="org-page-input"
-            placeholder={`${userfollowCurrentPage} / ${userfollowTotalPages}`}
+            min={1}
+            max={userfollowTotalPages}
             value={userfollowInputPage}
+            placeholder={`${userfollowCurrentPage} / ${userfollowTotalPages}`}
             onFocus={() => setUserfollowInputPage("")}
             onChange={handleUserfollowChange}
             onKeyDown={handleUserfollowKeyDown}
           />
-          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>
+
+          <button
+            className="btn"
+            disabled={userfollowCurrentPage === userfollowTotalPages}
+            onClick={handleUserfollowNext}
+          >
             ถัดไป
           </button>
         </div>
