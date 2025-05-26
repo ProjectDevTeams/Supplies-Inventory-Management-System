@@ -140,7 +140,7 @@ function ConsumableAddnewPopup({ onClose, onAdd }) {
                   onChange={handleFileChange}
                 />
                 <label htmlFor="fileUpload" className="consumable-addnew-custom-file-btn">
-                  {file ? "เลือกไฟล์แล้ว" : "เลือกไฟล์"}
+                  {file ? "เปลี่ยนไฟล์" : "เลือกไฟล์"}
                 </label>
               </div>
             </div>
