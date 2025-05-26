@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./StuffItem_Popup.css";
+import { API_URL } from '../../config'; // ✅ เพิ่มเพื่อใช้ประกอบ image URL
 
 function StuffItem_Popup({ item, onClose, onConfirm }) {
   const [quantity, setQuantity] = useState(0);
 
-  // เพิ่มการเช็คและ input ที่กรอกเองได้
   const handleAdd = () => {
     setQuantity((prev) => (prev < item.remain ? prev + 1 : prev));
   };
@@ -19,6 +19,12 @@ function StuffItem_Popup({ item, onClose, onConfirm }) {
       setQuantity(val);
     }
   };
+
+  // ✅ ดึง URL รูปภาพจาก server หรือแสดง placeholder หากไม่มี
+  const imageUrl =
+    item?.image && item.image.trim() !== ""
+      ? `${API_URL}/${item.image}`
+      : "https://via.placeholder.com/240x240";
 
   return (
     <div className="stuff-item-popup-container">
@@ -35,7 +41,7 @@ function StuffItem_Popup({ item, onClose, onConfirm }) {
           <div className="stuff-item-popup-image-wrapper">
             <label className="stuff-item-popup-label">ภาพ</label>
             <img
-              src={item?.image || "https://via.placeholder.com/120"}
+              src={imageUrl}
               className="stuff-item-popup-image-preview"
               alt="preview"
             />
