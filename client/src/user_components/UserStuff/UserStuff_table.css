@@ -84,11 +84,11 @@
 .user-stuff-table-button {
   background: linear-gradient(to right, #d7e9ff, #bddefa);
   color: #003366;
-  padding: 0.5rem 1.2rem;
+  padding: 0.9rem 1.8rem;
   border: none;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
   box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
