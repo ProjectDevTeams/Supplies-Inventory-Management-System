@@ -5,57 +5,49 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { API_URL } from "../../config";
 
+const thaiMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+
 function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 10;
 
-  const monthNameToNumber = (name) => {
-    const months = [
-      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-    ];
-    return months.indexOf(name) + 1;
+  const monthNameToNumber = name => {
+    const full = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+    return full.indexOf(name) + 1;
   };
 
-  const formatToThaiDate = (dateStr) => {
+  const formatToThaiDate = dateStr => {
     const d = new Date(dateStr);
     const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const m = d.getMonth();
     const year = d.getFullYear() + 543;
-    return `${day}/${month}/${year}`;
+    return `${day} ${thaiMonths[m]} ${year}`;
   };
 
   useEffect(() => {
     axios
       .get(`${API_URL}/receive_materials/get_receive_material_items.php`)
-      .then((res) => {
+      .then(res => {
         if (res.data.status === "success" && Array.isArray(res.data.data)) {
           const fromDate = fromMonth && fromYear
             ? new Date(`${parseInt(fromYear) - 543}-${monthNameToNumber(fromMonth)}-01`)
             : null;
-
           const toDate = toMonth && toYear
             ? new Date(`${parseInt(toYear) - 543}-${monthNameToNumber(toMonth)}-31`)
             : null;
-
-          const filtered = res.data.data.filter((item) => {
+          const filtered = res.data.data.filter(item => {
             const createdAt = new Date(item.created_at);
-            const matchWarehouse = warehouse === "ทั้งหมด" || item.stock_type === warehouse;
-            const matchFrom = !fromDate || createdAt >= fromDate;
-            const matchTo = !toDate || createdAt <= toDate;
-            return matchWarehouse && matchFrom && matchTo;
+            const okWare = warehouse === "ทั้งหมด" || item.stock_type === warehouse;
+            const okFrom = !fromDate || createdAt >= fromDate;
+            const okTo = !toDate || createdAt <= toDate;
+            return okWare && okFrom && okTo;
           });
-
           setData(filtered);
-        } else {
-          console.error("ข้อมูลผิด:", res.data);
         }
       })
-      .catch((err) => {
-        console.error("โหลดข้อมูลล้มเหลว:", err);
-      });
+      .catch(err => console.error(err));
   }, [warehouse, fromMonth, fromYear, toMonth, toYear]);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -68,23 +60,19 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ลำดับ", "บริษัท", "วันที่", "จำนวนวัสดุ", "มูลค่ารวม"]];
-    const rows = data.map((item, index) => [
-      index + 1,
+    const header = [["ลำดับ","บริษัท","จำนวนวัสดุ","มูลค่ารวม","วันที่"]];
+    const rows = data.map((item, i) => [
+      i + 1,
       item.company_name,
-      formatToThaiDate(item.created_at),
       item.items?.length || 0,
-      Math.round(item.total_price)
+      Math.round(item.total_price),
+      formatToThaiDate(item.created_at)
     ]);
-    const wsData = [...header, ...rows];
-
-    const worksheet = XLSX.utils.aoa_to_sheet(wsData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "รายงานการรับวัสดุ");
-
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const file = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(file, "รายงานการรับวัสดุ.xlsx");
+    const ws = XLSX.utils.aoa_to_sheet([ ...header, ...rows ]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "รายงานการรับวัสดุ");
+    const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([buf], { type: "application/octet-stream" }), "รายงานการรับวัสดุ.xlsx");
   };
 
   return (
@@ -95,15 +83,14 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
           <span>Export Excel</span>
         </button>
       </div>
-
       <table className="report-adjust-table">
         <thead>
           <tr>
             <th>ลำดับ</th>
             <th>บริษัท</th>
-            <th>วันที่</th>
             <th>จำนวนวัสดุ</th>
             <th>มูลค่ารวม</th>
+            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
@@ -111,14 +98,13 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
             <tr key={index}>
               <td>{indexOfFirstItem + index + 1}</td>
               <td>{item.company_name}</td>
-              <td>{formatToThaiDate(item.created_at)}</td>
               <td>{item.items?.length || 0}</td>
-              <td>{parseFloat(item.total_price).toLocaleString()}</td>
+              <td>{item.total_price.toLocaleString()}</td>
+              <td>{formatToThaiDate(item.created_at)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
       <div className="report-adjust-pagination-wrapper">
         <div className="report-adjust-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, data.length)} จาก {data.length} รายการ
@@ -132,13 +118,12 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
             min={1}
             max={totalPages}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
               if (e.key === "Enter") {
-                const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) {
-                  setCurrentPage(val);
-                }
+                const val = parseInt(inputPage, 10);
+                if (val >= 1 && val <= totalPages) setCurrentPage(val);
+                e.target.blur();
               }
             }}
             placeholder={`${currentPage} / ${totalPages}`}

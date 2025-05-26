@@ -1,4 +1,3 @@
-// ReportLowStock.js
 import React, { useState, useEffect } from "react";
 import "./Report-Receive.css";
 import * as XLSX from "xlsx";
@@ -6,12 +5,43 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { API_URL } from "../../config";
 
-function ReportLowStock({ warehouse }) {
+const thaiMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+
+export default function ReportLowStock({ warehouse }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
-
   const itemsPerPage = 10;
+
+  const formatToThaiDate = dateStr => {
+    const d = new Date(dateStr);
+    const day = String(d.getDate()).padStart(2, "0");
+    const m = d.getMonth();
+    const year = d.getFullYear() + 543;
+    return `${day} ${thaiMonths[m]} ${year}`;
+  };
+
+  useEffect(() => {
+    axios.get(`${API_URL}/materials/get_materials.php`)
+      .then(res => {
+        if (res.data.status === "success") {
+          let filtered = res.data.data.filter(item =>
+            item.status === "วัสดุใกล้หมดสต็อก" &&
+            (warehouse === "ทั้งหมด" || item.location === warehouse)
+          );
+          const transformed = filtered.map(item => [
+            item.name,
+            item.unit,
+            Number(item.price),
+            Number(item.remain),
+            Number(item.remain * item.price),
+            formatToThaiDate(item.created_at)
+          ]);
+          setData(transformed);
+        }
+      });
+  }, [warehouse]);
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -21,56 +51,21 @@ function ReportLowStock({ warehouse }) {
     setInputPage("");
   }, [currentPage]);
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/materials/get_materials.php`)
-      .then((res) => {
-        if (res.data.status === "success") {
-          let filtered = res.data.data;
-
-          if (warehouse === "ทั้งหมด") {
-            filtered = filtered.filter(item => item.status === "วัสดุใกล้หมดสต็อก");
-          } else {
-            filtered = filtered.filter(
-              item =>
-                item.status === "วัสดุใกล้หมดสต็อก" &&
-                item.location === warehouse
-            );
-          }
-
-          const transformed = filtered.map((item) => [
-            item.name,
-            item.unit,
-            Number(item.price),
-            Number(item.remain),
-            Number(item.remain * item.price),
-          ]);
-          setData(transformed);
-        }
-      })
-      .catch((err) => {
-        console.error("เกิดข้อผิดพลาด:", err);
-      });
-  }, [warehouse]);
-
   const exportToExcel = () => {
-    const header = [["ชื่อวัสดุ", "หน่วย", "ราคาต่อหน่วย", "คงเหลือ", "มูลค่ารวม"]];
-    const rows = data.map((row) => [
+    const header = [["ชื่อวัสดุ","หน่วย","ราคาต่อหน่วย","คงเหลือ","มูลค่ารวม","วันที่"]];
+    const rows = data.map(row => [
       row[0],
       row[1],
       Math.round(row[2]),
       Math.round(row[3]),
       Math.round(row[4]),
+      row[5]
     ]);
-    const wsData = [...header, ...rows];
-
-    const worksheet = XLSX.utils.aoa_to_sheet(wsData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "วัสดุใกล้หมดสต็อก");
-
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const file = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(file, "รายงานวัสดุใกล้หมดสต็อก.xlsx");
+    const ws = XLSX.utils.aoa_to_sheet([...header, ...rows]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "วัสดุใกล้หมดสต็อก");
+    const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([buf], { type: "application/octet-stream" }), "รายงานวัสดุใกล้หมดสต็อก.xlsx");
   };
 
   return (
@@ -90,6 +85,7 @@ function ReportLowStock({ warehouse }) {
             <th>ราคาต่อหน่วย</th>
             <th>คงเหลือ</th>
             <th>มูลค่ารวม</th>
+            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
@@ -126,8 +122,8 @@ function ReportLowStock({ warehouse }) {
             min={1}
             max={totalPages}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 const val = parseInt(inputPage.trim(), 10);
                 if (!isNaN(val) && val >= 1 && val <= totalPages) {
@@ -150,5 +146,3 @@ function ReportLowStock({ warehouse }) {
     </div>
   );
 }
-
-export default ReportLowStock;

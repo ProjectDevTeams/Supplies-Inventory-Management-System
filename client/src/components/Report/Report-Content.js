@@ -6,37 +6,63 @@ import ReportIssue from "./Report-Issue";
 import ReportAdjust from "./Report-Adjust";
 import ReportLowStock from "./Report-LowStock";
 
-function ReportContent() {
-  const months = [
-    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-  ];
+function isDateRangeValid(fromMonth, fromYear, toMonth, toYear) {
+  if (!(fromMonth && fromYear && toMonth && toYear)) {
+    return true;
+  }
+  const idx = name => [
+    "มกราคม","กุมภาพันธ์","มีนาคม","เมษายน",
+    "พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม",
+    "กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"
+  ].indexOf(name) + 1;
+  const f = new Date(`${parseInt(fromYear) - 543}-${idx(fromMonth)}-01`);
+  const t = new Date(`${parseInt(toYear) - 543}-${idx(toMonth)}-01`);
+  return f <= t;
+}
 
+export default function ReportContent() {
+  const months = [
+    "มกราคม", "กุมภาพันธ์","มีนาคม","เมษายน",
+    "พฤษภาคม","มิถุนายน","กรกฎาคม",
+    "สิงหาคม","กันยายน","ตุลาคม",
+    "พฤศจิกายน","ธันวาคม"
+  ];
   const currentBuddhistYear = new Date().getFullYear() + 543;
   const years = [];
   for (let y = 2565; y <= currentBuddhistYear; y++) {
     years.push(String(y));
   }
-
-  const warehouses = ["ทั้งหมด", "วัสดุในคลัง", "วัสดุนอกคลัง"];
+  const warehouses = ["ทั้งหมด","วัสดุในคลัง","วัสดุนอกคลัง"];
 
   const [fromMonth, setFromMonth] = useState("");
   const [fromYear, setFromYear] = useState("");
   const [toMonth, setToMonth] = useState("");
   const [toYear, setToYear] = useState("");
   const [warehouse, setWarehouse] = useState("ทั้งหมด");
-
   const [showResult, setShowResult] = useState(false);
   const [currentReport, setCurrentReport] = useState("");
-
   const [triggerSearch, setTriggerSearch] = useState(false);
 
   const handleSearch = () => {
+    if (!isDateRangeValid(fromMonth, fromYear, toMonth, toYear)) {
+      alert("ช่วงวันที่ไม่ถูกต้อง: 'ตั้งแต่' ต้องไม่เกิน 'จนถึง'");
+      return;
+    }
     setShowResult(true);
     setTriggerSearch(true);
   };
 
-  const handleReportClick = (reportType) => {
+  const handleClear = () => {
+    setFromMonth("");
+    setFromYear("");
+    setToMonth("");
+    setToYear("");
+    setWarehouse("ทั้งหมด");
+    setShowResult(false);
+    setTriggerSearch(false);
+  };
+
+  const handleReportClick = reportType => {
     setCurrentReport(reportType);
     setShowResult(false);
     setTriggerSearch(false);
@@ -56,25 +82,13 @@ function ReportContent() {
         <div className="report-title">
           รายงาน{currentReport ? ` / ${reportNames[currentReport]}` : ""}
         </div>
-
         <div className="report-controls">
-          <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>
-            รายงานยอดคงเหลือวัสดุ
-          </button>
-          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>
-            รายงานการเบิกวัสดุ
-          </button>
-          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>
-            รายงานการรับเข้าวัสดุ
-          </button>
-          <button className="report-btn report-green" onClick={() => handleReportClick("adjust")}>
-            รายงานการปรับยอด
-          </button>
-          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>
-            รายงานวัสดุใกล้หมดสต็อก
-          </button>
+          <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>รายงานยอดคงเหลือวัสดุ</button>
+          <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>รายงานการเบิกวัสดุ</button>
+          <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>รายงานการรับเข้าวัสดุ</button>
+          <button className="report-btn report-green" onClick={() => handleReportClick("adjust")}>รายงานการปรับยอด</button>
+          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>รายงานวัสดุใกล้หมดสต็อก</button>
         </div>
-
         {currentReport && (
           <div className="report-search">
             {currentReport !== "lowstock" && (
@@ -94,7 +108,6 @@ function ReportContent() {
                     </div>
                   </div>
                 </div>
-
                 <div className="report-search-row">
                   <div className="report-search-group">
                     <label>จนถึง</label>
@@ -112,7 +125,6 @@ function ReportContent() {
                 </div>
               </>
             )}
-
             <div className="report-search-row">
               {currentReport !== "issue" && (
                 <div className="report-search-group">
@@ -123,14 +135,12 @@ function ReportContent() {
                 </div>
               )}
               <div className="report-search-button">
-                <button className="report-btn-search" onClick={handleSearch}>
-                  ค้นหา
-                </button>
+                <button className="report-btn-search" onClick={handleSearch}>ค้นหา</button>
+                <button className="report-btn-clear" onClick={handleClear}>ล้าง</button>
               </div>
             </div>
           </div>
         )}
-
         {showResult && currentReport === "remain" && (
           <ReportMaterialRemain
             warehouse={warehouse}
@@ -142,7 +152,6 @@ function ReportContent() {
             onSearchHandled={() => setTriggerSearch(false)}
           />
         )}
-
         {showResult && currentReport === "receive" && (
           <ReportReceive
             warehouse={warehouse}
@@ -152,7 +161,6 @@ function ReportContent() {
             toYear={toYear}
           />
         )}
-
         {showResult && currentReport === "issue" && (
           <ReportIssue
             warehouse={warehouse}
@@ -162,7 +170,6 @@ function ReportContent() {
             toYear={toYear}
           />
         )}
-
         {showResult && currentReport === "adjust" && (
           <ReportAdjust
             warehouse={warehouse}
@@ -172,7 +179,6 @@ function ReportContent() {
             toYear={toYear}
           />
         )}
-
         {showResult && currentReport === "lowstock" && (
           <ReportLowStock warehouse={warehouse} />
         )}
@@ -180,5 +186,3 @@ function ReportContent() {
     </div>
   );
 }
-
-export default ReportContent;

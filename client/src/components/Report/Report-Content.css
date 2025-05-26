@@ -1,6 +1,6 @@
 .report-bar-container {
   width: 100%;
-  height: 100vh;
+  height: auto;
   padding: 1em;
   background-color: #f5f8fc;
   box-sizing: border-box;
@@ -18,14 +18,12 @@
   width: auto;
 }
 
-/* หัวข้อ */
 .report-title {
   font-weight: bold;
   font-size: 1.4em;
   color: #003366;
 }
 
-/* ปุ่มเมนูรายงาน */
 .report-controls {
   display: flex;
   gap: 2em;
@@ -47,16 +45,13 @@
   transform: scale(1.05);
 }
 
-/* สีปุ่มรายงาน */
 .report-blue   { background-color: #204d92; }
 .report-purple { background-color: #8e44ad; }
 .report-orange { background-color: #f39c12; }
 .report-yellow { background-color: #f1c40f; color: black; }
-.report-green    { background-color: #4ca345; }
+.report-green  { background-color: #4ca345; }
 .report-red    { background-color: #e74c3c; }
 
-
-/* ฟอร์มค้นหา */
 .report-search {
   display: flex;
   flex-direction: column;
@@ -106,7 +101,6 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* ปุ่มค้นหา */
 .report-search-button {
   display: flex;
   align-items: flex-end;
@@ -129,13 +123,20 @@
   transform: scale(1.05);
 }
 
-/* Responsive สำหรับ Report */
-@media (max-width: 768px) {
-  .report-search-row {
-    flex-direction: column;
-  }
-  /* บังคับให้ "คลังวัสดุ" อยู่ล่างสุดในแถวแรก */
-  .report-search .report-search-row:first-of-type .report-search-group:nth-child(2) {
-    order: 3;
-  }
+.report-btn-clear {
+  background-color: #6c757d;
+  border: none;
+  padding: 0.6em 1.5em;
+  margin-left: 0.5em;
+  border-radius: 5px;
+  font-size: 1em;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, transform 0.2s;
+}
+.report-btn-clear:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
 }
