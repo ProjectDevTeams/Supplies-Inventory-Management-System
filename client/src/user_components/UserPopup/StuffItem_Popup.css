@@ -1,6 +1,9 @@
 .stuff-item-popup-container {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
@@ -10,11 +13,13 @@
 }
 
 .stuff-item-popup-box {
-  width: 800px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
 }
 
 .stuff-item-popup-header {
@@ -43,28 +48,31 @@
 
 .stuff-item-popup-body {
   display: flex;
+  flex-wrap: wrap;
   padding: 2em 2.5em;
-  gap: 2.5em;
+  gap: 2em;
   background-color: #fdfdfd;
 }
 
 .stuff-item-popup-image-wrapper {
-  flex: 1;
+  flex: 1 1 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .stuff-item-popup-image-preview {
-  width: 240px;
-  height: auto;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-top: 0.5em;
 }
 
 .stuff-item-popup-form-wrapper {
-  flex: 2;
+  flex: 2 1 300px;
 }
 
 .stuff-item-popup-form {
@@ -92,12 +100,14 @@
 
 .stuff-item-popup-input,
 .stuff-item-popup-select {
+  width: 100%;
   padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
   background-color: #fff;
   transition: box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
 .stuff-item-popup-input:focus {
@@ -140,7 +150,7 @@
 
 .stuff-item-popup-form-footer {
   text-align: right;
-  margin-top: 0.1em; /* ลดจาก 1.5em เหลือแค่ 0.5em หรือ 0 ก็ได้ */
+  margin-top: 0.1em;
 }
 
 .stuff-item-popup-submit-btn {

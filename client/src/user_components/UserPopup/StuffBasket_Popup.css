@@ -8,16 +8,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* ✅ แก้จาก 9999 เพื่อให้ SweetAlert อยู่ด้านบน */
+  z-index: 1000;
   font-family: "Prompt", sans-serif;
 }
 
 .stuff-basket-popup {
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
   background: #fff;
-  width: 900px;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .stuff-basket-popup-header {
@@ -45,7 +47,7 @@
 
 .stuff-basket-popup-info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   column-gap: 40px;
   row-gap: 16px;
   margin-bottom: 32px;
@@ -67,6 +69,7 @@
   font-size: 15px;
   background-color: #fdfdfd;
   transition: box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
 .stuff-basket-popup-info-grid input:focus {
@@ -82,7 +85,7 @@
 }
 
 .stuff-basket-popup-table-scroll {
-  max-height: 200px;
+  max-height: 50vh;
   overflow-y: auto;
   border-radius: 8px;
   border: 1px solid #ddd;
@@ -99,6 +102,7 @@
   padding: 10px 12px;
   border: 1px solid #ddd;
   text-align: center;
+  word-wrap: break-word;
 }
 
 .stuff-basket-popup-material-table thead th {
