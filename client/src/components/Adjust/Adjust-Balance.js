@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../../config";
-import "./Balance.css";
+import { API_URL } from "../../config";
+import { ComponentUpdateSuccessAlert } from "../SweetAlert/ComponentSweetAlert";
+import "./Adjust-Balance.css";
 
-function Balance() {
-  const { id } = useParams(); // 📌 id คือ adjustment_id
+function AdjustBalance() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [status, setStatus] = useState("");
@@ -40,8 +41,7 @@ function Balance() {
         adjustment_id: id,
         status: status,
       });
-
-      alert("✅ บันทึกสถานะเรียบร้อยแล้ว");
+      ComponentUpdateSuccessAlert();
       navigate(-1, { state: { reload: true } });
     } catch (err) {
       alert("❌ บันทึกล้มเหลว");
@@ -104,4 +104,4 @@ function Balance() {
   );
 }
 
-export default Balance;
+export default AdjustBalance;

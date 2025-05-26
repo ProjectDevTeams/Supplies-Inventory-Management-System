@@ -22,9 +22,8 @@ import IncomingPage from "./pages/Incoming/IncomingPage";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
 import IncomingAddPage from "./pages/Incoming/IncomingAddPage";
 import AdjustPage from "./pages/Adjust/AdjustPage";
-import BalancePage from './pages/Adjust/BalancePage';
+import AdjustBalancePage from './pages/Adjust/AdjustBalancePage';
 import AdjustAddPage from "./pages/Adjust/AdjustAddPage";
-import Balance from "./components/Adjust/Balance/Balance";
 import HumanPage from "./pages/Human/HumanPage";
 import OrganizationsPage from "./pages/Organizations/OrganizationsPage";
 import ReportPage from "./pages/Report/ReportPage";
@@ -76,8 +75,8 @@ function App() {
         <Route path="/incoming/add" element={<IncomingAddPage />} />
         <Route path="/adjust" element={<AdjustPage />} />
         <Route path="/adjust/add" element={<AdjustAddPage />} />
-        <Route path="/adjust/balance" element={<BalancePage />} />
-        <Route path="/adjust/balance/:id" element={<Balance />} />
+        <Route path="/adjust/balance" element={<AdjustBalancePage />} />
+        <Route path="/adjust/balance/:id" element={<AdjustBalancePage />} />
         <Route path="/human" element={<HumanPage />} />
         <Route path="/organizations" element={<OrganizationsPage />} />
         <Route path="/report" element={<ReportPage />} />

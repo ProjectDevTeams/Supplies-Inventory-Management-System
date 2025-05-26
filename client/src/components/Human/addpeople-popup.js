@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import "./addpeople-popup.css";
 import axios from "axios";
 import { API_URL } from "../../config";
+import {
+  ComponentIncompleteAlert,
+  ComponentAddSuccessAlert
+} from "../SweetAlert/ComponentSweetAlert";
 
 function AddpeoplePopup({ onClose, onAdd }) {
   const [formData, setFormData] = useState({
@@ -11,7 +15,7 @@ function AddpeoplePopup({ onClose, onAdd }) {
     position: "",
     email: "",
     phone: "",
-    permission: "", 
+    permission: "",
     approval_status: "รออนุมัติ"
   });
 
@@ -22,12 +26,19 @@ function AddpeoplePopup({ onClose, onAdd }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { username, password, full_name, position, email, permission } = formData;
+    if (!username || !password || !full_name || !position || !email || !permission) {
+      ComponentIncompleteAlert();
+      return;
+    }
     try {
       await axios.post(`${API_URL}/users/add_user.php`, formData);
-      if (onAdd) onAdd();
-      if (onClose) onClose();
+      ComponentAddSuccessAlert();
+      onAdd?.();
+      onClose?.();
     } catch (error) {
       console.error("Error adding user:", error);
+      ComponentIncompleteAlert();
     }
   };
 
@@ -44,23 +55,23 @@ function AddpeoplePopup({ onClose, onAdd }) {
             <div className="addpeople-form-grid">
               <div className="addpeople-form-row">
                 <label>username</label>
-                <input type="text" name="username" value={formData.username} onChange={handleChange} required />
+                <input type="text" name="username" value={formData.username} onChange={handleChange} />
               </div>
               <div className="addpeople-form-row">
                 <label>รหัสผ่าน</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+                <input type="password" name="password" value={formData.password} onChange={handleChange} />
               </div>
               <div className="addpeople-form-row">
                 <label>ชื่อ-สกุล</label>
-                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
+                <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} />
               </div>
               <div className="addpeople-form-row">
                 <label>ตำแหน่งงาน</label>
-                <input type="text" name="position" value={formData.position} onChange={handleChange} required />
+                <input type="text" name="position" value={formData.position} onChange={handleChange} />
               </div>
               <div className="addpeople-form-row">
                 <label>Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} />
               </div>
               <div className="addpeople-form-row">
                 <label>โทรศัพท์</label>
@@ -68,7 +79,7 @@ function AddpeoplePopup({ onClose, onAdd }) {
               </div>
               <div className="addpeople-form-row">
                 <label>สิทธิการใช้งาน</label>
-                <select name="permission" value={formData.permission} onChange={handleChange} required>
+                <select name="permission" value={formData.permission} onChange={handleChange}>
                   <option value="">เลือกสิทธิการใช้งาน</option>
                   <option value="ผู้ใช้งาน">ผู้ใช้งาน</option>
                   <option value="แอดมิน">แอดมิน</option>
