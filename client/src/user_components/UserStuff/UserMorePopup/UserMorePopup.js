@@ -13,7 +13,7 @@ function UserMorePopup({ onClose }) {
     { id: Date.now(), item: null, quantity: 1, note: "" },
   ]);
 
-  const [, setInputText] = useState(""); 
+  const [, setInputText] = useState("");
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -41,7 +41,7 @@ function UserMorePopup({ onClose }) {
   const addRow = () => {
     setRows((prev) => [
       ...prev,
-      { id: Date.now(), item: null, quantity: 1, note: "" },
+      { id: Date.now(), item: null, quantity: null, price: null, note: "" },
     ]);
   };
 
@@ -87,97 +87,176 @@ function UserMorePopup({ onClose }) {
     }
   };
 
+  const [warehouse, setWarehouse] = useState("");
+  const [taxNumber, setTaxNumber] = useState("");
+  const [purchaseNumber, setPurchaseNumber] = useState("");
+  const [receiveDate, setReceiveDate] = useState("");
+
   return (
     <div className="usermorepopup-container">
       <div className="usermorepopup-header">
         <h2>รายการขอจัดซื้อเพิ่มเติม</h2>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <button className="usermorepopup-add-btn" onClick={addRow}>
-            ＋ เพิ่มแถว
-          </button>
-          <button className="usermorepopup-close-btn" onClick={onClose}>
-            ✕
-          </button>
+        <button className="usermorepopup-close-btn" onClick={onClose}>
+          ✕
+        </button>
+      </div>
+
+      <div className="usermorepopup-info-block">
+        <div className="usermorepopup-info-group">
+          <label>คลังวัสดุ</label>
+          <select
+            value={warehouse}
+            onChange={(e) => setWarehouse(e.target.value)}
+            className="usermorepopup-info-input"
+          >
+            <option value="">เลือกคลังวัสดุ...</option>
+            <option value="วัสดุในคลัง">วัสดุในคลัง</option>
+            <option value="วัสดุนอกคลัง">วัสดุนอกคลัง</option>
+          </select>
+        </div>
+
+        <div className="usermorepopup-info-group">
+          <label>เลขที่กำกับภาษี</label>
+          <input
+            type="text"
+            placeholder="INV-XXX"
+            value={taxNumber}
+            onChange={(e) => setTaxNumber(e.target.value)}
+            className="usermorepopup-info-input"
+          />
+        </div>
+
+        <div className="usermorepopup-info-group">
+          <label>เลขที่ มอ. จัดซื้อ</label>
+          <input
+            type="text"
+            placeholder="PO-XXX"
+            value={purchaseNumber}
+            onChange={(e) => setPurchaseNumber(e.target.value)}
+            className="usermorepopup-info-input"
+          />
+        </div>
+
+        <div className="usermorepopup-info-group">
+          <label>วันที่ขอจัดซื้อ</label>
+          <input
+            type="date"
+            value={receiveDate}
+            onChange={(e) => setReceiveDate(e.target.value)}
+            className="usermorepopup-info-input"
+          />
         </div>
       </div>
 
+      <hr className="usermorepopup-divider" />
+
       {rows.map((row) => (
         <div key={row.id} className="usermorepopup-row">
-          <CreatableSelect
-            options={options}
-            value={row.item}
-            onChange={(val) => updateRow(row.id, "item", val)}
-            isClearable
-            placeholder="เลือก/เพิ่มชื่อวัสดุ..."
-            className="usermorepopup-select"
-            menuPortalTarget={document.body} // 👈 ให้ dropdown popup ไปอยู่นอก DOM ปกติ
-            styles={{
-              menuPortal: (base) => ({ ...base, zIndex: 9999 }), // 👈 ให้ซ้อนอยู่บนสุด
-            }}
-            filterOption={null}
-            formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
-            isValidNewOption={(inputValue, _, selectOptions) => {
-              if (!inputValue) return false;
-              return !selectOptions.some(
-                (opt) => opt.value.toLowerCase() === inputValue.toLowerCase()
-              );
-            }}
-            getOptionLabel={(e) =>
-              e.__isNew__ ? (
-                e.label
-              ) : (
-                <div className="usermorepopup-option">
-                  <span className="usermorepopup-name">{e.rawLabel}</span>
-                  <span className="usermorepopup-amount">
-                    จำนวนคงเหลือ: {e.remain}
-                  </span>
-                </div>
-              )
-            }
-            onInputChange={(input) => {
-              setInputText(input);
-              if (input.trim() === "") {
-                setOptions(allOptions.filter((m) => parseInt(m.remain) === 0));
-              } else {
-                setOptions(
-                  allOptions.filter((m) =>
-                    (m.rawLabel || "")
-                      .toLowerCase()
-                      .includes(input.toLowerCase())
-                  )
+          <div className="usermorepopup-row-line1">
+            <CreatableSelect
+              options={options}
+              value={row.item}
+              onChange={(val) => updateRow(row.id, "item", val)}
+              isClearable
+              placeholder="เลือก/เพิ่มชื่อวัสดุ..."
+              className="usermorepopup-select"
+              menuPortalTarget={document.body}
+              styles={{
+                menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+              }}
+              filterOption={null}
+              formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
+              isValidNewOption={(inputValue, _, selectOptions) => {
+                if (!inputValue) return false;
+                return !selectOptions.some(
+                  (opt) => opt.value.toLowerCase() === inputValue.toLowerCase()
                 );
+              }}
+              getOptionLabel={(e) =>
+                e.__isNew__ ? (
+                  e.label
+                ) : (
+                  <div className="usermorepopup-option">
+                    <span className="usermorepopup-name">{e.rawLabel}</span>
+                    <span className="usermorepopup-amount">
+                      จำนวนคงเหลือ: {e.remain}
+                    </span>
+                  </div>
+                )
               }
-            }}
-          />
+              onInputChange={(input) => {
+                setInputText(input);
+                if (input.trim() === "") {
+                  setOptions(
+                    allOptions.filter((m) => parseInt(m.remain) === 0)
+                  );
+                } else {
+                  setOptions(
+                    allOptions.filter((m) =>
+                      (m.rawLabel || "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    )
+                  );
+                }
+              }}
+            />
 
-          <input
-            type="number"
-            min="1"
-            value={row.quantity}
-            onChange={(e) =>
-              updateRow(row.id, "quantity", Math.max(1, +e.target.value || 1))
-            }
-            placeholder="จำนวน"
-            className="usermorepopup-input"
-          />
+            <input
+              type="number"
+              min="1"
+              value={row.quantity ?? ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                const num = parseInt(val, 10);
+                updateRow(
+                  row.id,
+                  "quantity",
+                  isNaN(num) || num < 1 ? null : num
+                );
+              }}
+              placeholder="จำนวน"
+              className="usermorepopup-input usermorepopup-quantity-input"
+            />
+          </div>
 
-          <input
-            type="text"
-            value={row.note}
-            onChange={(e) => updateRow(row.id, "note", e.target.value)}
-            placeholder="หมายเหตุ"
-            className="usermorepopup-input"
-          />
+          <div className="usermorepopup-row-line2">
+            <input
+              type="number"
+              min="0"
+              value={row.price || ""}
+              onChange={(e) =>
+                updateRow(row.id, "price", Math.max(0, +e.target.value || 0))
+              }
+              placeholder="ราคาต่อหน่วย"
+              className="usermorepopup-input usermorepopup-price-input"
+            />
 
-          <button
-            className="usermorepopup-remove-btn"
-            onClick={() => removeRow(row.id)}
-            title="ลบแถว"
-          >
-            <FaTrash />
-          </button>
+            <input
+              type="text"
+              value={row.note}
+              onChange={(e) => updateRow(row.id, "note", e.target.value)}
+              placeholder="หมายเหตุ"
+              className="usermorepopup-input usermorepopup-note-input"
+            />
+
+            <button
+              className="usermorepopup-remove-btn"
+              onClick={() => removeRow(row.id)}
+              title="ลบแถว"
+            >
+              <FaTrash />
+            </button>
+          </div>
         </div>
       ))}
+
+      {/* ✅ ปุ่มเพิ่มแถวล่างซ้าย */}
+      <div className="usermorepopup-bottom-controls">
+        <button className="usermorepopup-add-btn" onClick={addRow}>
+          ＋ เพิ่มแถว
+        </button>
+      </div>
 
       <div className="usermorepopup-footer">
         <button

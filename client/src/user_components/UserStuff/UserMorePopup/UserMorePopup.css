@@ -20,7 +20,7 @@
 .usermorepopup-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #333;
+  color: #003366;
 }
 
 .usermorepopup-add-btn {
@@ -35,6 +35,9 @@
   transition: all 0.15s ease-in-out;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transform: translateY(0);
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .usermorepopup-add-btn:hover {
@@ -48,7 +51,8 @@
 
 .usermorepopup-row {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  /* align-items: center; */
   gap: 1rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -59,18 +63,30 @@
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.usermorepopup-row-line1,
+.usermorepopup-row-line2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ✅ แยกเฉพาะของ row-line2 */
+.usermorepopup-row-line2 {
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+
 .usermorepopup-row:hover {
   transform: scale(1.01);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-.usermorepopup-select {
-  flex: 3;
-  min-width: 200px;
-}
+
 
 .usermorepopup-input {
   flex: 1;
+  min-width: 160px;
   background-color: #f9fafb;
   border: 1px solid #e5e7eb;
   padding: 0.5rem 0.75rem;
@@ -82,16 +98,15 @@
   
 }
 
-.usermorepopup-input[type="number"] {
-  width: 140px;          /* ✅ กำหนดความกว้างเฉพาะ */
-  flex: 0 0 auto;       /* ✅ ไม่ให้ยืดหรือหดตามพื้นที่ */
+/* .usermorepopup-input[type="number"] {
+  width: 140px;          
+  flex: 0 0 auto;       
 }
 
 .usermorepopup-input[type="text"] {
-  width: 300px;          /* ✅ กำหนดความกว้างเฉพาะ */
-  flex: 0 0 auto;       /* ✅ ไม่ให้ยืดหรือหดตามพื้นที่ */
-}
-
+  width: 300px;          
+  flex: 0 0 auto;      
+} */
 
 .usermorepopup-input:focus {
   outline: none;
@@ -213,4 +228,61 @@
 /* เพิ่มในไฟล์ CSS ใดก็ได้ที่โหลด global */
 .swal2-container {
   z-index: 20000 !important;
+}
+
+.usermorepopup-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+
+.usermorepopup-info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.usermorepopup-info-group label {
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.usermorepopup-info-input {
+  background-color: #f9fafb;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+
+.usermorepopup-divider {
+  border: none;
+  border-top: 1.5px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+/* ช่อง select วัสดุ (70%) */
+.usermorepopup-select {
+  flex: 7;
+  min-width: 200px;
+}
+
+/* ช่องจำนวน (30%) */
+.usermorepopup-quantity-input {
+  flex: 3;
+  min-width: 100px;
+}
+
+/* ช่องราคาต่อหน่วย (40%) */
+.usermorepopup-price-input {
+  flex: 4;
+  min-width: 140px;
+}
+
+/* ช่องหมายเหตุ (60%) */
+.usermorepopup-note-input {
+  flex: 6;
+  min-width: 160px;
 }
