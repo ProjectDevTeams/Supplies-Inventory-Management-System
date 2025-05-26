@@ -20,21 +20,21 @@ export default function OrganizationsAddPopup({ onClose, onAddCompany }) {
     try {
       setLoading(true);
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      const userId = storedUser?.id;
+      const userId = storedUser?.id || 0;
 
       const res = await axios.post(
         `${API_URL}/companies/add_company.php`,
         {
-          name,
+          name: name.trim(),
           created_by: userId
         },
         { headers: { "Content-Type": "application/json" } }
       );
 
       if (res.data.status === "success") {
+        ComponentAddSuccessAlert();
         onAddCompany(res.data.data);
         onClose();
-        ComponentAddSuccessAlert();
       } else {
         ComponentIncompleteAlert();
       }
