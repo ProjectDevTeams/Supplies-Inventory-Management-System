@@ -109,7 +109,7 @@ function UserMoreTable({ searchTerm = "" }) {
             items.map((i) => (
               <tr
                 key={i.id}
-                onClick={() => navigate("/userstuff/more/detail-usermore", { state: { id: i.id } })}
+                onClick={() => navigate("/userstuff/more/detail", { state: { id: i.id } })}
                 style={{ cursor: "pointer" }}
               >
                 <td>{i.id}</td>
