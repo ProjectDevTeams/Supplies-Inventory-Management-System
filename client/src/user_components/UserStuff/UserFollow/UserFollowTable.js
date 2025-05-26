@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
 import { FaPrint } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -12,11 +12,9 @@ function UserFollowTable({ searchTerm = "" }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(
-        `${API_URL}/stuff_materials/get_stuff_materials.php`
-      );
+      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
       if (res.data.status === "success") {
         const mapped = res.data.data.map((item) => ({
           id: item.id,
@@ -34,17 +32,15 @@ function UserFollowTable({ searchTerm = "" }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // อย่าลืมใส่ [] ถ้าไม่มีตัวแปรภายนอกที่เปลี่ยนค่า
 
   useEffect(() => {
-    fetchData(); // โหลดครั้งแรก
-
+    fetchData();
     const interval = setInterval(() => {
-      fetchData(); // โหลดซ้ำทุก 10 วิ
+      fetchData();
     }, 10000);
-
-    return () => clearInterval(interval); // เคลียร์ทุกครั้งที่ component ถูกรื้อ
-  }, []);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   const formatDateThai = (dateStr) => {
     const date = new Date(dateStr);
@@ -236,39 +232,42 @@ function UserFollowTable({ searchTerm = "" }) {
             </tr>
           ) : (
             userfollowCurrentItems.map((row) => (
-              <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>{row.number}</td>
-                <td>{row.category}</td>
-                <td>{row.items}</td>
-                <td>{row.date}</td>
+              <tr key={row.id} className="userfollow-row">
+                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.id}</td>
+                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.number}</td>
+                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.category}</td>
+                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.items}</td>
+                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.date}</td>
                 <td
+                  onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}
                   className={
                     row.status === "อนุมัติ"
                       ? "status-approved"
                       : row.status === "รออนุมัติ"
-                      ? "status-pending"
-                      : row.status === "รอดำเนินการ"
-                      ? "status-processing"
-                      : row.status === "ไม่อนุมัติ"
-                      ? "status-cancelled"
-                      : ""
+                        ? "status-pending"
+                        : row.status === "รอดำเนินการ"
+                          ? "status-processing"
+                          : row.status === "ไม่อนุมัติ"
+                            ? "status-cancelled"
+                            : ""
                   }
                 >
                   {row.status}
                 </td>
-                <td>
+
+                {/* ❌ ห้ามกดแล้วไปหน้าอื่น */}
+                <td onClick={(e) => e.stopPropagation()}>
                   <Select
                     value={
                       row.status === "ไม่อนุมัติ"
                         ? { value: "ยกเลิก", label: "ยกเลิก", color: "#dc3545" }
                         : row.status === "รออนุมัติ"
-                        ? {
+                          ? {
                             value: "รอรับของ",
                             label: "รอรับของ",
                             color: "#1e398d",
                           }
-                        : statusOptions.find(
+                          : statusOptions.find(
                             (opt) => opt.value === row.status_user
                           )
                     }
@@ -285,18 +284,15 @@ function UserFollowTable({ searchTerm = "" }) {
                     className="custom-status-dropdown"
                   />
                 </td>
-                <td
-                  className="print-icon"
-                  onClick={() =>
-                    navigate("/user/confirm-status", { state: { id: row.id } })
-                  }
-                >
+
+                <td className="print-icon" onClick={(e) => e.stopPropagation()}>
                   <FaPrint />
                 </td>
               </tr>
             ))
           )}
         </tbody>
+
       </table>
 
       <div className="userfollow-pagination">
