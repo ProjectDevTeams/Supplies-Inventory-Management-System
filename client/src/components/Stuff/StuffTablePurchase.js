@@ -13,14 +13,13 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
   const [asc, setAsc] = useState(true);
   const perPage = 4;
 
-  // ✅ ย้าย fetchData ออกมา เพื่อใช้ซ้ำใน setInterval ได้
   const fetchData = async () => {
     try {
       const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
       if (res.data.status === "success") {
         const formatted = res.data.data.map((item) => ({
           id: parseInt(item.id),
-          code: `PE-${String(item.id).padStart(3, '0')}`,
+          code: item.running_code || `PE-${String(item.id).padStart(3, '0')}`,
           stock: item.items?.[0]?.stock_type || "วัสดุในคลัง",
           amount: item.items?.length || 0,
           date: item.created_date,
@@ -35,15 +34,12 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
     }
   };
 
-  // ✅ Auto refresh ทุก 10 วินาที
   useEffect(() => {
-    fetchData(); // โหลดครั้งแรก
-
+    fetchData();
     const interval = setInterval(() => {
-      fetchData(); // โหลดซ้ำ
+      fetchData();
     }, 10000);
-
-    return () => clearInterval(interval); // cleanup
+    return () => clearInterval(interval);
   }, []);
 
   const renderStatus = (st) => ({
@@ -84,7 +80,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
             <th onClick={toggleSort} style={{ cursor: 'pointer' }}>
               ลำดับ {asc ? '▲' : '▼'}
             </th>
-            <th>เลขที่ใบเบิก</th>
+            <th>เลขที่ใบขอจัดซื้อเพิ่มเติม</th>
             <th>คลังวัสดุ</th>
             <th>จำนวน</th>
             <th>วันที่สร้าง</th>
@@ -109,14 +105,23 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
                 <td>{i.stock}</td>
                 <td>{i.amount}</td>
                 <td>{i.date}</td>
-                <td className={`status ${i.status === 'approved' ? 'approved' : i.status === 'pending' ? 'pending' : 'rejected'}`}>
+                <td className={`status ${i.status}`}>
                   {renderStatus(i.status)}
                 </td>
                 <td
                   className="print-icon"
-                  onClick={(e) => {
-                    e.stopPropagation(); // ป้องกันไม่ให้ click ทั้งแถว
-                    navigate("/stuff/print-purchase", { state: { id: i.id } });
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    try {
+                      const res = await axios.get(`${API_URL}/purchase_extras_items/get_purchase_extras_items.php?id=${i.id}`);
+                      if (res.data.status === "success") {
+                        navigate("/stuff/print-purchase", {
+                          state: { data: res.data.data },
+                        });
+                      }
+                    } catch (err) {
+                      console.error("โหลดข้อมูลสำหรับพิมพ์ล้มเหลว:", err);
+                    }
                   }}
                 >
                   <FaPrint />

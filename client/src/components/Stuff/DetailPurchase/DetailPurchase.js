@@ -63,6 +63,7 @@ export default function DetailPurchase() {
       <div className="detail-purchase-box">
         <h2 className="detail-purchase-title">รายละเอียดการขอจัดซื้อเพิ่มเติม</h2>
         <div className="detail-purchase-grid">
+          <p><b>เลขที่ใบขอจัดซื้อเพิ่มเติม</b></p><p>{data.running_code || `PE-${String(data.id).padStart(3, '0')}`}</p>
           <p><b>คลังวัสดุ</b></p><p>{data.items[0]?.stock_type || 'วัสดุในคลัง'}</p>
           <p><b>หน่วยงาน</b></p><p>{data.department}</p>
           <p><b>ชื่อ</b></p><p>{data.name}</p>
@@ -99,7 +100,7 @@ export default function DetailPurchase() {
                   {row.image ? (
                     <img
                       src={`${API_URL}/${row.image}`}
-                      alt={row.name|| row.new_material_name}
+                      alt={row.name || row.new_material_name}
                       style={{ width: "60px", height: "60px", objectFit: "cover" }}
                       className="detail-item-image"
                     />

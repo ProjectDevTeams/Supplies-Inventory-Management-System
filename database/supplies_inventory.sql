@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2025 at 09:04 AM
+-- Generation Time: May 26, 2025 at 07:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -154,7 +154,7 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/________________________________________20250515092800.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 56, 10, 5, 0, '2025-05-12 17:00:00'),
+(1, 'materials/picture/material_1748230018.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 56, 10, 5, 0, '2025-05-12 17:00:00'),
 (2, '', 'เทปกาวสองหน้า', 1, 'ชิ้น', 'วัสดุนอกคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-05 17:00:00'),
 (3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 3, 3, 2, 0, '2025-05-06 09:20:18'),
 (4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 10, 6, 2, 0, '2025-05-06 09:20:18'),
@@ -203,6 +203,7 @@ INSERT INTO `material_categories` (`id`, `name`) VALUES
 
 CREATE TABLE `purchase_extras` (
   `id` int(11) NOT NULL,
+  `running_code` varchar(20) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `created_date` date DEFAULT curdate(),
   `reason` text DEFAULT NULL,
@@ -213,10 +214,10 @@ CREATE TABLE `purchase_extras` (
 -- Dumping data for table `purchase_extras`
 --
 
-INSERT INTO `purchase_extras` (`id`, `created_by`, `created_date`, `reason`, `approval_status`) VALUES
-(1, 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'อนุมัติ'),
-(2, 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'อนุมัติ'),
-(3, 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'อนุมัติ');
+INSERT INTO `purchase_extras` (`id`, `running_code`, `created_by`, `created_date`, `reason`, `approval_status`) VALUES
+(1, '2568/05/001', 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'อนุมัติ'),
+(2, '2568/05/002', 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'อนุมัติ'),
+(3, '2568/05/003', 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'อนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -238,7 +239,7 @@ CREATE TABLE `purchase_extra_items` (
 --
 
 INSERT INTO `purchase_extra_items` (`id`, `image`, `purchase_extra_id`, `material_id`, `new_material_name`, `quantity`) VALUES
-(1, 'materials/picture/tape.jpg', 1, 1, NULL, 5),
+(1, 'materials/picture/material_1748230018.jpg', 1, 1, NULL, 5),
 (2, NULL, 2, NULL, 'พัดลมตั้งโต๊ะ 16 นิ้ว', 2),
 (3, NULL, 3, 2, NULL, 10);
 
@@ -556,7 +557,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `email`, `phone`, `permission`, `approval_status`) VALUES
 (1, 'admin1', '1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'แอดมิน', 'อนุมัติ'),
 (2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'ผู้ช่วยแอดมิน', 'อนุมัติ'),
-(3, 'user1', '$2y$10$hR79d9RbIo8FlhJivkGkSOCrb3PIKJEXhfDzFFlpXYTQ1WE4YPDpq', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'ผู้ใช้งาน', 'อนุมัติ'),
+(3, 'user1', '123', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'ผู้ใช้งาน', 'อนุมัติ'),
 (4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'รออนุมัติ'),
 (6, 'user123', '$2y$10$OtEWucdWjiBec9zRpE/54eXqvOmQ11bEOBV6ZUkIUBdbj/m4uO83q', 'สมศรี พนักงาน', 'เจ้าหน้าที่', 'user123@example.com', '0891234567', 'ผู้ใช้งาน', 'อนุมัติ'),
 (8, 'user789', '$2y$10$5aren321Auyl6Ry4e8kJyuuSCoux9OjbJMYnGuv/GYU5db6Nj8HOW', 'วราภรณ์ ผู้ใช้ (แก้ไข)', 'เจ้าหน้าที่พัสดุ', 'user1_new@example.com', '0899999999', 'ผู้ใช้งาน', 'อนุมัติ'),
@@ -610,6 +611,7 @@ ALTER TABLE `material_categories`
 --
 ALTER TABLE `purchase_extras`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `running_code` (`running_code`),
   ADD KEY `fk_purchase_extras_created_by` (`created_by`);
 
 --
