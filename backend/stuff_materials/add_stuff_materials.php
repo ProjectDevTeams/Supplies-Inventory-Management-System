@@ -8,6 +8,7 @@ include '../db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+// 🔒 ตรวจสอบข้อมูลที่ต้องมี
 if (
     !isset($data['created_by']) ||
     !isset($data['reason']) ||
@@ -26,10 +27,12 @@ if (
 try {
     $conn->beginTransaction();
 
+    // ✅ กำหนด prefix สำหรับเดือนและปีปัจจุบัน
     $month = date("m");
     $year = date("Y") + 543;
-    $prefix = "SM-$year/$month";
+    $prefix = "$year/$month";
 
+    // ✅ ค้นหารหัสล่าสุดของเดือนนี้
     $stmtCode = $conn->prepare("
         SELECT running_code FROM stuff_materials 
         WHERE running_code LIKE ? 
@@ -39,9 +42,9 @@ try {
     $stmtCode->execute(["$prefix/%"]);
     $lastCode = $stmtCode->fetchColumn();
 
+    // ✅ หากพบรหัสล่าสุด ให้เพิ่มเลขต่อท้าย, ถ้าไม่พบเริ่มที่ 001
     if ($lastCode) {
-        $parts = explode("/", $lastCode);
-        $lastNumber = (int)$parts[2];
+        $lastNumber = (int)substr($lastCode, strrpos($lastCode, '/') + 1);
         $nextNumber = str_pad($lastNumber + 1, 3, "0", STR_PAD_LEFT);
     } else {
         $nextNumber = "001";
@@ -49,7 +52,7 @@ try {
 
     $running_code = "$prefix/$nextNumber";
 
-    // ✅ INSERT พร้อม supervisor_name
+    // ✅ เพิ่มข้อมูลลงตาราง stuff_materials
     $stmt = $conn->prepare("
         INSERT INTO stuff_materials 
         (running_code, created_at, created_by, reason, total_amount, Admin_status, User_status, supervisor_name) 
@@ -67,6 +70,7 @@ try {
 
     $stuff_material_id = $conn->lastInsertId();
 
+    // ✅ เพิ่มรายการวัสดุแต่ละชิ้น
     $stmtItem = $conn->prepare("
         INSERT INTO stuff_material_items 
         (stuff_material_id, material_id, quantity, total_price) 
