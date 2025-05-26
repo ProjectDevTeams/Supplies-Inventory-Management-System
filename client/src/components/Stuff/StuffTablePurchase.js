@@ -20,7 +20,6 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
         const formatted = res.data.data.map((item) => ({
           id: parseInt(item.id),
           code: item.running_code || `PE-${String(item.id).padStart(3, '0')}`,
-          stock: item.items?.[0]?.stock_type || "วัสดุในคลัง",
           amount: item.items?.length || 0,
           date: item.created_date,
           status: item.approval_status === 'อนุมัติ' ? 'approved'
@@ -48,12 +47,18 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
     rejected: 'ไม่อนุมัติ',
   }[st] || '-');
 
+  const formatThaiDate = (dateString) => {
+    const date = new Date(dateString);
+    const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+                      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+    return `${date.getDate()} ${thMonths[date.getMonth()]} ${date.getFullYear() + 543}`;
+  };
+
   const sorted = [...data].sort((a, b) => asc ? a.id - b.id : b.id - a.id);
 
   const filtered = sorted.filter(item =>
     item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.stock.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.date.includes(searchTerm) ||
+    formatThaiDate(item.date).includes(searchTerm) ||
     renderStatus(item.status).includes(searchTerm)
   );
 
@@ -81,9 +86,8 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
               ลำดับ {asc ? '▲' : '▼'}
             </th>
             <th>เลขที่ใบขอจัดซื้อเพิ่มเติม</th>
-            <th>คลังวัสดุ</th>
             <th>จำนวน</th>
-            <th>วันที่สร้าง</th>
+            <th>วันที่ขอจัดซื้อ</th>
             <th>สถานะ</th>
             <th>ปริ้น</th>
           </tr>
@@ -91,7 +95,7 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
         <tbody>
           {items.length === 0 ? (
             <tr>
-              <td colSpan="7" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+              <td colSpan="6" className="stuff-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             items.map(i => (
@@ -102,9 +106,8 @@ export default function StuffTablePurchase({ searchTerm = '' }) {
               >
                 <td>{i.id}</td>
                 <td className="stuff-link">{i.code}</td>
-                <td>{i.stock}</td>
                 <td>{i.amount}</td>
-                <td>{i.date}</td>
+                <td>{formatThaiDate(i.date)}</td>
                 <td className={`status ${i.status}`}>
                   {renderStatus(i.status)}
                 </td>

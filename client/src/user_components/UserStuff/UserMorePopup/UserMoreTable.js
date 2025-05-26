@@ -1,152 +1,121 @@
 import React, { useState, useEffect } from "react";
 import "./UserMoreTable.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../../config";
 
 function UserMoreTable({ searchTerm = "" }) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const [inputPage, setInputPage] = useState("");
+  const [page, setPage] = useState(1);
+  const [input, setInput] = useState("");
+  const [asc, setAsc] = useState(true);
+  const perPage = 5;
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // ✅ ใช้ mock data แทนการเรียก API
-    const mock = [
-      {
-        requester: "สมชาย ใจดี",
-        date: "2025-05-10",
-        status: "อนุมัติ",
-      },
-      {
-        requester: "สุภาวดี พูนสุข",
-        date: "2025-05-12",
-        status: "รออนุมัติ",
-      },
-      {
-        requester: "ทศพล อินทร์ใจดี",
-        date: "2025-05-13",
-        status: "ไม่อนุมัติ",
-      },
-      {
-        requester: "จิราพร จันทร์เพ็ญ",
-        date: "2025-05-14",
-        status: "อนุมัติ",
-      },
-      {
-        requester: "บุญช่วย ชาญกิจ",
-        date: "2025-05-15",
-        status: "รออนุมัติ",
-      },
-      {
-        requester: "ดาราวรรณ เพ็ชรรุ่ง",
-        date: "2025-05-16",
-        status: "ไม่อนุมัติ",
-      },
-    ];
+  const fetchData = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const fullName = storedUser?.full_name;
 
-    const formatted = mock.map((item, index) => ({
-      id: index + 1,
-      requester: item.requester,
-      date: formatDateThai(item.date),
-      status: item.status,
-    }));
+      const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
+      if (res.data.status === "success") {
+        const filtered = res.data.data.filter(
+          (item) => String(item.created_by) === String(fullName)
+        );
 
-    setData(formatted);
-    setLoading(false);
+        const formatted = filtered.map((item) => ({
+          id: parseInt(item.id),
+          requester: item.created_by,
+          date: item.created_date,
+          status:
+            item.approval_status === "อนุมัติ"
+              ? "approved"
+              : item.approval_status === "ไม่อนุมัติ"
+                ? "rejected"
+                : "pending",
+        }));
 
-    // 🔁 ถ้าจะใช้ API จริงให้ uncomment ด้านล่าง
-    /*
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost/api/user_more_data.php");
-        if (res.data.status === "success") {
-          const mapped = res.data.data.map((item, index) => ({
-            id: index + 1,
-            requester: item.requester,
-            date: formatDateThai(item.date),
-            status: item.status,
-          }));
-          setData(mapped);
-        }
-      } catch (error) {
-        console.error("โหลดข้อมูลผิดพลาด:", error);
-      } finally {
-        setLoading(false);
+        setData(formatted);
       }
-    };
-    fetchData();
-    */
-  }, []);
-
-  const formatDateThai = (dateStr) => {
-    const date = new Date(dateStr);
-    const monthNames = [
-      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
-    ];
-    return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear() + 543}`;
-  };
-
-  const filteredData = data.filter(
-    (row) =>
-      row.requester.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.date.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirst, indexOfLast);
-
-  const handlePrev = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
-
-  const handleNext = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
-
-  const handlePageChange = (e) => {
-    setInputPage(e.target.value);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const page = parseInt(inputPage);
-      if (!isNaN(page) && page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-        setInputPage("");
-      }
+    } catch (err) {
+      console.error("โหลดข้อมูลล้มเหลว:", err);
     }
   };
 
-  if (loading) return <div className="user-more-loading">กำลังโหลด...</div>;
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(() => {
+      fetchData();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const renderStatus = (st) => ({
+    pending: "รออนุมัติ",
+    approved: "อนุมัติ",
+    rejected: "ไม่อนุมัติ",
+  }[st] || "-");
+
+  const formatThaiDate = (dateString) => {
+    const date = new Date(dateString);
+    const thMonths = [
+      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
+    ];
+    return `${date.getDate()} ${thMonths[date.getMonth()]} ${date.getFullYear() + 543}`;
+  };
+
+  const sorted = [...data].sort((a, b) => (asc ? a.id - b.id : b.id - a.id));
+
+  const filtered = sorted.filter((item) =>
+    item.requester.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    formatThaiDate(item.date).includes(searchTerm) ||
+    renderStatus(item.status).includes(searchTerm)
+  );
+
+  const total = Math.ceil(filtered.length / perPage);
+  const items = filtered.slice((page - 1) * perPage, page * perPage);
+
+  const toggleSort = () => setAsc(!asc);
+  const prev = () => page > 1 && (setPage((p) => p - 1), setInput(""));
+  const next = () => page < total && (setPage((p) => p + 1), setInput(""));
+  const onKey = (e) => {
+    if (e.key === "Enter") {
+      const v = Number(input);
+      if (v >= 1 && v <= total) setPage(v);
+      e.target.blur();
+    }
+  };
 
   return (
     <div className="user-more-table-container">
       <table className="user-more-table">
         <thead>
           <tr>
-            <th>ลำดับ</th>
+            <th onClick={toggleSort} style={{ cursor: "pointer" }}>
+              ลำดับ {asc ? "▲" : "▼"}
+            </th>
             <th>ผู้ขอจัดซื้อ</th>
             <th>วันที่ขอจัดซื้อ</th>
             <th>สถานะ</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.length === 0 ? (
+          {items.length === 0 ? (
             <tr>
-              <td colSpan="4" className="user-more-no-data">
-                ไม่พบข้อมูล
-              </td>
+              <td colSpan="4" className="user-more-no-data">ไม่พบข้อมูล</td>
             </tr>
           ) : (
-            currentItems.map((row, idx) => (
-              <tr key={idx}>
-                <td>{row.id}</td>
-                <td>{row.requester}</td>
-                <td>{row.date}</td>
-                <td className={`status-${row.status.toLowerCase()}`}>{row.status}</td>
+            items.map((i) => (
+              <tr
+                key={i.id}
+                onClick={() => navigate("/userstuff/more/detail-usermore", { state: { id: i.id } })}
+                style={{ cursor: "pointer" }}
+              >
+                <td>{i.id}</td>
+                <td>{i.requester}</td>
+                <td>{formatThaiDate(i.date)}</td>
+                <td className={`status ${i.status}`}>{renderStatus(i.status)}</td>
               </tr>
             ))
           )}
@@ -155,22 +124,20 @@ function UserMoreTable({ searchTerm = "" }) {
 
       <div className="user-more-pagination">
         <div className="user-more-pagination-info">
-          แสดง {indexOfFirst + 1} ถึง {Math.min(indexOfLast, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
         </div>
         <div className="user-more-pagination-buttons">
-          <button className="btn" onClick={handlePrev} disabled={currentPage === 1}>ก่อนหน้า</button>
+          <button className="btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
           <input
-            type="number"
-            min={1}
-            max={totalPages}
-            placeholder={`${currentPage} / ${totalPages}`}
+            type="text"
             className="org-page-input"
-            value={inputPage}
-            onChange={handlePageChange}
-            onKeyDown={handleKeyDown}
-            onFocus={() => setInputPage("")}
+            placeholder={`${page} / ${total}`}
+            value={input}
+            onFocus={() => setInput("")}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={onKey}
           />
-          <button className="btn" onClick={handleNext} disabled={currentPage === totalPages}>ถัดไป</button>
+          <button className="btn" disabled={page === total} onClick={next}>ถัดไป</button>
         </div>
       </div>
     </div>
