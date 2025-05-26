@@ -1,43 +1,64 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 include '../db.php';
 
-// ดึงข้อมูลใบเบิกทั้งหมด พร้อมชื่อผู้สร้าง
-$stmt = $conn->prepare("
-  SELECT sm.*, u.full_name AS created_by_name
-  FROM stuff_materials sm
-  LEFT JOIN users u ON sm.created_by = u.id
-  ORDER BY sm.id DESC
-");
-$stmt->execute();
-$materials = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$username = $_GET['username'] ?? null;
 
-$results = [];
+try {
+    if ($username !== null) {
+        // ✅ กรองด้วย username
+        $stmt = $conn->prepare("
+            SELECT sm.*, u.full_name AS created_by_name
+            FROM stuff_materials sm
+            LEFT JOIN users u ON sm.created_by = u.id
+            WHERE u.username = ?
+            ORDER BY sm.id DESC
+        ");
+        $stmt->execute([$username]);
+    } else {
+        // ถ้าไม่มี username ส่งมา แสดงทั้งหมด (แนะนำให้ใช้เฉพาะตอนเทส)
+        $stmt = $conn->prepare("
+            SELECT sm.*, u.full_name AS created_by_name
+            FROM stuff_materials sm
+            LEFT JOIN users u ON sm.created_by = u.id
+            ORDER BY sm.id DESC
+        ");
+        $stmt->execute();
+    }
 
-foreach ($materials as $mat) {
-    $stmtItems = $conn->prepare("
-        SELECT smi.material_id, m.name, m.unit, smi.quantity, smi.total_price
-        FROM stuff_material_items smi
-        LEFT JOIN materials m ON smi.material_id = m.id
-        WHERE smi.stuff_material_id = ?
-    ");
-    $stmtItems->execute([$mat['id']]);
-    $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+    $materials = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = [];
 
-    $results[] = [
-        "id" => $mat['id'],
-        "running_code" => $mat['running_code'],
-        "created_at" => $mat['created_at'],
-        "created_by" => $mat['created_by_name'],
-        "supervisor_name" => $mat['supervisor_name'], // ✅ เพิ่มบรรทัดนี้
-        "Admin_status" => $mat['Admin_status'],
-        "User_status" => $mat['User_status'],
-        "items" => $items
-    ];
+    foreach ($materials as $mat) {
+        $stmtItems = $conn->prepare("
+            SELECT smi.material_id, m.name, m.unit, smi.quantity, smi.total_price
+            FROM stuff_material_items smi
+            LEFT JOIN materials m ON smi.material_id = m.id
+            WHERE smi.stuff_material_id = ?
+        ");
+        $stmtItems->execute([$mat['id']]);
+        $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+        $results[] = [
+            "id" => $mat['id'],
+            "running_code" => $mat['running_code'],
+            "created_at" => $mat['created_at'],
+            "created_by" => $mat['created_by_name'],
+            "supervisor_name" => $mat['supervisor_name'],
+            "Admin_status" => $mat['Admin_status'],
+            "User_status" => $mat['User_status'],
+            "items" => $items
+        ];
+    }
+
+    echo json_encode([
+        "status" => "success",
+        "data" => $results
+    ], JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "เกิดข้อผิดพลาด: " . $e->getMessage()
+    ]);
 }
-
-echo json_encode([
-  "status" => "success",
-  "data" => $results
-], JSON_UNESCAPED_UNICODE);

@@ -15,26 +15,37 @@ function UserFollowTable({ searchTerm = "" }) {
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
-    try {
-      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`);
-      if (res.data.status === "success") {
-        const mapped = res.data.data.map((item) => ({
-          id: item.id,
-          number: item.running_code,
-          category: "เบิกวัสดุ",
-          items: item.items.length,
-          date: formatDateThai(item.created_at),
-          status: item.Admin_status,
-          status_user: item.User_status,
-        }));
-        setData(mapped);
-      }
-    } catch (err) {
-      console.error("โหลดข้อมูลผิดพลาด:", err);
-    } finally {
-      setLoading(false);
+  try {
+    // ✅ ดึง user จาก localStorage แล้วแปลงกลับเป็น object
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username;
+
+    console.log("📦 ดึง user จาก localStorage:", user);
+    console.log("🔍 Username ส่งไปยัง API:", username);
+
+    const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`, {
+      params: { username }
+    });
+
+    if (res.data.status === "success") {
+      const mapped = res.data.data.map((item) => ({
+        id: item.id,
+        number: item.running_code,
+        category: "เบิกวัสดุ",
+        items: item.items.length,
+        date: formatDateThai(item.created_at),
+        status: item.Admin_status,
+        status_user: item.User_status,
+      }));
+      setData(mapped);
     }
-  }, []); // อย่าลืมใส่ [] ถ้าไม่มีตัวแปรภายนอกที่เปลี่ยนค่า
+  } catch (err) {
+    console.error("โหลดข้อมูลผิดพลาด:", err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
 
   useEffect(() => {
     fetchData();
