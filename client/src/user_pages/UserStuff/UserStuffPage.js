@@ -10,7 +10,6 @@ function UserStuffPage() {
       <Navbar />
       <main className="userstuff-content">  
           <UserStuffbar />
-
       </main>
     </div>
   );

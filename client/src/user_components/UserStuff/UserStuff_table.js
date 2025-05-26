@@ -48,10 +48,15 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   if (loading)
-    return <div className="user-stuff-table-loading">กำลังโหลดข้อมูล...</div>;
+    return (
+      <div className="user-stuff-table-loading">กำลังโหลดข้อมูล...</div>
+    );
 
   return (
     <div className="user-stuff-table-container">
@@ -106,46 +111,37 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
         </tbody>
       </table>
 
-      {/* ✅ Pagination รูปแบบเดียวกับ Consumable_Table */}
-      <div className="user-stuff-table-pagination">
-        <div className="user-stuff-table-info">
-          แสดง {indexOfFirstItem + 1} ถึง{" "}
-          {Math.min(indexOfLastItem, filteredData.length)} จาก{" "}
-          {filteredData.length} แถว
+      <div className="user-stuff-table-pagination-wrapper">
+        <div className="user-stuff-table-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
-        <div className="user-stuff-table-controls">
+        <div className="user-stuff-table-pagination-buttons">
           <button
-            className="user-stuff-table-btn"
             disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
           >
             ก่อนหน้า
           </button>
-
           <input
             type="number"
-            className="user-stuff-table-page-box"
+            className="user-stuff-table-page-input"
             min={1}
             max={totalPages}
             value={inputPage}
             placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
-               if (e.key === "Enter") {
-                const val = parseInt(inputPage.trim(), 10);
-                if (!isNaN(val) && val >= 1 && val <= totalPages) setCurrentPage(val);
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                const v = parseInt(inputPage, 10);
+                if (v >= 1 && v <= totalPages) setCurrentPage(v);
                 e.target.blur();
               }
             }}
           />
-
           <button
-            className="user-stuff-table-btn"
             disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
           >
             ถัดไป
           </button>

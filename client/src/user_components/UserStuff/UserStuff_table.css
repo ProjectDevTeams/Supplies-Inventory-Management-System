@@ -1,10 +1,10 @@
-/* UserStuff_table.css: Minimal Elegant (เปลี่ยน class เป็น user-stuff-table-) */
+/* UserStuff_table.css */
+
 .user-stuff-table-container {
+  width: 100%;
+  overflow-x: auto;
   margin-top: 1rem;
-  margin-left: 0.5rem;
-  padding: 1rem;
   background: #ffffff;
-  font-family: 'Prompt', sans-serif;
   border-radius: 8px;
   border: 1px solid #dcdcdc;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
@@ -12,31 +12,34 @@
 
 .user-stuff-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   background: white;
 }
 
+.user-stuff-table th,
+.user-stuff-table td {
+  padding: clamp(0.4rem, 1.5vw, 0.8rem);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  text-align: center;
+  border-bottom: 1px solid #e6e6e6;
+  word-wrap: break-word;
+}
+
 .user-stuff-table th {
   background: linear-gradient(to right, #eef3fa, #dbe9ff);
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.8rem;
-  text-align: center;
   color: #222;
+  font-weight: 600;
   border-bottom: 1px solid #cccccc;
 }
 
 .user-stuff-table td {
-  font-size: 0.95rem;
-  padding: 0.8rem;
-  text-align: center;
-  border-bottom: 1px solid #e6e6e6;
   color: #333;
   border-right: 1px solid #e0e0e0;
 }
 
-.user-stuff-table td:last-child,
-.user-stuff-table th:last-child {
+.user-stuff-table th:last-child,
+.user-stuff-table td:last-child {
   border-right: none;
 }
 
@@ -57,15 +60,10 @@
   margin-top: 0.25rem;
 }
 
-.user-stuff-table td:nth-child(2) {
-  text-align: center;
-  vertical-align: middle;
-  
-}
-
 .user-stuff-table-image-wrapper {
-  width: 70px;
-  height: 100px;
+  width: clamp(50px, 15%, 80px);
+  height: auto;
+  padding: 0.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,132 +71,56 @@
 }
 
 .user-stuff-table-image {
-  height: 100%;
-  width: auto;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  display: block;
-  margin: auto;
 }
 
-
 .user-stuff-table-button {
+  padding: clamp(0.4rem, 1.5vw, 0.8rem) clamp(0.8rem, 3vw, 1.5rem);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  border: none;
+  outline: none;
+  border-radius: clamp(4px, 1vw, 6px);
   background: linear-gradient(to right, #d7e9ff, #bddefa);
   color: #003366;
-  padding: 0.9rem 1.8rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
+  box-shadow: 0 clamp(1px, 0.5vw, 2px) clamp(4px, 1vw, 6px) rgba(100, 181, 246, 0.3);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-stuff-table-button:focus {
+  outline: none;
 }
 
 .user-stuff-table-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(66, 165, 245, 0.5);
+  box-shadow: 0 clamp(2px, 0.5vw, 4px) clamp(6px, 1vw, 12px) rgba(66, 165, 245, 0.5);
 }
 
-.user-stuff-table-pagination {
+.user-stuff-table-pagination-wrapper {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  font-size: 13px;
-  gap: 0.5rem;
   margin-top: 1rem;
 }
 
-.user-stuff-table-info {
-  color: #333;
+.user-stuff-table-pagination-info {
   flex: 1;
+  text-align: left;
+  color: #333;
+  font-size: 14px;
 }
 
-
-.user-stuff-table-controls {
+.user-stuff-table-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.user-stuff-table-controls button:not(.user-stuff-table-btn) {
-
-  padding: 0.4rem 0.9rem;
-  background: #ffffff;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.user-stuff-table-controls button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.user-stuff-table-input {
-  width: 60px;
-  text-align: center;
-  padding: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #ffffff; /* เปลี่ยนจากสีเทาอ่อน */
-  color: #333333;            /* เปลี่ยนจากสีเทาอ่อนเป็นสีเข้ม */
-  font-weight: bold;
-}
-
-.user-stuff-table-input::placeholder {
-  color: #555;
-  font-weight: normal;
-  opacity: 1; /* ให้แสดงเข้ม */
-}
-
-.user-stuff-table-btn {
-  padding: 0.4em 1em;
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.user-stuff-table-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.user-stuff-table-no-data {
-  font-style: italic;
-  color: #999;
-  font-size: 0.95rem;
-  padding: 1rem;
-}
-/* ✅ Pagination ที่เหมือน consumable-table */
-.user-stuff-table-pagination {
-  width: 98%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1em;
-}
-
-.user-stuff-table-info {
-  color: #333;
-  font-size: 14px;
-}
-
-.user-stuff-table-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* ปุ่มก่อนหน้า/ถัดไป */
-.user-stuff-table-btn {
-  padding: 0.5rem 1.2rem;
+.user-stuff-table-pagination-buttons button {
+  padding: 0.5rem 1rem;
   background-color: #ffffff;
   color: #333;
   border: 1px solid #ccc;
@@ -207,24 +129,17 @@
   cursor: pointer;
 }
 
-.user-stuff-table-btn:hover {
+.user-stuff-table-pagination-buttons button:hover {
   background-color: #e6f0ff;
 }
 
-.user-stuff-table-btn:disabled {
+.user-stuff-table-pagination-buttons button:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-/* กล่อง input "1 / 4" */
-.user-stuff-table-page-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.user-stuff-table-page-box {
+.user-stuff-table-page-input {
   width: 55px;
   text-align: center;
   padding: 0.4rem 0.6rem;
@@ -235,40 +150,20 @@
   color: white;
   font-weight: bold;
   appearance: textfield;
-  -moz-appearance: textfield;
 }
 
-.user-stuff-table-page-box:focus {
-  outline: none;
-  border-color: rgba(0, 123, 255, 0.7);
-}
-
-.user-stuff-table-page-box::placeholder {
+.user-stuff-table-page-input::placeholder {
   color: white;
   opacity: 1;
 }
 
-.user-stuff-table-page-box:focus::placeholder {
-  color: transparent;
+.user-stuff-table-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
 }
 
-.user-stuff-table-page-box::-webkit-inner-spin-button,
-.user-stuff-table-page-box::-webkit-outer-spin-button {
+.user-stuff-table-page-input::-webkit-inner-spin-button,
+.user-stuff-table-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.user-stuff-table-page-total {
-  font-weight: bold;
-  color: #333;
-  font-size: 14px;
-}
-
-/* ✅ Responsive */
-@media (max-width: 768px) {
-  .user-stuff-table-pagination {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5em;
-  }
 }

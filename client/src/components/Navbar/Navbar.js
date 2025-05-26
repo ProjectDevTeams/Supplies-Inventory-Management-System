@@ -1,8 +1,7 @@
-// File: src/components/Navbar/Navbar.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { LogOut } from 'lucide-react';
+import { LogOut } from "lucide-react";
 import {
   confirmLogout,
   showLogoutSuccess,
@@ -39,9 +38,9 @@ function Navbar() {
           {user ? user.full_name : "Guest"}
         </span>
         <button onClick={handleLogout} className="logout-button">
-  <LogOut size={20} />
-  <span>Logout</span>
-</button>
+          <LogOut size={20} />
+          <span className="logout-text">Logout</span>
+        </button>
       </div>
     </nav>
   );
