@@ -199,3 +199,23 @@
 .userstuff-bag-icon {
   background: linear-gradient(to right, #e0f2ff, #bcdcff);
 }
+
+.userstuff-add-more-btn {
+  background-color: #28a745;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.6em 1.5em;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  height: 44px; /* เท่ากล่อง input */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.userstuff-add-more-btn:hover {
+  background-color: #218838;
+}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./UserStuff_bar.css";
-import { useNavigate , useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,16 +8,20 @@ import UserMorePopup from "../../user_components/UserStuff/UserMorePopup/UserMor
 import UserStuffBasketPopup from "../../user_components/UserPopup/StuffBasket_Popup";
 
 import Swal from "sweetalert2";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-
-function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketItems = () => {} })  {
+function UserStuffbar({
+  searchTerm,
+  setSearchTerm,
+  basketItems = [],
+  setBasketItems = () => {},
+}) {
   const [showMorePopup, setShowMorePopup] = useState(false);
   const [showBasketPopup, setShowBasketPopup] = useState(false);
   const navigate = useNavigate();
 
   const location = useLocation();
   const isStuffPage = location.pathname === "/userstuff/stuff";
-
 
   const handleTabClick = (tab) => {
     switch (tab) {
@@ -27,12 +31,9 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
       case "สถานะการเบิกวัสดุ ":
         navigate("/userstuff/follow"); // path ไปยัง UserFollowTablePage.js
         break;
-      // case "ประวัติการทำรายการ":
-      //   navigate("/userstuff/history"); // path ไปยัง UserHistoryTablePage.js
-      //   break;
       case "รายการขอจัดซื้อเพิ่มเติม":
-        navigate("/userstuff/more"); // path ไปยัง UserMoreTablePage.js 
-        // setShowMorePopup(true);
+        navigate("/userstuff/more"); // path ไปยัง UserMoreTablePage.js
+
         break;
       default:
         break;
@@ -45,10 +46,10 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
         return "เบิกวัสดุ";
       case "/userstuff/follow":
         return "สถานะการเบิกวัสดุ ";
-      // case "/userstuff/history":
-      //   return "ประวัติการทำรายการ";
       case "/userstuff/more":
         return "รายการขอจัดซื้อเพิ่มเติม";
+      case "/userstuff/more/add":
+        return "เพิ่มรายการขอจัดซื้อเพิ่มเติม";
       default:
         return "";
     }
@@ -74,42 +75,63 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
     }
   };
 
-  const totalQuantity = basketItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQuantity = basketItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   return (
     <>
       <div className="userstuff-bar">
         <div className="userstuff-menu">
-          {[
-            "เบิกวัสดุ",
-            "สถานะการเบิกวัสดุ ",
-            // "ประวัติการทำรายการ",
-            "รายการขอจัดซื้อเพิ่มเติม",
-          ].map((tab) => (
-            <button
-              key={tab}
-              className={`userstuff-tab ${currentTab === tab ? "active" : ""}`}
-              onClick={() => handleTabClick(tab)}
-            >
-              {tab}
-            </button>
-          ))}
+          {["เบิกวัสดุ", "สถานะการเบิกวัสดุ ", "รายการขอจัดซื้อเพิ่มเติม"].map(
+            (tab) => (
+              <button
+                key={tab}
+                className={`userstuff-tab ${
+                  currentTab === tab ? "active" : ""
+                }`}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab}
+              </button>
+            )
+          )}
         </div>
 
         <div className="userstuff-right">
-          {["เบิกวัสดุ", "สถานะการเบิกวัสดุ "].includes(currentTab) && (
-            <div className="userstuff-search-box">
-              <FontAwesomeIcon
-                icon={faSearch}
-                className="userstuff-search-icon"
-              />
-              <input
-                type="text"
-                placeholder="ค้นหา"
-                className="userstuff-input"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          {[
+            "เบิกวัสดุ",
+            "สถานะการเบิกวัสดุ ",
+            "รายการขอจัดซื้อเพิ่มเติม",
+          ].includes(currentTab) && (
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div className="userstuff-search-box">
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="userstuff-search-icon"
+                />
+                <input
+                  type="text"
+                  placeholder="ค้นหา"
+                  className="userstuff-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              {currentTab === "รายการขอจัดซื้อเพิ่มเติม" && (
+                <button
+                  className="userstuff-add-more-btn"
+                  onClick={() => setShowMorePopup(true)} // ✅ กลับมาใช้แบบ popup
+                >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ marginRight: "0.5rem" }}
+                  />
+                  เพิ่มรายการ
+                </button>
+              )}
             </div>
           )}
 
@@ -141,13 +163,15 @@ function UserStuffbar({ searchTerm, setSearchTerm, basketItems = [], setBasketIt
       </div>
 
       {showMorePopup && (
-        <UserMorePopup onClose={() => setShowMorePopup(false)} />
+        <div className="userstuff-popup-overlay">
+          <UserMorePopup onClose={() => setShowMorePopup(false)} />
+        </div>
       )}
 
       {showBasketPopup && (
         <UserStuffBasketPopup
           basketItems={basketItems}
-          setBasketItems={setBasketItems} // ✅ เพิ่มตรงนี้
+          setBasketItems={setBasketItems}
           onClose={() => setShowBasketPopup(false)}
           onConfirm={handleConfirmRequest}
           onCancel={() => {
