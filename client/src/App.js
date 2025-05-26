@@ -40,6 +40,10 @@ import UserFollowTablePage from "./user_pages/UserStuff/UserFollowTablePage";
 // import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
 import UserMoreTablePage from "./user_pages/UserStuff/UserMoreTablePage";
 
+// import UserMoreAddPage from "./user_pages/UserStuff/UserMoreAddPage";
+
+
+
 /////////////////////////
 
 function App() {
@@ -82,7 +86,10 @@ function App() {
         <Route path="/userstuff/stuff" element={<UserStuffTablePage />} />
         <Route path="/userstuff/follow" element={<UserFollowTablePage />} />
         {/* <Route path="/userstuff/history" element={<UserHistoryTablePage />} /> */}
+
         <Route path="/userstuff/more" element={<UserMoreTablePage />} />
+
+        {/* <Route path="/userstuff/more/add" element={<UserMoreAddPage />} /> */}
 
       </Routes>
     </BrowserRouter>

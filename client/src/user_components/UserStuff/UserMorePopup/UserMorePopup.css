@@ -1,12 +1,13 @@
 .usermorepopup-container {
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 16px;
   padding: 2rem;
-  margin-left: 0.5rem;
-  background: #f9fbfd;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  max-width: 100%;
-  box-sizing: border-box;
-  font-family: 'Prompt', sans-serif;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 1000px;
+  position: relative;
 }
 
 .usermorepopup-header {
@@ -78,12 +79,19 @@
   min-width: 100px;
   font-size: 14px;
   transition: border-color 0.2s ease;
+  
 }
 
 .usermorepopup-input[type="number"] {
-  width: 250px;          /* ✅ กำหนดความกว้างเฉพาะ */
+  width: 140px;          /* ✅ กำหนดความกว้างเฉพาะ */
   flex: 0 0 auto;       /* ✅ ไม่ให้ยืดหรือหดตามพื้นที่ */
 }
+
+.usermorepopup-input[type="text"] {
+  width: 300px;          /* ✅ กำหนดความกว้างเฉพาะ */
+  flex: 0 0 auto;       /* ✅ ไม่ให้ยืดหรือหดตามพื้นที่ */
+}
+
 
 .usermorepopup-input:focus {
   outline: none;
@@ -174,4 +182,35 @@
   font-size: 0.8rem;
   color: #999;
   font-style: italic;
+}
+
+.userstuff-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.usermorepopup-close-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.usermorepopup-close-btn:hover {
+  color: #333;
+}
+
+/* เพิ่มในไฟล์ CSS ใดก็ได้ที่โหลด global */
+.swal2-container {
+  z-index: 20000 !important;
 }

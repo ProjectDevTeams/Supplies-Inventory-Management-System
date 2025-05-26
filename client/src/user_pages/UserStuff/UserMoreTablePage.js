@@ -7,6 +7,7 @@ import axios from "axios";
 import { API_URL } from "../../config";
 
 import "./UserMoreTablePage.css";
+import UserMoreTable from "../../user_components/UserStuff/UserMorePopup/UserMoreTable";
 
 function UserMoreTablePage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +36,7 @@ function UserMoreTablePage() {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
-          <UserMorePopup
+          <UserMoreTable     
             searchTerm={searchTerm}
             data={data}
             fetchData={fetchData}

@@ -6,14 +6,14 @@ import { API_URL } from "../../../config";
 import "./UserMorePopup.css";
 import Swal from "sweetalert2";
 
-function UserMorePopup() {
+function UserMorePopup({ onClose }) {
   const [options, setOptions] = useState([]);
   const [allOptions, setAllOptions] = useState([]);
   const [rows, setRows] = useState([
     { id: Date.now(), item: null, quantity: 1, note: "" },
   ]);
 
-  const [inputText, setInputText] = useState("");
+  const [, setInputText] = useState(""); 
 
   useEffect(() => {
     const fetchMaterials = async () => {
@@ -91,9 +91,14 @@ function UserMorePopup() {
     <div className="usermorepopup-container">
       <div className="usermorepopup-header">
         <h2>รายการขอจัดซื้อเพิ่มเติม</h2>
-        <button className="usermorepopup-add-btn" onClick={addRow}>
-          ＋ เพิ่มแถว
-        </button>
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <button className="usermorepopup-add-btn" onClick={addRow}>
+            ＋ เพิ่มแถว
+          </button>
+          <button className="usermorepopup-close-btn" onClick={onClose}>
+            ✕
+          </button>
+        </div>
       </div>
 
       {rows.map((row) => (
