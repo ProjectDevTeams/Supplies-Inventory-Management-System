@@ -254,7 +254,7 @@ function UserMorePopup({ onClose }) {
       {/* ✅ ปุ่มเพิ่มแถวล่างซ้าย */}
       <div className="usermorepopup-bottom-controls">
         <button className="usermorepopup-add-btn" onClick={addRow}>
-          ＋ เพิ่มแถว
+          ＋ เพิ่มรายการ
         </button>
       </div>
 
@@ -268,7 +268,7 @@ function UserMorePopup({ onClose }) {
             pointerEvents: isSubmitting ? "none" : "auto",
           }}
         >
-          {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
+          {isSubmitting ? "กำลังบันทึก..." : "บันทึกรายการ"}
         </button>
       </div>
     </div>
