@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import Select from "react-select";
 import { FaPrint } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -208,6 +210,73 @@ function UserFollowTable({ searchTerm = "" }) {
   if (loading)
     return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
+  const handleExportExcel = async (row) => {
+    const response = await fetch("/export_template_mock.xlsx");
+    const arrayBuffer = await response.arrayBuffer();
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const ws = workbook.Sheets[workbook.SheetNames[0]];
+
+    const excelData = {
+      code: row.number,
+      date: row.date.split(" ")[0], // ตัดเวลาออก
+      name: "นางสาวเพลิงดาว วิริยา",
+      department: "STI",
+      position: "เจ้าหน้าที่",
+      phone: "0123456789",
+      usage: "ใช้ในฝ่าย",
+      items: [
+        { name: "แฟ้มเอกสาร", qty: row.items, unit: "เล่ม" },
+      ],
+      sign_name: "สมชาย ขอยืม",
+      head_name: "หัวหน้า หน่วยงาน",
+      receiver_name: "ฝ่ายพัสดุ",
+      giver_name: "เจ้าหน้าที่พัสดุ",
+      approver_name: "ผู้สั่งจ่าย",
+    };
+
+    ws["I4"] = { t: "s", v: excelData.code };
+    ws["I5"] = { t: "s", v: excelData.date };
+    ws["D6"] = { t: "s", v: excelData.name };
+    ws["D7"] = { t: "s", v: excelData.department };
+    ws["I6"] = { t: "s", v: excelData.position };
+    ws["I7"] = { t: "s", v: excelData.phone };
+    ws["E8"] = { t: "s", v: `${excelData.items.length} รายการ` };
+    ws["I8"] = { t: "s", v: excelData.usage };
+
+    excelData.items.forEach((item, idx) => {
+      const rowNum = 11 + idx;
+      ws[`B${rowNum}`] = { t: "n", v: idx + 1 };
+      ws[`C${rowNum}`] = { t: "s", v: item.name };
+      ws[`H${rowNum}`] = { t: "n", v: item.qty };
+      ws[`I${rowNum}`] = { t: "s", v: item.unit };
+    });
+
+    // ฝั่งซ้าย
+    ws["C22"] = { t: "s", v: excelData.sign_name };
+    ws["C23"] = { t: "s", v: `(${excelData.sign_name})` };
+    ws["C24"] = { t: "s", v: excelData.date };
+    ws["C26"] = { t: "s", v: excelData.head_name };
+    ws["C27"] = { t: "s", v: `(${excelData.head_name})` };
+    ws["C28"] = { t: "s", v: excelData.date };
+
+    // ฝั่งขวา
+    ws["G22"] = { t: "s", v: excelData.receiver_name };
+    ws["G23"] = { t: "s", v: `(${excelData.receiver_name})` };
+    ws["G24"] = { t: "s", v: excelData.date };
+    ws["G26"] = { t: "s", v: excelData.giver_name };
+    ws["G27"] = { t: "s", v: `(${excelData.giver_name})` };
+    ws["G28"] = { t: "s", v: excelData.date };
+    ws["G30"] = { t: "s", v: excelData.approver_name };
+    ws["G31"] = { t: "s", v: `(${excelData.approver_name})` };
+    ws["G32"] = { t: "s", v: excelData.date };
+
+    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([output], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, `ใบเบิก_${excelData.code}.xlsx`);
+  };
+
   return (
     <div className="userfollow-table-container">
       <table className="user-follow-table">
@@ -285,9 +354,13 @@ function UserFollowTable({ searchTerm = "" }) {
                   />
                 </td>
 
-                <td className="print-icon" onClick={(e) => e.stopPropagation()}>
+                <td className="print-icon" onClick={(e) => {
+                  e.stopPropagation();
+                  handleExportExcel(row);
+                }}>
                   <FaPrint />
                 </td>
+
               </tr>
             ))
           )}
