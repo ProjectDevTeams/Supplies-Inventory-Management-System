@@ -15,66 +15,46 @@ function UserFollowTable({ searchTerm = "" }) {
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
-  try {
-    // ✅ ดึง user จาก localStorage แล้วแปลงกลับเป็น object
-    const user = JSON.parse(localStorage.getItem("user"));
-    const username = user?.username;
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const username = user?.username;
 
-    console.log("📦 ดึง user จาก localStorage:", user);
-    console.log("🔍 Username ส่งไปยัง API:", username);
+      const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`, {
+        params: { username }
+      });
 
-    const res = await axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`, {
-      params: { username }
-    });
-
-    if (res.data.status === "success") {
-      const mapped = res.data.data.map((item) => ({
-        id: item.id,
-        number: item.running_code,
-        category: "เบิกวัสดุ",
-        items: item.items.length,
-        date: formatDateThai(item.created_at),
-        status: item.Admin_status,
-        status_user: item.User_status,
-      }));
-      setData(mapped);
+      if (res.data.status === "success") {
+        const mapped = res.data.data.map((item) => ({
+          id: item.id,
+          number: item.running_code,
+          category: "เบิกวัสดุ",
+          items: item.items.length,
+          date: formatDateThai(item.created_at),
+          status: item.Admin_status,
+          status_user: item.User_status,
+        }));
+        setData(mapped);
+      }
+    } catch (err) {
+      console.error("โหลดข้อมูลผิดพลาด:", err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("โหลดข้อมูลผิดพลาด:", err);
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
+  }, []);
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(() => {
-      fetchData();
-    }, 10000);
+    const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
   }, [fetchData]);
 
   const formatDateThai = (dateStr) => {
     const date = new Date(dateStr);
     const monthNames = [
-      "ม.ค.",
-      "ก.พ.",
-      "มี.ค.",
-      "เม.ย.",
-      "พ.ค.",
-      "มิ.ย.",
-      "ก.ค.",
-      "ส.ค.",
-      "ก.ย.",
-      "ต.ค.",
-      "พ.ย.",
-      "ธ.ค.",
+      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
     ];
-    return `${date.getDate()} ${monthNames[date.getMonth()]} ${date
-      .getFullYear()
-      .toString()
-      .slice(-2)}`;
+    return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear().toString().slice(-2)}`;
   };
 
   const handleStatusUserChange = async (id, newStatus) => {
@@ -124,7 +104,7 @@ function UserFollowTable({ searchTerm = "" }) {
 
     await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
       id,
-      User_status: newStatus, // ต้องตรงกับฝั่ง PHP
+      User_status: newStatus,
     });
 
     setData((prev) =>
@@ -134,22 +114,90 @@ function UserFollowTable({ searchTerm = "" }) {
     );
   };
 
+  const handleExportExcel = async (row) => {
+    const response = await fetch("/image/template.xlsx");
+    if (!response.ok) {
+      Swal.fire({ icon: "error", title: "โหลด template ไม่สำเร็จ" });
+      return;
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const ws = workbook.Sheets[workbook.SheetNames[0]];
+
+    const excelData = {
+      code: row.number,
+      date: "23 พ.ค. 67",
+      name: "นางสาวเพลิงดาว วิริยา",
+      department: "STI",
+      position: "เจ้าหน้าที่",
+      phone: "0123456789",
+      usage: "เพื่อใช้ในงาน/กิจกรรม",
+      items: [{ name: "แฟ้มเอกสาร", qty: row.items, unit: "เล่ม" }],
+      sign_name: "สมชาย ขอยืม",
+      head_name: "หัวหน้า หน่วยงาน",
+      receiver_name: "ฝ่ายพัสดุ",
+      giver_name: "เจ้าหน้าที่พัสดุ",
+      approver_name: "ผู้สั่งจ่าย",
+    };
+
+    // กรอกฟอร์ม
+    ws["I4"] = { t: "s", v: excelData.code };
+    ws["I5"] = { t: "s", v: excelData.date };
+    ws["D6"] = { t: "s", v: excelData.name };
+    ws["D7"] = { t: "s", v: excelData.department };
+    ws["I6"] = { t: "s", v: excelData.position };
+    ws["I7"] = { t: "s", v: excelData.phone };
+    ws["E8"] = { t: "s", v: `${excelData.items.length} รายการ` };
+    ws["I8"] = { t: "s", v: excelData.usage };
+
+    excelData.items.forEach((item, idx) => {
+      const r = 11 + idx;
+      ws[`B${r}`] = { t: "n", v: idx + 1 };
+      ws[`C${r}`] = { t: "s", v: item.name };
+      ws[`H${r}`] = { t: "n", v: item.qty };
+      ws[`I${r}`] = { t: "s", v: item.unit };
+    });
+
+    // ลายเซ็น
+    ws["C22"] = { t: "s", v: excelData.sign_name };
+    ws["C23"] = { t: "s", v: excelData.sign_name };
+    ws["C24"] = { t: "s", v: excelData.date };
+
+    ws["C26"] = { t: "s", v: excelData.head_name };
+    ws["C27"] = { t: "s", v: excelData.head_name };
+    ws["C28"] = { t: "s", v: excelData.date };
+
+    ws["G22"] = { t: "s", v: excelData.receiver_name };
+    ws["G23"] = { t: "s", v: excelData.receiver_name };
+    ws["G24"] = { t: "s", v: excelData.date };
+
+    ws["G26"] = { t: "s", v: excelData.giver_name };
+    ws["G27"] = { t: "s", v: excelData.giver_name };
+    ws["G28"] = { t: "s", v: excelData.date };
+
+    ws["G30"] = { t: "s", v: excelData.approver_name };
+    ws["G31"] = { t: "s", v: excelData.approver_name };
+    ws["G32"] = { t: "s", v: excelData.date };
+
+    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([output], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, `ใบเบิก_${excelData.code}.xlsx`);
+  };
+
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
-    {
-      value: "รับของเรียบร้อยแล้ว",
-      label: "รับของเรียบร้อยแล้ว",
-      color: "#009244",
-    },
+    { value: "รับของเรียบร้อยแล้ว", label: "รับของเรียบร้อยแล้ว", color: "#009244" },
   ];
 
   const colourStyles = {
-    option: (styles, { data, isFocused, isSelected }) => ({
+    option: (styles, { data }) => ({
       ...styles,
       color: data.color,
-      backgroundColor: isFocused ? "#f0f0f0" : "white",
+      backgroundColor: "#fff",
       fontWeight: "bold",
-      cursor: "pointer",
     }),
     singleValue: (styles, { data }) => ({
       ...styles,
@@ -172,17 +220,10 @@ function UserFollowTable({ searchTerm = "" }) {
       row.status.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const userfollowTotalPages = Math.ceil(
-    filteredData.length / userfollowItemsPerPage
-  );
-  const userfollowIndexOfLastItem =
-    userfollowCurrentPage * userfollowItemsPerPage;
-  const userfollowIndexOfFirstItem =
-    userfollowIndexOfLastItem - userfollowItemsPerPage;
-  const userfollowCurrentItems = filteredData.slice(
-    userfollowIndexOfFirstItem,
-    userfollowIndexOfLastItem
-  );
+  const userfollowTotalPages = Math.ceil(filteredData.length / userfollowItemsPerPage);
+  const userfollowIndexOfLastItem = userfollowCurrentPage * userfollowItemsPerPage;
+  const userfollowIndexOfFirstItem = userfollowIndexOfLastItem - userfollowItemsPerPage;
+  const userfollowCurrentItems = filteredData.slice(userfollowIndexOfFirstItem, userfollowIndexOfLastItem);
 
   const handleUserfollowPrev = () => {
     setUserfollowCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -190,9 +231,7 @@ function UserFollowTable({ searchTerm = "" }) {
   };
 
   const handleUserfollowNext = () => {
-    setUserfollowCurrentPage((prev) =>
-      Math.min(prev + 1, userfollowTotalPages)
-    );
+    setUserfollowCurrentPage((prev) => Math.min(prev + 1, userfollowTotalPages));
     setUserfollowInputPage((prev) => Math.min(prev + 1, userfollowTotalPages));
   };
 
@@ -212,81 +251,13 @@ function UserFollowTable({ searchTerm = "" }) {
       if (!isNaN(val)) {
         const safePage = Math.min(Math.max(val, 1), userfollowTotalPages);
         setUserfollowCurrentPage(safePage);
-        setUserfollowInputPage(""); // reset
+        setUserfollowInputPage("");
       }
       e.target.blur();
     }
   };
 
-  if (loading)
-    return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
-
-  const handleExportExcel = async (row) => {
-    const response = await fetch("/export_template_mock.xlsx");
-    const arrayBuffer = await response.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer, { type: "array" });
-    const ws = workbook.Sheets[workbook.SheetNames[0]];
-
-    const excelData = {
-      code: row.number,
-      date: row.date.split(" ")[0], // ตัดเวลาออก
-      name: "นางสาวเพลิงดาว วิริยา",
-      department: "STI",
-      position: "เจ้าหน้าที่",
-      phone: "0123456789",
-      usage: "ใช้ในฝ่าย",
-      items: [
-        { name: "แฟ้มเอกสาร", qty: row.items, unit: "เล่ม" },
-      ],
-      sign_name: "สมชาย ขอยืม",
-      head_name: "หัวหน้า หน่วยงาน",
-      receiver_name: "ฝ่ายพัสดุ",
-      giver_name: "เจ้าหน้าที่พัสดุ",
-      approver_name: "ผู้สั่งจ่าย",
-    };
-
-    ws["I4"] = { t: "s", v: excelData.code };
-    ws["I5"] = { t: "s", v: excelData.date };
-    ws["D6"] = { t: "s", v: excelData.name };
-    ws["D7"] = { t: "s", v: excelData.department };
-    ws["I6"] = { t: "s", v: excelData.position };
-    ws["I7"] = { t: "s", v: excelData.phone };
-    ws["E8"] = { t: "s", v: `${excelData.items.length} รายการ` };
-    ws["I8"] = { t: "s", v: excelData.usage };
-
-    excelData.items.forEach((item, idx) => {
-      const rowNum = 11 + idx;
-      ws[`B${rowNum}`] = { t: "n", v: idx + 1 };
-      ws[`C${rowNum}`] = { t: "s", v: item.name };
-      ws[`H${rowNum}`] = { t: "n", v: item.qty };
-      ws[`I${rowNum}`] = { t: "s", v: item.unit };
-    });
-
-    // ฝั่งซ้าย
-    ws["C22"] = { t: "s", v: excelData.sign_name };
-    ws["C23"] = { t: "s", v: `(${excelData.sign_name})` };
-    ws["C24"] = { t: "s", v: excelData.date };
-    ws["C26"] = { t: "s", v: excelData.head_name };
-    ws["C27"] = { t: "s", v: `(${excelData.head_name})` };
-    ws["C28"] = { t: "s", v: excelData.date };
-
-    // ฝั่งขวา
-    ws["G22"] = { t: "s", v: excelData.receiver_name };
-    ws["G23"] = { t: "s", v: `(${excelData.receiver_name})` };
-    ws["G24"] = { t: "s", v: excelData.date };
-    ws["G26"] = { t: "s", v: excelData.giver_name };
-    ws["G27"] = { t: "s", v: `(${excelData.giver_name})` };
-    ws["G28"] = { t: "s", v: excelData.date };
-    ws["G30"] = { t: "s", v: excelData.approver_name };
-    ws["G31"] = { t: "s", v: `(${excelData.approver_name})` };
-    ws["G32"] = { t: "s", v: excelData.date };
-
-    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([output], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    saveAs(blob, `ใบเบิก_${excelData.code}.xlsx`);
-  };
+  if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
     <div className="userfollow-table-container">
@@ -306,9 +277,7 @@ function UserFollowTable({ searchTerm = "" }) {
         <tbody>
           {userfollowCurrentItems.length === 0 ? (
             <tr>
-              <td colSpan="8" className="userfollow-no-data">
-                ไม่มีข้อมูลที่ตรงกับคำค้นหา
-              </td>
+              <td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
             </tr>
           ) : (
             userfollowCurrentItems.map((row) => (
@@ -321,39 +290,19 @@ function UserFollowTable({ searchTerm = "" }) {
                 <td
                   onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}
                   className={
-                    row.status === "อนุมัติ"
-                      ? "status-approved"
-                      : row.status === "รออนุมัติ"
-                        ? "status-pending"
-                        : row.status === "รอดำเนินการ"
-                          ? "status-processing"
-                          : row.status === "ไม่อนุมัติ"
-                            ? "status-cancelled"
+                    row.status === "อนุมัติ" ? "status-approved"
+                      : row.status === "รออนุมัติ" ? "status-pending"
+                        : row.status === "รอดำเนินการ" ? "status-processing"
+                          : row.status === "ไม่อนุมัติ" ? "status-cancelled"
                             : ""
                   }
                 >
                   {row.status}
                 </td>
-
-                {/* ❌ ห้ามกดแล้วไปหน้าอื่น */}
                 <td onClick={(e) => e.stopPropagation()}>
                   <Select
-                    value={
-                      row.status === "ไม่อนุมัติ"
-                        ? { value: "ยกเลิก", label: "ยกเลิก", color: "#dc3545" }
-                        : row.status === "รออนุมัติ"
-                          ? {
-                            value: "รอรับของ",
-                            label: "รอรับของ",
-                            color: "#1e398d",
-                          }
-                          : statusOptions.find(
-                            (opt) => opt.value === row.status_user
-                          )
-                    }
-                    onChange={(selectedOption) =>
-                      handleStatusUserChange(row.id, selectedOption.value)
-                    }
+                    value={statusOptions.find((opt) => opt.value === row.status_user)}
+                    onChange={(selected) => handleStatusUserChange(row.id, selected.value)}
                     options={statusOptions}
                     styles={colourStyles}
                     isDisabled={
@@ -361,38 +310,26 @@ function UserFollowTable({ searchTerm = "" }) {
                       row.status === "รออนุมัติ" ||
                       row.status_user === "รับของเรียบร้อยแล้ว"
                     }
-                    className="custom-status-dropdown"
                   />
                 </td>
-
                 <td className="print-icon" onClick={(e) => {
                   e.stopPropagation();
                   handleExportExcel(row);
                 }}>
                   <FaPrint />
                 </td>
-
               </tr>
             ))
           )}
         </tbody>
-
       </table>
 
       <div className="userfollow-pagination">
         <div className="userfollow-pagination-info">
-          แสดง {userfollowIndexOfFirstItem + 1} ถึง{" "}
-          {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก{" "}
-          {filteredData.length} แถว
+          แสดง {userfollowIndexOfFirstItem + 1} ถึง {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="userfollow-pagination-buttons">
-          <button
-            className="btn"
-            disabled={userfollowCurrentPage === 1}
-            onClick={handleUserfollowPrev}
-          >
-            ก่อนหน้า
-          </button>
+          <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>ก่อนหน้า</button>
           <input
             type="number"
             className="org-page-input"
@@ -404,14 +341,7 @@ function UserFollowTable({ searchTerm = "" }) {
             onChange={handleUserfollowChange}
             onKeyDown={handleUserfollowKeyDown}
           />
-
-          <button
-            className="btn"
-            disabled={userfollowCurrentPage === userfollowTotalPages}
-            onClick={handleUserfollowNext}
-          >
-            ถัดไป
-          </button>
+          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>ถัดไป</button>
         </div>
       </div>
     </div>
