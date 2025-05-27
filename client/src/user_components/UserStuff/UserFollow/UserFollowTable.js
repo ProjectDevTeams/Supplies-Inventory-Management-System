@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import Select from "react-select";
 import { FaPrint } from "react-icons/fa";
-import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
@@ -57,73 +55,29 @@ function UserFollowTable({ searchTerm = "" }) {
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear().toString().slice(-2)}`;
   };
 
-  const handleStatusUserChange = async (id, newStatus) => {
-    const item = data.find((i) => i.id === id);
-    if (!item) return;
-
-    if (item.status === "ไม่อนุมัติ") {
-      Swal.fire({
-        icon: "warning",
-        title: "ไม่สามารถเปลี่ยนสถานะได้",
-        text: "รายการนี้ถูกไม่อนุมัติแล้ว",
-        confirmButtonText: "ตกลง",
-      });
-      return;
-    }
-
-    if (item.status === "รออนุมัติ") {
-      Swal.fire({
-        icon: "warning",
-        title: "ยังไม่สามารถเปลี่ยนสถานะได้",
-        text: "ต้องรอให้รายการได้รับการอนุมัติก่อน",
-        confirmButtonText: "ตกลง",
-      });
-      return;
-    }
-
-    if (item.status_user === "รับของเรียบร้อยแล้ว") {
-      Swal.fire({
-        icon: "warning",
-        title: "ไม่สามารถเปลี่ยนสถานะกลับได้",
-        confirmButtonText: "ตกลง",
-      });
-      return;
-    }
-
-    if (newStatus === "รับของเรียบร้อยแล้ว") {
-      const result = await Swal.fire({
-        title: "ยืนยันการเปลี่ยนสถานะ",
-        text: "คุณแน่ใจหรือไม่ว่าต้องการเปลี่ยนเป็น 'รับของเรียบร้อยแล้ว'?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "ยืนยัน",
-        cancelButtonText: "ยกเลิก",
-      });
-      if (!result.isConfirmed) return;
-    }
-
-    await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
-      id,
-      User_status: newStatus,
-    });
-
-    setData((prev) =>
-      prev.map((row) =>
-        row.id === id ? { ...row, status_user: newStatus } : row
-      )
-    );
-  };
-
   const handleExportExcel = async (row) => {
+    const workbook = new ExcelJS.Workbook();
     const response = await fetch("/image/template.xlsx");
-    if (!response.ok) {
-      Swal.fire({ icon: "error", title: "โหลด template ไม่สำเร็จ" });
-      return;
+    const buffer = await response.arrayBuffer();
+    await workbook.xlsx.load(buffer);
+    const ws = workbook.getWorksheet(1);
+
+    // ใส่หัวข้อ "ใบเบิกวัสดุ" แบบจัดกลาง และใช้ฟอนต์ TH SarabunPSK ขนาด 22 ตัวหนา
+    ws.mergeCells("B2:I2");
+    const titleCell = ws.getCell("B2");
+    titleCell.value = "ใบเบิกวัสดุ";
+    titleCell.alignment = { horizontal: "center", vertical: "middle" };
+    titleCell.font = { name: "TH SarabunPSK", size: 22, bold: true };
+
+    // ลบข้อความซ้ำใน B3 ถ้ามี
+    if (ws.getCell("B3").value === "ใบเบิกวัสดุ") {
+      ws.getCell("B3").value = "";
     }
 
-    const arrayBuffer = await response.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer, { type: "array" });
-    const ws = workbook.Sheets[workbook.SheetNames[0]];
+    // ใส่ usage: "ใช้ในฝ่าย" จัดกลางในเซลล์ I8
+    ws.getCell("I8").value = "ใช้ในฝ่าย";
+    ws.getCell("I8").alignment = { horizontal: "center", vertical: "middle" };
+
 
     const excelData = {
       code: row.number,
@@ -132,8 +86,11 @@ function UserFollowTable({ searchTerm = "" }) {
       department: "STI",
       position: "เจ้าหน้าที่",
       phone: "0123456789",
-      usage: "เพื่อใช้ในงาน/กิจกรรม",
-      items: [{ name: "แฟ้มเอกสาร", qty: row.items, unit: "เล่ม" }],
+      usage: "ใช้ในฝ่าย",
+      items: [
+        { name: "แฟ้มเอกสาร", qty: 2, unit: "เล่ม" },
+        { name: "ปากกา", qty: 10, unit: "ด้าม" },
+      ],
       sign_name: "สมชาย ขอยืม",
       head_name: "หัวหน้า หน่วยงาน",
       receiver_name: "ฝ่ายพัสดุ",
@@ -141,69 +98,60 @@ function UserFollowTable({ searchTerm = "" }) {
       approver_name: "ผู้สั่งจ่าย",
     };
 
-    // กรอกฟอร์ม
-    ws["I4"] = { t: "s", v: excelData.code };
-    ws["I5"] = { t: "s", v: excelData.date };
-    ws["D6"] = { t: "s", v: excelData.name };
-    ws["D7"] = { t: "s", v: excelData.department };
-    ws["I6"] = { t: "s", v: excelData.position };
-    ws["I7"] = { t: "s", v: excelData.phone };
-    ws["E8"] = { t: "s", v: `${excelData.items.length} รายการ` };
-    ws["I8"] = { t: "s", v: excelData.usage };
+    ws.getCell("I4").value = excelData.code;
+    ws.getCell("I5").value = excelData.date;
+    ws.getCell("D6").value = excelData.name;
+    ws.getCell("D7").value = excelData.department;
+    ws.getCell("I6").value = excelData.position;
+    ws.getCell("I7").value = excelData.phone;
+    ws.getCell("E8").value = `${excelData.items.length}`;
+    ws.getCell("I8").value = excelData.usage;
 
     excelData.items.forEach((item, idx) => {
-      const r = 11 + idx;
-      ws[`B${r}`] = { t: "n", v: idx + 1 };
-      ws[`C${r}`] = { t: "s", v: item.name };
-      ws[`H${r}`] = { t: "n", v: item.qty };
-      ws[`I${r}`] = { t: "s", v: item.unit };
-    });
+      const rowIdx = 12 + idx;
+      ws.getCell(`B${rowIdx}`).value = idx + 1;
+      ws.getCell(`C${rowIdx}`).value = item.name;
+      ws.getCell(`H${rowIdx}`).value = item.qty;
+      ws.getCell(`I${rowIdx}`).value = item.unit;
 
-    // ลายเซ็น
-    ws["C22"] = { t: "s", v: excelData.sign_name };
-    ws["C23"] = { t: "s", v: excelData.sign_name };
-    ws["C24"] = { t: "s", v: excelData.date };
+      ["B", "H", "I"].forEach((col) => {
+        ws.getCell(`${col}${rowIdx}`).alignment = {
+          horizontal: "center",
+          vertical: "middle",
+        };
+      });
 
-    ws["C26"] = { t: "s", v: excelData.head_name };
-    ws["C27"] = { t: "s", v: excelData.head_name };
-    ws["C28"] = { t: "s", v: excelData.date };
+      ws.getCell(`C${rowIdx}`).alignment = {
+        horizontal: "left",
+        vertical: "middle",
+        indent: 2, // ประมาณห่าง 1 ซม.
+      };
+    }); // ✅ ปิด forEach ตรงนี้ให้ถูก
 
-    ws["G22"] = { t: "s", v: excelData.receiver_name };
-    ws["G23"] = { t: "s", v: excelData.receiver_name };
-    ws["G24"] = { t: "s", v: excelData.date };
+    // แล้วค่อย export ข้างนอก
+    ws.getCell("C22").value = excelData.sign_name;
+    ws.getCell("C23").value = excelData.sign_name;
+    ws.getCell("C24").value = excelData.date;
 
-    ws["G26"] = { t: "s", v: excelData.giver_name };
-    ws["G27"] = { t: "s", v: excelData.giver_name };
-    ws["G28"] = { t: "s", v: excelData.date };
+    ws.getCell("C26").value = excelData.head_name;
+    ws.getCell("C27").value = excelData.head_name;
+    ws.getCell("C28").value = excelData.date;
 
-    ws["G30"] = { t: "s", v: excelData.approver_name };
-    ws["G31"] = { t: "s", v: excelData.approver_name };
-    ws["G32"] = { t: "s", v: excelData.date };
+    ws.getCell("G22").value = excelData.receiver_name;
+    ws.getCell("G23").value = excelData.receiver_name;
+    ws.getCell("G24").value = excelData.date;
 
-    const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([output], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    saveAs(blob, `ใบเบิก_${excelData.code}.xlsx`);
-  };
+    ws.getCell("G26").value = excelData.giver_name;
+    ws.getCell("G27").value = excelData.giver_name;
+    ws.getCell("G28").value = excelData.date;
 
-  const statusOptions = [
-    { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
-    { value: "รับของเรียบร้อยแล้ว", label: "รับของเรียบร้อยแล้ว", color: "#009244" },
-  ];
+    ws.getCell("G30").value = excelData.approver_name;
+    ws.getCell("G31").value = excelData.approver_name;
+    ws.getCell("G32").value = excelData.date;
 
-  const colourStyles = {
-    option: (styles, { data }) => ({
-      ...styles,
-      color: data.color,
-      backgroundColor: "#fff",
-      fontWeight: "bold",
-    }),
-    singleValue: (styles, { data }) => ({
-      ...styles,
-      color: data.color,
-      fontWeight: "bold",
-    }),
+    // ✅ ย้ายมานอก loop
+    const fileBuffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([fileBuffer]), `ใบเบิก_${excelData.code}.xlsx`);
   };
 
   const [userfollowCurrentPage, setUserfollowCurrentPage] = useState(1);
@@ -287,30 +235,16 @@ function UserFollowTable({ searchTerm = "" }) {
                 <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.category}</td>
                 <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.items}</td>
                 <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.date}</td>
-                <td
-                  onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}
-                  className={
-                    row.status === "อนุมัติ" ? "status-approved"
-                      : row.status === "รออนุมัติ" ? "status-pending"
-                        : row.status === "รอดำเนินการ" ? "status-processing"
-                          : row.status === "ไม่อนุมัติ" ? "status-cancelled"
-                            : ""
-                  }
-                >
+                <td className={
+                  row.status === "อนุมัติ" ? "status-approved"
+                    : row.status === "รออนุมัติ" ? "status-pending"
+                      : row.status === "รอดำเนินการ" ? "status-processing"
+                        : row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
+                }>
                   {row.status}
                 </td>
-                <td onClick={(e) => e.stopPropagation()}>
-                  <Select
-                    value={statusOptions.find((opt) => opt.value === row.status_user)}
-                    onChange={(selected) => handleStatusUserChange(row.id, selected.value)}
-                    options={statusOptions}
-                    styles={colourStyles}
-                    isDisabled={
-                      row.status === "ไม่อนุมัติ" ||
-                      row.status === "รออนุมัติ" ||
-                      row.status_user === "รับของเรียบร้อยแล้ว"
-                    }
-                  />
+                <td>
+                  {row.status_user}
                 </td>
                 <td className="print-icon" onClick={(e) => {
                   e.stopPropagation();
