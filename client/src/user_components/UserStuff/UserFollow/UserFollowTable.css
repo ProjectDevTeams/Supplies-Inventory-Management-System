@@ -117,20 +117,24 @@
   cursor: not-allowed;
 }
 
-.status-pending {
-  color: rgb(255, 183, 0);
-}
-
 .status-approved {
   color: rgb(0, 146, 68);
+  font-weight: bold;
+}
+
+.status-pending {
+  color: rgb(255, 183, 0);
+  font-weight: bold;
 }
 
 .status-processing {
   color: rgb(79, 48, 190);
+  font-weight: bold;
 }
 
 .status-cancelled {
   color: rgb(242, 0, 0);
+  font-weight: bold;
 }
 
 .status-pending-items,
@@ -172,4 +176,15 @@
   color: #000;
   cursor: pointer;
   font-size: 20px;
+}
+
+
+.select-option1 {
+  color: #1e398d; /* รอรับของ */
+  font-weight: bold;
+}
+
+.select-option2 {
+  color: #009244; /* รับของเรียบร้อยแล้ว */
+  font-weight: bold;
 }
