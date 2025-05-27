@@ -66,17 +66,14 @@ const StuffBasket_Popup = ({
     });
   };
 
-// ใช้สำหรับ check ว่าข้อมูลจำนวนสินค้าเป็น 0 ไหม
-const isConfirmDisabled = basketItems.length === 0 || basketItems.some(item => item.quantity === 0);
 
-
-const handleQuantityChange = (id, newQuantity) => {
-  const qty = Number(newQuantity);
-  const updated = basketItems.map((item) =>
-    item.id === id ? { ...item, quantity: isNaN(qty) ? 0 : qty } : item
-  );
-  setBasketItems(updated);
-};
+  const handleQuantityChange = (id, newQuantity) => {
+    const qty = Number(newQuantity);
+    const updated = basketItems.map((item) =>
+      item.id === id ? { ...item, quantity: isNaN(qty) ? 0 : qty } : item
+    );
+    setBasketItems(updated);
+  };
 
   const handleRemoveItem = (id) => {
     const updated = basketItems.filter((item) => item.id !== id);
@@ -85,6 +82,36 @@ const handleQuantityChange = (id, newQuantity) => {
 
   const handleConfirm = async () => {
     if (isSubmitting) return;
+
+    // ตรวจสอบความถูกต้องก่อนส่ง
+    if (basketItems.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "ไม่มีรายการวัสดุ",
+        text: "กรุณาเลือกวัสดุอย่างน้อย 1 รายการก่อน",
+      });
+      return;
+    }
+
+    if (basketItems.some((item) => item.quantity === 0)) {
+      Swal.fire({
+        icon: "warning",
+        title: "มีรายการที่จำนวนเป็น 0",
+        text: "กรุณาปรับจำนวนให้มากกว่า 0 หรือใช้ปุ่มลบเพื่อลบรายการนั้นออก",
+      });
+      return;
+    }
+
+    if (!purpose.trim() || !supervisor.trim() || !department.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรอกข้อมูลไม่ครบ",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วน",
+      });
+      return;
+    }
+
+    // ✅ ถ้าทุกอย่างครบ เริ่มส่งข้อมูล
     setIsSubmitting(true);
 
     const payload = {
@@ -155,7 +182,7 @@ const handleQuantityChange = (id, newQuantity) => {
               <label>ชื่อ</label>
               <input type="text" value={userFullName} readOnly />
             </div>
-            <div>
+            {/* <div>
               <label>สังกัด</label>
               <input
                 type="text"
@@ -163,7 +190,7 @@ const handleQuantityChange = (id, newQuantity) => {
                 onChange={(e) => setDepartment(e.target.value)}
                 placeholder="กรอกชื่อสังกัด"
               />
-            </div>
+            </div> */}
             <div>
               <label>เบิกจำนวน</label>
               <input
@@ -270,7 +297,6 @@ const handleQuantityChange = (id, newQuantity) => {
           <button
             className="stuff-basket-popup-confirm-btn"
             onClick={handleConfirm}
-            disabled ={isConfirmDisabled}
           >
             ยืนยันรายการ
           </button>
