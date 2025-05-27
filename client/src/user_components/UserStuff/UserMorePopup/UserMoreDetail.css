@@ -1,25 +1,22 @@
 /* UserMoreDetail.css */
+
 .more-detail-container {
-  flex: 1;
   display: flex;
-  flex-direction: column;
-  background-color: #f9f9f9;
-  padding: 2em;
+  justify-content: center;
+  padding: 1rem;
   box-sizing: border-box;
-  margin-left: 200px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
 }
 
 .more-detail-box {
-  background: white;
-  padding: 2rem 3rem;
+  background: #fff;
+  padding: 2rem;
   border-radius: 10px;
-  width: 60%;
-  margin: 0 auto;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Prompt', sans-serif;
-  font-size: 1rem;
+  width: 100%;
+  max-width: 800px;
   box-sizing: border-box;
-  text-align: center;
 }
 
 .more-detail-title {
@@ -32,36 +29,28 @@
 
 .more-detail-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 2rem;
-  row-gap: 1rem;
-  justify-content: start;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
   font-size: 1rem;
-  text-align: left;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 2rem;
+  width: 100%;
 }
 
 .more-detail-grid p {
   margin: 0;
-  font-size: 1rem;
   line-height: 1.6;
 }
 
 .more-detail-subtitle {
-  margin-top: 2rem;
   font-size: 1.2rem;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .more-detail-table {
+  width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 1rem;
-  width: 85%;
+  margin-bottom: 2rem;
 }
 
 .more-detail-table th,
@@ -70,6 +59,7 @@
   padding: 0.6rem;
   text-align: center;
   font-size: 1rem;
+  word-wrap: break-word;
 }
 
 .more-detail-table th {
@@ -77,17 +67,22 @@
   font-weight: bold;
 }
 
+.more-detail-item-image {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  object-fit: cover;
+}
+
 .more-detail-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 2rem;
-  padding-right: 1.5rem;
   gap: 1rem;
 }
 
 .more-detail-btn-back {
   background-color: #f79c05;
-  color: white;
+  color: #fff;
   padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 6px;
@@ -99,56 +94,28 @@
   background-color: #e67c00;
 }
 
-.more-detail-btn-save {
-  background-color: #4CAF50;
-  color: white;
-  padding: 0.6rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.more-detail-btn-save:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.more-detail-btn-save:hover:not(:disabled) {
-  background-color: #3e8e41;
-}
-
-.more-detail-select-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.more-detail-select {
-  padding: 0.4rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  width: 200px;
-}
-
-.more-detail-select option[value="approved"] {
-  color: green;
-}
-
-.more-detail-select option[value="rejected"] {
-  color: red;
-}
-
-.more-detail-select.approved {
-  color: green;
-}
-
-.more-detail-select.rejected {
-  color: red;
-}
-
-.more-detail-item-image {
-  width: 150px !important;
-  height: 150px !important;
-  object-fit: cover !important;
-  border-radius: 0;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .more-detail-box {
+    padding: 1rem;
+  }
+  .more-detail-title {
+    font-size: 1.5rem;
+  }
+  .more-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem 1rem;
+  }
+  .more-detail-table th,
+  .more-detail-table td {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+  .more-detail-item-image {
+    max-width: 100px;
+  }
+  .more-detail-btn-back {
+    flex: 1;
+    text-align: center;
+  }
 }

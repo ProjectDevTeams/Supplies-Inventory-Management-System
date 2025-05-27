@@ -1,3 +1,4 @@
+// UserMorePopup.js
 import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { FaTrash } from "react-icons/fa";
@@ -13,7 +14,6 @@ function UserMorePopup({ onClose }) {
   const [rows, setRows] = useState([
     { id: Date.now(), item: null, quantity: 1, file: null }
   ]);
-  const [inputText, setInputText] = useState("");
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -25,13 +25,11 @@ function UserMorePopup({ onClose }) {
           const filtered = res.data.data.filter(
             (m) => m.location === "วัสดุในคลัง"
           );
-
           const formatted = filtered.map((m) => ({
             label: m.name,
             value: m.name,
             rawLabel: m.name,
           }));
-
           setAllOptions(formatted);
           setOptions(formatted);
           setMaterialsData(res.data.data);
@@ -40,7 +38,6 @@ function UserMorePopup({ onClose }) {
         console.error("เกิดข้อผิดพลาด:", err);
       }
     };
-
     fetchMaterials();
   }, []);
 
@@ -70,34 +67,25 @@ function UserMorePopup({ onClose }) {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const created_by = user?.id;
-
       if (!created_by) {
         Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
         return;
       }
 
-      // อัปโหลดรูปภาพ
       const uploadFormData = new FormData();
       rows.forEach((row, index) => {
-        if (row.file) {
-          uploadFormData.append(`file_${index}`, row.file);
-        }
+        if (row.file) uploadFormData.append(`file_${index}`, row.file);
       });
-      
-      const uploadRes = await axios.post(`${API_URL}/purchase_extras_items/upload_image.php`,
+      const uploadRes = await axios.post(
+        `${API_URL}/purchase_extras_items/upload_image.php`,
         uploadFormData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
-
       const uploadedImages = uploadRes.data?.uploaded || {};
 
-      // สร้างรายการวัสดุ
       const items = rows.map((r, index) => {
         const name = r.item?.value ?? r.item?.label ?? "";
         const matched = materialsData.find((m) => m.name === name);
-
         return {
           quantity: r.quantity,
           material_id: matched ? matched.id : null,
@@ -106,41 +94,20 @@ function UserMorePopup({ onClose }) {
         };
       });
 
-      const payload = {
-        created_by,
-        reason: note,
-        items,
-      };
-
       const res = await axios.post(
         `${API_URL}/purchase_extras/add_purchase_extras.php`,
-        payload
+        { created_by, reason: note, items }
       );
 
       if (res.data.status === "success") {
-        Swal.fire({
-          icon: "success",
-          title: "บันทึกสำเร็จ",
-          text: "รายการถูกบันทึกเรียบร้อยแล้ว!",
-          confirmButtonColor: "#28a745",
-        });
+        Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
         onClose();
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "ผิดพลาด",
-          text: res.data.message || "บันทึกไม่สำเร็จ",
-          confirmButtonColor: "#dc3545",
-        });
+        Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
       }
     } catch (error) {
       console.error("❌ บันทกล้มเหลว:", error);
-      Swal.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาด",
-        text: "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่",
-        confirmButtonColor: "#dc3545",
-      });
+      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -150,9 +117,7 @@ function UserMorePopup({ onClose }) {
     <div className="usermorepopup-container">
       <div className="usermorepopup-header">
         <h2>รายการขอจัดซื้อเพิ่มเติม</h2>
-        <button className="usermorepopup-close-btn" onClick={onClose}>
-          ✕
-        </button>
+        <button className="usermorepopup-close-btn" onClick={onClose}>✕</button>
       </div>
 
       <div className="usermorepopup-info-block">
@@ -181,50 +146,20 @@ function UserMorePopup({ onClose }) {
               placeholder="เลือก/เพิ่มชื่อวัสดุ..."
               className="usermorepopup-select"
               menuPortalTarget={document.body}
-              styles={{
-                menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-              }}
-              filterOption={null}
+              styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
               formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
-              isValidNewOption={(inputValue, _, selectOptions) => {
-                if (!inputValue) return false;
-                return !selectOptions.some(
-                  (opt) =>
-                    opt.value.toLowerCase() === inputValue.toLowerCase()
-                );
-              }}
-              getOptionLabel={(e) =>
-                e.__isNew__ ? e.label : e.rawLabel
-              }
-              onInputChange={(input) => {
-                setInputText(input);
-                if (input.trim() === "") {
-                  setOptions(allOptions);
-                } else {
-                  setOptions(
-                    allOptions.filter((m) =>
-                      (m.rawLabel || "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    )
-                  );
-                }
-              }}
             />
-
             <input
               type="number"
               min="1"
               value={row.quantity ?? ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                const num = parseInt(val, 10);
+              onChange={(e) =>
                 updateRow(
                   row.id,
                   "quantity",
-                  isNaN(num) || num < 1 ? null : num
-                );
-              }}
+                  Math.max(1, parseInt(e.target.value, 10) || 1)
+                )
+              }
               placeholder="จำนวน"
               className="usermorepopup-input usermorepopup-quantity-input"
             />
@@ -234,10 +169,13 @@ function UserMorePopup({ onClose }) {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) =>
-                updateRow(row.id, "file", e.target.files?.[0] || null)
-              }
               className="usermorepopup-file-input"
+              data-file-name=""
+              onChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                updateRow(row.id, "file", file);
+                if (file) e.target.setAttribute("data-file-name", file.name);
+              }}
             />
             <button
               className="usermorepopup-remove-btn"
@@ -251,9 +189,7 @@ function UserMorePopup({ onClose }) {
       ))}
 
       <div className="usermorepopup-bottom-controls">
-        <button className="usermorepopup-add-btn" onClick={addRow}>
-          ＋ เพิ่มรายการ
-        </button>
+        <button className="usermorepopup-add-btn" onClick={addRow}>＋ เพิ่มรายการ</button>
       </div>
 
       <div className="usermorepopup-footer">
@@ -261,10 +197,6 @@ function UserMorePopup({ onClose }) {
           className="usermorepopup-save-btn"
           onClick={handleSave}
           disabled={isSubmitting}
-          style={{
-            opacity: isSubmitting ? 0.6 : 1,
-            pointerEvents: isSubmitting ? "none" : "auto",
-          }}
         >
           {isSubmitting ? "กำลังบันทึก..." : "บันทึกรายการ"}
         </button>

@@ -50,14 +50,21 @@
 }
 
 .userstuff-search-box {
-  flex: 1 1 300px;
-  max-width: 100%;
+  flex: 1;
+  width: 455px;
   position: relative;
   background: white;
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   overflow: hidden;
   transition: box-shadow 0.2s ease;
+}
+
+@media (max-width: 600px) {
+  .userstuff-search-box {
+    width: 100%;
+    flex: 1 1 auto;
+  }
 }
 
 .userstuff-search-box:hover {
@@ -160,6 +167,8 @@
 }
 
 .userstuff-add-more-btn {
+  flex: 0 0 auto;
+  width: 150px;
   background-color: #28a745;
   color: white;
   font-weight: 600;
@@ -168,11 +177,35 @@
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  height: 44px; /* เท่ากล่อง input */
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s ease;
+}
+
+.full-text {
+  display: inline;
+}
+
+.short-text {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .userstuff-add-more-btn {
+    flex: 1 1 auto;
+    height: auto;
+    padding: 0.6em 1.5em;
+  }
+
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline;
+  }
 }
 
 .userstuff-add-more-btn:hover {

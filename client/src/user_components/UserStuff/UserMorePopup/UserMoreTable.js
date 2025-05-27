@@ -1,3 +1,4 @@
+// UserMoreTable.js
 import React, { useState, useEffect } from "react";
 import "./UserMoreTable.css";
 import { useNavigate } from "react-router-dom";
@@ -16,13 +17,11 @@ function UserMoreTable({ searchTerm = "" }) {
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
       const fullName = storedUser?.full_name;
-
       const res = await axios.get(`${API_URL}/purchase_extras/get_purchase_extras.php`);
       if (res.data.status === "success") {
         const filtered = res.data.data.filter(
           (item) => String(item.created_by) === String(fullName)
         );
-
         const formatted = filtered.map((item) => ({
           id: parseInt(item.id),
           requester: item.created_by,
@@ -31,10 +30,9 @@ function UserMoreTable({ searchTerm = "" }) {
             item.approval_status === "อนุมัติ"
               ? "approved"
               : item.approval_status === "ไม่อนุมัติ"
-                ? "rejected"
-                : "pending",
+              ? "rejected"
+              : "pending",
         }));
-
         setData(formatted);
       }
     } catch (err) {
@@ -44,17 +42,12 @@ function UserMoreTable({ searchTerm = "" }) {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(() => {
-      fetchData();
-    }, 10000);
+    const interval = setInterval(fetchData, 10000);
     return () => clearInterval(interval);
   }, []);
 
-  const renderStatus = (st) => ({
-    pending: "รออนุมัติ",
-    approved: "อนุมัติ",
-    rejected: "ไม่อนุมัติ",
-  }[st] || "-");
+  const renderStatus = (st) =>
+    ({ pending: "รออนุมัติ", approved: "อนุมัติ", rejected: "ไม่อนุมัติ" }[st] || "-");
 
   const formatThaiDate = (dateString) => {
     const date = new Date(dateString);
@@ -66,11 +59,11 @@ function UserMoreTable({ searchTerm = "" }) {
   };
 
   const sorted = [...data].sort((a, b) => (asc ? a.id - b.id : b.id - a.id));
-
-  const filtered = sorted.filter((item) =>
-    item.requester.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    formatThaiDate(item.date).includes(searchTerm) ||
-    renderStatus(item.status).includes(searchTerm)
+  const filtered = sorted.filter(
+    (item) =>
+      item.requester.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      formatThaiDate(item.date).includes(searchTerm) ||
+      renderStatus(item.status).includes(searchTerm)
   );
 
   const total = Math.ceil(filtered.length / perPage);
@@ -109,13 +102,18 @@ function UserMoreTable({ searchTerm = "" }) {
             items.map((i) => (
               <tr
                 key={i.id}
-                onClick={() => navigate("/userstuff/more/detail", { state: { id: i.id } })}
+                className="user-more-table-row"
+                onClick={() =>
+                  navigate("/userstuff/more/detail", { state: { id: i.id } })
+                }
                 style={{ cursor: "pointer" }}
               >
                 <td>{i.id}</td>
                 <td>{i.requester}</td>
                 <td>{formatThaiDate(i.date)}</td>
-                <td className={`status ${i.status}`}>{renderStatus(i.status)}</td>
+                <td className={`status status-${i.status}`}>
+                  {renderStatus(i.status)}
+                </td>
               </tr>
             ))
           )}
@@ -124,10 +122,13 @@ function UserMoreTable({ searchTerm = "" }) {
 
       <div className="user-more-pagination">
         <div className="user-more-pagination-info">
-          แสดง {(page - 1) * perPage + 1} ถึง {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
+          แสดง {(page - 1) * perPage + 1} ถึง{" "}
+          {Math.min(page * perPage, filtered.length)} จาก {filtered.length} แถว
         </div>
         <div className="user-more-pagination-buttons">
-          <button className="btn" disabled={page === 1} onClick={prev}>ก่อนหน้า</button>
+          <button className="btn" disabled={page === 1} onClick={prev}>
+            ก่อนหน้า
+          </button>
           <input
             type="text"
             className="org-page-input"
@@ -137,7 +138,9 @@ function UserMoreTable({ searchTerm = "" }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKey}
           />
-          <button className="btn" disabled={page === total} onClick={next}>ถัดไป</button>
+          <button className="btn" disabled={page === total} onClick={next}>
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>

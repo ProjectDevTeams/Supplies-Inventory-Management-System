@@ -123,13 +123,11 @@ function UserStuffbar({
               {currentTab === "รายการขอจัดซื้อเพิ่มเติม" && (
                 <button
                   className="userstuff-add-more-btn"
-                  onClick={() => setShowMorePopup(true)} // ✅ กลับมาใช้แบบ popup
+                  onClick={() => setShowMorePopup(true)}
                 >
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  เพิ่มรายการ
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: "0.5rem" }} />
+                  <span className="full-text">เพิ่มรายการ</span>
+                  <span className="short-text">เพิ่ม</span>
                 </button>
               )}
             </div>
