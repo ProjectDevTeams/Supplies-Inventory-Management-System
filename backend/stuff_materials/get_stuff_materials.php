@@ -4,10 +4,20 @@ header("Content-Type: application/json; charset=UTF-8");
 include '../db.php';
 
 $username = $_GET['username'] ?? null;
+$id = $_GET['id'] ?? null; // ✅ รับค่า id ด้วย
 
 try {
-    if ($username !== null) {
-        // ✅ กรองด้วย username
+    if ($id !== null) {
+        // ✅ ถ้ามี id ให้ดึงใบเบิกเฉพาะอันนั้น
+        $stmt = $conn->prepare("
+            SELECT sm.*, u.full_name AS created_by_name
+            FROM stuff_materials sm
+            LEFT JOIN users u ON sm.created_by = u.id
+            WHERE sm.id = ?
+        ");
+        $stmt->execute([$id]);
+    } elseif ($username !== null) {
+        // ✅ ถ้ามี username ให้ดึงทั้งหมดของ user นั้น
         $stmt = $conn->prepare("
             SELECT sm.*, u.full_name AS created_by_name
             FROM stuff_materials sm
@@ -17,7 +27,7 @@ try {
         ");
         $stmt->execute([$username]);
     } else {
-        // ถ้าไม่มี username ส่งมา แสดงทั้งหมด (แนะนำให้ใช้เฉพาะตอนเทส)
+        // ✅ กรณีไม่มี filter ใช้ตอน dev/test เท่านั้น
         $stmt = $conn->prepare("
             SELECT sm.*, u.full_name AS created_by_name
             FROM stuff_materials sm
@@ -48,6 +58,7 @@ try {
             "supervisor_name" => $mat['supervisor_name'],
             "Admin_status" => $mat['Admin_status'],
             "User_status" => $mat['User_status'],
+            "reason" => $mat['reason'] ?? null,
             "items" => $items
         ];
     }
