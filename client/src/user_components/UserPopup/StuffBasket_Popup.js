@@ -4,34 +4,27 @@ import "./StuffBasket_Popup.css";
 import { API_URL } from "../../config";
 import Swal from "sweetalert2";
 
-// ✅ Popup สำหรับยืนยันรายการเบิกวัสดุ
-
 const StuffBasket_Popup = ({
-  basketItems = [], // รายการวัสดุที่เลือกไว้
-  setBasketItems = () => {}, // ฟังก์ชันสำหรับอัปเดต basketItems
-  onClose, // ฟังก์ชันปิด popup
-  onCancel, // ฟังก์ชันยกเลิก
-  onSuccess, // ฟังก์ชัน callback เมื่อลงข้อมูลสำเร็จ
+  basketItems = [],
+  setBasketItems = () => {},
+  onClose,
+  onCancel,
+  onSuccess,
 }) => {
-  // ✅ รวมจำนวนและมูลค่าทั้งหมดของรายการที่เลือก
   const totalQty = basketItems.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = basketItems.reduce(
     (sum, i) => sum + (i.quantity * i.price || 0),
     0
   );
 
-  // ✅ สถานะของช่องกรอกข้อมูล
-  const [purpose, setPurpose] = useState(""); // เพื่อใช้ในงาน/กิจกรรม
-  const [supervisor, setSupervisor] = useState(""); // ชื่อหัวหน้างาน
-  const [userFullName, setUserFullName] = useState(""); // ชื่อผู้ใช้ (จาก localStorage)
-  const [department, setDepartment] = useState(""); // ชื่อสังกัด
-  const [userId, setUserId] = useState(null); // ID ผู้ใช้
-
-  
+  const [purpose, setPurpose] = useState("");
+  const [supervisor, setSupervisor] = useState("");
+  const [userFullName, setUserFullName] = useState("");
+  const [department, setDepartment] = useState("");
+  const [userId, setUserId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCancelSuccess, setShowCancelSuccess] = useState(false);
 
-  // ✅ ดึงข้อมูลผู้ใช้จาก localStorage เมื่อ component โหลดครั้งแรก
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -40,64 +33,73 @@ const StuffBasket_Popup = ({
     }
   }, []);
 
-useEffect(() => {
-  if (!showCancelSuccess) return;
-
-  const timeout = setTimeout(() => {
-    Swal.fire({
-      title: "ยกเลิกเรียบร้อย",
-      text: "รายการทั้งหมดถูกล้างออกแล้ว",
-      icon: "success",
-      confirmButtonText: "ตกลง",
-    });
-    setShowCancelSuccess(false);
-  }, 300);
-
-  return () => clearTimeout(timeout);
-}, [showCancelSuccess]);
-
-
+  useEffect(() => {
+    if (!showCancelSuccess) return;
+    const timeout = setTimeout(() => {
+      Swal.fire({
+        title: "ยกเลิกเรียบร้อย",
+        text: "รายการทั้งหมดถูกล้างออกแล้ว",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      });
+      setShowCancelSuccess(false);
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [showCancelSuccess]);
 
   const handleCancel = () => {
-  Swal.fire({
-    title: "ยืนยันการยกเลิก",
-    text: "หากคุณยกเลิก รายการที่เลือกไว้จะถูกล้างทั้งหมด",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "ใช่, ยกเลิก",
-    cancelButtonText: "กลับไป",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      onClose();        // ✅ ปิด popup
-      onCancel();       // ✅ ล้างข้อมูล
-      setShowCancelSuccess(true); // ✅ รอแจ้งเตือน
-    }
-  });
+    Swal.fire({
+      title: "ยืนยันการยกเลิก",
+      text: "หากคุณยกเลิก รายการที่เลือกไว้จะถูกล้างทั้งหมด",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "ใช่, ยกเลิก",
+      cancelButtonText: "กลับไป",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onClose();
+        onCancel();
+        setShowCancelSuccess(true);
+      }
+    });
+  };
+
+// ใช้สำหรับ check ว่าข้อมูลจำนวนสินค้าเป็น 0 ไหม
+const isConfirmDisabled = basketItems.length === 0 || basketItems.some(item => item.quantity === 0);
+
+
+const handleQuantityChange = (id, newQuantity) => {
+  const qty = Number(newQuantity);
+  const updated = basketItems.map((item) =>
+    item.id === id ? { ...item, quantity: isNaN(qty) ? 0 : qty } : item
+  );
+  setBasketItems(updated);
 };
 
+  const handleRemoveItem = (id) => {
+    const updated = basketItems.filter((item) => item.id !== id);
+    setBasketItems(updated);
+  };
 
-
-  // ✅ ส่งข้อมูลไปยัง API เมื่อผู้ใช้กดปุ่ม "ยืนยัน"
   const handleConfirm = async () => {
-    if (isSubmitting) return; // ป้องกันกดซ้ำ
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    setIsSubmitting(true); // 🔒 ล็อกไว้ไม่ให้ส่งซ้ำ
-
- const payload = {
-  created_by: userId,
-  reason: purpose,
-  total_amount: parseFloat(totalPrice.toFixed(2)),
-  Admin_status: "รออนุมัติ",
-  User_status: "รอรับของ",
-  supervisor_name: supervisor,  // ✅ เพิ่ม
-  items: basketItems.map((item) => ({
-    material_id: item.id,
-    quantity: item.quantity,
-    total_price: parseFloat((item.quantity * item.price).toFixed(2)),
-  })),
-};
+    const payload = {
+      created_by: userId,
+      reason: purpose,
+      total_amount: parseFloat(totalPrice.toFixed(2)),
+      Admin_status: "รออนุมัติ",
+      User_status: "รอรับของ",
+      supervisor_name: supervisor,
+      items: basketItems.map((item) => ({
+        material_id: item.id,
+        quantity: item.quantity,
+        total_price: parseFloat((item.quantity * item.price).toFixed(2)),
+      })),
+    };
 
     try {
       const res = await axios.post(
@@ -106,9 +108,8 @@ useEffect(() => {
       );
       if (res.data.status === "success") {
         onSuccess?.();
-        setBasketItems([]); // ✅ ล้าง basketItems
-        onClose(); // ✅ ปิด popup React ก่อน
-
+        setBasketItems([]);
+        onClose();
         setTimeout(() => {
           Swal.fire({
             title: "สำเร็จ",
@@ -116,7 +117,7 @@ useEffect(() => {
             icon: "success",
             confirmButtonText: "ตกลง",
           });
-        }, 200); // ✅ รอ popup ปิดก่อนค่อยแจ้งเตือน
+        }, 200);
       } else {
         Swal.fire({
           title: "เกิดข้อผิดพลาด",
@@ -134,14 +135,13 @@ useEffect(() => {
         confirmButtonText: "ตกลง",
       });
     } finally {
-      setIsSubmitting(false); // ✅ ปลดล็อก
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="stuff-basket-popup-overlay">
       <div className="stuff-basket-popup">
-        {/* ✅ ส่วนหัว popup */}
         <div className="stuff-basket-popup-header">
           <span className="stuff-basket-popup-title">ยืนยันรายการ</span>
           <button className="stuff-basket-popup-close" onClick={onClose}>
@@ -149,7 +149,6 @@ useEffect(() => {
           </button>
         </div>
 
-        {/* ✅ ส่วนฟอร์มข้อมูล */}
         <div className="stuff-basket-popup-body">
           <div className="stuff-basket-popup-info-grid">
             <div>
@@ -197,7 +196,6 @@ useEffect(() => {
             </div>
           </div>
 
-          {/* ✅ ตารางรายการวัสดุที่เลือก */}
           <div className="stuff-basket-popup-table-section">
             <h3>รายการวัสดุ</h3>
             <div className="stuff-basket-popup-table-scroll">
@@ -216,12 +214,41 @@ useEffect(() => {
                       <td>{index + 1}</td>
                       <td>{item.name}</td>
                       <td>
-                        {item.quantity} {item.unit}
+                        <div className="stuff-basket-qty-wrapper">
+                          <input
+                            type="number"
+                            min="0"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              handleQuantityChange(item.id, e.target.value)
+                            }
+                            className="stuff-basket-qty-input"
+                          />
+                          <span>{item.unit}</span>
+                        </div>
                       </td>
-                      <td>{(item.quantity * item.price).toFixed(2)} บาท</td>
+                      <td style={{ paddingRight: "12px" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            gap: "12px",
+                          }}
+                        >
+                          <span className="value">
+                            {(item.quantity * item.price).toFixed(2)} บาท
+                          </span>
+                          <button
+                            className="stuff-basket-delete-btn"
+                            onClick={() => handleRemoveItem(item.id)}
+                          >
+                            ลบ
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
-                  {/* ✅ แถวรวม */}
                   <tr>
                     <td colSpan="2">รวม</td>
                     <td>{totalQty} หน่วย</td>
@@ -233,7 +260,6 @@ useEffect(() => {
           </div>
         </div>
 
-        {/* ✅ ปุ่มยืนยันและยกเลิก */}
         <div className="stuff-basket-popup-footer">
           <button
             className="stuff-basket-popup-cancel-btn"
@@ -244,6 +270,7 @@ useEffect(() => {
           <button
             className="stuff-basket-popup-confirm-btn"
             onClick={handleConfirm}
+            disabled ={isConfirmDisabled}
           >
             ยืนยันรายการ
           </button>

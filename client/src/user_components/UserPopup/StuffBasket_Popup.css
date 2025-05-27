@@ -150,3 +150,112 @@
 .stuff-basket-popup-cancel-btn:hover {
   transform: scale(1.03);
 }
+
+.stuff-basket-delete-btn {
+  background: none;
+  border: none;
+  color: #e53935;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.stuff-basket-delete-btn:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
+
+
+.stuff-basket-qty-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* ระยะห่างระหว่าง input กับหน่วย */
+}
+
+.stuff-basket-qty-input {
+  width: 100%;
+  max-width: 80px;
+  padding: 6px 10px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stuff-basket-qty-input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
+
+
+.value {
+  display: inline-block;
+  min-width: 80px;           /* ให้ความกว้างพอสมควร */
+  text-align: left;         /* ชิดขวาในตัวมันเอง */
+  font-size: 14px;
+ margin-right: 12%;
+ justify-content: flex-end;
+  align-items: center;
+}
+
+
+
+@media (max-width: 768px) {
+  .stuff-basket-popup {
+    width: 95%;
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 0;
+  }
+
+  .stuff-basket-popup-body {
+    padding: 16px;
+  }
+
+  .stuff-basket-popup-info-grid {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+
+  .stuff-basket-popup-confirm-btn,
+  .stuff-basket-popup-cancel-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .stuff-basket-popup-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .stuff-basket-popup-material-table th,
+  .stuff-basket-popup-material-table td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .stuff-basket-qty-input {
+    width: 100%;
+    max-width: 60px;
+    font-size: 13px;
+    padding: 4px 8px;
+  }
+
+  .value {
+    font-size: 13px;
+    min-width: unset;
+    text-align: right;
+  }
+
+  .stuff-basket-delete-btn {
+    font-size: 13px;
+  }
+}
