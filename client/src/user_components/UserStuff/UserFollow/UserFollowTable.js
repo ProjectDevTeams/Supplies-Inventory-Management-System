@@ -129,21 +129,31 @@ function UserFollowTable({ searchTerm = "" }) {
 
     excelData.items.forEach((item, idx) => {
       const rowIdx = 12 + idx;
+
       ws.getCell(`B${rowIdx}`).value = idx + 1;
       ws.getCell(`C${rowIdx}`).value = item.name;
       ws.getCell(`H${rowIdx}`).value = item.qty;
       ws.getCell(`I${rowIdx}`).value = item.unit;
 
-      ["B", "H", "I"].forEach((col) => {
-        ws.getCell(`${col}${rowIdx}`).alignment = { horizontal: "center", vertical: "middle" };
-        ws.getCell(`${col}${rowIdx}`).font = { name: "TH SarabunPSK" };
+      // ✅ ฟอนต์ + Alignment ทุกช่อง + ขนาด 14
+      ["B", "C", "H", "I"].forEach((col) => {
+        ws.getCell(`${col}${rowIdx}`).font = { name: "TH SarabunPSK", size: 14 };
+        ws.getCell(`${col}${rowIdx}`).alignment = {
+          horizontal: col === "C" ? "left" : "center",
+          vertical: "middle",
+          ...(col === "C" ? { indent: 2 } : {}),
+        };
       });
-      ws.getCell(`C${rowIdx}`).alignment = { horizontal: "left", vertical: "middle", indent: 2 };
-      ws.getCell(`C${rowIdx}`).font = { name: "TH SarabunPSK" };
     });
 
-    ["C22", "C23", "C24", "C26", "C27", "C28", "G22", "G23", "G24", "G26", "G27", "G28", "G30", "G31", "G32"].forEach((cell) => {
-      ws.getCell(cell).font = { name: "TH SarabunPSK" };
+    [
+      "C22", "C23", "C24",  // ผู้ขอเบิก
+      "C26", "C27", "C28",  // หัวหน้า
+      "G22", "G23", "G24",  // ฝ่ายพัสดุ
+      "G26", "G27", "G28",  // เจ้าหน้าที่
+      "G30", "G31", "G32",  // ผู้สั่งจ่าย
+    ].forEach((cell) => {
+      ws.getCell(cell).font = { name: "TH SarabunPSK", size: 14 };
     });
 
     ws.getCell("C22").value = excelData.sign_name;
