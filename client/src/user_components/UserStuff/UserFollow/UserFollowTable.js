@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import Select from "react-select";
-// eslint-disable-next-line no-unused-vars
 import Swal from 'sweetalert2';
 import { FaPrint } from "react-icons/fa";
 import axios from "axios";
@@ -10,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
 import "./UserFollowTable.css";
 
-
-
 function UserFollowTable({ searchTerm = "" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
+  const itemsPerPage = 5;
+
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -56,6 +57,23 @@ function UserFollowTable({ searchTerm = "" }) {
     const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear().toString().slice(-2)}`;
   };
+
+  const filteredData = data.filter((row) =>
+    row.id.toString().includes(searchTerm) ||
+    row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.items.toString().includes(searchTerm) ||
+    row.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    row.status.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   const handleStatusUserChange = async (id, newStatus) => {
     const item = data.find((i) => i.id === id);
@@ -129,13 +147,11 @@ function UserFollowTable({ searchTerm = "" }) {
 
     excelData.items.forEach((item, idx) => {
       const rowIdx = 12 + idx;
-
       ws.getCell(`B${rowIdx}`).value = idx + 1;
       ws.getCell(`C${rowIdx}`).value = item.name;
       ws.getCell(`H${rowIdx}`).value = item.qty;
       ws.getCell(`I${rowIdx}`).value = item.unit;
 
-      // ✅ ฟอนต์ + Alignment ทุกช่อง + ขนาด 14
       ["B", "C", "H", "I"].forEach((col) => {
         ws.getCell(`${col}${rowIdx}`).font = { name: "TH SarabunPSK", size: 14 };
         ws.getCell(`${col}${rowIdx}`).alignment = {
@@ -147,11 +163,9 @@ function UserFollowTable({ searchTerm = "" }) {
     });
 
     [
-      "C22", "C23", "C24",  // ผู้ขอเบิก
-      "C26", "C27", "C28",  // หัวหน้า
-      "G22", "G23", "G24",  // ฝ่ายพัสดุ
-      "G26", "G27", "G28",  // เจ้าหน้าที่
-      "G30", "G31", "G32",  // ผู้สั่งจ่าย
+      "C22", "C23", "C24", "C26", "C27", "C28",
+      "G22", "G23", "G24", "G26", "G27", "G28",
+      "G30", "G31", "G32"
     ].forEach((cell) => {
       ws.getCell(cell).font = { name: "TH SarabunPSK", size: 14 };
     });
@@ -186,56 +200,6 @@ function UserFollowTable({ searchTerm = "" }) {
     singleValue: (styles, { data }) => ({ ...styles, color: data.color, fontWeight: "bold" }),
   };
 
-  const [userfollowCurrentPage, setUserfollowCurrentPage] = useState(1);
-  const [userfollowItemsPerPage] = useState(5);
-  const [userfollowInputPage, setUserfollowInputPage] = useState(1);
-
-  const filteredData = data.filter((row) =>
-    row.id.toString().includes(searchTerm) ||
-    row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.items.toString().includes(searchTerm) ||
-    row.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.status.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const userfollowTotalPages = Math.ceil(filteredData.length / userfollowItemsPerPage);
-  const userfollowIndexOfLastItem = userfollowCurrentPage * userfollowItemsPerPage;
-  const userfollowIndexOfFirstItem = userfollowIndexOfLastItem - userfollowItemsPerPage;
-  const userfollowCurrentItems = filteredData.slice(userfollowIndexOfFirstItem, userfollowIndexOfLastItem);
-
-  const handleUserfollowPrev = () => {
-    setUserfollowCurrentPage((prev) => Math.max(prev - 1, 1));
-    setUserfollowInputPage((prev) => Math.max(prev - 1, 1));
-  };
-
-  const handleUserfollowNext = () => {
-    setUserfollowCurrentPage((prev) => Math.min(prev + 1, userfollowTotalPages));
-    setUserfollowInputPage((prev) => Math.min(prev + 1, userfollowTotalPages));
-  };
-
-  const handleUserfollowChange = (e) => {
-    const val = e.target.value;
-    if (/^\d*$/.test(val)) {
-      const num = parseInt(val, 10);
-      if (num <= userfollowTotalPages || isNaN(num)) {
-        setUserfollowInputPage(val);
-      }
-    }
-  };
-
-  const handleUserfollowKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const val = parseInt(userfollowInputPage.toString().trim(), 10);
-      if (!isNaN(val)) {
-        const safePage = Math.min(Math.max(val, 1), userfollowTotalPages);
-        setUserfollowCurrentPage(safePage);
-        setUserfollowInputPage("");
-      }
-      e.target.blur();
-    }
-  };
-
   if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
@@ -254,10 +218,10 @@ function UserFollowTable({ searchTerm = "" }) {
           </tr>
         </thead>
         <tbody>
-          {userfollowCurrentItems.length === 0 ? (
+          {currentItems.length === 0 ? (
             <tr><td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td></tr>
           ) : (
-            userfollowCurrentItems.map((row) => (
+            currentItems.map((row) => (
               <tr key={row.id} className="userfollow-row">
                 <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.id}</td>
                 <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.number}</td>
@@ -274,8 +238,6 @@ function UserFollowTable({ searchTerm = "" }) {
                     {row.status}
                   </span>
                 </td>
-
-
                 <td onClick={(e) => e.stopPropagation()}>
                   <Select
                     value={statusOptions.find((opt) => opt.value === row.status_user)}
@@ -289,7 +251,6 @@ function UserFollowTable({ searchTerm = "" }) {
                     }
                   />
                 </td>
-
                 <td className="print-icon" onClick={(e) => { e.stopPropagation(); handleExportExcel(row); }}>
                   <FaPrint />
                 </td>
@@ -301,22 +262,29 @@ function UserFollowTable({ searchTerm = "" }) {
 
       <div className="userfollow-pagination">
         <div className="userfollow-pagination-info">
-          แสดง {userfollowIndexOfFirstItem + 1} ถึง {Math.min(userfollowIndexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
         <div className="userfollow-pagination-buttons">
-          <button className="btn" disabled={userfollowCurrentPage === 1} onClick={handleUserfollowPrev}>ก่อนหน้า</button>
+          <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
           <input
-            type="number"
+            type="text"
             className="org-page-input"
-            min={1}
-            max={userfollowTotalPages}
-            value={userfollowInputPage}
-            placeholder={`${userfollowCurrentPage} / ${userfollowTotalPages}`}
-            onFocus={() => setUserfollowInputPage("")}
-            onChange={handleUserfollowChange}
-            onKeyDown={handleUserfollowKeyDown}
+            placeholder={`${currentPage} / ${totalPages}`}
+            value={inputPage}
+            onFocus={() => setInputPage("")}
+            onChange={(e) => setInputPage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const page = parseInt(inputPage, 10);
+                if (!isNaN(page) && page >= 1 && page <= totalPages) {
+                  setCurrentPage(page);
+                }
+                setInputPage("");
+                e.target.blur();
+              }
+            }}
           />
-          <button className="btn" disabled={userfollowCurrentPage === userfollowTotalPages} onClick={handleUserfollowNext}>ถัดไป</button>
+          <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
         </div>
       </div>
     </div>

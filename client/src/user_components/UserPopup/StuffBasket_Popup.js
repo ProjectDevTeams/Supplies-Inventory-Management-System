@@ -102,7 +102,7 @@ const StuffBasket_Popup = ({
       return;
     }
 
-    if (!purpose.trim() || !supervisor.trim() || !department.trim()) {
+    if (!purpose.trim() || !supervisor.trim()) {
       Swal.fire({
         icon: "warning",
         title: "กรอกข้อมูลไม่ครบ",
