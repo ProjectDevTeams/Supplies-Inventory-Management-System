@@ -1,12 +1,12 @@
 /* UserMorePopup.css */
 .usermorepopup-container {
   box-sizing: border-box;
-  width: auto;
-  max-width: 90%;
+  width: 100%;
+  max-width: 800px;
   min-width: 320px;
   max-height: 90vh;
   padding: 1.5rem;
-  margin: 0 1rem;
+  margin: 0 auto;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);

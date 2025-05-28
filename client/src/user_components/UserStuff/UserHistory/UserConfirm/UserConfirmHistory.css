@@ -16,6 +16,7 @@
   background: #f9f9f9;
   box-sizing: border-box;
   overflow-x: auto;
+  height: auto;
 }
 
 /* กล่องหลัก: กินเต็ม 100% แต่จำกัด max-width */
