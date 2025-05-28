@@ -17,29 +17,33 @@ function UserMorePopup({ onClose }) {
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const fetchMaterials = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
-        if (res.data.status === "success") {
-          const filtered = res.data.data.filter(
-            (m) => m.location === "วัสดุในคลัง"
-          );
-          const formatted = filtered.map((m) => ({
-            label: m.name,
-            value: m.name,
-            rawLabel: m.name,
-          }));
-          setAllOptions(formatted);
-          setOptions(formatted);
-          setMaterialsData(res.data.data);
-        }
-      } catch (err) {
-        console.error("เกิดข้อผิดพลาด:", err);
+useEffect(() => {
+  const fetchOutOfStockMaterials = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+      if (res.data.status === "success") {
+        const filtered = res.data.data.filter(
+          (m) => m.location === "วัสดุในคลัง" && parseInt(m.remain) === 0
+        );
+
+        const formatted = filtered.map((m) => ({
+          label: `${m.name} (จำนวนคงเหลือ: ${m.remain})`,
+          value: m.name,
+          rawLabel: m.name,
+        }));
+
+        setAllOptions(formatted);
+        setOptions(formatted);
+        setMaterialsData(filtered); // เก็บเฉพาะวัสดุคงเหลือ 0
       }
-    };
-    fetchMaterials();
-  }, []);
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด:", err);
+    }
+  };
+
+  fetchOutOfStockMaterials();
+}, []);
+
 
   const addRow = () => {
     setRows((prev) => [
