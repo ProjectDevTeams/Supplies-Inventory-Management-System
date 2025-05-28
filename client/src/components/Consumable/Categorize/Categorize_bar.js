@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router";
 import "./Categorize_bar.css";
 

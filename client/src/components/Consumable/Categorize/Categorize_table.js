@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Categorize_table.css";
 import AddCatagorizePopup from "./AddCategorize_popup";
 import EditCatagorizePopup from "./EditCategorize_popup";

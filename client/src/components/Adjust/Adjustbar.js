@@ -1,5 +1,3 @@
-// src/components/Adjust/Adjustbar.js
-import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Adjustbar.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';

@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router";
 import "./Consumablebar.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
