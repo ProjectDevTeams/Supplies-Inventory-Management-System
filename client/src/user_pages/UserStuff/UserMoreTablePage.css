@@ -16,4 +16,6 @@
   background-color: #f9f9f9;
   padding: 1em;
   box-sizing: border-box;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
 }

@@ -1,16 +1,19 @@
-/* UserStuff_table.css */
-
 .user-stuff-table-container {
   width: 100%;
   overflow-x: auto;
-  margin-top: 1rem;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .user-stuff-table {
-  width: 100%;
+  width: auto;
+  min-width: 100%;
   table-layout: auto;
   border-collapse: collapse;
-  background: white;
 }
 
 .user-stuff-table th,

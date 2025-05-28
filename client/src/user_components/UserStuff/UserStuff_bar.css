@@ -32,13 +32,13 @@
 }
 
 .userstuff-tab:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
 }
 
 .userstuff-tab.active {
-    background: linear-gradient(to right, #2a78db, #5997ef);
-    color: white;
+  background: linear-gradient(to right, #2a78db, #5997ef);
+  color: white;
 }
 
 .userstuff-right {
@@ -46,7 +46,6 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
 }
 
 .userstuff-search-box {
@@ -143,19 +142,31 @@
     transform: scale(0);
     opacity: 0;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 1;
   }
+
   100% {
     transform: scale(1);
   }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  75% { transform: translateX(2px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-2px);
+  }
+
+  75% {
+    transform: translateX(2px);
+  }
 }
 
 .basket-badge.animate {
