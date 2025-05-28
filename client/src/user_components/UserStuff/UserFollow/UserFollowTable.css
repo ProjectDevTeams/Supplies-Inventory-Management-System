@@ -1,4 +1,4 @@
-.userfollow-table-container {
+.user-follow-table-container {
   width: 100%;
   overflow-x: auto;
   margin: 1rem auto;
@@ -15,6 +15,7 @@
   min-width: 100%;
   table-layout: auto;
   border-collapse: collapse;
+  background: white;
 }
 
 .user-follow-table th,
@@ -70,57 +71,74 @@
   padding: 1rem;
 }
 
-.userfollow-pagination {
+.user-follow-table-pagination-wrapper {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  font-size: 13px;
-  gap: 0.5rem;
   margin-top: 1rem;
 }
 
-.userfollow-pagination-info {
-  color: #333;
+.user-follow-table-pagination-info {
   flex: 1;
+  text-align: left;
+  color: #333;
+  font-size: 14px;
 }
 
-.userfollow-pagination-buttons {
+.user-follow-table-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.btn {
-  padding: 0.4em 1em;
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.org-page-input {
-  width: 60px;
-  text-align: center;
-  padding: 0.3rem;
+.user-follow-table-pagination-buttons button {
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  color: #333;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #ffffff;
-  color: #333333;
-  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.org-page-input::placeholder {
-  color: #555;
-  font-weight: normal;
+.user-follow-table-pagination-buttons button:hover {
+  background-color: #e6f0ff;
+}
+
+.user-follow-table-pagination-buttons button:disabled {
+  background-color: #eeeeee;
+  color: #aaa;
+  pointer-events: none;
+}
+
+.user-follow-table-page-input {
+  width: 55px;
+  text-align: center;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid rgba(0, 123, 255, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  appearance: textfield;
+}
+
+.user-follow-table-page-input::placeholder {
+  color: white;
   opacity: 1;
+}
+
+.user-follow-table-page-input:focus {
+  outline: none;
+  border-color: rgba(0, 123, 255, 0.7);
+}
+
+.user-follow-table-page-input::-webkit-inner-spin-button,
+.user-follow-table-page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .status-approved {
@@ -143,94 +161,10 @@
   font-weight: bold;
 }
 
-.status-pending-items,
-.status-receive-items {
-  font-size: 14px;
-  font-weight: bold;
-  outline: none;
-  text-align: center;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #ccc;
-  padding: 0.3em 0.6em;
-}
-
-.status-pending-items {
-  color: #4b25b6;
-}
-
-.status-receive-items {
-  color: rgb(0, 146, 68);
-}
-
-.select-option1 {
-  color: #1e398d;
-  font-weight: bold;
-}
-
-.select-option2 {
-  color: #009244;
-  font-weight: bold;
-}
-
 .print-icon svg {
   color: #000;
   cursor: pointer;
   font-size: 20px;
-}
-
-.userfollow-btn {
-  padding: 0.4rem 1rem;
-  background-color: #fff;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.userfollow-btn:hover {
-  background-color: #e6f0ff;
-}
-
-.userfollow-btn:disabled {
-  background-color: #eee;
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-.userfollow-page-input {
-  width: 55px;
-  text-align: center;
-  padding: 0.4rem 0.6rem;
-  border: 2px solid rgba(0, 123, 255, 0.3);
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-.userfollow-page-input::placeholder {
-  color: white;
-  opacity: 1;
-}
-
-.userfollow-page-input:focus {
-  outline: none;
-  border-color: rgba(0, 123, 255, 0.7);
-}
-
-.userfollow-page-input::-webkit-inner-spin-button,
-.userfollow-page-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 @media (max-width: 768px) {

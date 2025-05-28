@@ -57,27 +57,28 @@
   padding: 1rem;
 }
 
-.user-more-pagination {
+.user-more-table-pagination-wrapper {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
-  gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
-.user-more-pagination-info {
+.user-more-table-pagination-info {
   flex: 1;
+  text-align: left;
   color: #333;
+  font-size: 14px;
 }
 
-.user-more-pagination-buttons {
+.user-more-table-pagination-buttons {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.user-more-pagination-buttons .btn {
+.user-more-table-pagination-buttons button {
   padding: 0.5rem 1rem;
   background-color: #ffffff;
   color: #333;
@@ -87,17 +88,17 @@
   cursor: pointer;
 }
 
-.user-more-pagination-buttons .btn:hover {
+.user-more-table-pagination-buttons button:hover {
   background-color: #e6f0ff;
 }
 
-.user-more-pagination-buttons .btn:disabled {
+.user-more-table-pagination-buttons button:disabled {
   background-color: #eeeeee;
   color: #aaa;
   pointer-events: none;
 }
 
-.org-page-input {
+.user-more-table-page-input {
   width: 55px;
   text-align: center;
   padding: 0.4rem 0.6rem;
@@ -110,18 +111,18 @@
   appearance: textfield;
 }
 
-.org-page-input::placeholder {
+.user-more-table-page-input::placeholder {
   color: white;
   opacity: 1;
 }
 
-.org-page-input:focus {
+.user-more-table-page-input:focus {
   outline: none;
   border-color: rgba(0, 123, 255, 0.7);
 }
 
-.org-page-input::-webkit-inner-spin-button,
-.org-page-input::-webkit-outer-spin-button {
+.user-more-table-page-input::-webkit-inner-spin-button,
+.user-more-table-page-input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

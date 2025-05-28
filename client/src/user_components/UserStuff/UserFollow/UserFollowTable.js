@@ -203,7 +203,7 @@ function UserFollowTable({ searchTerm = "" }) {
   if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
-    <div className="userfollow-table-container">
+    <div className="user-follow-table-container">
       <table className="user-follow-table">
         <thead>
           <tr>
@@ -260,31 +260,40 @@ function UserFollowTable({ searchTerm = "" }) {
         </tbody>
       </table>
 
-      <div className="userfollow-pagination">
-        <div className="userfollow-pagination-info">
+      <div className="user-follow-table-pagination-wrapper">
+        <div className="user-follow-table-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
         </div>
-        <div className="userfollow-pagination-buttons">
-          <button className="btn" disabled={currentPage === 1} onClick={handlePrev}>ก่อนหน้า</button>
+        <div className="user-follow-table-pagination-buttons">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            ก่อนหน้า
+          </button>
           <input
-            type="text"
-            className="org-page-input"
-            placeholder={`${currentPage} / ${totalPages}`}
+            type="number"
+            className="user-follow-table-page-input"
+            min={1}
+            max={totalPages}
             value={inputPage}
+            placeholder={`${currentPage} / ${totalPages}`}
             onFocus={() => setInputPage("")}
-            onChange={(e) => setInputPage(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
               if (e.key === "Enter") {
-                const page = parseInt(inputPage, 10);
-                if (!isNaN(page) && page >= 1 && page <= totalPages) {
-                  setCurrentPage(page);
-                }
-                setInputPage("");
+                const v = parseInt(inputPage, 10);
+                if (v >= 1 && v <= totalPages) setCurrentPage(v);
                 e.target.blur();
               }
             }}
           />
-          <button className="btn" disabled={currentPage === totalPages} onClick={handleNext}>ถัดไป</button>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            ถัดไป
+          </button>
         </div>
       </div>
     </div>
