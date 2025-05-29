@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import ExcelJS from "exceljs";
-import { saveAs } from "file-saver";
 import Select from "react-select";
-import Swal from 'sweetalert2';
-import { FaPrint } from "react-icons/fa";
+// import { FaPrint } from "react-icons/fa";
+// import { FaPrint } from 'react-icons/fa';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
+import Swal from 'sweetalert2';
 import "./UserFollowTable.css";
 
 function UserFollowTable({ searchTerm = "" }) {
@@ -33,7 +32,7 @@ function UserFollowTable({ searchTerm = "" }) {
           number: item.running_code,
           category: "เบิกวัสดุ",
           items: item.items.length,
-          date: formatDateThai(item.created_at),
+          date: item.created_at,
           status: item.Admin_status,
           status_user: item.User_status,
         }));
@@ -63,8 +62,8 @@ function UserFollowTable({ searchTerm = "" }) {
     row.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
     row.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
     row.items.toString().includes(searchTerm) ||
-    row.date.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    row.status.toLowerCase().includes(searchTerm.toLowerCase())
+    formatDateThai(row.date).includes(searchTerm) ||
+    row.status.toLowerCase().includes(searchTerm)
   );
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -101,94 +100,6 @@ function UserFollowTable({ searchTerm = "" }) {
     setData((prev) => prev.map((row) => (row.id === id ? { ...row, status_user: newStatus } : row)));
   };
 
-  const handleExportExcel = async (row) => {
-    const workbook = new ExcelJS.Workbook();
-    const response = await fetch("/image/template.xlsx");
-    const buffer = await response.arrayBuffer();
-    await workbook.xlsx.load(buffer);
-    const ws = workbook.getWorksheet(1);
-
-    ws.mergeCells("B2:I2");
-    const titleCell = ws.getCell("B2");
-    titleCell.value = "ใบเบิกวัสดุ";
-    titleCell.alignment = { horizontal: "center", vertical: "middle" };
-    titleCell.font = { name: "TH SarabunPSK", size: 22, bold: true };
-
-    if (ws.getCell("B3").value === "ใบเบิกวัสดุ") ws.getCell("B3").value = "";
-
-    const excelData = {
-      code: row.number,
-      date: "23 พ.ค. 67",
-      name: "นางสาวเพลิงดาว วิริยา",
-      department: "STI",
-      position: "เจ้าหน้าที่",
-      phone: "0123456789",
-      usage: "ใช้ในฝ่าย",
-      items: [
-        { name: "แฟ้มเอกสาร", qty: 2, unit: "เล่ม" },
-        { name: "ปากกา", qty: 10, unit: "ด้าม" },
-      ],
-      sign_name: "สมชาย ขอยืม",
-      head_name: "หัวหน้า หน่วยงาน",
-      receiver_name: "ฝ่ายพัสดุ",
-      giver_name: "เจ้าหน้าที่พัสดุ",
-      approver_name: "ผู้สั่งจ่าย",
-    };
-
-    ws.getCell("I4").value = excelData.code;
-    ws.getCell("I5").value = excelData.date;
-    ws.getCell("D6").value = excelData.name;
-    ws.getCell("D7").value = excelData.department;
-    ws.getCell("I6").value = excelData.position;
-    ws.getCell("I7").value = excelData.phone;
-    ws.getCell("E8").value = `${excelData.items.length}`;
-    ws.getCell("I8").value = excelData.usage;
-    ws.getCell("I8").alignment = { horizontal: "center" };
-
-    excelData.items.forEach((item, idx) => {
-      const rowIdx = 12 + idx;
-      ws.getCell(`B${rowIdx}`).value = idx + 1;
-      ws.getCell(`C${rowIdx}`).value = item.name;
-      ws.getCell(`H${rowIdx}`).value = item.qty;
-      ws.getCell(`I${rowIdx}`).value = item.unit;
-
-      ["B", "C", "H", "I"].forEach((col) => {
-        ws.getCell(`${col}${rowIdx}`).font = { name: "TH SarabunPSK", size: 14 };
-        ws.getCell(`${col}${rowIdx}`).alignment = {
-          horizontal: col === "C" ? "left" : "center",
-          vertical: "middle",
-          ...(col === "C" ? { indent: 2 } : {}),
-        };
-      });
-    });
-
-    [
-      "C22", "C23", "C24", "C26", "C27", "C28",
-      "G22", "G23", "G24", "G26", "G27", "G28",
-      "G30", "G31", "G32"
-    ].forEach((cell) => {
-      ws.getCell(cell).font = { name: "TH SarabunPSK", size: 14 };
-    });
-
-    ws.getCell("C22").value = excelData.sign_name;
-    ws.getCell("C23").value = excelData.sign_name;
-    ws.getCell("C24").value = excelData.date;
-    ws.getCell("C26").value = excelData.head_name;
-    ws.getCell("C27").value = excelData.head_name;
-    ws.getCell("C28").value = excelData.date;
-    ws.getCell("G22").value = excelData.receiver_name;
-    ws.getCell("G23").value = excelData.receiver_name;
-    ws.getCell("G24").value = excelData.date;
-    ws.getCell("G26").value = excelData.giver_name;
-    ws.getCell("G27").value = excelData.giver_name;
-    ws.getCell("G28").value = excelData.date;
-    ws.getCell("G30").value = excelData.approver_name;
-    ws.getCell("G31").value = excelData.approver_name;
-    ws.getCell("G32").value = excelData.date;
-
-    const fileBuffer = await workbook.xlsx.writeBuffer();
-    saveAs(new Blob([fileBuffer]), `ใบเบิก_${excelData.code}.xlsx`);
-  };
 
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
@@ -223,79 +134,59 @@ function UserFollowTable({ searchTerm = "" }) {
           ) : (
             currentItems.map((row) => (
               <tr key={row.id} className="userfollow-row">
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.id}</td>
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.number}</td>
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.category}</td>
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.items}</td>
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>{row.date}</td>
-                <td onClick={() => navigate("/user/confirm-status", { state: { id: row.id } })}>
+                <td>{row.id}</td>
+                <td>{row.number}</td>
+                <td>{row.category}</td>
+                <td>{row.items}</td>
+                <td>{formatDateThai(row.date)}</td>
+                <td>
                   <span className={
                     row.status === "อนุมัติ" ? "status-approved" :
                       row.status === "รออนุมัติ" ? "status-pending" :
-                        row.status === "รอดำเนินการ" ? "status-processing" :
-                          row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
+                        row.status === "ไม่อนุมัติ" ? "status-cancelled" : ""
                   }>
                     {row.status}
                   </span>
                 </td>
-                <td onClick={(e) => e.stopPropagation()}>
+                <td>
                   <Select
                     value={statusOptions.find((opt) => opt.value === row.status_user)}
-                    onChange={(selected) => handleStatusUserChange(row.id, selected.value)}
                     options={statusOptions}
                     styles={colourStyles}
-                    isDisabled={
-                      row.status === "ไม่อนุมัติ" ||
-                      row.status === "รออนุมัติ" ||
-                      row.status_user === "รับของเรียบร้อยแล้ว"
-                    }
+                    isDisabled={true}
                   />
                 </td>
-                <td className="print-icon" onClick={(e) => { e.stopPropagation(); handleExportExcel(row); }}>
-                  <FaPrint />
+                <td className="print-icon">
+                  <span
+                    style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
+                    onClick={() => {
+                      console.log("✅ CLICKED PRINT BUTTON");
+                      navigate("/userstuff/follow/print-track", {
+                        state: {
+                          data: {
+                            code: "TEST123",
+                            date: "2025-05-29",
+                            name: "ทดสอบ",
+                            department: "แผนก",
+                            position: "ตำแหน่ง",
+                            phone: "000-000",
+                            items: [{ name: "วัสดุ A", qty: 1, unit: "อัน" }]
+                          }
+                        }
+                      });
+                    }}
+                  >
+                    ปริ้น
+                  </span>
                 </td>
+
+
+
               </tr>
             ))
           )}
         </tbody>
       </table>
-
-      <div className="user-follow-table-pagination-wrapper">
-        <div className="user-follow-table-pagination-info">
-          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
-        </div>
-        <div className="user-follow-table-pagination-buttons">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-          >
-            ก่อนหน้า
-          </button>
-          <input
-            type="number"
-            className="user-follow-table-page-input"
-            min={1}
-            max={totalPages}
-            value={inputPage}
-            placeholder={`${currentPage} / ${totalPages}`}
-            onFocus={() => setInputPage("")}
-            onChange={e => setInputPage(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                const v = parseInt(inputPage, 10);
-                if (v >= 1 && v <= totalPages) setCurrentPage(v);
-                e.target.blur();
-              }
-            }}
-          />
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-          >
-            ถัดไป
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

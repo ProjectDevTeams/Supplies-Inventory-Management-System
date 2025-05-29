@@ -1,0 +1,72 @@
+.printtrack-wrapper {
+  padding: 2cm;
+  font-family: 'TH SarabunNew', sans-serif;
+  font-size: 18px;
+  color: #000;
+  line-height: 1.6;
+  width: 100%;
+  max-width: 950px;
+  margin: auto;
+}
+
+.printtrack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.printtrack-logo {
+  width: 100px;
+}
+
+.printtrack-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.printtrack-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 2rem;
+  margin: 1.5rem 0;
+}
+
+.printtrack-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+}
+
+.printtrack-table th,
+.printtrack-table td {
+  border: 1px solid #aaa;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.printtrack-table th {
+  background: #dbeaff;
+}
+
+.printtrack-signature {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.printtrack-signature div {
+  width: 30%;
+  text-align: center;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

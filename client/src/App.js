@@ -18,6 +18,7 @@ import StuffDetailPage from './pages/Stuff/StuffDetailPage';
 import StuffDetailTrackPage from './pages/Stuff/StuffDetailTrackPage';
 import StuffDetailPurchasePage from './pages/Stuff/StuffDetailPurchasePage';
 import PrintPurchasePage from "./components/Stuff/PrintPurchase/PrintPurchase";
+import PrintTrackPage from "./user_pages/UserStuff/PrintTrackPage";
 import IncomingPage from "./pages/Incoming/IncomingPage";
 import IncomingDetailPage from "./pages/Incoming/IncomingDetailPage";
 import IncomingAddPage from "./pages/Incoming/IncomingAddPage";
@@ -70,6 +71,7 @@ function App() {
         <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
         <Route path="/stuff/DetailPurchase" element={<StuffDetailPurchasePage />} />
         <Route path="/stuff/print-purchase" element={<PrintPurchasePage />} />
+        <Route path="/userstuff/follow/print-track" element={<PrintTrackPage />} />
         <Route path="/incoming" element={<IncomingPage />} />
         <Route path="/incoming/detail/:id" element={<IncomingDetailPage />} />
         <Route path="/incoming/add" element={<IncomingAddPage />} />
