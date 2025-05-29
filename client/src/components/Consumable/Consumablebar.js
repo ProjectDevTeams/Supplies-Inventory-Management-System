@@ -2,14 +2,35 @@ import { useNavigate } from "react-router";
 import "./Consumablebar.css";
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
 
 function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
   const navigate = useNavigate();
+  const [lowStockCount, setLowStockCount] = useState(0);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  // ✅ โหลดข้อมูลวัสดุใกล้หมด
+  useEffect(() => {
+    const fetchLowStockCount = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+        if (res.data.status === "success") {
+          const filtered = res.data.data.filter(
+            item => item.status === "วัสดุใกล้หมดสต็อก"
+          );
+          setLowStockCount(filtered.length);
+        }
+      } catch (error) {
+        console.error("โหลดจำนวนสินค้าที่ใกล้หมดสต็อกล้มเหลว:", error);
+      }
+    };
+    fetchLowStockCount();
+  }, []);
 
   return (
     <div>
@@ -25,13 +46,11 @@ function Consumable({ onAddClick, searchTerm, setSearchTerm }) {
               value={searchTerm}
               onChange={handleSearchChange}
             />
-              
-            
           </div>
 
           <div className="button-group">
-            <button className="btn danger">
-              สินค้าใกล้หมดสต็อก
+            <button className="btn danger" onClick={() => navigate("/report")}>
+              สินค้าใกล้หมดสต็อก ({lowStockCount})
             </button>
 
             <button className="btn success" onClick={onAddClick}>

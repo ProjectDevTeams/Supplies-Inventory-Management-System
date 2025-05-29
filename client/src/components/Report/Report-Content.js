@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Report-Content.css";
 import ReportMaterialRemain from "./Report-MaterialRemain";
 import ReportReceive from "./Report-Receive";
 import ReportIssue from "./Report-Issue";
 import ReportAdjust from "./Report-Adjust";
 import ReportLowStock from "./Report-LowStock";
+import axios from "axios";
+import { API_URL } from "../../config";
 
 function isDateRangeValid(fromMonth, fromYear, toMonth, toYear) {
-  if (!(fromMonth && fromYear && toMonth && toYear)) {
-    return true;
-  }
+  if (!(fromMonth && fromYear && toMonth && toYear)) return true;
   const idx = name => [
-    "มกราคม","กุมภาพันธ์","มีนาคม","เมษายน",
-    "พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม",
-    "กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+    "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+    "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
   ].indexOf(name) + 1;
   const f = new Date(`${parseInt(fromYear) - 543}-${idx(fromMonth)}-01`);
   const t = new Date(`${parseInt(toYear) - 543}-${idx(toMonth)}-01`);
@@ -22,17 +22,15 @@ function isDateRangeValid(fromMonth, fromYear, toMonth, toYear) {
 
 export default function ReportContent() {
   const months = [
-    "มกราคม", "กุมภาพันธ์","มีนาคม","เมษายน",
-    "พฤษภาคม","มิถุนายน","กรกฎาคม",
-    "สิงหาคม","กันยายน","ตุลาคม",
-    "พฤศจิกายน","ธันวาคม"
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+    "พฤษภาคม", "มิถุนายน", "กรกฎาคม",
+    "สิงหาคม", "กันยายน", "ตุลาคม",
+    "พฤศจิกายน", "ธันวาคม"
   ];
   const currentBuddhistYear = new Date().getFullYear() + 543;
   const years = [];
-  for (let y = 2565; y <= currentBuddhistYear; y++) {
-    years.push(String(y));
-  }
-  const warehouses = ["ทั้งหมด","วัสดุในคลัง","วัสดุนอกคลัง"];
+  for (let y = 2565; y <= currentBuddhistYear; y++) years.push(String(y));
+  const warehouses = ["ทั้งหมด", "วัสดุในคลัง", "วัสดุนอกคลัง"];
 
   const [fromMonth, setFromMonth] = useState("");
   const [fromYear, setFromYear] = useState("");
@@ -42,6 +40,25 @@ export default function ReportContent() {
   const [showResult, setShowResult] = useState(false);
   const [currentReport, setCurrentReport] = useState("");
   const [triggerSearch, setTriggerSearch] = useState(false);
+  const [lowStockCount, setLowStockCount] = useState(0);
+
+  // ✅ โหลดจำนวนวัสดุใกล้หมดสต็อกทันทีที่เข้า
+  useEffect(() => {
+    const fetchLowStockCount = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+        if (res.data.status === "success") {
+          const filtered = res.data.data.filter(item =>
+            item.status === "วัสดุใกล้หมดสต็อก"
+          );
+          setLowStockCount(filtered.length);
+        }
+      } catch (error) {
+        console.error("เกิดข้อผิดพลาดในการโหลดข้อมูลวัสดุใกล้หมดสต็อก:", error);
+      }
+    };
+    fetchLowStockCount();
+  }, []);
 
   const handleSearch = () => {
     if (!isDateRangeValid(fromMonth, fromYear, toMonth, toYear)) {
@@ -82,13 +99,17 @@ export default function ReportContent() {
         <div className="report-title">
           รายงาน{currentReport ? ` / ${reportNames[currentReport]}` : ""}
         </div>
+
         <div className="report-controls">
           <button className="report-btn report-blue" onClick={() => handleReportClick("remain")}>รายงานยอดคงเหลือวัสดุ</button>
           <button className="report-btn report-yellow" onClick={() => handleReportClick("issue")}>รายงานการเบิกวัสดุ</button>
           <button className="report-btn report-purple" onClick={() => handleReportClick("receive")}>รายงานการรับเข้าวัสดุ</button>
           <button className="report-btn report-green" onClick={() => handleReportClick("adjust")}>รายงานการปรับยอด</button>
-          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>รายงานวัสดุใกล้หมดสต็อก</button>
+          <button className="report-btn report-red" onClick={() => handleReportClick("lowstock")}>
+            รายงานวัสดุใกล้หมดสต็อก จำนวน {lowStockCount.toLocaleString()} รายการ
+          </button>
         </div>
+
         {currentReport && (
           <div className="report-search">
             {currentReport !== "lowstock" && (
@@ -125,6 +146,7 @@ export default function ReportContent() {
                 </div>
               </>
             )}
+
             <div className="report-search-row">
               {currentReport !== "issue" && (
                 <div className="report-search-group">
@@ -141,6 +163,7 @@ export default function ReportContent() {
             </div>
           </div>
         )}
+
         {showResult && currentReport === "remain" && (
           <ReportMaterialRemain
             warehouse={warehouse}
@@ -180,7 +203,10 @@ export default function ReportContent() {
           />
         )}
         {showResult && currentReport === "lowstock" && (
-          <ReportLowStock warehouse={warehouse} />
+          <ReportLowStock
+            warehouse={warehouse}
+            setLowStockCount={setLowStockCount}
+          />
         )}
       </div>
     </div>

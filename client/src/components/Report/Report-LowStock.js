@@ -5,31 +5,34 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { API_URL } from "../../config";
 
-export default function ReportLowStock({ warehouse }) {
+export default function ReportLowStock({ warehouse, setLowStockCount }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    axios.get(`${API_URL}/materials/get_materials.php`)
-      .then(res => {
-        if (res.data.status === "success") {
-          let filtered = res.data.data.filter(item =>
-            item.status === "วัสดุใกล้หมดสต็อก" &&
-            (warehouse === "ทั้งหมด" || item.location === warehouse)
-          );
-          const transformed = filtered.map(item => [
-            item.name,
-            item.unit,
-            Number(item.remain),
-            Number(item.price),
-            Number(item.remain * item.price)
-          ]);
-          setData(transformed);
+useEffect(() => {
+  axios.get(`${API_URL}/materials/get_materials.php`)
+    .then(res => {
+      if (res.data.status === "success") {
+        let filtered = res.data.data.filter(item =>
+          item.status === "วัสดุใกล้หมดสต็อก" &&
+          (warehouse === "ทั้งหมด" || item.location === warehouse)
+        );
+        const transformed = filtered.map(item => [
+          item.name,
+          item.unit,
+          Number(item.remain),
+          Number(item.price),
+          Number(item.remain * item.price)
+        ]);
+        setData(transformed);
+        if (setLowStockCount) {
+          setLowStockCount(transformed.length); // ✅ แก้ตรงนี้
         }
-      });
-  }, [warehouse]);
+      }
+    });
+}, [warehouse]);
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
