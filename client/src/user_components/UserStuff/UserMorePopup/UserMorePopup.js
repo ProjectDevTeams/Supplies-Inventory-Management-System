@@ -12,43 +12,39 @@ function UserMorePopup({ onClose }) {
   const [allOptions, setAllOptions] = useState([]);
   const [materialsData, setMaterialsData] = useState([]);
   const [rows, setRows] = useState([
-    { id: Date.now(), item: null, quantity: 1, file: null }
+    { id: Date.now(), item: null, quantity: 1, file: null, note: "" },
   ]);
-  const [note, setNote] = useState("");
+  const [, setInputText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-useEffect(() => {
-  const fetchOutOfStockMaterials = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/materials/get_materials.php`);
-      if (res.data.status === "success") {
-        const filtered = res.data.data.filter(
-          (m) => m.location === "วัสดุในคลัง" && parseInt(m.remain) === 0
-        );
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/materials/get_materials.php`);
+        if (res.data.status === "success") {
+          const all = res.data.data.map((m) => ({
+            label: `${m.name} (จำนวนคงเหลือ: ${m.remain})`,
+            value: m.name,
+            remain: m.remain,
+            rawLabel: m.name,
+          }));
 
-        const formatted = filtered.map((m) => ({
-          label: `${m.name} (จำนวนคงเหลือ: ${m.remain})`,
-          value: m.name,
-          rawLabel: m.name,
-        }));
-
-        setAllOptions(formatted);
-        setOptions(formatted);
-        setMaterialsData(filtered); // เก็บเฉพาะวัสดุคงเหลือ 0
+          setAllOptions(all);
+          setOptions(all.filter((m) => parseInt(m.remain) === 0));
+          setMaterialsData(res.data.data); // ✅ เพิ่มตรงนี้เพื่อเชื่อมวัสดุ
+        }
+      } catch (err) {
+        console.error("เกิดข้อผิดพลาด:", err);
       }
-    } catch (err) {
-      console.error("เกิดข้อผิดพลาด:", err);
-    }
-  };
+    };
 
-  fetchOutOfStockMaterials();
-}, []);
-
+    fetchMaterials();
+  }, []);
 
   const addRow = () => {
     setRows((prev) => [
       ...prev,
-      { id: Date.now(), item: null, quantity: null, file: null }
+      { id: Date.now(), item: null, quantity: 1, file: null, note: "" },
     ]);
   };
 
@@ -78,8 +74,11 @@ useEffect(() => {
 
       const uploadFormData = new FormData();
       rows.forEach((row, index) => {
-        if (row.file) uploadFormData.append(`file_${index}`, row.file);
+        if (row.file) {
+          uploadFormData.append(`file_${index}`, row.file);
+        }
       });
+
       const uploadRes = await axios.post(
         `${API_URL}/purchase_extras_items/upload_image.php`,
         uploadFormData,
@@ -100,7 +99,11 @@ useEffect(() => {
 
       const res = await axios.post(
         `${API_URL}/purchase_extras/add_purchase_extras.php`,
-        { created_by, reason: note, items }
+        {
+          created_by,
+          reason: rows[0]?.note || "",
+          items,
+        }
       );
 
       if (res.data.status === "success") {
@@ -129,9 +132,9 @@ useEffect(() => {
           <label>หมายเหตุ</label>
           <input
             type="text"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
             placeholder="ใส่หมายเหตุ..."
+            value={rows[0]?.note || ""}
+            onChange={(e) => updateRow(rows[0].id, "note", e.target.value)}
             className="usermorepopup-info-input"
           />
         </div>
@@ -151,20 +154,50 @@ useEffect(() => {
               className="usermorepopup-select"
               menuPortalTarget={document.body}
               styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              filterOption={null}
               formatCreateLabel={(inputValue) => `เพิ่ม "${inputValue}"`}
+              isValidNewOption={(inputValue, _, selectOptions) =>
+                inputValue &&
+                !selectOptions.some(
+                  (opt) => opt.value.toLowerCase() === inputValue.toLowerCase()
+                )
+              }
+              getOptionLabel={(e) =>
+                e.__isNew__ ? (
+                  e.label
+                ) : (
+                  <div className="usermorepopup-option">
+                    <span className="usermorepopup-name">{e.rawLabel}</span>
+                    <span className="usermorepopup-amount">
+                      จำนวนคงเหลือ: {e.remain}
+                    </span>
+                  </div>
+                )
+              }
+              onInputChange={(input) => {
+                setInputText(input);
+                setOptions(
+                  input.trim() === ""
+                    ? allOptions.filter((m) => parseInt(m.remain) === 0)
+                    : allOptions.filter((m) =>
+                        (m.rawLabel || "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      )
+                );
+              }}
             />
+
             <input
               type="number"
               min="1"
               value={row.quantity ?? ""}
-              onChange={(e) =>
-                updateRow(
-                  row.id,
-                  "quantity",
-                  Math.max(1, parseInt(e.target.value, 10) || 1)
-                )
-              }
-              placeholder="จำนวน"
+              onChange={(e) => {
+                const val = e.target.value;
+                const num = parseInt(val, 10);
+                updateRow(row.id, "quantity", isNaN(num) || num < 1 ? null : num);
+              }}
+              placeholder="1"
               className="usermorepopup-input usermorepopup-quantity-input"
             />
           </div>
@@ -172,15 +205,11 @@ useEffect(() => {
           <div className="usermorepopup-row-line2">
             <input
               type="file"
-              accept="image/*"
-              className="usermorepopup-file-input"
-              data-file-name=""
-              onChange={(e) => {
-                const file = e.target.files?.[0] || null;
-                updateRow(row.id, "file", file);
-                if (file) e.target.setAttribute("data-file-name", file.name);
-              }}
+              onChange={(e) => updateRow(row.id, "file", e.target.files[0] || null)}
             />
+            <span style={{ color: "#fff", fontSize: "0.9rem" }}>
+              {row.file?.name || "ไม่มีไฟล์ที่เลือก"}
+            </span>
             <button
               className="usermorepopup-remove-btn"
               onClick={() => removeRow(row.id)}
@@ -192,8 +221,8 @@ useEffect(() => {
         </div>
       ))}
 
-      <div className="usermorepopup-bottom-controls">
-        <button className="usermorepopup-add-btn" onClick={addRow}>＋ เพิ่มรายการ</button>
+      <div className="usermorepopup-add-btn" onClick={addRow}>
+        ＋ เพิ่มรายการ
       </div>
 
       <div className="usermorepopup-footer">
@@ -201,6 +230,10 @@ useEffect(() => {
           className="usermorepopup-save-btn"
           onClick={handleSave}
           disabled={isSubmitting}
+          style={{
+            opacity: isSubmitting ? 0.6 : 1,
+            pointerEvents: isSubmitting ? "none" : "auto",
+          }}
         >
           {isSubmitting ? "กำลังบันทึก..." : "บันทึกรายการ"}
         </button>
