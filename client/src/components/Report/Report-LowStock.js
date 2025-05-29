@@ -5,21 +5,11 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import { API_URL } from "../../config";
 
-const thaiMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-
 export default function ReportLowStock({ warehouse }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 10;
-
-  const formatToThaiDate = dateStr => {
-    const d = new Date(dateStr);
-    const day = String(d.getDate()).padStart(2, "0");
-    const m = d.getMonth();
-    const year = d.getFullYear() + 543;
-    return `${day} ${thaiMonths[m]} ${year}`;
-  };
 
   useEffect(() => {
     axios.get(`${API_URL}/materials/get_materials.php`)
@@ -32,10 +22,9 @@ export default function ReportLowStock({ warehouse }) {
           const transformed = filtered.map(item => [
             item.name,
             item.unit,
-            Number(item.price),
             Number(item.remain),
-            Number(item.remain * item.price),
-            formatToThaiDate(item.created_at)
+            Number(item.price),
+            Number(item.remain * item.price)
           ]);
           setData(transformed);
         }
@@ -52,14 +41,13 @@ export default function ReportLowStock({ warehouse }) {
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ชื่อวัสดุ","หน่วย","ราคาต่อหน่วย","คงเหลือ","มูลค่ารวม","วันที่"]];
+    const header = [["ชื่อวัสดุ", "หน่วย", "คงเหลือ", "ราคาต่อหน่วย", "มูลค่ารวม"]];
     const rows = data.map(row => [
       row[0],
       row[1],
       Math.round(row[2]),
       Math.round(row[3]),
-      Math.round(row[4]),
-      row[5]
+      Math.round(row[4])
     ]);
     const ws = XLSX.utils.aoa_to_sheet([...header, ...rows]);
     const wb = XLSX.utils.book_new();
@@ -82,10 +70,9 @@ export default function ReportLowStock({ warehouse }) {
           <tr>
             <th>ชื่อวัสดุ</th>
             <th>หน่วย</th>
-            <th>ราคาต่อหน่วย</th>
             <th>คงเหลือ</th>
+            <th>ราคาต่อหน่วย</th>
             <th>มูลค่ารวม</th>
-            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
