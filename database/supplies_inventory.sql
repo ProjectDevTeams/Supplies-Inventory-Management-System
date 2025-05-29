@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 07:00 AM
+-- Generation Time: May 29, 2025 at 06:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,7 +44,11 @@ INSERT INTO `adjustments` (`id`, `created_by`, `created_date`, `updated_date`, `
 (7, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
 (8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
 (12, 1, '2025-05-21', '2025-05-21', 'อนุมัติ'),
-(13, 1, '2025-07-31', '2025-05-22', 'อนุมัติ');
+(13, 1, '2025-07-31', '2025-05-22', 'อนุมัติ'),
+(14, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
+(15, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
+(16, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
+(17, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ');
 
 --
 -- Triggers `adjustments`
@@ -80,22 +84,44 @@ CREATE TABLE `adjustment_items` (
   `stock_type` enum('วัสดุในคลัง','วัสดุนอกคลัง') DEFAULT NULL,
   `material_id` int(11) NOT NULL,
   `quantity` int(11) DEFAULT 0 COMMENT 'จำนวนที่ปรับ',
-  `old_quantity` int(11) DEFAULT 0 COMMENT 'จำนวนก่อนการปรับ'
+  `old_quantity` int(11) DEFAULT 0 COMMENT 'จำนวนก่อนการปรับ',
+  `difference` int(11) DEFAULT 0 COMMENT 'ส่วนต่างระหว่าง quantity กับ old_quantity'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `adjustment_items`
 --
 
-INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`, `old_quantity`) VALUES
-(1, 6, 'วัสดุในคลัง', 1, 5, 0),
-(2, 6, 'วัสดุในคลัง', 2, 10, 0),
-(3, 7, 'วัสดุนอกคลัง', 3, 8, 0),
-(4, 7, 'วัสดุในคลัง', 4, 6, 0),
-(5, 8, 'วัสดุในคลัง', 5, 3, 0),
-(6, 8, 'วัสดุนอกคลัง', 6, 12, 0),
-(12, 12, 'วัสดุนอกคลัง', 1, 10, 2),
-(13, 13, 'วัสดุในคลัง', 1, 50, 10);
+INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`, `old_quantity`, `difference`) VALUES
+(1, 6, 'วัสดุในคลัง', 1, 5, 0, 0),
+(2, 6, 'วัสดุในคลัง', 2, 10, 0, 0),
+(3, 7, 'วัสดุนอกคลัง', 3, 8, 0, 0),
+(4, 7, 'วัสดุในคลัง', 4, 6, 0, 0),
+(5, 8, 'วัสดุในคลัง', 5, 3, 0, 0),
+(6, 8, 'วัสดุนอกคลัง', 6, 12, 0, 0),
+(12, 12, 'วัสดุนอกคลัง', 1, 10, 2, 0),
+(13, 13, 'วัสดุในคลัง', 1, 50, 10, 0),
+(14, 14, 'วัสดุในคลัง', 1, 50, 56, 6),
+(15, 15, 'วัสดุในคลัง', 1, 50, 56, 0),
+(16, 16, 'วัสดุในคลัง', 1, 50, 56, 6),
+(17, 17, 'วัสดุในคลัง', 1, 50, 56, 6),
+(18, 17, 'วัสดุในคลัง', 4, 15, 10, 5);
+
+--
+-- Triggers `adjustment_items`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_ai_set_difference` BEFORE INSERT ON `adjustment_items` FOR EACH ROW BEGIN
+  SET NEW.difference = ABS(NEW.old_quantity - NEW.quantity);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_ai_update_difference` BEFORE UPDATE ON `adjustment_items` FOR EACH ROW BEGIN
+  SET NEW.difference = ABS(NEW.old_quantity - NEW.quantity);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -216,8 +242,15 @@ CREATE TABLE `purchase_extras` (
 
 INSERT INTO `purchase_extras` (`id`, `running_code`, `created_by`, `created_date`, `reason`, `approval_status`) VALUES
 (1, '2568/05/001', 3, '2025-05-19', 'ขอซื้อวัสดุเพิ่มเติมสำหรับโปรเจกต์ A', 'อนุมัติ'),
-(2, '2568/05/002', 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'อนุมัติ'),
-(3, '2568/05/003', 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'อนุมัติ');
+(2, '2568/05/002', 3, '2025-05-19', 'จัดซื้อด่วนเพื่อซ่อมแซมอุปกรณ์', 'ไม่อนุมัติ'),
+(3, '2568/05/003', 3, '2025-05-19', 'ขอเบิกแฟ้มเพิ่มสำหรับฝ่ายบัญชี', 'อนุมัติ'),
+(4, '2568/05/004', 3, '2025-05-27', 'ขอซื้ออุปกรณ์เพิ่มเติม', 'รออนุมัติ'),
+(5, '2568/05/005', 3, '2025-05-27', 'test', 'รออนุมัติ'),
+(6, '2568/05/006', 3, '2025-05-27', 'test 2', 'รออนุมัติ'),
+(7, '2568/05/007', 3, '2025-05-27', 'test 3', 'รออนุมัติ'),
+(8, '2568/05/008', 3, '2025-05-27', 'test33333', 'รออนุมัติ'),
+(9, '2568/05/009', 3, '2025-05-27', 'test', 'รออนุมัติ'),
+(10, '2568/05/010', 3, '2025-05-27', '123', 'รออนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -241,7 +274,19 @@ CREATE TABLE `purchase_extra_items` (
 INSERT INTO `purchase_extra_items` (`id`, `image`, `purchase_extra_id`, `material_id`, `new_material_name`, `quantity`) VALUES
 (1, 'materials/picture/material_1748230018.jpg', 1, 1, NULL, 5),
 (2, NULL, 2, NULL, 'พัดลมตั้งโต๊ะ 16 นิ้ว', 2),
-(3, NULL, 3, 2, NULL, 10);
+(3, NULL, 3, 2, NULL, 10),
+(4, 'materials/picture/material_1748230018.jpg', 4, 1, NULL, 5),
+(5, NULL, 4, NULL, 'โต๊ะไม้พับได้', 2),
+(6, 'materials/picture/material_1748230018.jpg', 5, 1, NULL, 20),
+(7, 'materials/picture/material_1748230018.jpg', 6, 1, NULL, 20),
+(8, '', 6, 4, NULL, 5),
+(9, 'materials/picture/material_1748230018.jpg', 7, 1, NULL, 1),
+(10, '', 7, NULL, 'กระดาษดำ', 1),
+(11, NULL, 8, NULL, 'กระดาษดำ', 10),
+(12, 'materials/picture/material_1748230018.jpg', 9, 1, NULL, 10),
+(13, 'purchase_extras_items/picture/material_purchase_20250527085958_file_1.jpg', 9, NULL, 'กระดาษสีดำ', 10),
+(14, 'materials/picture/material_1748230018.jpg', 10, 1, NULL, 10),
+(15, 'purchase_extras_items/picture/material_purchase_20250527090605_file_1.jpg', 10, NULL, 'test', 10);
 
 -- --------------------------------------------------------
 
@@ -412,10 +457,10 @@ CREATE TABLE `stuff_materials` (
 --
 
 INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `supervisor_name`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
-(1, '2568/05/001', '2025-05-16', 11, 'นายประเสริฐ ใจดี', 'เบิกเพื่อใช้งานงานใหม่', 2525.00, 'รออนุมัติ', 'รับของเรียบร้อยแล้ว'),
-(2, 'SM-68/05/002', '2025-05-16', 1, NULL, 'เบิกสำหรับจัดอบรมภายใน', 300.00, 'อนุมัติ', 'รอรับของ'),
-(3, 'SM-68/05/003', '2025-07-31', 3, NULL, 'เบิกสำหรับซ่อมบำรุงทั่วไป', 220.00, 'อนุมัติ', 'รอรับของ'),
-(4, 'SM-2568/05/001', '2025-05-23', 3, NULL, '', 1100.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว');
+(1, '2568/05/001', '2025-05-26', 3, '', '', 2200.00, 'รออนุมัติ', 'รอรับของ'),
+(2, '2568/05/002', '2025-05-26', 3, '', '', 100.00, 'รออนุมัติ', 'รอรับของ'),
+(3, '2568/05/003', '2025-05-26', 4, '', '', 2200.00, 'รออนุมัติ', 'รอรับของ'),
+(4, '2568/05/004', '2025-05-26', 1, '', '', 1540.00, 'รออนุมัติ', 'รอรับของ');
 
 --
 -- Triggers `stuff_materials`
@@ -468,13 +513,10 @@ CREATE TABLE `stuff_material_items` (
 --
 
 INSERT INTO `stuff_material_items` (`id`, `stuff_material_id`, `material_id`, `quantity`, `total_price`) VALUES
-(1, 1, 1, 10, 2200.00),
-(2, 1, 2, 20, 300.00),
-(3, 1, 3, 5, 25.00),
-(4, 2, 2, 20, 300.00),
-(5, 3, 5, 1, 120.00),
-(6, 3, 6, 4, 100.00),
-(7, 4, 1, 5, 1100.00);
+(8, 1, 1, 10, 2200.00),
+(9, 2, 4, 10, 100.00),
+(10, 3, 1, 10, 2200.00),
+(11, 4, 1, 7, 1540.00);
 
 --
 -- Triggers `stuff_material_items`
@@ -558,7 +600,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `position`, `ema
 (1, 'admin1', '1234', 'สมชาย แอดมิน', 'ผู้ดูแลระบบ', 'admin1@example.com', '0812345678', 'แอดมิน', 'อนุมัติ'),
 (2, 'assistant1', 'assist1234', 'สายฝน ผู้ช่วย', 'ผู้ช่วยแอดมิน', 'assist1@example.com', '0823456789', 'ผู้ช่วยแอดมิน', 'อนุมัติ'),
 (3, 'user1', '123', 'วราภรณ์ ผู้ใช้', 'เจ้าหน้าที่พัสดุ', 'user1@example.com', '0834567890', 'ผู้ใช้งาน', 'อนุมัติ'),
-(4, 'user2', 'user5678', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'รออนุมัติ'),
+(4, 'user2', '123', 'ปิยะพงษ์ สต๊อก', 'เจ้าหน้าที่คลัง', 'user2@example.com', '0845678901', 'ผู้ใช้งาน', 'อนุมัติ'),
 (6, 'user123', '$2y$10$OtEWucdWjiBec9zRpE/54eXqvOmQ11bEOBV6ZUkIUBdbj/m4uO83q', 'สมศรี พนักงาน', 'เจ้าหน้าที่', 'user123@example.com', '0891234567', 'ผู้ใช้งาน', 'อนุมัติ'),
 (8, 'user789', '$2y$10$5aren321Auyl6Ry4e8kJyuuSCoux9OjbJMYnGuv/GYU5db6Nj8HOW', 'วราภรณ์ ผู้ใช้ (แก้ไข)', 'เจ้าหน้าที่พัสดุ', 'user1_new@example.com', '0899999999', 'ผู้ใช้งาน', 'อนุมัติ'),
 (9, 'Test00', '$2y$10$0qn.bVPRHj34TmQpGAPpg.g4b8q/xP0x32qyKMYOvlogMGujr5f3K', 'Test', 'เจ้าหน้าที่', 'test@gmail.com', '0000000000', 'แอดมิน', 'รออนุมัติ'),
@@ -668,13 +710,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `adjustment_items`
 --
 ALTER TABLE `adjustment_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -698,13 +740,13 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `purchase_extras`
 --
 ALTER TABLE `purchase_extras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `purchase_extra_items`
 --
 ALTER TABLE `purchase_extra_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `receive_materials`
@@ -728,7 +770,7 @@ ALTER TABLE `stuff_materials`
 -- AUTO_INCREMENT for table `stuff_material_items`
 --
 ALTER TABLE `stuff_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
