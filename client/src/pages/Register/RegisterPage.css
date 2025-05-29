@@ -1,86 +1,234 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Kanit', Arial, sans-serif;
+  font-family: "Kanit", Arial, sans-serif;
 }
 
 .body-register {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+.register-left {
+  width: 60%;
+  max-width: 700px;
+  background-color: #ffffff;
+  padding: 60px 60px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.register-box {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  margin-left: 0;
+  margin-right: auto;
+  transform: scale(1);
+  background-color: #fff;
+}
+
+.register-box:hover {
+  transform: scale(0.97);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #2176bd;
+  box-shadow: 0 0 0 2px rgba(33, 118, 189, 0.2);
+  transition: box-shadow 0.2s ease;
+}
+
+.register-box h2 {
+  font-size: 1.8rem;
+  margin: 0.05rem 0 0.3rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.logo {
+  width: 100px;
+  height: 80px;
+  margin: 0;
+  margin-bottom: 0;
+  display: block;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.75em;
+}
+
+.input-group label {
+  margin-bottom: 0.1em;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.input-group input {
+  padding: 0.6em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+.register-button {
+  width: 100%;
+  padding: 0.75em;
+  background-color: #2176bd;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 0.1rem;
+}
+
+.register-button:hover {
+  background-color: #155a95;
+}
+
+.switch-page {
+  margin-top: 0.8rem;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.switch-page a {
+  color: #2176bd;
+  text-decoration: none;
+}
+
+.register-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.register-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.input-columns {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.input-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+
+@media (max-width: 768px) {
+  .body-register {
+    background-image: url("../../assets/bg-login2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     height: 100vh;
-    overflow: hidden;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  
+
   .register-container {
-    display: flex;
-    height: 100%;
-    width: 100%;
-  }
-  
-  .register-left {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-  }
-  
-  .register-box {
-    width: 80%;
-    max-width: 400px;
-  }
-  
-  .logo {
-    width: 120px;
-    margin-bottom: 1em;
-  }
-  
-  .input-group {
-    display: flex;
     flex-direction: column;
-    margin-bottom: 1em;
-  }
-  
-  .input-group label {
-    margin-bottom: 0.3em;
-    font-weight: 500;
-  }
-  
-  .input-group input {
-    padding: 0.7em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .register-button {
-    width: 100%;
-    padding: 0.7em;
-    background-color: #2176bd;
-    border: none;
-    color: white;
-    font-size: 1em;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .register-button:hover {
-    background-color: #155a95;
-  }
-  
-  .register-right {
-    flex: 1;
-    display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .register-right img {
+    height: 100vh;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
-  
+
+  .register-left {
+    width: 90%;
+    max-width: 300px;           /* 🔽 ย่อมากขึ้น */
+    padding: 15px 15px;         /* 🔽 ขอบในเล็กลง */
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .register-box {
+    width: 100%;
+    padding: 0;
+    
+  }
+
+  .input-columns {
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
+
+  .input-column {
+    gap: 0.1rem;
+  }
+
+  .register-box h2 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .register-button {
+    font-size: 0.9rem;
+    padding: 0.6em;
+    width: 90%;
+
+    /* padding-right: 0.1em; */
+    margin: 1rem auto 0 auto;
+    display: block;   
+    
+  }
+
+  .logo {
+    width: 70px;
+    height: auto;
+    margin: 0 auto 0.75rem;
+    display: block;
+  }
+
+  .register-right {
+    display: none;
+  }
+
+  .switch-page {
+    margin-top: 0.4rem;
+    /* margin-bottom: 0.6rem; */
+    font-size: 0.9em;
+  }
+}
+
+
