@@ -73,7 +73,7 @@ export default function ReportMaterialRemain({ warehouse, fromMonth, fromYear, t
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ลำดับ","ชื่อวัสดุ","หน่วย","ยอดยกมา","ยอดซื้อ","ยอดเบิก","คงเหลือ","มูลค่า","วันที่"]];
+    const header = [["ลำดับ","ชื่อวัสดุ","หน่วย","ยอดยกมา","ยอดซื้อ","ยอดเบิก","คงเหลือ","มูลค่า","วันที่สร้างวัสดุ"]];
     const rows = data.map(item => [
       item.id, item.name, item.unit,
       item.carry, item.brought, item.issued,
@@ -100,7 +100,7 @@ export default function ReportMaterialRemain({ warehouse, fromMonth, fromYear, t
           <tr>
             <th>ลำดับ</th><th>ชื่อวัสดุ</th><th>หน่วย</th><th>ยอดยกมา</th>
             <th>ยอดซื้อ</th><th>ยอดเบิก</th><th>คงเหลือ</th>
-            <th>มูลค่า</th><th>วันที่</th>
+            <th>มูลค่า</th><th>วันที่สร้างวัสดุ</th>
           </tr>
         </thead>
         <tbody>

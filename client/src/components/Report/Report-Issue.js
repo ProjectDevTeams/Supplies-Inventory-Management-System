@@ -65,7 +65,7 @@ export default function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, t
   useEffect(() => { setInputPage(""); },[currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ลำดับ","เลขที่","ชื่อผู้ขอเบิก","ชื่อวัสดุ","จำนวน","มูลค่า","วันที่"]];
+    const header = [["ลำดับ","เลขที่","ชื่อผู้ขอเบิก","ชื่อวัสดุ","จำนวน","มูลค่า","วันที่เบิกวัสดุ"]];
     const rows = data.map((it,i)=>[
       i+1,it.code,it.created_by,it.name,it.quantity,Math.round(it.price),it.date
     ]);
@@ -88,7 +88,7 @@ export default function ReportIssue({ warehouse, fromMonth, fromYear, toMonth, t
         <thead>
           <tr>
             <th>ลำดับ</th><th>เลขที่</th><th>ชื่อผู้ขอเบิก</th>
-            <th>ชื่อวัสดุ</th><th>จำนวน</th><th>มูลค่า</th><th>วันที่</th>
+            <th>ชื่อวัสดุ</th><th>จำนวน</th><th>มูลค่า</th><th>วันที่เบิกวัสดุ</th>
           </tr>
         </thead>
         <tbody>{shown.map((item,i)=>(

@@ -60,7 +60,7 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
   }, [currentPage]);
 
   const exportToExcel = () => {
-    const header = [["ลำดับ","บริษัท","จำนวนวัสดุ","มูลค่ารวม","วันที่"]];
+    const header = [["ลำดับ","บริษัท","จำนวนวัสดุ","มูลค่ารวม","วันที่รับเข้าวัสดุ"]];
     const rows = data.map((item, i) => [
       i + 1,
       item.company_name,
@@ -90,7 +90,7 @@ function ReportReceive({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
             <th>บริษัท</th>
             <th>จำนวนวัสดุ</th>
             <th>มูลค่ารวม</th>
-            <th>วันที่</th>
+            <th>วันที่รับเข้าวัสดุ</th>
           </tr>
         </thead>
         <tbody>

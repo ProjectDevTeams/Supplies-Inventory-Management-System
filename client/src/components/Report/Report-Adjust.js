@@ -55,6 +55,7 @@ function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
                     material_name: item.material_name,
                     old_quantity: item.old_quantity,
                     quantity: item.quantity,
+                    difference: item.difference, // ✅ เพิ่มคอลัมน์ส่วนต่าง
                     full_name: adj.full_name,
                     date: formatToThaiDate(adj.created_date)
                   });
@@ -78,7 +79,7 @@ function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
 
   const exportToExcel = () => {
     const header = [
-      ["ลำดับ","จากคลัง","ชื่อวัสดุ","จำนวนเดิม","จำนวนที่ปรับ","ผู้รับผิดชอบ","วันที่"]
+      ["ลำดับ","จากคลัง","ชื่อวัสดุ","จำนวนเดิม","จำนวนที่ปรับ","ส่วนต่าง","ผู้รับผิดชอบ","วันที่ปรับยอด"]
     ];
     const rows = data.map((item, i) => [
       i + 1,
@@ -86,6 +87,7 @@ function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
       item.material_name,
       item.old_quantity,
       item.quantity,
+      item.difference, // ✅ ส่งออกส่วนต่างด้วย
       item.full_name,
       item.date
     ]);
@@ -112,8 +114,9 @@ function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
             <th>ชื่อวัสดุ</th>
             <th>จำนวนเดิม</th>
             <th>จำนวนที่ปรับ</th>
+            <th>ส่วนต่าง</th> {/* ✅ เพิ่มคอลัมน์ */}
             <th>ผู้รับผิดชอบ</th>
-            <th>วันที่</th>
+            <th>วันที่ปรับยอด</th>
           </tr>
         </thead>
         <tbody>
@@ -124,6 +127,7 @@ function ReportAdjust({ warehouse, fromMonth, fromYear, toMonth, toYear }) {
               <td>{item.material_name}</td>
               <td>{item.old_quantity}</td>
               <td>{item.quantity}</td>
+              <td>{item.difference}</td> {/* ✅ แสดงค่าความต่าง */}
               <td>{item.full_name}</td>
               <td>{item.date}</td>
             </tr>

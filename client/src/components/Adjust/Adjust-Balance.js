@@ -75,6 +75,10 @@ function AdjustBalance() {
               <strong>เป็นจำนวน:</strong>
               <span>{item.quantity ?? "-"}</span>
             </div>
+            <div className="balance-row">
+              <strong>ส่วนต่าง:</strong>
+              <span>{item.difference ?? "-"}</span>
+            </div>
           </div>
         ))}
       </div>
