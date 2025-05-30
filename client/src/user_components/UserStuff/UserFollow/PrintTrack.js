@@ -1,12 +1,11 @@
-// File: PrintTrackPage.js
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./PrintTrack.css";
 
 export default function PrintTrackPage() {
   const { state } = useLocation();
-  const data = state?.data;
-  console.log("📦 รับข้อมูลจาก navigate:", data);
+  const data = state?.data || {};
+
   useEffect(() => {
     if (data) {
       const timer = setTimeout(() => window.print(), 500);
@@ -14,42 +13,62 @@ export default function PrintTrackPage() {
     }
   }, [data]);
 
-  const formatThaiDate = (dateStr) => {
-    const d = new Date(dateStr);
-    const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
-                      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+  const formatThaiDate = (dateStr = "") => {
+    const d = dateStr ? new Date(dateStr) : new Date();
+    const thMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
     return `${d.getDate()} ${thMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
   };
 
-  if (!data) return <div style={{ padding: "2cm" }}>ไม่พบข้อมูล</div>;
-
   return (
     <div className="printtrack-wrapper">
-      <div className="printtrack-header">
+      {/* Logo */}
+      <div className="printtrack-logo-header">
         <img src="/image/logo.png" alt="logo" className="printtrack-logo" />
-        <h2 className="printtrack-title">ใบเบิกวัสดุ</h2>
       </div>
 
-      <div className="printtrack-grid">
-        <div>เลขที่ใบเบิก: {data.code}</div>
-        <div>วันที่: {formatThaiDate(data.date)}</div>
-        <div>ชื่อ: {data.name}</div>
-        <div>ตำแหน่ง: {data.position}</div>
-        <div>หน่วยงาน: {data.department}</div>
-        <div>โทรศัพท์: {data.phone}</div>
+      {/* Title */}
+      <h2 className="printtrack-title">ใบเบิกวัสดุ</h2>
+
+      {/* Info grid */}
+      <div className="printtrack-info-grid">
+        <div>ข้าพเจ้า:</div>
+        <div>{data.name || "................................."}</div>
+        <div>เลขที่/ปีงบประมาณ:</div>
+        <div>{data.budgetCode || "....................."}</div>
+
+        <div>หน่วยงาน:</div>
+        <div>{data.department || "................................."}</div>
+        <div>วันที่:</div>
+        <div>{formatThaiDate(data.date)}</div>
+
+        <div className="span-col-left">ความประสงค์จะขอเบิกวัสดุ จำนวน: {data.totalQty ?? "-"} รายการ</div>
+        <div></div>
+        <div>ตำแหน่ง:</div>
+        <div>{data.position || "................................."}</div>
+
+        <div></div>
+        <div></div>
+        <div>โทรศัพท์:</div>
+        <div>{data.phone || "......"}</div>
+
+        <div></div>
+        <div></div>
+        <div>เพื่อใช้ในงาน/กิจกรรม:</div>
+        <div>{data.purpose || "................................."}</div>
       </div>
 
+      {/* Table */}
       <table className="printtrack-table">
         <thead>
           <tr>
-            <th>ลำดับที่</th>
-            <th>รายการวัสดุ</th>
-            <th>จำนวน</th>
-            <th>หน่วยนับ</th>
+            <th style={{ width: "10%" }}>ลำดับที่</th>
+            <th style={{ width: "55%" }}>รายการวัสดุ</th>
+            <th style={{ width: "15%" }}>จำนวน</th>
+            <th style={{ width: "20%" }}>หน่วยนับ</th>
           </tr>
         </thead>
         <tbody>
-          {data.items.map((item, idx) => (
+          {(data.items || []).map((item, idx) => (
             <tr key={idx}>
               <td>{idx + 1}</td>
               <td>{item.name}</td>
@@ -57,26 +76,49 @@ export default function PrintTrackPage() {
               <td>{item.unit}</td>
             </tr>
           ))}
+          {Array.from({ length: 9 - (data.items?.length || 0) }).map((_, i) => (
+            <tr key={i}>
+              <td>&nbsp;</td><td></td><td></td><td></td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
-      <div className="printtrack-signature">
-        <div>
-          <p>ลงชื่อ..................................................... ผู้ขอเบิก</p>
-          <p>( {data.name} )</p>
-          <p>วันที่..........................................</p>
-        </div>
-        <div>
-          <p>ลงชื่อ..................................................... หัวหน้างาน</p>
-          <p>( ............................................... )</p>
-          <p>วันที่..........................................</p>
-        </div>
-        <div>
-          <p>ลงชื่อ..................................................... ผู้จ่ายของ</p>
-          <p>( ............................................... )</p>
-          <p>วันที่..........................................</p>
-        </div>
-      </div>
+      {/* Signatures */}
+      <table className="printtrack-sign-table">
+        <tbody>
+          <tr>
+            <td>
+              <p className="sign-header">
+                ข้าพเจ้าขอรับรองว่าวัสดุที่ขอเบิกไปใช้ในราชการหน่วยงานเท่านั้น
+              </p>
+              <p className="sign-line">ลงชื่อ..........................................ผู้ขอเบิก</p>
+              <p className="sign-line">( ................................. )</p>
+              <p className="sign-line">วันที่.................................</p>
+              <div className="sign-gap" />
+              <p className="sign-line">ลงชื่อ..........................................หัวหน้างาน</p>
+              <p className="sign-line">( ........................................ )</p>
+              <p className="sign-line">วันที่.................................</p>
+            </td>
+            <td>
+              <p className="sign-header">
+                ข้าพเจ้าได้ตรวจรับวัสดุที่ขอเบิกแล้วครบถ้วนตามรายการที่ได้รับอนุมัติ
+              </p>
+              <p className="sign-line">ลงชื่อ..........................................ผู้รับของ</p>
+              <p className="sign-line">( ........................................ )</p>
+              <p className="sign-line">วันที่.................................</p>
+              <div className="sign-gap" />
+              <p className="sign-line">ลงชื่อ..........................................ผู้จ่ายของ</p>
+              <p className="sign-line">( ........................................ )</p>
+              <p className="sign-line">วันที่.................................</p>
+              <div className="sign-gap" />
+              <p className="sign-line">ลงชื่อ..........................................ผู้สั่งจ่ายวัสดุ</p>
+              <p className="sign-line">( ........................................ )</p>
+              <p className="sign-line">วันที่.................................</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

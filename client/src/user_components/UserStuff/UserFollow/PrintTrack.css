@@ -1,72 +1,91 @@
+html, body {
+  margin:0; padding:0;
+}
+
 .printtrack-wrapper {
-  padding: 2cm;
-  font-family: 'TH SarabunNew', sans-serif;
-  font-size: 18px;
-  color: #000;
-  line-height: 1.6;
-  width: 100%;
-  max-width: 950px;
-  margin: auto;
+  width:210mm; min-height:297mm;
+  padding:10mm;
+  box-sizing:border-box;
+  margin:auto;
+  font-family:'TH SarabunNew', sans-serif;
+  font-size:16px; line-height:1.4; color:#000;
 }
 
-.printtrack-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.printtrack-logo {
-  width: 100px;
-}
+.printtrack-logo-header { text-align:left; margin-bottom:0.5rem; }
+.printtrack-logo { width:80px; }
 
 .printtrack-title {
-  font-size: 24px;
-  font-weight: bold;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:0.5rem;
 }
 
-.printtrack-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 2rem;
-  margin: 1.5rem 0;
+.printtrack-info-grid {
+  display:grid;
+  grid-template-columns:auto 1fr auto 1fr;
+  row-gap:2mm;
+  column-gap:6mm;
+  margin-bottom:2mm;
+}
+
+.printtrack-info-grid > div {
+  white-space:nowrap;
+}
+
+.printtrack-info-grid .span-col-left {
+  grid-column:1 / span 2;
 }
 
 .printtrack-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2rem 0;
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:8mm;
 }
 
 .printtrack-table th,
 .printtrack-table td {
-  border: 1px solid #aaa;
-  padding: 0.6rem;
-  text-align: center;
+  border:1px solid #000;
+  padding:0.2rem;
+  text-align:center;
+  vertical-align:middle;
+  font-size:15px;
 }
 
 .printtrack-table th {
-  background: #dbeaff;
+  background:#dbeaff;
+  font-weight:bold;
 }
 
-.printtrack-signature {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 3rem;
+.printtrack-sign-table {
+  width:100%;
+  border-collapse:separate;
+  border-spacing:8mm 0;
 }
 
-.printtrack-signature div {
-  width: 30%;
-  text-align: center;
+.printtrack-sign-table td {
+  border:1px solid #000;
+  padding:8mm;
+  vertical-align:top;
+  font-size:15px;
+}
+
+.sign-header {
+  margin:0 0 4mm;
+  font-weight:bold;
+  text-align:center;
+}
+
+.sign-line {
+  margin:2mm 0;
+  text-align:left;
+}
+
+.sign-gap {
+  height:4mm;
 }
 
 @media print {
-  @page {
-    size: A4 portrait;
-    margin: 1.5cm;
-  }
-
-  body {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
+  @page { size:A4 portrait; margin:0; }
+  body { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
 }
