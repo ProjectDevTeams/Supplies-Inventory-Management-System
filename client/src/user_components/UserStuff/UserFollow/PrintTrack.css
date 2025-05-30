@@ -24,9 +24,13 @@ html, body {
 .printtrack-info-grid {
   display:grid;
   grid-template-columns:auto 1fr auto 1fr;
-  row-gap:2mm;
+  row-gap:4mm;
   column-gap:6mm;
   margin-bottom:2mm;
+}
+
+.printtrack-info-table{
+  border-spacing: 10mm 2mm;
 }
 
 .printtrack-info-grid > div {
@@ -78,7 +82,8 @@ html, body {
 
 .sign-line {
   margin:2mm 0;
-  text-align:left;
+
+  text-align:center;
 }
 
 .sign-gap {
