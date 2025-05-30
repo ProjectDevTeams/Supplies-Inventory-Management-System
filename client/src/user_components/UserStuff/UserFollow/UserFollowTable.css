@@ -167,6 +167,37 @@
   font-size: 20px;
 }
 
+.user-follow-table-pagination-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.user-follow-table-pagination-info {
+  font-size: 14px;
+  color: #555;
+}
+
+.user-follow-table-pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-follow-table-pagination-buttons button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.user-follow-table-page-input {
+  width: 60px;
+  text-align: center;
+  padding: 5px;
+}
+
+
 @media (max-width: 768px) {
   .user-follow-table {
     display: block;
@@ -175,3 +206,4 @@
     background: white;
   }
 }
+

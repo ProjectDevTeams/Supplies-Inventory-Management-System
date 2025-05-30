@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
-// import { FaPrint } from "react-icons/fa";
-// import { FaPrint } from 'react-icons/fa';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
@@ -12,7 +10,6 @@ function UserFollowTable({ searchTerm = "" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 5;
 
   const navigate = useNavigate();
@@ -78,8 +75,13 @@ function UserFollowTable({ searchTerm = "" }) {
     const item = data.find((i) => i.id === id);
     if (!item) return;
 
-    if (item.status === "ไม่อนุมัติ" || item.status === "รออนุมัติ" || item.status_user === "รับของเรียบร้อยแล้ว") {
-      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้" });
+    if (item.status !== "อนุมัติ") {
+      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้ (ต้องเป็น อนุมัติ)" });
+      return;
+    }
+
+    if (item.status_user === "รับของเรียบร้อยแล้ว") {
+      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้ (รับของเรียบร้อยแล้วแล้ว)" });
       return;
     }
 
@@ -100,7 +102,6 @@ function UserFollowTable({ searchTerm = "" }) {
     setData((prev) => prev.map((row) => (row.id === id ? { ...row, status_user: newStatus } : row)));
   };
 
-
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
     { value: "รับของเรียบร้อยแล้ว", label: "รับของเรียบร้อยแล้ว", color: "#009244" },
@@ -109,6 +110,22 @@ function UserFollowTable({ searchTerm = "" }) {
   const colourStyles = {
     option: (styles, { data }) => ({ ...styles, color: data.color, backgroundColor: "#fff", fontWeight: "bold" }),
     singleValue: (styles, { data }) => ({ ...styles, color: data.color, fontWeight: "bold" }),
+  };
+
+  const handleRowClick = (row) => {
+    navigate("/userstuff/follow/print-track", {
+      state: {
+        data: {
+          code: row.number,
+          date: formatDateThai(row.date),
+          name: "ชื่อผู้ใช้",
+          department: "แผนก",
+          position: "ตำแหน่ง",
+          phone: "000-000",
+          items: [{ name: "วัสดุ A", qty: row.items, unit: "หน่วย" }]
+        }
+      }
+    });
   };
 
   if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
@@ -153,24 +170,28 @@ function UserFollowTable({ searchTerm = "" }) {
                     value={statusOptions.find((opt) => opt.value === row.status_user)}
                     options={statusOptions}
                     styles={colourStyles}
-                    isDisabled={true}
+                    isDisabled={row.status !== "อนุมัติ"}
+                    onChange={(selectedOption) =>
+                      handleStatusUserChange(row.id, selectedOption.value)
+                    }
                   />
                 </td>
                 <td className="print-icon">
                   <span
                     style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation(); // กันคลิกทะลุ
                       console.log("✅ CLICKED PRINT BUTTON");
                       navigate("/userstuff/follow/print-track", {
                         state: {
                           data: {
-                            code: "TEST123",
-                            date: "2025-05-29",
-                            name: "ทดสอบ",
+                            code: row.number,
+                            date: formatDateThai(row.date),
+                            name: "ชื่อผู้ใช้",
                             department: "แผนก",
                             position: "ตำแหน่ง",
                             phone: "000-000",
-                            items: [{ name: "วัสดุ A", qty: 1, unit: "อัน" }]
+                            items: [{ name: "วัสดุ A", qty: row.items, unit: "หน่วย" }]
                           }
                         }
                       });
@@ -179,14 +200,45 @@ function UserFollowTable({ searchTerm = "" }) {
                     ปริ้น
                   </span>
                 </td>
-
-
-
               </tr>
+
             ))
           )}
         </tbody>
       </table>
+      <div className="user-follow-table-pagination-wrapper">
+        <div className="user-follow-table-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+        </div>
+        <div className="user-follow-table-pagination-buttons">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            ก่อนหน้า
+          </button>
+          <input
+            type="number"
+            className="user-follow-table-page-input"
+            min={1}
+            max={totalPages}
+            value={currentPage}
+            placeholder={`${currentPage} / ${totalPages}`}
+            onChange={e => {
+              const v = parseInt(e.target.value, 10);
+              if (v >= 1 && v <= totalPages) {
+                setCurrentPage(v);
+              }
+            }}
+          />
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
