@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import "./PrintTrack.css";
 
 export default function PrintTrackPage() {
   const { state } = useLocation();
-  const data = state?.data || {};
+
+  const data = useMemo(() => state?.data || {}, [state]);
 
   useEffect(() => {
     if (data) {
@@ -12,6 +13,7 @@ export default function PrintTrackPage() {
       return () => clearTimeout(timer);
     }
   }, [data]);
+
 
   const formatThaiDate = (dateStr = "") => {
     const d = dateStr ? new Date(dateStr) : new Date();
