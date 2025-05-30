@@ -1,5 +1,4 @@
-// UserMorePopup.js
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { FaTrash } from "react-icons/fa";
 import axios from "axios";
@@ -22,7 +21,12 @@ function UserMorePopup({ onClose }) {
       try {
         const res = await axios.get(`${API_URL}/materials/get_materials.php`);
         if (res.data.status === "success") {
-          const all = res.data.data.map((m) => ({
+          // ✅ กรองเฉพาะวัสดุในคลัง
+          const filtered = res.data.data.filter(
+            (m) => m.location === "วัสดุในคลัง"
+          );
+
+          const all = filtered.map((m) => ({
             label: `${m.name} (จำนวนคงเหลือ: ${m.remain})`,
             value: m.name,
             remain: m.remain,
@@ -31,7 +35,7 @@ function UserMorePopup({ onClose }) {
 
           setAllOptions(all);
           setOptions(all.filter((m) => parseInt(m.remain) === 0));
-          setMaterialsData(res.data.data); // ✅ เพิ่มตรงนี้เพื่อเชื่อมวัสดุ
+          setMaterialsData(filtered);
         }
       } catch (err) {
         console.error("เกิดข้อผิดพลาด:", err);
@@ -61,81 +65,80 @@ function UserMorePopup({ onClose }) {
   };
 
   const handleSave = async () => {
-  if (isSubmitting) return;
+    if (isSubmitting) return;
 
-  // 🔍 ตรวจสอบว่าแต่ละ row ต้องมี item (วัสดุ) และไฟล์แนบ
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const materialName = row.item?.value || row.item?.label;
+    // 🔍 ตรวจสอบว่าแต่ละ row ต้องมี item (วัสดุ) และไฟล์แนบ
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const materialName = row.item?.value || row.item?.label;
 
-    if (!materialName || !row.file) {
-      Swal.fire({
-        icon: "warning",
-        title: "กรอกข้อมูลไม่ครบ",
-        text: "กรุณาเลือกหรือเพิ่มชื่อวัสดุ และแนบรูปภาพก่อนบันทึกรายการ",
+      if (!materialName || !row.file) {
+        Swal.fire({
+          icon: "warning",
+          title: "กรอกข้อมูลไม่ครบ",
+          text: "กรุณาเลือกหรือเพิ่มชื่อวัสดุ และแนบรูปภาพก่อนบันทึกรายการ",
+        });
+        return;
+      }
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const created_by = user?.id;
+      if (!created_by) {
+        Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
+        return;
+      }
+
+      const uploadFormData = new FormData();
+      rows.forEach((row, index) => {
+        if (row.file) {
+          uploadFormData.append(`file_${index}`, row.file);
+        }
       });
-      return;
-    }
-  }
 
-  setIsSubmitting(true);
+      const uploadRes = await axios.post(
+        `${API_URL}/purchase_extras_items/upload_image.php`,
+        uploadFormData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      const uploadedImages = uploadRes.data?.uploaded || {};
 
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const created_by = user?.id;
-    if (!created_by) {
-      Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
-      return;
-    }
+      const items = rows.map((r, index) => {
+        const name = r.item?.value ?? r.item?.label ?? "";
+        const matched = materialsData.find((m) => m.name === name);
+        return {
+          quantity: r.quantity,
+          material_id: matched ? matched.id : null,
+          new_material_name: matched ? null : name,
+          image: matched?.image || uploadedImages[`file_${index}`] || "",
+        };
+      });
 
-    const uploadFormData = new FormData();
-    rows.forEach((row, index) => {
-      if (row.file) {
-        uploadFormData.append(`file_${index}`, row.file);
+      const res = await axios.post(
+        `${API_URL}/purchase_extras/add_purchase_extras.php`,
+        {
+          created_by,
+          reason: rows[0]?.note || "",
+          items,
+        }
+      );
+
+      if (res.data.status === "success") {
+        Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
+        onClose();
+      } else {
+        Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
       }
-    });
-
-    const uploadRes = await axios.post(
-      `${API_URL}/purchase_extras_items/upload_image.php`,
-      uploadFormData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
-    const uploadedImages = uploadRes.data?.uploaded || {};
-
-    const items = rows.map((r, index) => {
-      const name = r.item?.value ?? r.item?.label ?? "";
-      const matched = materialsData.find((m) => m.name === name);
-      return {
-        quantity: r.quantity,
-        material_id: matched ? matched.id : null,
-        new_material_name: matched ? null : name,
-        image: matched?.image || uploadedImages[`file_${index}`] || "",
-      };
-    });
-
-    const res = await axios.post(
-      `${API_URL}/purchase_extras/add_purchase_extras.php`,
-      {
-        created_by,
-        reason: rows[0]?.note || "",
-        items,
-      }
-    );
-
-    if (res.data.status === "success") {
-      Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
-      onClose();
-    } else {
-      Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
+    } catch (error) {
+      console.error("❌ บันทกล้มเหลว:", error);
+      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("❌ บันทกล้มเหลว:", error);
-    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <div className="usermorepopup-container">
@@ -220,29 +223,28 @@ function UserMorePopup({ onClose }) {
           </div>
 
           <div className="usermorepopup-file-container">
-  <div className="usermorepopup-file-input">
-    <label className="usermorepopup-file-label">
-      เลือกไฟล์
-      <input
-        type="file"
-        onChange={(e) => updateRow(row.id, "file", e.target.files[0] || null)}
-      />
-    </label>
-  </div>
+            <div className="usermorepopup-file-input">
+              <label className="usermorepopup-file-label">
+                เลือกไฟล์
+                <input
+                  type="file"
+                  onChange={(e) => updateRow(row.id, "file", e.target.files[0] || null)}
+                />
+              </label>
+            </div>
 
-  <span className="usermorepopup-file-name">
-    {row.file?.name || "ไม่มีไฟล์ที่เลือก"}
-  </span>
+            <span className="usermorepopup-file-name">
+              {row.file?.name || "ไม่มีไฟล์ที่เลือก"}
+            </span>
 
-  <button
-    className="usermorepopup-remove-btn"
-    onClick={() => removeRow(row.id)}
-    title="ลบแถว"
-  >
-    <FaTrash />
-  </button>
-</div>
-
+            <button
+              className="usermorepopup-remove-btn"
+              onClick={() => removeRow(row.id)}
+              title="ลบแถว"
+            >
+              <FaTrash />
+            </button>
+          </div>
         </div>
       ))}
 
