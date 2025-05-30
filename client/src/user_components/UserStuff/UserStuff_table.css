@@ -42,10 +42,10 @@
   border-right: none;
 }
 
-.user-stuff-table-row:hover td {
+/* .user-stuff-table-row:hover td {
   background-color: #f8f9fb;
   transition: background-color 0.2s ease;
-}
+} */
 
 .user-stuff-table-name {
   font-weight: 600;
