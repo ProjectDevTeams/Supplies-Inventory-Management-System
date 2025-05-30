@@ -15,7 +15,7 @@ export default function PrintTrackPage() {
 
   const formatThaiDate = (dateStr = "") => {
     const d = dateStr ? new Date(dateStr) : new Date();
-    const thMonths = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+    const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
     return `${d.getDate()} ${thMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
   };
 
@@ -29,33 +29,43 @@ export default function PrintTrackPage() {
       {/* Title */}
       <h2 className="printtrack-title">ใบเบิกวัสดุ</h2>
 
-      {/* Info grid */}
-      <div className="printtrack-info-grid">
-        <div>ข้าพเจ้า:</div>
-        <div>{data.name || "................................."}</div>
-        <div>เลขที่/ปีงบประมาณ:</div>
-        <div>{data.budgetCode || "....................."}</div>
-
-        <div>หน่วยงาน:</div>
-        <div>{data.department || "................................."}</div>
-        <div>วันที่:</div>
-        <div>{formatThaiDate(data.date)}</div>
-
-        <div className="span-col-left">ความประสงค์จะขอเบิกวัสดุ จำนวน: {data.totalQty ?? "-"} รายการ</div>
-        <div></div>
-        <div>ตำแหน่ง:</div>
-        <div>{data.position || "................................."}</div>
-
-        <div></div>
-        <div></div>
-        <div>โทรศัพท์:</div>
-        <div>{data.phone || "......"}</div>
-
-        <div></div>
-        <div></div>
-        <div>เพื่อใช้ในงาน/กิจกรรม:</div>
-        <div>{data.purpose || "................................."}</div>
-      </div>
+      {/* Info */}
+      <table className="printtrack-info-table">
+        <tbody>
+          <tr>
+            <td style={{ width: "50%" }}>
+              ชื่อพนักงาน .......................................................
+            </td>
+            <td>
+              เลขที่/ปีงบประมาณ .................................................
+            </td>
+          </tr>
+          <tr>
+            <td>
+              หน่วยงาน ..........................................................
+            </td>
+            <td>
+              วันที่ {formatThaiDate(data.date)}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              ความประสงค์จะขอเบิกวัสดุ จำนวน ....... รายการ
+            </td>
+            <td>
+              ตำแหน่ง ..........................................................
+            </td>
+          </tr>
+          <tr>
+            <td>
+              โทรศัพท์ .........
+            </td>
+            <td>
+              เพื่อใช้ในงาน/กิจกรรม ..................................................
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       {/* Table */}
       <table className="printtrack-table">
