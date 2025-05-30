@@ -64,6 +64,7 @@ html, body {
 .printtrack-sign-table {
   width:99.99%;
   border-collapse:separate;
+  border-spacing: 0.5mm 0;
   vertical-align:middle;
 }
 
