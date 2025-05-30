@@ -5,6 +5,7 @@ import { API_URL } from '../../../config';
 import { StuffDetailSweetAlert } from './StuffDetailSweetAlert';
 import './Detail.css';
 
+
 export default function Detail() {
   const location = useLocation();
   const navigate = useNavigate();
