@@ -61,64 +61,81 @@ function UserMorePopup({ onClose }) {
   };
 
   const handleSave = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  if (isSubmitting) return;
 
-    try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const created_by = user?.id;
-      if (!created_by) {
-        Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
-        return;
-      }
+  // 🔍 ตรวจสอบว่าแต่ละ row ต้องมี item (วัสดุ) และไฟล์แนบ
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const materialName = row.item?.value || row.item?.label;
 
-      const uploadFormData = new FormData();
-      rows.forEach((row, index) => {
-        if (row.file) {
-          uploadFormData.append(`file_${index}`, row.file);
-        }
+    if (!materialName || !row.file) {
+      Swal.fire({
+        icon: "warning",
+        title: "กรอกข้อมูลไม่ครบ",
+        text: "กรุณาเลือกหรือเพิ่มชื่อวัสดุ และแนบรูปภาพก่อนบันทึกรายการ",
       });
-
-      const uploadRes = await axios.post(
-        `${API_URL}/purchase_extras_items/upload_image.php`,
-        uploadFormData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      const uploadedImages = uploadRes.data?.uploaded || {};
-
-      const items = rows.map((r, index) => {
-        const name = r.item?.value ?? r.item?.label ?? "";
-        const matched = materialsData.find((m) => m.name === name);
-        return {
-          quantity: r.quantity,
-          material_id: matched ? matched.id : null,
-          new_material_name: matched ? null : name,
-          image: matched?.image || uploadedImages[`file_${index}`] || "",
-        };
-      });
-
-      const res = await axios.post(
-        `${API_URL}/purchase_extras/add_purchase_extras.php`,
-        {
-          created_by,
-          reason: rows[0]?.note || "",
-          items,
-        }
-      );
-
-      if (res.data.status === "success") {
-        Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
-        onClose();
-      } else {
-        Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
-      }
-    } catch (error) {
-      console.error("❌ บันทกล้มเหลว:", error);
-      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
-    } finally {
-      setIsSubmitting(false);
+      return;
     }
-  };
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const created_by = user?.id;
+    if (!created_by) {
+      Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
+      return;
+    }
+
+    const uploadFormData = new FormData();
+    rows.forEach((row, index) => {
+      if (row.file) {
+        uploadFormData.append(`file_${index}`, row.file);
+      }
+    });
+
+    const uploadRes = await axios.post(
+      `${API_URL}/purchase_extras_items/upload_image.php`,
+      uploadFormData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    const uploadedImages = uploadRes.data?.uploaded || {};
+
+    const items = rows.map((r, index) => {
+      const name = r.item?.value ?? r.item?.label ?? "";
+      const matched = materialsData.find((m) => m.name === name);
+      return {
+        quantity: r.quantity,
+        material_id: matched ? matched.id : null,
+        new_material_name: matched ? null : name,
+        image: matched?.image || uploadedImages[`file_${index}`] || "",
+      };
+    });
+
+    const res = await axios.post(
+      `${API_URL}/purchase_extras/add_purchase_extras.php`,
+      {
+        created_by,
+        reason: rows[0]?.note || "",
+        items,
+      }
+    );
+
+    if (res.data.status === "success") {
+      Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
+      onClose();
+    } else {
+      Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
+    }
+  } catch (error) {
+    console.error("❌ บันทกล้มเหลว:", error);
+    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="usermorepopup-container">
@@ -202,22 +219,30 @@ function UserMorePopup({ onClose }) {
             />
           </div>
 
-          <div className="usermorepopup-row-line2">
-            <input
-              type="file"
-              onChange={(e) => updateRow(row.id, "file", e.target.files[0] || null)}
-            />
-            <span style={{ color: "#fff", fontSize: "0.9rem" }}>
-              {row.file?.name || "ไม่มีไฟล์ที่เลือก"}
-            </span>
-            <button
-              className="usermorepopup-remove-btn"
-              onClick={() => removeRow(row.id)}
-              title="ลบแถว"
-            >
-              <FaTrash />
-            </button>
-          </div>
+          <div className="usermorepopup-file-container">
+  <div className="usermorepopup-file-input">
+    <label className="usermorepopup-file-label">
+      เลือกไฟล์
+      <input
+        type="file"
+        onChange={(e) => updateRow(row.id, "file", e.target.files[0] || null)}
+      />
+    </label>
+  </div>
+
+  <span className="usermorepopup-file-name">
+    {row.file?.name || "ไม่มีไฟล์ที่เลือก"}
+  </span>
+
+  <button
+    className="usermorepopup-remove-btn"
+    onClick={() => removeRow(row.id)}
+    title="ลบแถว"
+  >
+    <FaTrash />
+  </button>
+</div>
+
         </div>
       ))}
 

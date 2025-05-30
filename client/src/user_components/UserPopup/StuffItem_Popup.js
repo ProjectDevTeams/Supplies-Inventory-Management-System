@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./StuffItem_Popup.css";
-import { API_URL } from '../../config'; // ✅ เพิ่มเพื่อใช้ประกอบ image URL
+import { API_URL } from "../../config"; // ✅ เพิ่มเพื่อใช้ประกอบ image URL
 
 function StuffItem_Popup({ item, onClose, onConfirm }) {
   const [quantity, setQuantity] = useState(0);
@@ -25,6 +25,48 @@ function StuffItem_Popup({ item, onClose, onConfirm }) {
     item?.image && item.image.trim() !== ""
       ? `${API_URL}/${item.image}`
       : "https://via.placeholder.com/240x240";
+
+  const flyImageToBasket = () => {
+    const img = document.querySelector(".stuff-item-popup-image-preview");
+    const bagImg = document.querySelector(".userstuff-bag-icon img"); // ✅ จุดนี้เลือกเฉพาะ <img>
+
+    if (!img || !bagImg) return;
+
+    const startRect = img.getBoundingClientRect();
+    const endRect = bagImg.getBoundingClientRect();
+
+    const clone = img.cloneNode(true);
+    clone.style.position = "fixed";
+    clone.style.left = `${startRect.left}px`;
+    clone.style.top = `${startRect.top}px`;
+    clone.style.width = `${startRect.width}px`;
+    clone.style.height = `${startRect.height}px`;
+    clone.style.transition = "all 0.8s ease-in-out";
+    clone.style.zIndex = 9999;
+    clone.style.borderRadius = "50%";
+    clone.style.opacity = 0.9;
+    clone.style.pointerEvents = "none";
+
+    document.body.appendChild(clone);
+
+    requestAnimationFrame(() => {
+      clone.style.left = `${endRect.left}px`;
+      clone.style.top = `${endRect.top}px`;
+      clone.style.width = `0px`;
+      clone.style.height = `0px`;
+      clone.style.opacity = 0;
+    });
+
+    clone.addEventListener("transitionend", () => {
+      clone.remove();
+      if (bagImg) {
+        bagImg.classList.add("animate"); // ✅ ใส่ animate แค่ <img>
+        setTimeout(() => {
+          bagImg.classList.remove("animate");
+        }, 500);
+      }
+    });
+  };
 
   return (
     <div className="stuff-item-popup-container">
@@ -135,7 +177,10 @@ function StuffItem_Popup({ item, onClose, onConfirm }) {
                 <button
                   type="button"
                   className="stuff-item-popup-submit-btn"
-                  onClick={() => onConfirm(item, quantity)}
+                  onClick={() => {
+                    flyImageToBasket(); // ✅ เอฟเฟกต์ภาพลอยไปตะกร้า
+                    onConfirm(item, quantity); // ✅ เพิ่มลงตะกร้า + ปิด popup
+                  }}
                 >
                   ยืนยัน
                 </button>

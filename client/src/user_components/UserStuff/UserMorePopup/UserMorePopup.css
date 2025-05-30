@@ -286,3 +286,57 @@
   flex: 6;
   min-width: 160px;
 }
+
+.usermorepopup-file-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.usermorepopup-file-input {
+  position: relative;
+  display: inline-block;
+}
+
+.usermorepopup-file-input input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.usermorepopup-file-label {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.usermorepopup-file-label input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.usermorepopup-file-label:hover {
+  background-color: #1e40af;
+}
+
+.usermorepopup-file-name {
+  color: #555;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+  flex: 1;
+}

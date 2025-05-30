@@ -175,22 +175,29 @@
   gap: 8px; /* ระยะห่างระหว่าง input กับหน่วย */
 }
 
+.stuff-basket-qty-wrapper span {
+  margin-left: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
 .stuff-basket-qty-input {
-  width: 100%;
-  max-width: 80px;
-  padding: 6px 10px;
-  font-size: 14px;
+  width: 72px;
+  height: 36px;
+  padding: 6px 12px;
+  font-size: 15px;
   text-align: center;
   border: 1px solid #ccc;
-  border-radius: 12px;
-  background-color: #fafafa;
+  border-radius: 20px;
+  background-color: #fefefe;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .stuff-basket-qty-input:focus {
   outline: none;
-  border-color: #80bdff;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
 }
 
 
@@ -258,4 +265,24 @@
   .stuff-basket-delete-btn {
     font-size: 13px;
   }
+}
+
+/* ปุ่มถังขยะ */
+.stuff-basket-delete-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #e53935;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+.stuff-basket-delete-btn:hover {
+  transform: scale(1.2);
+}
+
+/* แถวรวม */
+.stuff-basket-total-row td {
+  background-color: #eef3fa;
+  font-weight: bold;
 }

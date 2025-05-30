@@ -222,3 +222,20 @@
 .userstuff-add-more-btn:hover {
   background-color: #218838;
 }
+
+@keyframes shake-pop {
+  0%   { transform: scale(1) rotate(0deg); }
+  25%  { transform: scale(1.2) rotate(-5deg); }
+  50%  { transform: scale(1.3) rotate(5deg); }
+  75%  { transform: scale(1.2) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.userstuff-bag-icon img.animate {
+  animation: shake-pop 0.5s ease;
+}
+
+
+/* .userstuff-bag-icon.animate {
+  animation: shake-pop 0.5s ease;
+} */

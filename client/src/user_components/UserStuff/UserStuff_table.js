@@ -37,6 +37,18 @@ function UserStuff_Table({ searchTerm = "", basketItems, setBasketItems }) {
     setInputPage("");
   }, [currentPage]);
 
+//   useEffect(() => {
+//     localStorage.setItem("basketItems", JSON.stringify(basketItems));
+//   }, [basketItems]);
+
+//   useEffect(() => {
+//   const saved = localStorage.getItem("basketItems");
+//   if (saved) {
+//     setBasketItems(JSON.parse(saved));
+//   }
+// }, []);
+
+
   const filteredData = materials.filter(
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

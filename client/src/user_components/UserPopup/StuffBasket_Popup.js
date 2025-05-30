@@ -61,11 +61,11 @@ const StuffBasket_Popup = ({
       if (result.isConfirmed) {
         onClose();
         onCancel();
+        
         setShowCancelSuccess(true);
       }
     });
   };
-
 
   const handleQuantityChange = (id, newQuantity) => {
     const qty = Number(newQuantity);
@@ -166,6 +166,8 @@ const StuffBasket_Popup = ({
     }
   };
 
+
+  
   return (
     <div className="stuff-basket-popup-overlay">
       <div className="stuff-basket-popup">
@@ -269,17 +271,24 @@ const StuffBasket_Popup = ({
                           <button
                             className="stuff-basket-delete-btn"
                             onClick={() => handleRemoveItem(item.id)}
+                            title="ลบรายการ"
                           >
-                            ลบ
+                            🗑
                           </button>
                         </div>
                       </td>
                     </tr>
                   ))}
-                  <tr>
-                    <td colSpan="2">รวม</td>
-                    <td>{totalQty} หน่วย</td>
-                    <td>{totalPrice.toFixed(2)} บาท</td>
+                  <tr className="stuff-basket-total-row">
+                    <td colSpan="2">
+                      <strong>รวม</strong>
+                    </td>
+                    <td>
+                      <strong>{totalQty} หน่วย</strong>
+                    </td>
+                    <td>
+                      <strong>{totalPrice.toFixed(2)} บาท</strong>
+                    </td>
                   </tr>
                 </tbody>
               </table>
