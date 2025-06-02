@@ -81,8 +81,8 @@ function UserFollowTable({ searchTerm = "" }) {
       return;
     }
 
-    if (item.status_user === "รับของเรียบร้อยแล้ว") {
-      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้ (รับของเรียบร้อยแล้วแล้ว)" });
+    if (item.status_user === "รับของเรียบร้อยแล้ว" && newStatus === "รอรับของ") {
+      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะกลับเป็น รอรับของ ได้" });
       return;
     }
 
@@ -97,7 +97,7 @@ function UserFollowTable({ searchTerm = "" }) {
 
     await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
       id,
-      User_status: newStatus,
+      User_status: newStatus
     });
 
     setData((prev) => prev.map((row) => (row.id === id ? { ...row, status_user: newStatus } : row)));
@@ -168,14 +168,19 @@ function UserFollowTable({ searchTerm = "" }) {
                 </td>
                 <td>
                   <Select
-                    value={statusOptions.find((opt) => opt.value === row.status_user)}
+                    value={
+                      row.status === "รออนุมัติ"
+                        ? statusOptions.find((opt) => opt.value === "รอรับของ")
+                        : statusOptions.find((opt) => opt.value === row.status_user)
+                    }
                     options={statusOptions}
                     styles={colourStyles}
-                    isDisabled={row.status !== "อนุมัติ"}
+                    isDisabled={row.status !== "อนุมัติ" || row.status === "รออนุมัติ"}
                     onChange={(selectedOption) =>
                       handleStatusUserChange(row.id, selectedOption.value)
                     }
                   />
+
                 </td>
                 <td className="print-icon">
                   <span
@@ -198,7 +203,7 @@ function UserFollowTable({ searchTerm = "" }) {
                       });
                     }}
                   >
-                  <FaPrint />
+                    <FaPrint />
                   </span>
                 </td>
               </tr>
