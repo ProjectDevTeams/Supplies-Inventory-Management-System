@@ -1,11 +1,33 @@
-import { useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../../../config";
 import "./PrintTrack.css";
 
 export default function PrintTrackPage() {
-  const { state } = useLocation();
+  const location = useLocation();
+  const id = location.state?.id;
 
-  const data = useMemo(() => state?.data || {}, [state]);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    console.log("🆔 ID ที่รับมาใน PrintTrackPage:", id);
+
+    if (!id) return;
+
+    axios.get(`${API_URL}/stuff_materials/get_stuff_materials.php`, { params: { id } })
+      .then(res => {
+        console.log("📦 Response จาก API:", res.data);
+
+        if (res.data.status === 'success' && Array.isArray(res.data.data)) {
+          setData(res.data.data[0]);
+          console.log("✅ ตั้งค่า data สำเร็จ:", res.data.data[0]);
+        } else {
+          console.warn("⚠️ API success แต่ data ไม่ใช่ array หรือว่าง");
+        }
+      })
+      .catch(err => console.error("❌ โหลดข้อมูลผิดพลาด:", err));
+  }, [id]);
 
   useEffect(() => {
     if (data) {
@@ -14,12 +36,17 @@ export default function PrintTrackPage() {
     }
   }, [data]);
 
-
   const formatThaiDate = (dateStr = "") => {
     const d = dateStr ? new Date(dateStr) : new Date();
     const thMonths = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
     return `${d.getDate()} ${thMonths[d.getMonth()]} ${d.getFullYear() + 543}`;
   };
+
+  if (!data || !data.items) {
+    return <div>กำลังโหลดข้อมูล...</div>;
+  }
+
+  const total = data.items.reduce((sum, i) => sum + parseFloat(i.total_price), 0).toFixed(2);
 
   return (
     <div className="printtrack-wrapper">
@@ -36,23 +63,23 @@ export default function PrintTrackPage() {
         <tbody>
           <tr>
             <td style={{ width: "50%" }}>
-              ชื่อพนักงาน .......................................................
+              ชื่อพนักงาน {data.created_by || "......................................................."}
             </td>
             <td>
-              เลขที่/ปีงบประมาณ .................................................
-            </td>
-          </tr>
-          <tr>
-            <td>
-              หน่วยงาน ..........................................................
-            </td>
-            <td>
-              วันที่ {formatThaiDate(data.date)}
+              เลขที่/ปีงบประมาณ {data.running_code || "................................................."}
             </td>
           </tr>
           <tr>
             <td>
-              ความประสงค์จะขอเบิกวัสดุ จำนวน..........รายการ
+              หน่วยงาน -
+            </td>
+            <td>
+              วันที่ {formatThaiDate(data.created_at)}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              ความประสงค์จะขอเบิกวัสดุ จำนวน {data.items.length} รายการ
             </td>
             <td>
               ตำแหน่ง ..........................................................
@@ -60,11 +87,17 @@ export default function PrintTrackPage() {
           </tr>
           <tr>
             <td>
-              โทรศัพท์ .........
+              โทรศัพท์ ..........................................................
             </td>
             <td>
-              เพื่อใช้ในงาน/กิจกรรม ..................................................
+              เพื่อใช้ในงาน/กิจกรรม {data.reason || "-"}
             </td>
+          </tr>
+          <tr>
+            <td>
+              คลัง วัสดุในคลัง
+            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -75,26 +108,26 @@ export default function PrintTrackPage() {
           <tr>
             <th style={{ width: "10%" }}>ลำดับที่</th>
             <th style={{ width: "55%" }}>รายการวัสดุ</th>
-            <th style={{ width: "15%" }}>จำนวน</th>
-            <th style={{ width: "20%" }}>หน่วยนับ</th>
+            <th style={{ width: "15%" }}>จำนวน/หน่วยนับ</th>
+            <th style={{ width: "20%" }}>มูลค่า</th>
           </tr>
         </thead>
         <tbody>
-          {(data.items || []).map((item, idx) => (
+          {data.items.map((item, idx) => (
             <tr key={idx}>
               <td>{idx + 1}</td>
               <td>{item.name}</td>
-              <td>{item.qty}</td>
-              <td>{item.unit}</td>
+              <td>{item.quantity} {item.unit}</td>
+              <td>{item.total_price}</td>
             </tr>
           ))}
-          {Array.from({ length: 9 - (data.items?.length || 0) }).map((_, i) => (
-            <tr key={i}>
-              <td>&nbsp;</td><td></td><td></td><td></td>
-            </tr>
-          ))}
+          <tr>
+            <td colSpan="3"><strong>รวม</strong></td>
+            <td>{total}</td>
+          </tr>
         </tbody>
       </table>
+
 
       {/* Signatures */}
       <table className="printtrack-sign-table">

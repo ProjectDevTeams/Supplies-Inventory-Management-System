@@ -113,22 +113,6 @@ function UserFollowTable({ searchTerm = "" }) {
     singleValue: (styles, { data }) => ({ ...styles, color: data.color, fontWeight: "bold" }),
   };
 
-  const handleRowClick = (row) => {
-    navigate("/userstuff/follow/print-track", {
-      state: {
-        data: {
-          code: row.number,
-          date: formatDateThai(row.date),
-          name: "ชื่อผู้ใช้",
-          department: "แผนก",
-          position: "ตำแหน่ง",
-          phone: "000-000",
-          items: [{ name: "วัสดุ A", qty: row.items, unit: "หน่วย" }]
-        }
-      }
-    });
-  };
-
   if (loading) return <div className="userfollow-loading">กำลังโหลดข้อมูล...</div>;
 
   return (
@@ -148,10 +132,20 @@ function UserFollowTable({ searchTerm = "" }) {
         </thead>
         <tbody>
           {currentItems.length === 0 ? (
-            <tr><td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td></tr>
+            <tr>
+              <td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+            </tr>
           ) : (
             currentItems.map((row) => (
-              <tr key={row.id} className="userfollow-row">
+              <tr
+                key={row.id}
+                className="userfollow-row"
+                onClick={() => {
+                  console.log("➡️ ไปหน้า UserConfirmHisPage, id:", row.id);
+                  navigate("/user/confirm-status", { state: { id: row.id } });
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{row.id}</td>
                 <td>{row.number}</td>
                 <td>{row.category}</td>
@@ -166,7 +160,11 @@ function UserFollowTable({ searchTerm = "" }) {
                     {row.status}
                   </span>
                 </td>
-                <td>
+                <td
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onMouseUp={(e) => e.stopPropagation()}
+                >
                   <Select
                     value={
                       row.status === "รออนุมัติ"
@@ -179,27 +177,20 @@ function UserFollowTable({ searchTerm = "" }) {
                     onChange={(selectedOption) =>
                       handleStatusUserChange(row.id, selectedOption.value)
                     }
+                    onMouseDown={(e) => e.stopPropagation()} 
+                    onClick={(e) => e.stopPropagation()}
+                    onWheel={(e) => e.stopPropagation()}
                   />
-
                 </td>
+
                 <td className="print-icon">
                   <span
                     style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
                     onClick={(e) => {
-                      e.stopPropagation(); // กันคลิกทะลุ
-                      console.log("✅ CLICKED PRINT BUTTON");
+                      e.stopPropagation();
+                      console.log("✅ CLICKED PRINT BUTTON, ส่ง id:", row.id);
                       navigate("/userstuff/follow/print-track", {
-                        state: {
-                          data: {
-                            code: row.number,
-                            date: formatDateThai(row.date),
-                            name: "ชื่อผู้ใช้",
-                            department: "แผนก",
-                            position: "ตำแหน่ง",
-                            phone: "000-000",
-                            items: [{ name: "วัสดุ A", qty: row.items, unit: "หน่วย" }]
-                          }
-                        }
+                        state: { id: row.id }
                       });
                     }}
                   >
@@ -207,11 +198,11 @@ function UserFollowTable({ searchTerm = "" }) {
                   </span>
                 </td>
               </tr>
-
             ))
           )}
         </tbody>
       </table>
+
       <div className="user-follow-table-pagination-wrapper">
         <div className="user-follow-table-pagination-info">
           แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
