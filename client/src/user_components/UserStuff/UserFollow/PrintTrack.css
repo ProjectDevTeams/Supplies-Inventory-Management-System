@@ -16,9 +16,9 @@ html, body {
 
 .printtrack-title {
   text-align:center;
-  font-size:22px;
+  font-size:26px;
   font-weight:bold;
-  margin-bottom:0.5rem;
+  margin-bottom: 30px;
 }
 
 .printtrack-info-grid {
@@ -31,6 +31,7 @@ html, body {
 
 .printtrack-info-table{
   border-spacing: 10mm 2mm;
+  margin-bottom: 5.3mm;
 }
 
 .printtrack-info-grid > div {
