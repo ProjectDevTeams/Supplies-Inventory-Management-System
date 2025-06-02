@@ -71,7 +71,7 @@ export default function PrintTrackPage() {
           </tr>
           <tr>
             <td>
-              หน่วยงาน -
+              หน่วยงาน ..........................................................
             </td>
             <td>
               วันที่ {formatThaiDate(data.created_at)}
