@@ -15,6 +15,10 @@ function UserFollowTable({ searchTerm = "" }) {
 
   const navigate = useNavigate();
 
+  const [inputPage, setInputPage] = useState("");
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
   const fetchData = useCallback(async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -69,8 +73,8 @@ function UserFollowTable({ searchTerm = "" }) {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
-  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  // const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  // const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   const handleStatusUserChange = async (id, newStatus) => {
     const item = data.find((i) => i.id === id);
@@ -177,7 +181,7 @@ function UserFollowTable({ searchTerm = "" }) {
                     onChange={(selectedOption) =>
                       handleStatusUserChange(row.id, selectedOption.value)
                     }
-                    onMouseDown={(e) => e.stopPropagation()} 
+                    onMouseDown={(e) => e.stopPropagation()}
                     onClick={(e) => e.stopPropagation()}
                     onWheel={(e) => e.stopPropagation()}
                   />
@@ -219,15 +223,21 @@ function UserFollowTable({ searchTerm = "" }) {
             className="user-follow-table-page-input"
             min={1}
             max={totalPages}
-            value={currentPage}
+            value={inputPage}
             placeholder={`${currentPage} / ${totalPages}`}
-            onChange={e => {
-              const v = parseInt(e.target.value, 10);
-              if (v >= 1 && v <= totalPages) {
-                setCurrentPage(v);
+            onFocus={() => setInputPage("")}
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                const v = parseInt(inputPage, 10);
+                if (v >= 1 && v <= totalPages) {
+                  setCurrentPage(v);
+                }
+                e.target.blur();
               }
             }}
           />
+
           <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
