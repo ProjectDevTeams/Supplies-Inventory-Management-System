@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
+import { FaPrint } from 'react-icons/fa';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
@@ -197,7 +198,7 @@ function UserFollowTable({ searchTerm = "" }) {
                       });
                     }}
                   >
-                    ปริ้น
+                  <FaPrint />
                   </span>
                 </td>
               </tr>
