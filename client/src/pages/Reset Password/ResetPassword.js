@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './ResetPassword.css';
-import { API_URL } from '../../config'; 
+import { API_URL } from '../../config';
 
 function ResetPassword() {
-  const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [username, setUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -33,15 +32,15 @@ function ResetPassword() {
   };
 
   return (
-    <div className="body-login">
-      <div className="login-container">
-        <div className="login-left">
-          <div className="login-box">
-            <img src="/image/logo.png" alt="Logo" className="logo" />
-            <h3 className="login-title">เปลี่ยนรหัสผ่าน</h3>
-            <p className="login-subtitle">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
+    <div className="reset-body">
+      <div className="reset-container">
+        <div className="reset-left">
+          <div className="reset-box">
+            <img src="/image/logo.png" alt="Logo" className="reset-logo" />
+            <h3 className="reset-title">เปลี่ยนรหัสผ่าน</h3>
+            <p className="reset-subtitle">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
 
-            <div className="input-group">
+            <div className="reset-input-group">
               <label>Username</label>
               <input
                 type="text"
@@ -50,7 +49,7 @@ function ResetPassword() {
               />
             </div>
 
-            <div className="input-group">
+            <div className="reset-input-group">
               <label>New Password</label>
               <input
                 type={showConfirm ? 'text' : 'password'}
@@ -58,21 +57,22 @@ function ResetPassword() {
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <span
-                className="eye-icon"
+                className="reset-eye-icon"
                 onClick={() => setShowConfirm(!showConfirm)}
               >
                 <img
-                  className="eye-view"
+                  className="reset-eye-view"
                   src={showConfirm ? "/image/eyeview.png" : "/image/eyehide.png"}
+                  alt="toggle"
                 />
               </span>
             </div>
 
-            <button className="login-button" onClick={handleReset}>Reset</button>
+            <button className="reset-button" onClick={handleReset}>Reset</button>
           </div>
         </div>
 
-        <div className="login-right">
+        <div className="reset-right">
           <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>

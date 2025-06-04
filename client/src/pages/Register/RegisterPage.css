@@ -1,13 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@400;500&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Kanit", Arial, sans-serif;
-}
-
-.body-register {
+.registerpage-body {
   background-color: #f5f5f5;
   height: 100%;
   display: flex;
@@ -16,25 +7,27 @@
   overflow: hidden;
 }
 
-.register-container {
+.registerpage-container {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100vh;
 }
 
-.register-left {
-  width: 60%;
+.registerpage-left {
+  width: 100%;
   max-width: 700px;
   background-color: #ffffff;
-  padding: 60px 60px;
+  padding: 30px 30px;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.register-box {
+.registerpage-box {
   width: 100%;
-  max-width: 600px;
   padding: 2rem;
   margin-left: 0;
   margin-right: auto;
@@ -42,54 +35,41 @@
   background-color: #fff;
 }
 
-.register-box:hover {
-  transform: scale(0.97);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-}
-
-.input-group input:focus {
-  outline: none;
-  border-color: #2176bd;
-  box-shadow: 0 0 0 2px rgba(33, 118, 189, 0.2);
-  transition: box-shadow 0.2s ease;
-}
-
-.register-box h2 {
-  font-size: 1.8rem;
-  margin: 0.05rem 0 0.3rem;
-  color: #333;
-  font-weight: 600;
-}
-
-.logo {
-  width: 100px;
-  height: 80px;
-  margin: 0;
-  margin-bottom: 0;
+.registerpage-logo {
+  width: 200px;
+  height: auto;
   display: block;
+  margin: 0 auto 1rem auto;
 }
 
-.input-group {
+.registerpage-title {
+  font-size: 1.8em;
+  margin: 30px 0 30px;
+  color: #333;
+  text-align: center;
+}
+
+.registerpage-input-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.75em;
 }
 
-.input-group label {
+.registerpage-input-group label {
   margin-bottom: 0.1em;
   font-weight: 500;
   font-size: 0.95rem;
   color: #333;
 }
 
-.input-group input {
+.registerpage-input-group input {
   padding: 0.6em;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 0.95rem;
 }
 
-.register-button {
+.registerpage-button {
   width: 100%;
   padding: 0.75em;
   background-color: #2176bd;
@@ -103,22 +83,22 @@
   margin-top: 0.1rem;
 }
 
-.register-button:hover {
+.registerpage-button:hover {
   background-color: #155a95;
 }
 
-.switch-page {
+.registerpage-switch-page {
   margin-top: 0.8rem;
   font-size: 0.85em;
   text-align: center;
 }
 
-.switch-page a {
+.registerpage-switch-page a {
   color: #2176bd;
   text-decoration: none;
 }
 
-.register-right {
+.registerpage-right {
   flex: 1;
   display: flex;
   align-items: center;
@@ -126,66 +106,66 @@
   overflow: hidden;
 }
 
-.register-right img {
+.registerpage-right img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
 }
 
-.input-columns {
+.registerpage-input-columns {
   display: flex;
   gap: 2rem;
   justify-content: space-between;
   margin-bottom: 1.5rem;
 }
 
-.input-column {
+.registerpage-input-column {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-
+/* ✅ Responsive */
 @media (max-width: 768px) {
-  .body-register {
+  .registerpage-body {
     background-image: url("../../assets/bg-login2.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 100vh;
-    padding: 0;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    overflow-y: auto;
   }
 
-  .register-container {
+  .registerpage-container {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    justify-content: flex-start;
+    min-height: 100vh;
     width: 100%;
   }
 
-  .register-left {
-    width: 90%;
-    max-width: 300px;           /* 🔽 ย่อมากขึ้น */
-    padding: 15px 15px;         /* 🔽 ขอบในเล็กลง */
+  .registerpage-left {
+    width: 100%;
+    max-width: 350px;
+    padding: 15px 15px;
     border-radius: 16px;
-    background-color: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(5px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
-  .register-box {
+  .registerpage-box {
     width: 100%;
     padding: 0;
-    
   }
 
-  .input-columns {
+  .registerpage-input-columns {
     flex-direction: column;
     gap: 0.1rem;
     margin-left: 1rem;
@@ -193,42 +173,36 @@
     margin-bottom: 0;
   }
 
-  .input-column {
+  .registerpage-input-column {
     gap: 0.1rem;
   }
 
-  .register-box h2 {
+  .registerpage-box h2 {
     font-size: 1.3rem;
     text-align: center;
   }
 
-  .register-button {
+  .registerpage-button {
     font-size: 0.9rem;
     padding: 0.6em;
     width: 90%;
-
-    /* padding-right: 0.1em; */
     margin: 1rem auto 0 auto;
-    display: block;   
-    
+    display: block;
   }
 
-  .logo {
+  .registerpage-logo {
     width: 70px;
     height: auto;
     margin: 0 auto 0.75rem;
     display: block;
   }
 
-  .register-right {
+  .registerpage-right {
     display: none;
   }
 
-  .switch-page {
+  .registerpage-switch-page {
     margin-top: 0.4rem;
-    /* margin-bottom: 0.6rem; */
     font-size: 0.9em;
   }
 }
-
-

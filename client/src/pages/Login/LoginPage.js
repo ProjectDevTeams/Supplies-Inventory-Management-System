@@ -7,7 +7,7 @@ import { API_URL } from '../../config';
 import {
   showLoginSuccess,
   showLoginError
-} from '../../components/SweetAlert/LoginSweetAlert'; // ปรับ path ให้ตรงกับโครงสร้างโปรเจกต์
+} from '../../components/SweetAlert/LoginSweetAlert';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,13 +24,12 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();  // ป้องกันการรีเฟรชหน้า
+    e.preventDefault();
     try {
       const res = await axios.post(`${API_URL}/users/login.php`, formData);
       const data = res.data;
 
       if (data.status === "success") {
-        // เก็บข้อมูล user ลง localStorage
         const user = {
           id: data.id,
           username: data.username,
@@ -39,40 +38,34 @@ export default function LoginPage() {
         };
         localStorage.setItem("user", JSON.stringify(user));
 
-        // แจ้งเตือนสำเร็จ และรอผู้ใช้กดปุ่มก่อนนำทาง
         await showLoginSuccess();
 
-        // นำทางตามสิทธิ์
         if (user.permission === "ผู้ใช้งาน") {
           navigate("/userstuff/stuff");
         } else if (user.permission === "แอดมิน" || user.permission === "ผู้ช่วยแอดมิน") {
           navigate("/Home");
         } else {
-          // ถ้าสิทธิ์ไม่ตรงคาด
           await showLoginError("สิทธิการใช้งานไม่ถูกต้อง");
         }
       } else {
-        // กรณี login ล้มเหลว (เช่น username/password ไม่ถูกต้อง)
         await showLoginError(data.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
       }
     } catch (err) {
       console.error("Login error:", err);
-      // กรณีติดต่อเซิร์ฟเวอร์ไม่ได้
       await showLoginError("ไม่สามารถติดต่อเซิร์ฟเวอร์ได้");
     }
   };
 
   return (
-    <div className="body-login">
-      <div className="login-container">
-        <div className="login-left">
-          <div className="login-box">
-            <img src="/image/logo.png" alt="Logo" className="logo" />
-            <h4>Welcome back!</h4>
-            <h2>กรุณาเข้าสู่ระบบ</h2>
-
+    <div className="loginpage-body">
+      <div className="loginpage-container">
+        <div className="loginpage-left">
+          <div className="loginpage-box">
+            <img src="/image/logo.png" alt="Logo" className="loginpage-logo" />
+            <h4 className="loginpage-subtitle">Welcome back!</h4>
+            <h2 className="loginpage-title">กรุณาเข้าสู่ระบบ</h2>
             <form onSubmit={handleLogin}>
-              <div className="input-group">
+              <div className="loginpage-input-group">
                 <label>Username</label>
                 <input
                   type="text"
@@ -84,7 +77,7 @@ export default function LoginPage() {
                 />
               </div>
 
-              <div className="input-group">
+              <div className="loginpage-input-group">
                 <label>Password</label>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -95,33 +88,33 @@ export default function LoginPage() {
                   required
                 />
                 <span
-                  className="login-eye-icon"
+                  className="loginpage-eye-icon"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   <img
-                    className="login-eye-view"
+                    className="loginpage-eye-view"
                     src={showPassword ? "/image/eyeview.png" : "/image/eyehide.png"}
                     alt="Toggle password"
                   />
                 </span>
               </div>
 
-              <div className="forgot-password">
-                <Link to="/reset" className="forgot-password">ลืมรหัสผ่าน</Link>
+              <div className="loginpage-forgot-password">
+                <Link to="/reset" className="loginpage-forgot-password">ลืมรหัสผ่าน</Link>
               </div>
 
-              <button type="submit" className="login-button">
+              <button type="submit" className="loginpage-button">
                 เข้าสู่ระบบ
               </button>
             </form>
 
-            <div className="switch-page">
+            <div className="loginpage-switch-page">
               ยังไม่มีบัญชี? <Link to="/register">สมัครสมาชิก</Link>
             </div>
           </div>
         </div>
 
-        <div className="login-right">
+        <div className="loginpage-right">
           <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>

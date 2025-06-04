@@ -55,17 +55,16 @@ function RegisterPage() {
   };
 
   return (
-    <div className="body-register">
-      <div className="register-container">
-        <div className="register-left">
-          <div className="register-box">
-            <img src="/image/logo.png" alt="Logo" className="logo" />
-            <h2>สมัครสมาชิก</h2>
+    <div className="registerpage-body">
+      <div className="registerpage-container">
+        <div className="registerpage-left">
+          <div className="registerpage-box">
+            <img src="/image/logo.png" alt="Logo" className="registerpage-logo" />
+            <h2 className="registerpage-title">สมัครสมาชิก</h2>
 
-            {/* ✅ กล่อง input 2 คอลัมน์ */}
-            <div className="input-columns">
-              <div className="input-column">
-                <div className="input-group">
+            <div className="registerpage-input-columns">
+              <div className="registerpage-input-column">
+                <div className="registerpage-input-group">
                   <label>ชื่อผู้ใช้งาน</label>
                   <input
                     type="text"
@@ -75,7 +74,7 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input-group">
+                <div className="registerpage-input-group">
                   <label>ชื่อ-สกุล</label>
                   <input
                     type="text"
@@ -85,7 +84,7 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input-group">
+                <div className="registerpage-input-group">
                   <label>อีเมล</label>
                   <input
                     type="email"
@@ -97,8 +96,8 @@ function RegisterPage() {
                 </div>
               </div>
 
-              <div className="input-column">
-                <div className="input-group">
+              <div className="registerpage-input-column">
+                <div className="registerpage-input-group">
                   <label>รหัสผ่าน</label>
                   <input
                     type="password"
@@ -108,7 +107,7 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input-group">
+                <div className="registerpage-input-group">
                   <label>เบอร์โทรศัพท์</label>
                   <input
                     type="text"
@@ -118,7 +117,7 @@ function RegisterPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="input-group">
+                <div className="registerpage-input-group">
                   <label>ตำแหน่งงาน</label>
                   <input
                     type="text"
@@ -131,17 +130,17 @@ function RegisterPage() {
               </div>
             </div>
 
-            <button className="register-button" onClick={handleRegister}>
+            <button className="registerpage-button" onClick={handleRegister}>
               สมัครสมาชิก
             </button>
 
-            <div className="switch-page">
+            <div className="registerpage-switch-page">
               มีบัญชีอยู่แล้ว? <Link to="/login">เข้าสู่ระบบ</Link>
             </div>
           </div>
         </div>
 
-        <div className="register-right">
+        <div className="registerpage-right">
           <img src="/image/bg-login.jpg" alt="Background" />
         </div>
       </div>

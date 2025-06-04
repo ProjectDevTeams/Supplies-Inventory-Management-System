@@ -7,66 +7,76 @@
   font-family: 'Kanit', Arial, sans-serif;
 }
 
-.body-login {
+.loginpage-body {
   background-color: #f5f5f5;
-  overflow: hidden;
-  height: 100vh;
-  width: 100%;
-}
-
-.login-container {
-  display: flex;
   height: 100%;
-  width: 100%;
-}
-
-.login-left {
-  width: 50%;
-  max-width: 480px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
-  padding: 60px 40px;
+  overflow: hidden;
 }
 
-.login-box {
+.loginpage-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+.loginpage-left {
+  width: 100%;
+  max-width: 500px;
+  padding: 60px 60px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginpage-box {
   width: 100%;
   max-width: 360px;
   text-align: center;
+  background-color: #fff;
 }
 
-.logo {
-  width: 100%;
-  max-width: 220px;
-  margin-bottom: 25px;
+.loginpage-logo {
+  width: 200px;
+  height: 80px;
+  margin: 0;
+  margin-bottom: 0;
+  display: block;
 }
 
-h4 {
-  font-size: 1.3em;
-  color: #666;
+.loginpage-logo {
+  width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem auto;
 }
 
-h2 {
+.loginpage-title {
   font-size: 1.8em;
   margin: 10px 0 30px;
   color: #333;
 }
 
-.input-group {
+.loginpage-input-group {
   text-align: left;
   margin-bottom: 20px;
+  position: relative;
+  /* สำหรับ eye-icon */
 }
 
-.input-group label {
+.loginpage-input-group label {
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
   font-size: 1em;
 }
 
-.input-group input {
+.loginpage-input-group input {
   width: 100%;
   padding: 12px 14px;
   border-radius: 8px;
@@ -75,12 +85,12 @@ h2 {
   transition: border 0.3s;
 }
 
-.input-group input:focus {
+.loginpage-input-group input:focus {
   border-color: #007bff;
   outline: none;
 }
 
-.forgot-password {
+.loginpage-forgot-password {
   text-align: right;
   margin-bottom: 20px;
   color: #007bff;
@@ -89,7 +99,7 @@ h2 {
   text-decoration: none;
 }
 
-.login-button {
+.loginpage-button {
   width: 100%;
   padding: 14px;
   background-color: #007bff;
@@ -101,34 +111,131 @@ h2 {
   transition: background-color 0.3s;
 }
 
-.login-button:hover {
+.loginpage-button:hover {
   background-color: #0056b3;
 }
 
-.login-right {
+.loginpage-switch-page {
+  margin-top: 0.8rem;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.loginpage-switch-page a {
+  color: #2176bd;
+  text-decoration: none;
+}
+
+.loginpage-right {
   flex: 1;
   background-size: cover;
   background-position: center;
   overflow: hidden;
 }
 
-.login-right img {
+.loginpage-right img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.login-eye-view{
+.loginpage-eye-view {
   padding-top: 7px;
   width: 60%;
   opacity: 0.5;
 }
 
-.login-eye-icon {
+.loginpage-eye-icon {
   position: absolute;
   right: 14px;
   top: 38px;
   cursor: pointer;
   font-size: 1em;
   color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loginpage-body {
+    background-image: url("../../assets/bg-login2.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .loginpage-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .loginpage-left {
+    width: 100%;
+    max-width: 320px;
+    padding: 20px 20px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .loginpage-box {
+    width: 100%;
+    padding: 0;
+  }
+
+  .loginpage-logo {
+    width: 70px;
+    height: auto;
+    margin: 0 auto 1rem;
+    display: block;
+  }
+
+  .loginpage-title {
+    font-size: 1.8em;
+    margin: 10px 0 30px;
+    color: #333;
+  }
+
+  .loginpage-input-group {
+    margin-bottom: 16px;
+  }
+
+  .loginpage-input-group input {
+    padding: 10px 12px;
+    font-size: 0.95em;
+  }
+
+  .loginpage-forgot-password {
+    font-size: 0.85em;
+    margin-bottom: 16px;
+  }
+
+  .loginpage-button {
+    font-size: 1em;
+    padding: 12px;
+    width: 90%;
+    margin: 1rem auto 0 auto;
+    display: block;
+  }
+
+  .loginpage-right {
+    display: none;
+  }
+
+  .loginpage-eye-icon {
+    top: 34px;
+    font-size: 0.9em;
+  }
+
+  .loginpage-switch-page {
+    margin-top: 0.4rem;
+    font-size: 0.9em;
+  }
 }
