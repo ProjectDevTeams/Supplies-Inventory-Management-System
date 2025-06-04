@@ -1,10 +1,10 @@
-// src/components/Stuff/Detail.js
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../../config';
 import { StuffDetailSweetAlert } from './StuffDetailSweetAlert';
 import './Detail.css';
+
 
 export default function Detail() {
   const location = useLocation();

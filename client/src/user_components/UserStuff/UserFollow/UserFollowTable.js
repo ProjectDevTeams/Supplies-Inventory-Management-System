@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Select from "react-select";
-// import { FaPrint } from "react-icons/fa";
-// import { FaPrint } from 'react-icons/fa';
+import { FaPrint } from 'react-icons/fa';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../config";
@@ -12,11 +11,14 @@ function UserFollowTable({ searchTerm = "" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
   const itemsPerPage = 5;
 
   const navigate = useNavigate();
 
+  const [inputPage, setInputPage] = useState("");
+  useEffect(() => {
+    setInputPage("");
+  }, [currentPage]);
   const fetchData = useCallback(async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -71,15 +73,20 @@ function UserFollowTable({ searchTerm = "" }) {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
-  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  // const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  // const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   const handleStatusUserChange = async (id, newStatus) => {
     const item = data.find((i) => i.id === id);
     if (!item) return;
 
-    if (item.status === "ไม่อนุมัติ" || item.status === "รออนุมัติ" || item.status_user === "รับของเรียบร้อยแล้ว") {
-      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้" });
+    if (item.status !== "อนุมัติ") {
+      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะได้ (ต้องเป็น อนุมัติ)" });
+      return;
+    }
+
+    if (item.status_user === "รับของเรียบร้อยแล้ว" && newStatus === "รอรับของ") {
+      Swal.fire({ icon: "warning", title: "ไม่สามารถเปลี่ยนสถานะกลับเป็น รอรับของ ได้" });
       return;
     }
 
@@ -94,12 +101,11 @@ function UserFollowTable({ searchTerm = "" }) {
 
     await axios.put(`${API_URL}/stuff_materials/update_stuff_materials.php`, {
       id,
-      User_status: newStatus,
+      User_status: newStatus
     });
 
     setData((prev) => prev.map((row) => (row.id === id ? { ...row, status_user: newStatus } : row)));
   };
-
 
   const statusOptions = [
     { value: "รอรับของ", label: "รอรับของ", color: "#1e398d" },
@@ -130,10 +136,20 @@ function UserFollowTable({ searchTerm = "" }) {
         </thead>
         <tbody>
           {currentItems.length === 0 ? (
-            <tr><td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td></tr>
+            <tr>
+              <td colSpan="8" className="userfollow-no-data">ไม่มีข้อมูลที่ตรงกับคำค้นหา</td>
+            </tr>
           ) : (
             currentItems.map((row) => (
-              <tr key={row.id} className="userfollow-row">
+              <tr
+                key={row.id}
+                className="userfollow-row"
+                onClick={() => {
+                  console.log("➡️ ไปหน้า UserConfirmHisPage, id:", row.id);
+                  navigate("/user/confirm-status", { state: { id: row.id } });
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{row.id}</td>
                 <td>{row.number}</td>
                 <td>{row.category}</td>
@@ -148,45 +164,88 @@ function UserFollowTable({ searchTerm = "" }) {
                     {row.status}
                   </span>
                 </td>
-                <td>
+                <td
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onMouseUp={(e) => e.stopPropagation()}
+                >
                   <Select
-                    value={statusOptions.find((opt) => opt.value === row.status_user)}
+                    value={
+                      row.status === "รออนุมัติ"
+                        ? statusOptions.find((opt) => opt.value === "รอรับของ")
+                        : statusOptions.find((opt) => opt.value === row.status_user)
+                    }
                     options={statusOptions}
                     styles={colourStyles}
-                    isDisabled={true}
+                    isDisabled={row.status !== "อนุมัติ" || row.status === "รออนุมัติ"}
+                    onChange={(selectedOption) =>
+                      handleStatusUserChange(row.id, selectedOption.value)
+                    }
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
+                    onWheel={(e) => e.stopPropagation()}
                   />
                 </td>
+
                 <td className="print-icon">
                   <span
                     style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
-                    onClick={() => {
-                      console.log("✅ CLICKED PRINT BUTTON");
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("✅ CLICKED PRINT BUTTON, ส่ง id:", row.id);
                       navigate("/userstuff/follow/print-track", {
-                        state: {
-                          data: {
-                            code: "TEST123",
-                            date: "2025-05-29",
-                            name: "ทดสอบ",
-                            department: "แผนก",
-                            position: "ตำแหน่ง",
-                            phone: "000-000",
-                            items: [{ name: "วัสดุ A", qty: 1, unit: "อัน" }]
-                          }
-                        }
+                        state: { id: row.id }
                       });
                     }}
                   >
-                    ปริ้น
+                    <FaPrint />
                   </span>
                 </td>
-
-
-
               </tr>
             ))
           )}
         </tbody>
       </table>
+
+      <div className="user-follow-table-pagination-wrapper">
+        <div className="user-follow-table-pagination-info">
+          แสดง {indexOfFirstItem + 1} ถึง {Math.min(indexOfLastItem, filteredData.length)} จาก {filteredData.length} แถว
+        </div>
+        <div className="user-follow-table-pagination-buttons">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          >
+            ก่อนหน้า
+          </button>
+          <input
+            type="number"
+            className="user-follow-table-page-input"
+            min={1}
+            max={totalPages}
+            value={inputPage}
+            placeholder={`${currentPage} / ${totalPages}`}
+            onFocus={() => setInputPage("")}
+            onChange={e => setInputPage(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                const v = parseInt(inputPage, 10);
+                if (v >= 1 && v <= totalPages) {
+                  setCurrentPage(v);
+                }
+                e.target.blur();
+              }
+            }}
+          />
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          >
+            ถัดไป
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
