@@ -4,7 +4,13 @@ import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { API_URL } from "../../../config";
 import "./UserMorePopup.css";
-import Swal from "sweetalert2";
+import {
+  showWarningIncomplete,
+  showErrorNoUser,
+  showSaveSuccess,
+  showSaveError,
+  showGenericError
+} from "./UserMoreSweetAlert";
 
 function UserMorePopup({ onClose }) {
   const [options, setOptions] = useState([]);
@@ -21,7 +27,6 @@ function UserMorePopup({ onClose }) {
       try {
         const res = await axios.get(`${API_URL}/materials/get_materials.php`);
         if (res.data.status === "success") {
-          // ✅ กรองเฉพาะวัสดุในคลัง
           const filtered = res.data.data.filter(
             (m) => m.location === "วัสดุในคลัง"
           );
@@ -67,17 +72,12 @@ function UserMorePopup({ onClose }) {
   const handleSave = async () => {
     if (isSubmitting) return;
 
-    // 🔍 ตรวจสอบว่าแต่ละ row ต้องมี item (วัสดุ) และไฟล์แนบ
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const materialName = row.item?.value || row.item?.label;
 
       if (!materialName || !row.file) {
-        Swal.fire({
-          icon: "warning",
-          title: "กรอกข้อมูลไม่ครบ",
-          text: "กรุณาเลือกหรือเพิ่มชื่อวัสดุ และแนบรูปภาพก่อนบันทึกรายการ",
-        });
+        await showWarningIncomplete();
         return;
       }
     }
@@ -88,7 +88,7 @@ function UserMorePopup({ onClose }) {
       const user = JSON.parse(localStorage.getItem("user"));
       const created_by = user?.id;
       if (!created_by) {
-        Swal.fire("ไม่พบข้อมูลผู้ใช้", "กรุณาเข้าสู่ระบบใหม่", "error");
+        await showErrorNoUser();
         return;
       }
 
@@ -127,14 +127,14 @@ function UserMorePopup({ onClose }) {
       );
 
       if (res.data.status === "success") {
-        Swal.fire("บันทึกสำเร็จ", "รายการถูกบันทึกเรียบร้อยแล้ว!", "success");
+        await showSaveSuccess();
         onClose();
       } else {
-        Swal.fire("ผิดพลาด", res.data.message || "บันทึกไม่สำเร็จ", "error");
+        await showSaveError(res.data.message);
       }
     } catch (error) {
       console.error("❌ บันทกล้มเหลว:", error);
-      Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้", "error");
+      await showGenericError();
     } finally {
       setIsSubmitting(false);
     }
@@ -162,8 +162,12 @@ function UserMorePopup({ onClose }) {
 
       <hr className="usermorepopup-divider" />
 
-      {rows.map((row) => (
+      {rows.map((row, index) => (
         <div key={row.id} className="usermorepopup-row">
+          <div style={{ marginBottom: "0.5rem", fontWeight: "bold", color: "#333" }}>
+            รายการที่ {index + 1}
+          </div>
+
           <div className="usermorepopup-row-line1">
             <CreatableSelect
               options={options}

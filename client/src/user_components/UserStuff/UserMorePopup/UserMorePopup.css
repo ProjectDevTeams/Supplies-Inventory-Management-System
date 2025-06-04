@@ -340,3 +340,113 @@
   margin-left: 1rem;
   flex: 1;
 }
+
+@media (max-width: 768px) {
+  .usermorepopup-container {
+    width: 95%;
+    max-width: 100%;
+    padding: 1rem;
+    max-height: 95vh;
+    overflow-y: auto;
+    border-radius: 12px;
+  }
+
+  .usermorepopup-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .usermorepopup-header h2 {
+    font-size: 1.3rem;
+    text-align: left;
+  }
+
+  .usermorepopup-add-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .usermorepopup-row {
+    padding: 0.75rem;
+    gap: 0.75rem;
+    position: relative;
+    padding-top: 2rem;
+    border: 1px solid #000;
+    border-radius: 8px;
+  }
+
+  .usermorepopup-row::before {
+    content: attr(data-index);
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #003366;
+  }
+
+  .usermorepopup-row-line1,
+  .usermorepopup-row-line2 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .usermorepopup-input {
+    width: 100%;
+    min-width: unset;
+    font-size: 0.95rem;
+  }
+
+  .usermorepopup-remove-btn {
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .usermorepopup-info-block {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .usermorepopup-info-input {
+    font-size: 0.95rem;
+  }
+
+  .usermorepopup-save-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+
+  .usermorepopup-file-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .usermorepopup-file-label {
+    width: 100%;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .usermorepopup-file-name {
+    margin-left: 0;
+    font-size: 0.9rem;
+  }
+
+  .usermorepopup-select,
+  .usermorepopup-quantity-input,
+  .usermorepopup-price-input,
+  .usermorepopup-note-input {
+    flex: 1 1 100%;
+    min-width: unset;
+  }
+}
