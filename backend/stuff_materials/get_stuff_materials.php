@@ -54,6 +54,7 @@ try {
             "id" => $mat['id'],
             "running_code" => $mat['running_code'],
             "created_at" => $mat['created_at'],
+            "created_by_id" => $mat['created_by'], // ⭐ เพิ่ม id ของ created_by
             "created_by" => $mat['created_by_name'],
             "supervisor_name" => $mat['supervisor_name'],
             "Admin_status" => $mat['Admin_status'],

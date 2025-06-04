@@ -9,6 +9,7 @@ export default function PrintTrackPage() {
   const id = location.state?.id;
 
   const [data, setData] = useState(null);
+  const [userInfo, setUserInfo] = useState({ position: "", phone: "" }); // ⭐ state ใหม่
 
   useEffect(() => {
     console.log("🆔 ID ที่รับมาใน PrintTrackPage:", id);
@@ -20,8 +21,30 @@ export default function PrintTrackPage() {
         console.log("📦 Response จาก API:", res.data);
 
         if (res.data.status === 'success' && Array.isArray(res.data.data)) {
-          setData(res.data.data[0]);
-          console.log("✅ ตั้งค่า data สำเร็จ:", res.data.data[0]);
+          const itemData = res.data.data[0];
+          setData(itemData);
+          console.log("✅ ตั้งค่า data สำเร็จ:", itemData);
+
+          // ⭐ โหลด users แล้วหา created_by_id
+          if (itemData.created_by_id) {
+            axios.get(`${API_URL}/users/get_users.php`)
+              .then(userRes => {
+                console.log("👤 Users API Response:", userRes.data);
+                if (Array.isArray(userRes.data)) {
+                  const foundUser = userRes.data.find(u => parseInt(u.id) === parseInt(itemData.created_by_id));
+                  if (foundUser) {
+                    setUserInfo({
+                      position: foundUser.position || "",
+                      phone: foundUser.phone || ""
+                    });
+                    console.log("✅ ตั้งค่า userInfo:", foundUser);
+                  } else {
+                    console.warn("⚠️ ไม่พบ user ตรงกับ created_by_id");
+                  }
+                }
+              })
+              .catch(err => console.error("❌ โหลด userInfo ผิดพลาด:", err));
+          }
         } else {
           console.warn("⚠️ API success แต่ data ไม่ใช่ array หรือว่าง");
         }
@@ -82,12 +105,12 @@ export default function PrintTrackPage() {
               ความประสงค์จะขอเบิกวัสดุ จำนวน {data.items.length} รายการ
             </td>
             <td>
-              ตำแหน่ง ..........................................................
+              ตำแหน่ง {userInfo.position || ".........................................................."}
             </td>
           </tr>
           <tr>
             <td>
-              โทรศัพท์ ..........................................................
+              โทรศัพท์ {userInfo.phone || ".........................................................."}
             </td>
             <td>
               เพื่อใช้ในงาน/กิจกรรม {data.reason || "-"}
@@ -128,7 +151,6 @@ export default function PrintTrackPage() {
         </tbody>
       </table>
 
-
       {/* Signatures */}
       <table className="printtrack-sign-table">
         <tbody>
@@ -138,7 +160,7 @@ export default function PrintTrackPage() {
                 ข้าพเจ้าขอรับรองว่าวัสดุที่ขอเบิกไปใช้ในราชการหน่วยงานเท่านั้น
               </p>
               <p className="sign-line">ลงชื่อ..........................................ผู้ขอเบิก</p>
-              <p className="sign-line"> (..............................................)</p>
+              <p className="sign-line">(..............................................)</p>
               <p className="sign-line">วันที่...............................................................</p>
               <div className="sign-gap" />
               <p className="sign-line">ลงชื่อ..........................................หัวหน้างาน</p>
