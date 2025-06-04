@@ -181,6 +181,7 @@ function UserFollowTable({ searchTerm = "" }) {
                     onChange={(selectedOption) =>
                       handleStatusUserChange(row.id, selectedOption.value)
                     }
+                    isSearchable={false}
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={(e) => e.stopPropagation()}
                     onWheel={(e) => e.stopPropagation()}
