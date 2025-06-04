@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 // Public Pages
 import HomePage from "./pages/Home/HomePage";
@@ -31,26 +32,17 @@ import ReportPage from "./pages/Report/ReportPage";
 import SettingPage from "./pages/Setting/SettingPage";
 
 // ผู้ใช้งานทั่วไป
-// import UserStuffPage from "./user_pages/UserStuff/UserStuffPage";
 import UserConfirmHisPage from "./user_pages/UserStuff/UserConfirmHisPage";
-/////////////////////////
-
 import UserStuffTablePage from "./user_pages/UserStuff/UserStuffTablePage";
 import UserFollowTablePage from "./user_pages/UserStuff/UserFollowTablePage";
-// import UserHistoryTablePage from "./user_pages/UserStuff/UserHistoryTablePage";
 import UserMoreTablePage from "./user_pages/UserStuff/UserMoreTablePage";
 import UserMoreDetailPage from "./user_pages/UserStuff/UserMoreDetailPage";
-// import UserMoreAddPage from "./user_pages/UserStuff/UserMoreAddPage";
-
-
-
-/////////////////////////
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ✅ Public Pages */}
+        {/*  Public Pages */}
         <Route index element={<LoginPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -59,40 +51,35 @@ function App() {
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/verification" element={<EmailVerification />} />
 
-        {/* ✅ ทุกหน้าเข้าถึงได้โดยไม่ต้องมีสิทธิ์
-        <Route path="/userstuff" element={<UserStuffPage />} /> */}
-        <Route path="/user/confirm-status" element={<UserConfirmHisPage />} />        
-        <Route path="/consumable" element={<ConsumablePage />} />
-        <Route path="/consumable/categorize" element={<CategorizePage />} />
-        <Route path="/stuff" element={<StuffPage />} />
-        <Route path="/stuff/detail" element={<StuffDetailPage />} />
-        <Route path="/stuff/DetailTrack" element={<StuffDetailTrackPage />} />
-        <Route path="/stuff/track" element={<StuffTrackPage />} />
-        <Route path="/stuff/purchase" element={<StuffPurchasePage />} />
-        <Route path="/stuff/DetailPurchase" element={<StuffDetailPurchasePage />} />
-        <Route path="/stuff/print-purchase" element={<PrintPurchasePage />} />
-        <Route path="/userstuff/follow/print-track" element={<PrintTrackPage />} />
-        <Route path="/incoming" element={<IncomingPage />} />
-        <Route path="/incoming/detail/:id" element={<IncomingDetailPage />} />
-        <Route path="/incoming/add" element={<IncomingAddPage />} />
-        <Route path="/adjust" element={<AdjustPage />} />
-        <Route path="/adjust/add" element={<AdjustAddPage />} />
-        <Route path="/adjust/balance" element={<AdjustBalancePage />} />
-        <Route path="/adjust/balance/:id" element={<AdjustBalancePage />} />
-        <Route path="/human" element={<HumanPage />} />
-        <Route path="/organizations" element={<OrganizationsPage />} />
-        <Route path="/report" element={<ReportPage />} />
-        <Route path="/setting" element={<SettingPage />} />
+        {/*  Admin/Assistant Pages */}
+        <Route path="/consumable" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><ConsumablePage /></ProtectedRoute>} />
+        <Route path="/consumable/categorize" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><CategorizePage /></ProtectedRoute>} />
+        <Route path="/stuff" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffPage /></ProtectedRoute>} />
+        <Route path="/stuff/detail" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffDetailPage /></ProtectedRoute>} />
+        <Route path="/stuff/DetailTrack" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffDetailTrackPage /></ProtectedRoute>} />
+        <Route path="/stuff/track" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffTrackPage /></ProtectedRoute>} />
+        <Route path="/stuff/purchase" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffPurchasePage /></ProtectedRoute>} />
+        <Route path="/stuff/DetailPurchase" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><StuffDetailPurchasePage /></ProtectedRoute>} />
+        <Route path="/stuff/print-purchase" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><PrintPurchasePage /></ProtectedRoute>} />
+        <Route path="/incoming" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><IncomingPage /></ProtectedRoute>} />
+        <Route path="/incoming/detail/:id" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><IncomingDetailPage /></ProtectedRoute>} />
+        <Route path="/incoming/add" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><IncomingAddPage /></ProtectedRoute>} />
+        <Route path="/adjust" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><AdjustPage /></ProtectedRoute>} />
+        <Route path="/adjust/add" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><AdjustAddPage /></ProtectedRoute>} />
+        <Route path="/adjust/balance" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><AdjustBalancePage /></ProtectedRoute>} />
+        <Route path="/adjust/balance/:id" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><AdjustBalancePage /></ProtectedRoute>} />
+        <Route path="/human" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><HumanPage /></ProtectedRoute>} />
+        <Route path="/organizations" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><OrganizationsPage /></ProtectedRoute>} />
+        <Route path="/report" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><ReportPage /></ProtectedRoute>} />
+        <Route path="/setting" element={<ProtectedRoute allow={["แอดมิน", "ผู้ช่วยแอดมิน"]}><SettingPage /></ProtectedRoute>} />
 
-        <Route path="/userstuff/stuff" element={<UserStuffTablePage />} />
-        <Route path="/userstuff/follow" element={<UserFollowTablePage />} />
-        {/* <Route path="/userstuff/history" element={<UserHistoryTablePage />} /> */}
-
-        <Route path="/userstuff/more" element={<UserMoreTablePage />} />
-        <Route path="/userstuff/more/detail" element={<UserMoreDetailPage />} />
-
-        {/* <Route path="/userstuff/more/add" element={<UserMoreAddPage />} /> */}
-
+        {/* User Pages */}
+        <Route path="/userstuff/stuff" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><UserStuffTablePage /></ProtectedRoute>} />
+        <Route path="/userstuff/follow" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><UserFollowTablePage /></ProtectedRoute>} />
+        <Route path="/user/confirm-status" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><UserConfirmHisPage /></ProtectedRoute>} />
+        <Route path="/userstuff/more" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><UserMoreTablePage /></ProtectedRoute>} />
+        <Route path="/userstuff/more/detail" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><UserMoreDetailPage /></ProtectedRoute>} />
+        <Route path="/userstuff/follow/print-track" element={<ProtectedRoute allow={["ผู้ใช้งาน"]}><PrintTrackPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
