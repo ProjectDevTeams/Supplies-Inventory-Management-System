@@ -81,13 +81,13 @@
   align-items: center;
   justify-content: center;
   margin: auto;
-  overflow: hidden;  /* ⭐️ สำคัญ → กัน "รูปล้นช่อง" ⭐️ */
+  overflow: hidden;  /*  สำคัญ → กัน "รูปล้นช่อง"  */
 }
 
 .user-stuff-table-image {
-  max-width: 100%;   /* ⭐️ ทำให้รูปไม่เกิน wrapper ⭐️ */
-  max-height: 100%;  /* ⭐️ ทำให้รูปไม่เกิน wrapper ⭐️ */
-  object-fit: contain; /* ⭐️ บังคับขนาดรูปไม่ยืดไม่เพี้ยน ⭐️ */
+  max-width: 100%;   /*  ทำให้รูปไม่เกิน wrapper  */
+  max-height: 100%;  /*  ทำให้รูปไม่เกิน wrapper  */
+  object-fit: contain; /*  บังคับขนาดรูปไม่ยืดไม่เพี้ยน  */
 }
 
 
