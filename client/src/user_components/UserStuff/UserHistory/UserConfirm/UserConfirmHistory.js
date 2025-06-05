@@ -1,5 +1,3 @@
-// UserConfirmHistory.js
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../../../../components/Navbar/Navbar';
@@ -44,8 +42,8 @@ export default function UserConfirmHistory() {
             <div>{new Date(data.created_at).toLocaleDateString()}</div>
             <div><strong>ชื่อ</strong></div>
             <div>{data.created_by}</div>
-            <div><strong>สังกัด</strong></div>
-            <div>-</div>
+            <div><strong>หัวหน้างาน</strong></div>
+            <div>{data.supervisor_name || '-'}</div>
             <div><strong>เบิกจำนวน</strong></div>
             <div>{data.items.length} รายการ</div>
             <div><strong>คลัง</strong></div>
