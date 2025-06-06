@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 29, 2025 at 06:46 AM
+-- Generation Time: Jun 06, 2025 at 04:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,21 +34,6 @@ CREATE TABLE `adjustments` (
   `updated_date` date DEFAULT curdate() COMMENT 'วันที่แก้ไข',
   `status` enum('รออนุมัติ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รออนุมัติ' COMMENT 'สถานะการอนุมัติ'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `adjustments`
---
-
-INSERT INTO `adjustments` (`id`, `created_by`, `created_date`, `updated_date`, `status`) VALUES
-(6, 3, '2025-05-16', '2025-05-22', 'อนุมัติ'),
-(7, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
-(8, 3, '2025-05-16', '2025-05-16', 'อนุมัติ'),
-(12, 1, '2025-05-21', '2025-05-21', 'อนุมัติ'),
-(13, 1, '2025-07-31', '2025-05-22', 'อนุมัติ'),
-(14, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
-(15, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
-(16, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ'),
-(17, 1, '2025-05-29', '2025-05-29', 'รออนุมัติ');
 
 --
 -- Triggers `adjustments`
@@ -89,25 +74,6 @@ CREATE TABLE `adjustment_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `adjustment_items`
---
-
-INSERT INTO `adjustment_items` (`id`, `adjustment_id`, `stock_type`, `material_id`, `quantity`, `old_quantity`, `difference`) VALUES
-(1, 6, 'วัสดุในคลัง', 1, 5, 0, 0),
-(2, 6, 'วัสดุในคลัง', 2, 10, 0, 0),
-(3, 7, 'วัสดุนอกคลัง', 3, 8, 0, 0),
-(4, 7, 'วัสดุในคลัง', 4, 6, 0, 0),
-(5, 8, 'วัสดุในคลัง', 5, 3, 0, 0),
-(6, 8, 'วัสดุนอกคลัง', 6, 12, 0, 0),
-(12, 12, 'วัสดุนอกคลัง', 1, 10, 2, 0),
-(13, 13, 'วัสดุในคลัง', 1, 50, 10, 0),
-(14, 14, 'วัสดุในคลัง', 1, 50, 56, 6),
-(15, 15, 'วัสดุในคลัง', 1, 50, 56, 0),
-(16, 16, 'วัสดุในคลัง', 1, 50, 56, 6),
-(17, 17, 'วัสดุในคลัง', 1, 50, 56, 6),
-(18, 17, 'วัสดุในคลัง', 4, 15, 10, 5);
-
---
 -- Triggers `adjustment_items`
 --
 DELIMITER $$
@@ -137,19 +103,6 @@ CREATE TABLE `companies` (
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `companies`
---
-
-INSERT INTO `companies` (`id`, `name`, `created_at`, `created_by`, `updated_at`) VALUES
-(6, 'บริษัท เอเทค คอร์ปอเรชั่น', '2025-05-14 08:01:30', NULL, NULL),
-(7, 'ห้างหุ้นส่วน ซีเอ็น เทรดดิ้ง', '2025-05-14 08:01:30', NULL, NULL),
-(8, 'บริษัท โกลบอล ซัพพลาย', '2025-05-14 08:01:30', 1, '2025-05-23 04:13:21'),
-(9, 'อัพเดต1', '2025-05-14 08:01:30', 2, '2025-05-21 08:12:53'),
-(10, 'อัพเดต2', '2025-05-14 08:01:30', 2, '2025-05-21 08:12:08'),
-(11, 'test', '2025-05-14 08:53:46', NULL, NULL),
-(12, 'tes123', '2025-05-14 08:54:07', NULL, '2025-05-14 08:54:30');
-
 -- --------------------------------------------------------
 
 --
@@ -174,32 +127,6 @@ CREATE TABLE `materials` (
   `status` varchar(100) GENERATED ALWAYS AS (case when `remaining_quantity` <= `min_quantity` then 'วัสดุใกล้หมดสต็อก' else 'เบิกได้' end) STORED,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `materials`
---
-
-INSERT INTO `materials` (`id`, `image`, `name`, `category_id`, `unit`, `stock_type`, `carry_over_quantity`, `max_quantity`, `min_quantity`, `price`, `remaining_quantity`, `received_quantity`, `issued_quantity`, `adjusted_quantity`, `created_at`) VALUES
-(1, 'materials/picture/material_1748230018.jpg', 'เทปกาวสองหน้า', 1, 'ม้วน', 'วัสดุในคลัง', 1, 0, 0, 220.00, 56, 10, 5, 0, '2025-05-12 17:00:00'),
-(2, '', 'เทปกาวสองหน้า', 1, 'ชิ้น', 'วัสดุนอกคลัง', 2, 10, 2, 15.00, 10, 5, 1, 0, '2025-05-05 17:00:00'),
-(3, '', 'ดินสอ 2B', 1, 'แท่ง', 'วัสดุนอกคลัง', 1, 6, 1, 5.00, 3, 3, 2, 0, '2025-05-06 09:20:18'),
-(4, '', 'ปากกาเจลสีดำ', 1, 'ด้าม', 'วัสดุในคลัง', 2, 8, 2, 10.00, 10, 6, 2, 0, '2025-05-06 09:20:18'),
-(5, '', 'กระดาษ A4', 1, 'รีม', 'วัสดุในคลัง', 0, 5, 2, 120.00, 3, 2, 1, 0, '2025-05-06 09:20:18'),
-(6, '', 'คลิปหนีบกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 1, 10, 2, 25.00, 12, 4, 0, 0, '2025-05-06 09:20:18'),
-(7, '', 'แฟ้มแข็ง', 1, 'เล่ม', 'วัสดุในคลัง', 0, 4, 1, 30.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
-(8, '', 'สมุดปกแข็ง', 1, 'เล่ม', 'วัสดุนอกคลัง', 1, 3, 1, 35.00, 1, 2, 1, 0, '2025-05-06 09:20:18'),
-(9, '', 'กระดาษโน้ต', 1, 'ชุด', 'วัสดุในคลัง', 0, 6, 2, 12.00, 10, 5, 2, 0, '2025-05-06 09:20:18'),
-(10, '', 'เทปใส', 1, 'ม้วน', 'วัสดุในคลัง', 1, 3, 1, 8.00, 2, 1, 1, 0, '2025-05-06 09:20:18'),
-(11, '', 'สติ๊กเกอร์ A4', 1, 'แผ่น', 'วัสดุนอกคลัง', 2, 5, 2, 5.00, 3, 3, 0, 0, '2025-05-06 09:20:18'),
-(12, '', 'แฟ้มซองพลาสติก', 1, 'ซอง', 'วัสดุในคลัง', 1, 6, 2, 7.00, 3, 4, 1, 0, '2025-05-06 09:20:18'),
-(13, '', 'ลวดเย็บกระดาษ', 1, 'กล่อง', 'วัสดุนอกคลัง', 0, 3, 1, 18.00, 0, 2, 2, 0, '2025-05-06 09:20:18'),
-(14, '', 'ปากกาลูกลื่น', 1, 'ด้าม', 'วัสดุในคลัง', 2, 6, 2, 12.00, 4, 5, 1, 0, '2025-05-06 09:20:18'),
-(15, '', 'แฟ้มห่วง', 1, 'เล่ม', 'วัสดุในคลัง', 1, 5, 2, 40.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
-(16, '', 'เครื่องเย็บกระดาษ', 1, 'เครื่อง', 'วัสดุนอกคลัง', 0, 3, 1, 85.00, 2, 2, 0, 0, '2025-05-06 09:20:18'),
-(17, '', 'น้ำยาล้างบอร์ด', 1, 'ขวด', 'วัสดุในคลัง', 1, 2, 1, 30.00, 0, 1, 1, 0, '2025-05-06 09:20:18'),
-(18, '', 'สก็อตเทป', 1, 'ม้วน', 'วัสดุในคลัง', 0, 4, 1, 6.00, 2, 3, 1, 0, '2025-05-06 09:20:18'),
-(19, '', 'กล่องเอกสาร', 1, 'กล่อง', 'วัสดุในคลัง', 2, 6, 2, 55.00, 4, 4, 0, 0, '2025-05-06 09:20:18'),
-(20, '', 'แผ่นพลาสติกใส', 1, 'แผ่น', 'วัสดุนอกคลัง', 1, 4, 1, 3.00, 1, 2, 1, 0, '2025-07-31 09:20:18');
 
 -- --------------------------------------------------------
 
@@ -250,7 +177,9 @@ INSERT INTO `purchase_extras` (`id`, `running_code`, `created_by`, `created_date
 (7, '2568/05/007', 3, '2025-05-27', 'test 3', 'รออนุมัติ'),
 (8, '2568/05/008', 3, '2025-05-27', 'test33333', 'รออนุมัติ'),
 (9, '2568/05/009', 3, '2025-05-27', 'test', 'รออนุมัติ'),
-(10, '2568/05/010', 3, '2025-05-27', '123', 'รออนุมัติ');
+(10, '2568/05/010', 3, '2025-05-27', '123', 'รออนุมัติ'),
+(11, '2568/05/011', 3, '2025-05-29', '555555555555555', 'รออนุมัติ'),
+(12, '2568/06/001', 3, '2025-06-02', '', 'อนุมัติ');
 
 -- --------------------------------------------------------
 
@@ -266,27 +195,6 @@ CREATE TABLE `purchase_extra_items` (
   `new_material_name` varchar(255) DEFAULT NULL,
   `quantity` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `purchase_extra_items`
---
-
-INSERT INTO `purchase_extra_items` (`id`, `image`, `purchase_extra_id`, `material_id`, `new_material_name`, `quantity`) VALUES
-(1, 'materials/picture/material_1748230018.jpg', 1, 1, NULL, 5),
-(2, NULL, 2, NULL, 'พัดลมตั้งโต๊ะ 16 นิ้ว', 2),
-(3, NULL, 3, 2, NULL, 10),
-(4, 'materials/picture/material_1748230018.jpg', 4, 1, NULL, 5),
-(5, NULL, 4, NULL, 'โต๊ะไม้พับได้', 2),
-(6, 'materials/picture/material_1748230018.jpg', 5, 1, NULL, 20),
-(7, 'materials/picture/material_1748230018.jpg', 6, 1, NULL, 20),
-(8, '', 6, 4, NULL, 5),
-(9, 'materials/picture/material_1748230018.jpg', 7, 1, NULL, 1),
-(10, '', 7, NULL, 'กระดาษดำ', 1),
-(11, NULL, 8, NULL, 'กระดาษดำ', 10),
-(12, 'materials/picture/material_1748230018.jpg', 9, 1, NULL, 10),
-(13, 'purchase_extras_items/picture/material_purchase_20250527085958_file_1.jpg', 9, NULL, 'กระดาษสีดำ', 10),
-(14, 'materials/picture/material_1748230018.jpg', 10, 1, NULL, 10),
-(15, 'purchase_extras_items/picture/material_purchase_20250527090605_file_1.jpg', 10, NULL, 'test', 10);
 
 -- --------------------------------------------------------
 
@@ -312,17 +220,17 @@ CREATE TABLE `receive_materials` (
 --
 
 INSERT INTO `receive_materials` (`id`, `created_by`, `stock_type`, `company_id`, `project_name`, `tax_invoice_number`, `purchase_order_number`, `created_at`, `total_price`, `approval_status`) VALUES
-(1, 3, 'วัสดุในคลัง', 6, NULL, 'INV-001', 'PO-001', '2025-05-16', 645.00, 'ไม่อนุมัติ'),
-(2, 3, 'วัสดุในคลัง', 7, NULL, 'INV-002', 'PO-002', '2025-05-16', 70.00, 'รออนุมัติ'),
-(3, 3, 'วัสดุนอกคลัง', 8, NULL, 'INV-003', 'PO-003', '2025-05-16', 220.00, 'อนุมัติ'),
-(4, 3, 'วัสดุในคลัง', 6, NULL, 'INV-004', 'PO-004', '2025-05-20', 1500.00, 'อนุมัติ'),
-(5, 3, 'วัสดุในคลัง', 7, NULL, 'INV-005', 'PO-005', '2025-04-30', 1500.00, 'อนุมัติ'),
-(6, 1, 'วัสดุนอกคลัง', 7, NULL, 'ทอลอง', 'ทดลอง', '2025-05-23', 200.00, 'อนุมัติ'),
-(7, 1, 'วัสดุนอกคลัง', 6, NULL, '111111', '018', '2025-05-22', 22.00, 'อนุมัติ'),
-(8, 1, 'วัสดุในคลัง', NULL, 'โครงการ ABC', 'INV-123', 'PO-456', '2025-05-22', 305.00, 'รออนุมัติ'),
-(9, 1, 'วัสดุในคลัง', 6, NULL, '111', '111', '2025-05-23', 1.00, 'รออนุมัติ'),
-(10, 1, 'วัสดุนอกคลัง', 6, '', 'กกก', 'กกก', '2025-05-23', 1.00, 'รออนุมัติ'),
-(11, 3, 'วัสดุในคลัง', 6, NULL, '888888888888', '88888888888888', '2025-05-23', 100.00, 'อนุมัติ');
+(1, 3, 'วัสดุในคลัง', NULL, NULL, 'INV-001', 'PO-001', '2025-05-16', 0.00, 'ไม่อนุมัติ'),
+(2, 3, 'วัสดุในคลัง', NULL, NULL, 'INV-002', 'PO-002', '2025-05-16', 0.00, 'รออนุมัติ'),
+(3, 3, 'วัสดุนอกคลัง', NULL, NULL, 'INV-003', 'PO-003', '2025-05-16', 0.00, 'อนุมัติ'),
+(4, 3, 'วัสดุในคลัง', NULL, NULL, 'INV-004', 'PO-004', '2025-05-20', 0.00, 'อนุมัติ'),
+(5, 3, 'วัสดุในคลัง', NULL, NULL, 'INV-005', 'PO-005', '2025-04-30', 0.00, 'อนุมัติ'),
+(6, 1, 'วัสดุนอกคลัง', NULL, NULL, 'ทอลอง', 'ทดลอง', '2025-05-23', 0.00, 'อนุมัติ'),
+(7, 1, 'วัสดุนอกคลัง', NULL, NULL, '111111', '018', '2025-05-22', 0.00, 'อนุมัติ'),
+(8, 1, 'วัสดุในคลัง', NULL, 'โครงการ ABC', 'INV-123', 'PO-456', '2025-05-22', 0.00, 'รออนุมัติ'),
+(9, 1, 'วัสดุในคลัง', NULL, NULL, '111', '111', '2025-05-23', 0.00, 'รออนุมัติ'),
+(10, 1, 'วัสดุนอกคลัง', NULL, '', 'กกก', 'กกก', '2025-05-23', 0.00, 'รออนุมัติ'),
+(11, 3, 'วัสดุในคลัง', NULL, NULL, '888888888888', '88888888888888', '2025-05-23', 0.00, 'อนุมัติ');
 
 --
 -- Triggers `receive_materials`
@@ -371,28 +279,6 @@ CREATE TABLE `receive_material_items` (
   `price_per_unit` decimal(10,2) DEFAULT 0.00,
   `total_price` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `receive_material_items`
---
-
-INSERT INTO `receive_material_items` (`id`, `receive_material_id`, `material_id`, `quantity`, `price_per_unit`, `total_price`) VALUES
-(3, 2, NULL, 10, 10.00, 50.00),
-(4, 2, NULL, 2, 10.00, 20.00),
-(5, 3, 1, 20, 120.00, 120.00),
-(6, 3, 2, 40, 25.00, 100.00),
-(16, 4, 1, 20, 30.00, 600.00),
-(17, 4, 4, 30, 30.00, 900.00),
-(20, 5, 1, 50, 30.00, 1500.00),
-(23, 6, 10, 2, 100.00, 200.00),
-(25, 7, 1, 1, 22.00, 22.00),
-(26, 8, 5, 10, 15.50, 155.00),
-(27, 8, 7, 3, 50.00, 150.00),
-(28, 9, 1, 1, 1.00, 1.00),
-(34, 10, 11, 1, 1.00, 1.00),
-(35, 1, NULL, 2, 300.00, 600.00),
-(36, 1, NULL, 3, 15.00, 45.00),
-(38, 11, 1, 10, 10.00, 100.00);
 
 --
 -- Triggers `receive_material_items`
@@ -457,10 +343,13 @@ CREATE TABLE `stuff_materials` (
 --
 
 INSERT INTO `stuff_materials` (`id`, `running_code`, `created_at`, `created_by`, `supervisor_name`, `reason`, `total_amount`, `Admin_status`, `User_status`) VALUES
-(1, '2568/05/001', '2025-05-26', 3, '', '', 2200.00, 'รออนุมัติ', 'รอรับของ'),
-(2, '2568/05/002', '2025-05-26', 3, '', '', 100.00, 'รออนุมัติ', 'รอรับของ'),
-(3, '2568/05/003', '2025-05-26', 4, '', '', 2200.00, 'รออนุมัติ', 'รอรับของ'),
-(4, '2568/05/004', '2025-05-26', 1, '', '', 1540.00, 'รออนุมัติ', 'รอรับของ');
+(1, '2568/05/001', '2025-05-26', 3, '', '', 0.00, 'รออนุมัติ', 'รอรับของ'),
+(2, '2568/05/002', '2025-05-26', 3, '', '', 0.00, 'รออนุมัติ', 'รอรับของ'),
+(3, '2568/05/003', '2025-05-26', 4, '', '', 0.00, 'รออนุมัติ', 'รอรับของ'),
+(4, '2568/05/004', '2025-05-26', 1, '', '', 0.00, 'รออนุมัติ', 'รอรับของ'),
+(5, '2568/06/001', '2025-06-02', 3, 'user1', 'user1', 0.00, 'อนุมัติ', 'รับของเรียบร้อยแล้ว'),
+(6, '2568/06/002', '2025-06-05', 3, 'อาคม ยินดี', 'test', 0.00, 'รออนุมัติ', 'รอรับของ'),
+(7, '2568/06/003', '2025-06-05', 3, '123', '1223', 0.00, 'รออนุมัติ', 'รอรับของ');
 
 --
 -- Triggers `stuff_materials`
@@ -507,16 +396,6 @@ CREATE TABLE `stuff_material_items` (
   `quantity` int(11) DEFAULT 0,
   `total_price` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `stuff_material_items`
---
-
-INSERT INTO `stuff_material_items` (`id`, `stuff_material_id`, `material_id`, `quantity`, `total_price`) VALUES
-(8, 1, 1, 10, 2200.00),
-(9, 2, 4, 10, 100.00),
-(10, 3, 1, 10, 2200.00),
-(11, 4, 1, 7, 1540.00);
 
 --
 -- Triggers `stuff_material_items`
@@ -710,25 +589,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `adjustments`
 --
 ALTER TABLE `adjustments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `adjustment_items`
 --
 ALTER TABLE `adjustment_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `material_categories`
@@ -740,13 +619,13 @@ ALTER TABLE `material_categories`
 -- AUTO_INCREMENT for table `purchase_extras`
 --
 ALTER TABLE `purchase_extras`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `purchase_extra_items`
 --
 ALTER TABLE `purchase_extra_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `receive_materials`
@@ -758,19 +637,19 @@ ALTER TABLE `receive_materials`
 -- AUTO_INCREMENT for table `receive_material_items`
 --
 ALTER TABLE `receive_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stuff_materials`
 --
 ALTER TABLE `stuff_materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `stuff_material_items`
 --
 ALTER TABLE `stuff_material_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
