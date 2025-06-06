@@ -22,7 +22,7 @@
 /* กล่องหลัก: กินเต็ม 100% แต่จำกัด max-width */
 .user-confirm-box {
   background: #fff;
-  padding: 2rem 3rem;
+  padding: 2rem;
   border-radius: 10px;
   width: 100%;
   max-width: 800px;
@@ -42,8 +42,9 @@
 /* Grid รายละเอียด: auto-fit ง่ายๆ ไม่ต้อง media */
 .user-confirm-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem 2rem;
+  grid-template-columns: max-content auto;
+  row-gap: 1rem;
+  column-gap: 2rem;
   margin-bottom: 2rem;
 }
 
