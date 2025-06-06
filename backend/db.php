@@ -1,18 +1,18 @@
 <?php
-$host = "localhost";         // โฮสต์ของฐานข้อมูล (ใน XAMPP ใช้ localhost)
-$db_name = "supplies_inventory";  // ชื่อฐานข้อมูลที่คุณสร้างไว้
-$username = "root";          // ชื่อผู้ใช้ (XAMPP มักใช้ root)
-$password = "";              // รหัสผ่าน (XAMPP ปกติไม่มี)
+$host = "localhost";                // โฮสต์ของฐานข้อมูล
+$db_name = "stiinfras_safety";      // ชื่อฐานข้อมูล
+$username = "stiinfras_safety";     // ชื่อผู้ใช้
+$password = "B6y229SoC8f";          // รหัสผ่าน
 
 try {
-    // สร้าง PDO object สำหรับติดต่อ MySQL
+    // สร้าง PDO object สำหรับเชื่อมต่อ MySQL
     $conn = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $username, $password);
     
-    // ตั้งค่าให้ PDO แจ้ง error เป็น exception (ช่วยในการ debug)
+    // ตั้งค่าให้ PDO แจ้ง error เป็น exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 } catch(PDOException $e) {
-    // กรณีเชื่อมต่อไม่ได้
+    // กรณีเชื่อมต่อไม่สำเร็จ
     echo "Connection failed: " . $e->getMessage();
     exit;
 }
